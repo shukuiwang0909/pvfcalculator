@@ -1,17 +1,222 @@
 ---
+const title = "PVF Calculator - Pipe, Valve & Flange Weight Calculators";
+const description = "Free ASME B16.5 & B16.9 weight calculators for pipe fittings. Calculate flange, elbow, tee, and reducer weights in carbon steel, stainless steel, and alloy steel.";
+const canonical = "https://pvfcalculator.com/";
 
+const tools = [
+  {
+    name: "Flange Weight Calculator",
+    desc: "Weld neck, slip on, blind, socket weld & threaded flanges. Class 150-2500, NPS 1/2\"-24\".",
+    href: "/flange-weight-calculator/",
+    icon: "🔩",
+    color: "bg-blue-50 hover:bg-blue-100 border-blue-200",
+    textColor: "text-blue-900",
+    tag: "ASME B16.5"
+  },
+  {
+    name: "Elbow Weight Calculator", 
+    desc: "45° & 90° long/short radius elbows. 13 schedules from SCH 10 to XXS.",
+    href: "/elbow-weight-calculator/",
+    icon: "↩️",
+    color: "bg-green-50 hover:bg-green-100 border-green-200",
+    textColor: "text-green-900",
+    tag: "ASME B16.9"
+  },
+  {
+    name: "Tee Weight Calculator",
+    desc: "Equal & reducing tees with automatic branch size validation.",
+    href: "/tee-weight-calculator/",
+    icon: "🔱",
+    color: "bg-purple-50 hover:bg-purple-100 border-purple-200", 
+    textColor: "text-purple-900",
+    tag: "ASME B16.9"
+  },
+  {
+    name: "Reducer Weight Calculator",
+    desc: "Concentric & eccentric reducers. Smart large/small end pairing.",
+    href: "/reducer-weight-calculator/",
+    icon: "📐",
+    color: "bg-orange-50 hover:bg-orange-100 border-orange-200",
+    textColor: "text-orange-900", 
+    tag: "ASME B16.9"
+  }
+];
+
+const features = [
+  { title: "ASME Standards", desc: "B16.5 flange dimensions & B16.9 fitting weights" },
+  { title: "5 Materials", desc: "A105, F304, F316, F11 + custom density" },
+  { title: "13 Schedules", desc: "SCH 10 through XXS wall thicknesses" },
+  { title: "kg / lb", desc: "Instant unit switching" },
+  { title: "Mobile First", desc: "Works on any device" },
+  { title: "Free Forever", desc: "No signup, no limits" }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PVF Calculator",
+  "url": canonical,
+  "description": description,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": canonical + "?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="pvfcalculator.com" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <!-- Header -->
+  <header class="bg-slate-900 text-white shadow-lg">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</span>
+      </div>
+      <nav class="hidden gap-6 text-sm text-slate-300 sm:flex">
+        <a href="/flange-weight-calculator/" class="hover:text-white transition">Flange</a>
+        <a href="/elbow-weight-calculator/" class="hover:text-white transition">Elbow</a>
+        <a href="/tee-weight-calculator/" class="hover:text-white transition">Tee</a>
+        <a href="/reducer-weight-calculator/" class="hover:text-white transition">Reducer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <!-- Hero -->
+    <div class="mb-10 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+        Pipe Fitting <span class="text-orange-600">Weight Calculators</span>
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+        Professional ASME B16.5 & B16.9 weight calculators for flanges, elbows, tees and reducers. 
+        Used by procurement engineers, freight forwarders, and project managers worldwide.
+      </p>
+      <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs font-medium">
+        <span class="rounded-full bg-slate-200 px-3 py-1 text-slate-700">Carbon Steel</span>
+        <span class="rounded-full bg-slate-200 px-3 py-1 text-slate-700">Stainless Steel</span>
+        <span class="rounded-full bg-slate-200 px-3 py-1 text-slate-700">Alloy Steel</span>
+        <span class="rounded-full bg-orange-100 px-3 py-1 text-orange-700">100% Free</span>
+      </div>
+    </div>
+
+    <!-- Tools Grid -->
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Calculator tools">
+      {tools.map((tool) => (
+        <a 
+          href={tool.href}
+          class={`group relative overflow-hidden rounded-2xl border-2 p-6 shadow-sm transition-all hover:shadow-md ${tool.color}`}
+        >
+          <div class="flex items-start justify-between">
+            <span class="text-3xl">{tool.icon}</span>
+            <span class="rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+              {tool.tag}
+            </span>
+          </div>
+          <h2 class={`mt-3 text-xl font-bold ${tool.textColor}`}>{tool.name}</h2>
+          <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{tool.desc}</p>
+          <div class={`mt-4 inline-flex items-center gap-1 text-sm font-semibold ${tool.textColor} opacity-0 transition group-hover:opacity-100`}>
+            Open Calculator →
+          </div>
+        </a>
+      ))}
+    </section>
+
+    <!-- Features -->
+    <section class="mt-12 rounded-2xl bg-white p-6 shadow-md" aria-label="Features">
+      <h2 class="mb-4 text-lg font-bold text-slate-900">Why Engineers Choose PVF Calculator</h2>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        {features.map((f) => (
+          <div class="text-center">
+            <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p class="text-sm font-semibold text-slate-900">{f.title}</p>
+            <p class="mt-0.5 text-xs text-slate-500">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SEO Content -->
+    <section class="mt-12 grid gap-6 lg:grid-cols-2" aria-label="About PVF calculators">
+      <div class="rounded-2xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-lg font-bold text-slate-900">ASME B16.5 Flange Weights</h2>
+        <p class="text-sm leading-relaxed text-slate-600">
+          Calculate theoretical weights for weld neck (WN), slip on (SO), blind (BL), socket weld (SW) and threaded (THD) 
+          flanges per ASME B16.5. Supports Class 150, 300, 600, 900, 1500 and 2500 pressure ratings in NPS 1/2" through 24". 
+          Includes A105 carbon steel, F304/F316 stainless steel, and F11 alloy steel with custom density input.
+        </p>
+        <a href="/flange-weight-calculator/" class="mt-3 inline-block text-sm font-semibold text-orange-600 hover:underline">
+          Calculate flange weight →
+        </a>
+      </div>
+      <div class="rounded-2xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-lg font-bold text-slate-900">ASME B16.9 Fitting Weights</h2>
+        <p class="text-sm leading-relaxed text-slate-600">
+          Butt-weld fitting weight calculators for 45°/90° elbows (long & short radius), equal/reducing tees, and 
+          concentric/eccentric reducers. Covers SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160 and XXS schedules 
+          with automatic geometry validation.
+        </p>
+        <a href="/elbow-weight-calculator/" class="mt-3 inline-block text-sm font-semibold text-orange-600 hover:underline">
+          Calculate fitting weight →
+        </a>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mt-10 rounded-2xl bg-slate-900 p-6 text-center text-white" aria-label="Call to action">
+      <h2 class="text-xl font-bold">Need Cangzhou Factory Quotes?</h2>
+      <p class="mt-2 text-sm text-slate-400">
+        Get competitive pricing from Hebei pipe fitting manufacturers. Free quotes within 24 hours.
+      </p>
+      <a 
+        href="mailto:quotes@pvfcalculator.com" 
+        class="mt-4 inline-block rounded-lg bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+      >
+        Request Factory Quote
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-12 border-t border-slate-200 bg-white py-8">
+    <div class="mx-auto max-w-5xl px-4">
+      <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div class="text-sm text-slate-600">
+          <span class="font-semibold">pvfcalculator.com</span> — Engineering calculators for pipe fittings
+        </div>
+        <nav class="flex gap-4 text-xs text-slate-500">
+          <a href="/flange-weight-calculator/" class="hover:text-slate-700">Flange</a>
+          <a href="/elbow-weight-calculator/" class="hover:text-slate-700">Elbow</a>
+          <a href="/tee-weight-calculator/" class="hover:text-slate-700">Tee</a>
+          <a href="/reducer-weight-calculator/" class="hover:text-slate-700">Reducer</a>
+        </nav>
+      </div>
+      <p class="mt-4 text-center text-xs text-slate-400">
+        © 2026 PVF Calculator. Calculations based on ASME B16.5 & B16.9 standards. Verify critical weights with manufacturers.
+      </p>
+    </div>
+  </footer>
+</body>
 </html>
