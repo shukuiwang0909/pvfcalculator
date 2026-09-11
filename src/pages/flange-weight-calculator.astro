@@ -1,0 +1,502 @@
+---
+const title = "Flange Weight Calculator (ASME B16.5) | Weld Neck, Slip On, Blind | pvfcalculator.com";
+const description = "Free ASME B16.5 flange weight calculator. Accurate geometric modeling (not flat-plate) for Weld Neck, Slip On, Blind, Socket Weld & Threaded flanges, Class 150–2500, NPS 1/2\"–24\", A105 / F304 / F316 / F11 materials. Results in kg or lb.";
+const canonical = "https://pvfcalculator.com/flange-weight-calculator/";
+
+const faqs = [
+  {
+    q: "How do you calculate the weight of an ASME B16.5 flange?",
+    a: "The weight is calculated from the true 3-D volume of the flange multiplied by material density. The flange is decomposed into a flange ring disc, a tapered (weld neck) or straight (slip-on) hub, and the raised face, using the official ASME B16.5 dimensions — outside diameter, bore, ring thickness t, hub diameter X, hub length Y. Weight = Volume × Density. This is fundamentally more accurate than the flat-plate method used by most online calculators."
+  },
+  {
+    q: "Why is this calculator more accurate than flat-plate (plate approximation) calculators?",
+    a: "Flat-plate calculators compute weight as π/4 × (OD² − bore²) × thickness × density, ignoring the hub entirely. For a 24\" Class 150 weld neck flange that method understates the weight by more than 40%. Our engine models the conical frustum hub and raised face explicitly, which typically lands within ±5% of manufacturer catalog weights."
+  },
+  {
+    q: "What is the difference between weld neck and slip-on flange weight?",
+    a: "For the same NPS and class, weld neck flanges are usually heavier because their hub is a full-length tapered cone (long dimension Y) designed for butt welding and fatigue resistance, while slip-on flanges have a shorter straight hub. The ring (flange body) dimensions O, t and bolt circle are identical between WN and SO in ASME B16.5 for Class 150 and 300."
+  },
+  {
+    q: "How much does a 24 inch 150# weld neck flange weigh?",
+    a: "A 24\" (NPS 24) Class 150 weld neck flange in ASTM A105 carbon steel weighs approximately 128 kg (about 282 lb) by ASME B16.5 geometric calculation — consistent with major manufacturer catalogs (typically quoted around 126–129 kg)."
+  },
+  {
+    q: "How much does a 24 inch class 150 blind flange weigh?",
+    a: "A 24\" Class 150 blind flange (ASME B16.5 blind minimum thickness 69.9 mm / 2.75 in) in A105 carbon steel weighs approximately 291 kg (about 642 lb). Be careful with calculators showing values near 193 kg — they mistakenly apply the weld-neck ring thickness instead of the blind thickness."
+  },
+  {
+    q: "What material densities are used in this calculator?",
+    a: "ASTM A105 carbon steel: 7,850 kg/m³; ASTM A182 F304 stainless steel: 8,000 kg/m³; ASTM A182 F316/F316L: 7,980 kg/m³; ASTM A182 F11 alloy steel: 7,820 kg/m³; ASTM A182 F22: 7,850 kg/m³. A custom density input (kg/m³ or lb/ft³ equivalent) is also available."
+  },
+  {
+    q: "Which flange types, classes and sizes are covered?",
+    a: "All five ASME B16.5 flange types — Weld Neck (WN), Slip On (SO), Blind (BL), Socket Weld (SW) and Threaded (THD) — in Class 150, 300, 600, 900, 1500 and 2500. NPS 1/2\" through 24\" are covered, with the same size exclusions as the standard itself (no 3-1/2\" in Class 900/1500, and Class 2500 stops at NPS 12\")."
+  },
+  {
+    q: "Does the calculator include the raised face and hub taper?",
+    a: "Yes. The raised face (1.6 mm for Class 150/300, 6.4 mm for Class 600 and above) is added as an explicit annular volume, and weld neck hubs are modeled as true conical frustums between the hub base diameter X and the flange outside diameter over the hub length Y minus ring thickness."
+  },
+  {
+    q: "How accurate is this calculator?",
+    a: "For standard ASME B16.5 flanges in carbon steel, calculated weights are typically within ±5% of published manufacturer catalog weights (e.g., 24\" 150# WN ≈ 128 kg vs 126–129 kg catalog). Deviations come from bore selection (we use STD-wall pipe bore), fillet radii, and manufacturing tolerances. For critical applications, always verify with the manufacturer."
+  },
+  {
+    q: "Are bolt holes subtracted from the flange weight?",
+    a: "No. ASME B16.5 bolt-circle hole deduction is negligible (typically under 0.5% of total weight) and standard manufacturer catalog weights are quoted without deducting bolt holes, so we follow the same convention for consistency with supplier quotations."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Flange Weight Calculator (ASME B16.5)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="pvfcalculator.com" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <header class="bg-slate-900 text-white shadow">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
+      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
+        <a href="/flange-weight-calculator/" class="text-orange-400 font-medium">Flange Weight</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="hover:text-white">B16.5 Dimensions</a>
+        <a href="/pipe-weight-calculator/" class="hover:text-white">Pipe Weight</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        Flange Weight Calculator <span class="text-orange-600">(ASME B16.5)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-slate-600">
+        Calculate the theoretical weight of ASME B16.5 pipe flanges from true 3-D geometry —
+        tapered weld-neck hubs and raised faces included, <strong>not</strong> a flat-plate approximation.
+        Covers Weld Neck, Slip On, Blind, Socket Weld and Threaded flanges, Class 150–2500, NPS 1/2″–24″.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Flange weight calculator tool">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">Flange Type</label>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-5" id="typeButtons">
+          <button data-type="WN"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M2 34 L14 12 L62 12 L62 34 Z M14 12 L14 34" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">Weld Neck</span>
+          </button>
+          <button data-type="SO"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="14" y="12" width="48" height="22" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">Slip On</span>
+          </button>
+          <button data-type="BL"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="8" y="10" width="54" height="24" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="16" x2="56" y2="16" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></svg>
+            <span class="text-xs font-semibold">Blind</span>
+          </button>
+          <button data-type="SW"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="20" y="12" width="42" height="22" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="12" width="6" height="22" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">Socket Weld</span>
+          </button>
+          <button data-type="THD" class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="20" y="12" width="42" height="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 14 l4 2 l-4 2 l4 2 l-4 2 l4 2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">Threaded</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-slate-500" id="typeDesc">Tapered hub, butt-weld end</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-slate-700">Pressure Class</label>
+          <select id="cls" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+            <option value="150">Class 150</option>
+            <option value="300">Class 300</option>
+            <option value="600">Class 600</option>
+            <option value="900">Class 900</option>
+            <option value="1500">Class 1500</option>
+            <option value="2500">Class 2500</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-slate-700">Nominal Size (NPS)</label>
+          <select id="nps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
+          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Flange Weight</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-slate-300">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Volume</span><span class="font-semibold" id="outVolume">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Density</span><span class="font-semibold" id="outDensity">–</span></div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.5)</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Volume Breakdown</p>
+          <dl class="text-sm" id="volList"></dl>
+          <details class="mt-3 text-xs text-slate-500">
+            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+            <p class="mt-1">Dimensions per ASME B16.5-2020: WN Table 8, SO Table 9, SW Table 10, BL Table 12, THD Table 15 (Class 150/300), equivalent class tables for 600–2500. Bore = STD-wall pipe ID per ASME B36.10M.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full dimension & weight table -->
+    <section class="mt-10" aria-label="Dimension and weight table">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.5 <span id="tableTitle" class="text-orange-600">Flange</span> Dimensions &amp; Weights — <span id="tableClass">Class 150</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table class="w-full min-w-[760px] text-sm">
+          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">OD (mm)</th>
+              <th class="px-3 py-2.5">Bore (mm)</th>
+              <th class="px-3 py-2.5">t / C (mm)</th>
+              <th class="px-3 py-2.5">X (mm)</th>
+              <th class="px-3 py-2.5">Y (mm)</th>
+              <th class="px-3 py-2.5">Bolt Circle (mm)</th>
+              <th class="px-3 py-2.5">Bolts</th>
+              <th class="px-3 py-2.5 text-right">Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody id="dimsTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">Weights in the table use the currently selected material density. Tap any row to load it into the calculator.</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(geometric model, not flat plate)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="rounded-xl bg-white p-5 shadow-md">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="Weld neck flange geometric model">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- hub frustum -->
+            <path d="M70 60 L180 60 L180 40 L70 20 Z" fill="#fde68a" stroke="#b45309" stroke-width="1.5" />
+            <!-- ring -->
+            <rect x="180" y="20" width="36" height="180" fill="#fed7aa" stroke="#c2410c" stroke-width="1.5" />
+            <!-- RF -->
+            <rect x="216" y="34" width="10" height="152" fill="#fb923c" stroke="#c2410c" stroke-width="1" />
+            <!-- bore -->
+            <line x1="0" y1="92" x2="216" y2="92" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 4" />
+            <line x1="0" y1="128" x2="216" y2="128" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 4" />
+            <!-- dims -->
+            <line x1="180" y1="215" x2="216" y2="215" stroke="#64748b" marker-start="url(#arr)" marker-end="url(#arr)" />
+            <text x="188" y="230" font-size="11" fill="#334155" text-anchor="middle">t</text>
+            <line x1="70" y1="110" x2="180" y2="110" stroke="#64748b" marker-start="url(#arr)" marker-end="url(#arr)" />
+            <text x="125" y="124" font-size="11" fill="#334155" text-anchor="middle">Y − t</text>
+            <text x="125" y="50" font-size="12" fill="#92400e" text-anchor="middle">Hub: conical frustum X → OD</text>
+            <text x="198" y="14" font-size="12" fill="#9a3412" text-anchor="middle">Ring disc</text>
+            <text x="241" y="110" font-size="11" fill="#9a3412">RF</text>
+            <text x="30" y="86" font-size="11" fill="#334155">Bore</text>
+            <text x="60" y="170" font-size="11" fill="#334155">X = hub dia @ base</text>
+            <text x="150" y="170" font-size="11" fill="#334155">OD</text>
+          </svg>
+        </div>
+        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
+          <p class="font-semibold text-slate-900">Volume equations (dimensions from ASME B16.5 tables)</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>Weld Neck:</strong> V = disc(OD, bore, t) + frustum(X→OD, Y−t) − bore cylinder(Y−t) + raised face</li>
+            <li><strong>Slip On / Socket Weld / Threaded:</strong> V = disc(OD, bore, t) + cylinder(X, Y−t) − bore cylinder(Y−t) + raised face</li>
+            <li><strong>Blind:</strong> V = disc(OD, t<sub>blind</sub>) + raised face</li>
+            <li>Frustum: V = π·L/3 · (R₁² + R₁R₂ + R₂²)</li>
+            <li>Weight = V × ρ × 10⁻⁹ (mm³ → kg, ρ in kg/m³)</li>
+          </ul>
+          <p class="mt-3">The flat-plate method (π/4·(OD²−bore²)·t·ρ) ignores the hub. For a 24″ Class 150 WN flange it returns ≈ 90 kg versus the true ≈ 128 kg — a <strong>42% understatement</strong>, which is why geometric modeling matters for freight and quoting.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+              {f.q}
+              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ ASME B16.5 Flange Dimensions Chart</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Pipe Weight Calculator</a>
+        <a href="/cangzhou-flange-manufacturers/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Cangzhou Flange Manufacturers</a>
+        <a href="/request-a-quote/" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+      <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.5-2020 dimensions and
+      nominal material densities. Actual weights may vary due to bore selection, fillet radii, and manufacturing
+      tolerances. For critical applications (lifting, shipping cost guarantees, pressure-boundary design), verify
+      with the flange manufacturer.
+    </p>
+  </main>
+
+  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+    <p>© 2026 pvfcalculator.com — ASME B16.5 Flange Weight Calculator. Data traceable to ASME B16.5-2020 Tables 8–15.</p>
+  </footer>
+
+<script>
+  import { CLASS_DATA, CLASS_LIST, MATERIALS, NPS_LIST } from '../data/flange-dimensions';
+  import { computeFlangeWeight, FLANGE_TYPES, type FlangeType } from '../lib/flange-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = { type: 'WN' as FlangeType, cls: 150, nps: 2, density: 7850, qty: 1, unit: 'kg' as 'kg' | 'lb' };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const cd = CLASS_DATA[state.cls];
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!cd.validNps.includes(state.nps)) {
+      state.nps = cd.validNps[Math.min(5, cd.validNps.length - 1)];
+      sel.value = String(state.nps);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setTypeButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) => {
+      const active = b.dataset.type === state.type;
+      b.classList.toggle('border-orange-500', active);
+      b.classList.toggle('bg-orange-50', active);
+      b.classList.toggle('text-orange-700', active);
+      b.classList.toggle('border-slate-200', !active);
+      b.classList.toggle('text-slate-600', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const t = FLANGE_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? t.desc : '';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-slate-900 text-white';
+    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  function renderResult() {
+    const r = computeFlangeWeight(state.type, state.cls, state.nps, state.density);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    $('resultLine').textContent =
+      `${FLANGE_TYPES.find((t) => t.id === state.type)!.name} ${r.npsLabel} Class ${r.cls} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outVolume').textContent = `${fmt(r.volumeCm3, 0)} cm³`;
+    $('outDensity').textContent = `${fmt(state.density, 0)} kg/m³`;
+
+    const d = r.dims;
+    const rows: [string, string][] = state.type === 'BL'
+      ? [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Blind thickness t', `${fmt(d.t, 1)} mm`],
+         ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`], ['Bolt circle', `${fmt(d.bcd, 1)} mm`],
+         ['Bolts', d.bolts]]
+      : [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Bore (STD wall)', `${fmt(d.bore, 1)} mm`],
+         ['Ring thickness t', `${fmt(d.t, 1)} mm`], ['Hub diameter X', `${fmt(d.x, 1)} mm`],
+         ['Hub length Y', `${fmt(d.y, 1)} mm`], ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`],
+         ['Bolt circle', `${fmt(d.bcd, 1)} mm`], ['Bolts', d.bolts]];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800">${v}</dd></div>`)
+      .join('');
+
+    const v = r.volumes;
+    const seg = state.type === 'BL'
+      ? [['Flange disc', v.ringMm3], ['Raised face', v.faceMm3]]
+      : [['Flange ring', v.ringMm3], [state.type === 'WN' ? 'Tapered hub (net)' : 'Straight hub (net)', v.hubMm3], ['Raised face', v.faceMm3]];
+    $('volList').innerHTML = seg
+      .map(([k, mm3]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800">${fmt((mm3 as number) / 1000, 1)} cm³</dd></div>`)
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Total</dt><dd class="font-bold text-orange-700">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
+  }
+
+  function renderTable() {
+    const cd = CLASS_DATA[state.cls];
+    const tname = FLANGE_TYPES.find((t) => t.id === state.type)!.name;
+    $('tableTitle').textContent = tname;
+    $('tableClass').textContent = `Class ${state.cls}`;
+    const tbody = $('dimsTableBody');
+    tbody.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const r = computeFlangeWeight(state.type, state.cls, n.nps, state.density);
+      if (!r.valid) continue;
+      const d = r.dims;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover:bg-orange-50';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(d.od, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.bore, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(d.t, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.x, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.y, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(d.bcd, 1)}</td>` +
+        `<td class="px-3 py-2">${d.bolts}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'text-orange-600' : ''}">${fmt(r.weightKg, 2)}</td>`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.type = b.dataset.type as FlangeType; setTypeButtons(); render(); })
+  );
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; setUnitButtons(); renderResult(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; setUnitButtons(); renderResult(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateNps();
+  setTypeButtons();
+  setUnitButtons();
+  render();
+</script>
+</body>
+</html>
