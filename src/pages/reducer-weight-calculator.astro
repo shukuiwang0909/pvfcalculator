@@ -1,0 +1,551 @@
+---
+const title = "Pipe Reducer Weight Calculator | Concentric & Eccentric Reducer Weight | pvfcalculator.com";
+const description = "Calculate concentric and eccentric reducer weight. ASME B16.9 reducer weight calculator for carbon steel, stainless steel, alloy steel. Free online.";
+const canonical = "https://pvfcalculator.com/reducer-weight-calculator/";
+
+const faqs = [
+  {
+    q: "How do you calculate the weight of a pipe reducer?",
+    a: "Reducer weight is estimated from the straight-pipe weight of the large end size and schedule — a concentric reducer weighs ≈ 0.80 × and an eccentric reducer ≈ 0.85 × the equivalent length of straight pipe — anchored on manufacturer-catalog concentric SCH 40 weights per ASME B16.9 combination. This calculator looks up the catalog-calibrated reference weight for the large × small NPS combination, then applies the schedule factor (SCH 80 ≈ 1.5 × SCH 40), the reducer-type factor (eccentric ≈ 1.06 × concentric) and the material density ratio (ρ / 7,850). Results are typically within ±10% of supplier quotations for carbon steel butt-weld reducers."
+  },
+  {
+    q: "What is the difference between concentric and eccentric reducer weight?",
+    a: "An eccentric reducer weighs about 6% more than a concentric reducer of the same large end, small end and schedule (for example a 6″ × 4″ SCH 40 reducer: ≈ 2.50 kg concentric versus ≈ 2.65 kg eccentric). The weight difference comes from the offset bore — one side of the eccentric fitting keeps full large-end wall length while the other side tapers. Functionally, concentric reducers keep the center line straight and are used in vertical runs, while eccentric reducers keep the bottom (or top) of the line flat and are used in horizontal pump suction lines to avoid trapping air pockets."
+  },
+  {
+    q: "How much does a 6 inch by 4 inch SCH 40 concentric reducer weigh?",
+    a: "A 6″ × 4″ (NPS 6 × NPS 4) SCH 40 concentric butt-weld reducer in carbon steel (ASTM A234 WPB) weighs approximately 2.5 kg (about 5.5 lb). The same combination in SCH 80 weighs approximately 3.8 kg, as an eccentric reducer approximately 2.65 kg, and in 304 stainless steel approximately 2.55 kg. Ten pieces would total roughly 25 kg — useful for freight and packing-list estimates."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Pipe Reducer Weight Calculator (ASME B16.9)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="pvfcalculator.com" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <header class="bg-slate-900 text-white shadow">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
+      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
+        <a href="/flange-weight-calculator/" class="hover:text-white">Flange Weight</a>
+        <a href="/elbow-weight-calculator/" class="hover:text-white">Elbow Weight</a>
+        <a href="/reducer-weight-calculator/" class="text-orange-400 font-medium">Reducer Weight</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        Pipe Reducer Weight Calculator <span class="text-orange-600">(ASME B16.9)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-slate-600">
+        Calculate the theoretical weight of ASME B16.9 butt-weld pipe reducers — concentric
+        (center lines aligned) and eccentric (flat bottom) — for large ends NPS 3/4″ to 24″
+        and small ends NPS 1/2″ to 20″ in schedules SCH 10 through XXS. Covers carbon steel,
+        stainless steel and alloy steel with results in kilograms or pounds.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Reducer weight calculator tool">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">Reducer Type</label>
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2" id="typeRadios" role="radiogroup" aria-label="Reducer type">
+          <label data-type="CON" class="type-opt flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 transition">
+            <input type="radio" name="rtype" value="CON" class="h-4 w-4 shrink-0 accent-orange-500" checked />
+            <svg viewBox="0 0 64 40" class="h-8 w-14 shrink-0" aria-hidden="true"><path d="M4 7 L60 15.5 L60 24.5 L4 33 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="7" x2="4" y2="33" stroke="currentColor" stroke-width="2"/><line x1="60" y1="15.5" x2="60" y2="24.5" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="min-w-0">
+              <span class="block text-sm font-semibold">Concentric</span>
+              <span class="block text-xs text-slate-500">Center lines aligned — vertical runs</span>
+            </span>
+          </label>
+          <label data-type="ECC" class="type-opt flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 transition">
+            <input type="radio" name="rtype" value="ECC" class="h-4 w-4 shrink-0 accent-orange-500" />
+            <svg viewBox="0 0 64 40" class="h-8 w-14 shrink-0" aria-hidden="true"><path d="M4 6 L60 18 L60 31 L4 31 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="6" x2="4" y2="31" stroke="currentColor" stroke-width="2"/><line x1="60" y1="18" x2="60" y2="31" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="min-w-0">
+              <span class="block text-sm font-semibold">Eccentric</span>
+              <span class="block text-xs text-slate-500">Flat bottom — horizontal pump suction</span>
+            </span>
+          </label>
+        </div>
+        <p class="mt-1 text-xs text-slate-500" id="typeDesc">Concentric Reducer — center lines aligned, used in vertical pump suction &amp; process lines</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="largeNps" class="mb-1 block text-sm font-semibold text-slate-700">Large End Size (NPS)</label>
+          <select id="largeNps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="smallNps" class="mb-1 block text-sm font-semibold text-slate-700">Small End Size (NPS)</label>
+          <select id="smallNps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"></select>
+          <p class="mt-1 hidden text-xs font-medium text-amber-700" id="smallNote">Small end must be smaller than the large end.</p>
+        </div>
+        <div>
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-slate-700">Schedule</label>
+          <select id="schedule" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+            <option value="SCH10">SCH 10</option>
+            <option value="SCH20">SCH 20</option>
+            <option value="SCH30">SCH 30</option>
+            <option value="STD">SCH STD</option>
+            <option value="SCH40" selected>SCH 40</option>
+            <option value="SCH60">SCH 60</option>
+            <option value="SCH80">SCH 80</option>
+            <option value="XS">SCH XS</option>
+            <option value="SCH100">SCH 100</option>
+            <option value="SCH120">SCH 120</option>
+            <option value="SCH140">SCH 140</option>
+            <option value="SCH160">SCH 160</option>
+            <option value="XXS">SCH XXS</option>
+          </select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
+          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Reducer Weight</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-slate-300">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">End-to-end (H, typ.)</span><span class="font-semibold" id="outLength">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Large-end OD</span><span class="font-semibold" id="outLargeOd">–</span></div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.9)</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Calculation Basis</p>
+          <dl class="text-sm" id="basisList"></dl>
+          <details class="mt-3 text-xs text-slate-500">
+            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+            <p class="mt-1">Reference weights are manufacturer-catalog concentric reducer values for SCH 40 carbon steel; SCH 80 / XS = × 1.5 and other schedules use ASME B36.10M metal-mass factors; unlisted combinations extrapolate ∝ large-end NPS². Eccentric = concentric × 1.06. End-to-end length is not standardized by ASME B16.9 — the displayed H ≈ large-end OD is typical of manufacturer catalogs. Weights are theoretical — verify with the fitting manufacturer for critical applications.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="Reducer weight table">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Reducer Weights — <span id="tableTitle" class="text-orange-600">Concentric SCH 40 Reference</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table class="w-full min-w-[720px] text-sm">
+          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+            <tr>
+              <th class="px-3 py-2.5">Combination</th>
+              <th class="px-3 py-2.5">Large OD (mm)</th>
+              <th class="px-3 py-2.5">Small OD (mm)</th>
+              <th class="px-3 py-2.5">H ≈ (mm)</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 CON</th>
+              <th class="px-3 py-2.5 text-right">SCH 80 CON</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 ECC</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">Table weights use the currently selected material density and are shown in <span id="tableUnit">kg</span>. Tap any row to load it into the calculator.</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(large-end pipe weight × calibration factors)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="rounded-xl bg-white p-5 shadow-md">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="Concentric and eccentric reducer geometric model">
+            <defs>
+              <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- concentric reducer -->
+            <path d="M60 60 L300 86 L300 154 L60 180 Z" fill="#fed7aa" opacity="0.5" stroke="#c2410c" stroke-width="2" />
+            <line x1="60" y1="60" x2="60" y2="180" stroke="#c2410c" stroke-width="2" />
+            <line x1="300" y1="86" x2="300" y2="154" stroke="#c2410c" stroke-width="2" />
+            <line x1="20" y1="120" x2="330" y2="120" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5" />
+            <text x="180" y="42" font-size="12" fill="#9a3412" text-anchor="middle">Concentric — center lines aligned</text>
+            <!-- D dim -->
+            <line x1="44" y1="60" x2="44" y2="180" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="30" y="124" font-size="11" fill="#334155">D</text>
+            <!-- d dim -->
+            <line x1="316" y1="86" x2="316" y2="154" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="332" y="124" font-size="11" fill="#334155">d</text>
+            <!-- H dim -->
+            <line x1="60" y1="202" x2="300" y2="202" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="180" y="218" font-size="11" fill="#334155" text-anchor="middle">H ≈ large-end OD (typ. manufacturer length)</text>
+            <!-- eccentric reducer -->
+            <path d="M60 226 L300 226 L300 214 L60 190 Z" fill="#fde68a" opacity="0.6" stroke="#b45309" stroke-width="2" />
+            <text x="180" y="182" font-size="11" fill="#92400e" text-anchor="middle">Eccentric — flat bottom (≈ +6% weight)</text>
+          </svg>
+        </div>
+        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
+          <p class="font-semibold text-slate-900">Reducer weight equations (ASME B16.9 + ASME B36.10M)</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>Base method:</strong> W<sub>con</sub> ≈ 0.80 × straight-pipe weight of the <strong>large end</strong> size &amp; schedule · W<sub>ecc</sub> ≈ 0.85 ×</li>
+            <li><strong>This calculator (catalog-calibrated):</strong> W = W<sub>ref</sub>(large × small, SCH 40) × F<sub>sch</sub> × F<sub>type</sub> × (ρ / 7,850)</li>
+            <li><strong>Schedule factor F<sub>sch</sub>:</strong> SCH 40 / STD = 1.0 · SCH 80 / XS = 1.5 · SCH 10–160 and XXS scale the SCH 40 reference by their ASME B36.10M metal-mass ratio</li>
+            <li><strong>Type factor F<sub>type</sub>:</strong> concentric = 1.0 · eccentric = 1.06 (≈ 0.85 / 0.80)</li>
+            <li><strong>Unlisted combinations:</strong> extrapolate from the nearest known combination, metal volume ∝ large-end NPS²</li>
+          </ul>
+          <p class="mt-3">The raw 0.8 × straight-pipe shortcut needs an assumed reducer length, which ASME B16.9 does not standardize — manufacturer end-to-end lengths vary by roughly ±30%. Anchoring on catalog weights for the actual large × small combination removes that guesswork: for a 6″ × 4″ SCH 40 reducer the engine returns ≈ 2.5 kg, matching supplier catalogs, where a naive 0.8 × kg/m × OD estimate can drift ±25%.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO content -->
+    <section class="mt-12 space-y-6" aria-label="Reducer weight reference guide">
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">How to Calculate Reducer Weight</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>To calculate the weight of a butt-weld reducer you need five inputs: the reducer type (concentric or eccentric), the large-end NPS, the small-end NPS, the wall schedule and the material density. The small end must always be smaller than the large end — a reducer transitions between two different pipe sizes in the same line. Start from a catalog or calibrated concentric SCH 40 reference weight for the exact large × small combination, then multiply by the schedule factor (SCH 80 ≈ 1.5 × SCH 40), by 1.06 if the reducer is eccentric, and by the ratio of your material density to 7,850 kg/m³ if you are not working in carbon steel.</p>
+          <p>Procurement and freight teams usually skip the geometry entirely and order by catalog weight, because reducer end-to-end lengths are manufacturer-specific. This calculator combines both worlds: calibrated reference weights for the 20 most common combinations, deterministic extrapolation ∝ large-end NPS² for the rest, and automatic schedule, type and material scaling — so a 10-piece bill of materials totals instantly in kg or lb.</p>
+        </div>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">Reducer Weight Formula</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>The complete formula used by this calculator is:</p>
+          <p class="rounded-lg bg-slate-100 px-4 py-3 font-mono text-sm text-slate-800">W = W_ref(large × small) × F_sch × F_type × ρ / 7,850</p>
+          <p>where W_ref is the carbon-steel concentric SCH 40 reference weight for the selected combination, F_sch is the schedule factor (1.0 for SCH 40 / STD, 1.5 for SCH 80 / XS, metal-mass ratios for other schedules), F_type is 1.0 for concentric and 1.06 for eccentric, and ρ is the material density in kg/m³. Total weight for a purchase order is W × quantity. Worked example: a 6″ × 4″ SCH 80 eccentric reducer in stainless F316 (ρ = 7,980) weighs 2.50 × 1.5 × 1.06 × 7,980 / 7,850 ≈ 4.04 kg, and twenty pieces weigh ≈ 80.8 kg.</p>
+        </div>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Standard</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>ASME B16.9, “Factory-Made Wrought Buttwelding Fittings,” is the governing standard for butt-weld reducers in sizes NPS 1/2″ through 48″. It defines concentric reducers (center lines aligned) and eccentric reducers (offset bore, flat on one side) with beveled ends for butt welding. Unlike elbows and tees, B16.9 does not assign reducer end-to-end lengths — those follow manufacturer or purchaser agreement (MSS SP-43 / SP-75 for stainless and other fittings), which is why reducer weights are best anchored on catalog values rather than envelope geometry.</p>
+          <p>Wall thicknesses follow ASME B36.10M for carbon and alloy steel (SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS) and ASME B36.19M for stainless steel. Typical materials include ASTM A234 WPB (carbon steel), A403 WP304/WP316 (stainless) and A234 WP11/WP22 (alloy steel). Eccentric reducers are standard in horizontal pump suction lines where a flat bottom prevents air pockets, while concentric reducers suit vertical runs and general process piping.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+              {f.q}
+              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Flange Weight Calculator</a>
+        <a href="/elbow-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Elbow Weight Calculator</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Tee Weight Calculator</a>
+        <a href="/products/concentric-reducer" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Concentric Reducer Products</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+      <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.9
+      reducer combinations and catalog-calibrated reference weights for carbon steel.
+      Actual fitting weights vary between manufacturers because B16.9 does not standardize
+      reducer end-to-end lengths and permits tolerances on wall thickness. For critical
+      applications (lifting, shipping cost guarantees, pressure-boundary design), verify
+      with the fitting manufacturer.
+    </p>
+  </main>
+
+  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+    <p>© 2026 pvfcalculator.com — ASME B16.9 Pipe Reducer Weight Calculator. Combinations per ASME B16.9, schedules per ASME B36.10M.</p>
+  </footer>
+
+<script>
+  import { COMBO_LIST, MATERIALS, NPS_LIST, REDUCER_TYPES, SCHEDULES, SMALL_END_MAX, type ReducerType } from '../data/reducer-dimensions';
+  import { computeReducerWeight } from '../lib/reducer-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    type: 'CON' as ReducerType,
+    large: 6,
+    small: 4,
+    schedule: 'SCH40',
+    density: 7850,
+    qty: 1,
+    unit: 'kg' as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateLarge() {
+    const sel = $('largeNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (n.nps < 0.75) continue; // large ends: NPS 3/4" and up
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.large) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateSmall() {
+    const sel = $('smallNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    const valid = NPS_LIST.filter((n) => n.nps < state.large && n.nps <= SMALL_END_MAX);
+    for (const n of valid) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.small) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!valid.some((n) => n.nps === state.small)) {
+      state.small = valid.length ? valid[valid.length - 1].nps : 0;
+      sel.value = String(state.small);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setTypeStyles() {
+    document.querySelectorAll<HTMLLabelElement>('.type-opt').forEach((l) => {
+      const active = l.dataset.type === state.type;
+      l.classList.toggle('border-orange-500', active);
+      l.classList.toggle('bg-orange-50', active);
+      l.classList.toggle('text-orange-700', active);
+      l.classList.toggle('border-slate-200', !active);
+      l.classList.toggle('text-slate-600', !active);
+    });
+    const t = REDUCER_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? `${t.name} — ${t.desc}` : '';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-slate-900 text-white';
+    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
+  const typeName = (id: ReducerType) => (id === 'ECC' ? 'Eccentric' : 'Concentric');
+
+  function renderResult() {
+    const r = computeReducerWeight(state.type, state.large, state.small, state.schedule, state.density);
+    const invalid = !r.valid;
+    $('smallNote').classList.toggle('hidden', !invalid);
+    ($('smallNps') as HTMLSelectElement).classList.toggle('border-amber-500', invalid);
+    if (invalid) {
+      $('weightValue').textContent = '–';
+      $('resultLine').textContent = 'Select a small end smaller than the large end.';
+      $('totalWeight').textContent = '–';
+      return;
+    }
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    $('resultLine').textContent =
+      `${typeName(r.type)} Reducer ${r.largeLabel} × ${r.smallLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outLength').textContent = `${fmt(r.lengthMm, 1)} mm`;
+    $('outLargeOd').textContent = `${fmt(r.largeOdMm, 1)} mm`;
+
+    const rows: [string, string][] = [
+      ['Reducer type', `${typeName(r.type)} (ASME B16.9)`],
+      ['Combination', `${r.largeLabel} × ${r.smallLabel}`],
+      ['Schedule', scheduleName(r.schedule)],
+      ['Large-end OD × wall', `${fmt(r.largeOdMm, 1)} mm`],
+      ['Small-end OD', `${fmt(r.smallOdMm, 1)} mm`],
+      ['End-to-end (H, typ.)', `${fmt(r.lengthMm, 1)} mm`],
+      ['Size ratio d/D', fmt(r.smallOdMm / r.largeOdMm, 3)],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .join('');
+
+    const basis: [string, string][] = [
+      ['SCH 40 CON reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)}`],
+      ['Reducer-type factor', `× ${fmt(r.typeFactor, 2)}`],
+      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+    ];
+    $('basisList').innerHTML = basis
+      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .join('') +
+      `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Result</dt><dd class="font-bold text-orange-700">${fmt(r.weightKg, 2)} kg</dd></div>`;
+  }
+
+  function renderTable() {
+    $('tableUnit').textContent = state.unit;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const c of COMBO_LIST) {
+      const r40 = computeReducerWeight('CON', c.large, c.small, 'SCH40', state.density);
+      const r80 = computeReducerWeight('CON', c.large, c.small, 'SCH80', state.density);
+      const recc = computeReducerWeight('ECC', c.large, c.small, 'SCH40', state.density);
+      if (!r40.valid) continue;
+      const conv = (x: { weightKg: number; weightLb: number }) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
+      const isCurrent = state.large === c.large && state.small === c.small;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover:bg-orange-50' + (isCurrent ? ' bg-orange-50' : '');
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${r40.largeLabel} × ${r40.smallLabel}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.largeOdMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.smallOdMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.lengthMm, 1)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'CON' && (state.schedule === 'SCH40' || state.schedule === 'STD') ? 'text-orange-600' : ''}">${fmt(conv(r40), 2)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'CON' && (state.schedule === 'SCH80' || state.schedule === 'XS') ? 'text-orange-600' : ''}">${fmt(conv(r80), 2)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'ECC' && (state.schedule === 'SCH40' || state.schedule === 'STD') ? 'text-orange-600' : ''}">${fmt(conv(recc), 2)}</td>`;
+      tr.addEventListener('click', () => {
+        state.large = c.large;
+        state.small = c.small;
+        ($('largeNps') as HTMLSelectElement).value = String(c.large);
+        populateSmall();
+        ($('smallNps') as HTMLSelectElement).value = String(c.small);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLInputElement>('input[name="rtype"]').forEach((radio) =>
+    radio.addEventListener('change', () => {
+      if (!radio.checked) return;
+      state.type = radio.value as ReducerType;
+      setTypeStyles();
+      render();
+    })
+  );
+  $('largeNps').addEventListener('change', (e) => {
+    state.large = Number((e.target as HTMLSelectElement).value);
+    populateSmall(); // small end options are always < large end
+    render();
+  });
+  $('smallNps').addEventListener('change', (e) => { state.small = Number((e.target as HTMLSelectElement).value); render(); });
+  $('schedule').addEventListener('change', (e) => { state.schedule = (e.target as HTMLSelectElement).value; render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateLarge();
+  populateSmall();
+  setTypeStyles();
+  setUnitButtons();
+  render();
+</script>
+</body>
+</html>

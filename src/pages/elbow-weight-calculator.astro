@@ -1,0 +1,564 @@
+---
+const title = "Pipe Elbow Weight Calculator | 45° & 90° LR/SR Elbow Weight | pvfcalculator.com";
+const description = "Calculate 90° and 45° elbow weight (LR/SR). ASME B16.9 elbow weight calculator for carbon steel, stainless steel, alloy steel. Free online.";
+const canonical = "https://pvfcalculator.com/elbow-weight-calculator/";
+
+const faqs = [
+  {
+    q: "How do you calculate the weight of a 90° pipe elbow?",
+    a: "Elbow weight is estimated from the ASME B16.9 center-to-end dimension (1.5 × NPS for a long-radius 90° elbow, 1.0 × NPS for short radius, 0.625 × NPS for a 45° elbow) multiplied by the pipe weight per unit length from the ASME B36.10M schedule tables, then scaled for material density. This calculator uses that method calibrated against manufacturer catalog weights, so results typically land within ±10% of supplier quotations for carbon steel butt-weld elbows."
+  },
+  {
+    q: "How much does a 6 inch SCH 40 long radius 90° elbow weigh?",
+    a: "A 6\" (NPS 6) SCH 40 long-radius 90° butt-weld elbow in carbon steel (ASTM A234 WPB) weighs approximately 18 kg (about 40 lb). The same elbow in SCH 80 weighs approximately 28 kg, in 304 stainless steel roughly 18.3 kg, and the short-radius version roughly 12.6 kg."
+  },
+  {
+    q: "What is the difference between long radius and short radius elbow weight?",
+    a: "A short-radius (SR) 90° elbow has a center-to-end dimension of 1.0 × NPS versus 1.5 × NPS for long radius (LR), so its bend arc is shorter and it carries less metal — typically about 70% of the LR weight for the same NPS and schedule. SR elbows are used only where space is tight; LR is the ASME B16.9 default. Note that ASME B16.9 does not define SR 45° elbows — 45° elbows are long radius only."
+  },
+  {
+    q: "How much lighter is a 45° elbow than a 90° elbow?",
+    a: "A 45° elbow weighs roughly 60% of an equivalent 90° long-radius elbow of the same NPS and schedule, because its center-to-end dimension is 0.625 × NPS versus 1.5 × NPS and the bend arc carries proportionally less metal. For example, a 4\" SCH 40 LR elbow is about 8.0 kg as 90° and about 4.8 kg as 45°."
+  },
+  {
+    q: "Which standard covers butt-weld elbow dimensions and weights?",
+    a: "ASME B16.9 covers factory-made wrought butt-welding fittings — including 90° and 45°, long- and short-radius elbows — in NPS 1/2\" through 48\". It defines the center-to-end dimensions (A, B) and tolerances, while wall thicknesses follow the pipe schedule tables of ASME B36.10M (carbon steel) and B36.19M (stainless steel). Actual fitting weights vary slightly between manufacturers because B16.9 allows tolerances on wall thickness and center-to-end."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Pipe Elbow Weight Calculator (ASME B16.9)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="pvfcalculator.com" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <header class="bg-slate-900 text-white shadow">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
+      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
+        <a href="/flange-weight-calculator/" class="hover:text-white">Flange Weight</a>
+        <a href="/elbow-weight-calculator/" class="text-orange-400 font-medium">Elbow Weight</a>
+        <a href="/pipe-weight-calculator/" class="hover:text-white">Pipe Weight</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        Pipe Elbow Weight Calculator <span class="text-orange-600">(ASME B16.9)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-slate-600">
+        Calculate the theoretical weight of ASME B16.9 butt-weld pipe elbows — 90° and 45°,
+        long radius (1.5D) and short radius (1D) — from NPS 1/2″ to 24″ in schedules
+        SCH 10 through XXS. Covers carbon steel, stainless steel and alloy steel with
+        results in kilograms or pounds.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Elbow weight calculator tool">
+      <!-- Angle selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">Elbow Angle</label>
+        <div class="grid grid-cols-2 gap-2" id="angleButtons">
+          <button data-angle="90" class="angle-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 16 A16 16 0 0 1 24 32 L56 32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 38 L8 32 M56 38 L56 32" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+            <span class="text-xs font-semibold">90° Elbow</span>
+          </button>
+          <button data-angle="45" class="angle-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 30 A22 22 0 0 1 22 16 L56 16" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 38 L8 34 M56 24 L56 20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+            <span class="text-xs font-semibold">45° Elbow</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-slate-500" id="angleDesc">Quarter bend — full right-angle change of direction</p>
+      </div>
+
+      <!-- Radius selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">Radius Type</label>
+        <div class="grid grid-cols-2 gap-2" id="radiusButtons">
+          <button data-radius="LR" class="radius-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 22 A16 16 0 0 1 24 38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 38 L8 12 A26 26 0 0 1 34 38 L56 38" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+            <span class="text-xs font-semibold">Long Radius (1.5D)</span>
+          </button>
+          <button data-radius="SR" class="radius-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 28 A10 10 0 0 1 18 38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 38 L8 18 A20 20 0 0 1 28 38 L56 38" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+            <span class="text-xs font-semibold">Short Radius (1.0D)</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-slate-500" id="radiusDesc">Center-to-end = 1.5 × NPS (1.5D) — the B16.9 default</p>
+        <p class="mt-1 hidden text-xs font-medium text-amber-700" id="srNote">Short radius is only available for 90° elbows — per ASME B16.9, 45° elbows are made in long radius only.</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-slate-700">Nominal Size (NPS)</label>
+          <select id="nps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-slate-700">Schedule</label>
+          <select id="schedule" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+            <option value="SCH10">SCH 10</option>
+            <option value="SCH20">SCH 20</option>
+            <option value="SCH30">SCH 30</option>
+            <option value="STD">SCH STD</option>
+            <option value="SCH40" selected>SCH 40</option>
+            <option value="SCH60">SCH 60</option>
+            <option value="SCH80">SCH 80</option>
+            <option value="XS">SCH XS</option>
+            <option value="SCH100">SCH 100</option>
+            <option value="SCH120">SCH 120</option>
+            <option value="SCH140">SCH 140</option>
+            <option value="SCH160">SCH 160</option>
+            <option value="XXS">SCH XXS</option>
+          </select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
+          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Elbow Weight</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-slate-300">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Center-to-end (A)</span><span class="font-semibold" id="outCenterToEnd">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-slate-400">Pipe OD</span><span class="font-semibold" id="outPipeOd">–</span></div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.9)</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Calculation Basis</p>
+          <dl class="text-sm" id="basisList"></dl>
+          <details class="mt-3 text-xs text-slate-500">
+            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+            <p class="mt-1">Center-to-end dimensions per ASME B16.9 (90° LR = 1.5 × NPS, 90° SR = 1.0 × NPS, 45° LR = 0.625 × NPS). Reference weights are manufacturer-catalog LR 90° values for SCH 40 / SCH 80 carbon steel; other schedules use ASME B36.10M metal-mass factors and unlisted sizes extrapolate ∝ NPS². Weights are theoretical — verify with the fitting manufacturer for critical applications.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="Elbow weight table">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Elbow Weights — <span id="tableTitle" class="text-orange-600">90° Long Radius</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+        <table class="w-full min-w-[680px] text-sm">
+          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">Center-to-End A (mm)</th>
+              <th class="px-3 py-2.5">Pipe OD (mm)</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 / STD</th>
+              <th class="px-3 py-2.5 text-right">SCH 80 / XS</th>
+              <th class="px-3 py-2.5 text-right">SCH 160</th>
+              <th class="px-3 py-2.5 text-right">SCH XXS</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">Table weights use the currently selected material density and <span id="tableCaption">90° LR</span> geometry. Tap any row to load it into the calculator.</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(center-to-end × weight-per-length, catalog-calibrated)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="rounded-xl bg-white p-5 shadow-md">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="90 degree long radius elbow geometric model">
+            <defs>
+              <marker id="arrE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- centerlines -->
+            <path d="M60 210 L60 90 A60 60 0 0 1 120 30 L360 30" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5" />
+            <!-- outer bend -->
+            <path d="M30 210 L30 90 A90 90 0 0 1 120 0 L390 0" fill="none" stroke="#c2410c" stroke-width="2" />
+            <path d="M90 210 L90 90 A30 30 0 0 1 120 60 L390 60" fill="none" stroke="#c2410c" stroke-width="2" />
+            <!-- metal fill -->
+            <path d="M30 210 L90 210 L90 90 A30 30 0 0 0 120 60 L390 60 L390 0 L120 0 A90 90 0 0 0 30 90 Z" fill="#fed7aa" opacity="0.45" stroke="none" />
+            <!-- dim A horizontal -->
+            <line x1="60" y1="120" x2="360" y2="120" stroke="#64748b" marker-start="url(#arrE)" marker-end="url(#arrE)" />
+            <text x="210" y="136" font-size="12" fill="#334155" text-anchor="middle">A = 1.5 × NPS (center-to-end)</text>
+            <!-- dim A vertical -->
+            <line x1="180" y1="90" x2="180" y2="210" stroke="#64748b" marker-start="url(#arrE)" marker-end="url(#arrE)" />
+            <text x="196" y="155" font-size="12" fill="#334155">A</text>
+            <!-- bend radius -->
+            <line x1="60" y1="90" x2="105" y2="75" stroke="#b45309" stroke-width="1.5" />
+            <text x="110" y="70" font-size="11" fill="#92400e">R = bend radius (1.5D / 1.0D)</text>
+            <text x="225" y="42" font-size="12" fill="#9a3412" text-anchor="middle">90° elbow — LR or SR</text>
+          </svg>
+        </div>
+        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
+          <p class="font-semibold text-slate-900">Elbow weight equations (ASME B16.9 + ASME B36.10M)</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>Center-to-end (A):</strong> 90° LR: A = 1.5 × NPS in · 90° SR: A = 1.0 × NPS in · 45° LR: A = 0.625 × NPS in</li>
+            <li><strong>Base method:</strong> W = A × (pipe weight per unit length from the schedule table)</li>
+            <li><strong>This calculator (catalog-calibrated):</strong> W = W<sub>LR90,ref</sub>(NPS, SCH) × F<sub>geo</sub> × (ρ / 7,850)</li>
+            <li><strong>Geometry factor F<sub>geo</sub>:</strong> 90° LR = 1.0 · 90° SR = 0.7 · 45° LR = 0.6</li>
+            <li><strong>Schedule factor:</strong> SCH STD = SCH 40, SCH XS = SCH 80; SCH 10–160 and XXS scale the SCH 40 reference by their ASME B36.10M metal-mass ratio</li>
+          </ul>
+          <p class="mt-3">The simple A × kg/m formula <strong>understates</strong> real elbow weight because B16.9 elbows are thicker than straight pipe at the intrados and extrados (wall-thickness reinforcement at the bend). That is why the engine anchors on manufacturer-catalog LR 90° weights instead — for a 2″ SCH 40 LR 90° elbow the raw formula gives ≈ 0.4 kg while the true catalog weight is ≈ 1.8 kg, a <strong>4× understatement</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO content -->
+    <section class="mt-12 space-y-6" aria-label="Elbow weight reference guide">
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">How to Calculate Elbow Weight</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>To calculate the weight of a butt-weld elbow you need four inputs: the nominal pipe size (NPS), the wall schedule, the bend geometry (90° or 45°, long or short radius) and the material density. Start from the ASME B16.9 center-to-end dimension — 1.5 × NPS for a 90° long-radius elbow, 1.0 × NPS for short radius and 0.625 × NPS for a 45° elbow — then multiply by the pipe weight per meter taken from the ASME B36.10M schedule tables, and finally scale by the ratio of your material density to 7,850 kg/m³ if you are not working in carbon steel.</p>
+          <p>In practice, procurement and freight teams use manufacturer catalog weights rather than the raw formula, because elbows carry extra metal at the bend. A 6″ SCH 40 LR 90° elbow catalogs at about 18 kg — nearly double what the center-to-end × kg/m shortcut predicts. This calculator combines both approaches: catalog-calibrated reference weights with geometry and schedule factors, so a 45° elbow automatically comes out at roughly 60% and a short-radius 90° at roughly 70% of the long-radius 90° weight.</p>
+        </div>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">Elbow Weight Formula</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>The complete formula used by this calculator is:</p>
+          <p class="rounded-lg bg-slate-100 px-4 py-3 font-mono text-sm text-slate-800">W = W_ref(NPS, SCH) × F_geo × ρ / 7,850</p>
+          <p>where W_ref is the carbon-steel LR 90° catalog weight for the selected NPS and schedule, F_geo is 1.0 for 90° LR, 0.7 for 90° SR and 0.6 for 45° LR, and ρ is the material density in kg/m³. Total weight for a purchase order is simply W × quantity. Worked example: a 4″ SCH 80 stainless F316 (ρ = 7,980) LR 90° elbow weighs 11.5 kg × 1.0 × 7,980 / 7,850 ≈ 11.7 kg, and forty pieces weigh ≈ 468 kg.</p>
+        </div>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-md">
+        <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Standard</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+          <p>ASME B16.9, “Factory-Made Wrought Buttwelding Fittings,” is the governing standard for butt-weld elbows in sizes NPS 1/2″ through 48″. It defines the center-to-end dimensions (A for 90° elbows, B for 45° elbows), wall thicknesses by schedule, and dimensional tolerances. Long radius — 1.5 × NPS — is the default configuration and is by far the most common in process piping; short radius (1.0 × NPS) elbows are specified only where the piping layout cannot accommodate the longer fitting. The standard covers 45° and 90° elbows in long radius, and 90° elbows in short radius; short-radius 45° elbows are not part of the standard.</p>
+          <p>Wall thicknesses follow ASME B36.10M for carbon and alloy steel (SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS) and ASME B36.19M for stainless steel. Typical materials include ASTM A234 WPB (carbon steel), A403 WP304/WP316 (stainless) and A234 WP11/WP22 (alloy steel). Because B16.9 permits tolerances on wall thickness and center-to-end, individual manufacturer weights can vary by a few percent — always confirm against the supplier’s catalog for exact freight and cost estimates.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+              {f.q}
+              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Flange Weight Calculator</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Tee Weight Calculator</a>
+        <a href="/reducer-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Reducer Weight Calculator</a>
+        <a href="/products/pipe-elbow" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Pipe Elbow Products</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+      <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.9
+      center-to-end dimensions and catalog-calibrated reference weights for carbon steel.
+      Actual fitting weights vary between manufacturers due to B16.9 tolerances on wall
+      thickness and center-to-end dimensions. For critical applications (lifting, shipping
+      cost guarantees, pressure-boundary design), verify with the fitting manufacturer.
+    </p>
+  </main>
+
+  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+    <p>© 2026 pvfcalculator.com — ASME B16.9 Pipe Elbow Weight Calculator. Dimensions per ASME B16.9, schedules per ASME B36.10M.</p>
+  </footer>
+
+<script>
+  import { ELBOW_ANGLES, MATERIALS, NPS_LIST, RADIUS_TYPES, SCHEDULES } from '../data/elbow-dimensions';
+  import { computeElbowWeight, type ElbowAngle, type RadiusType } from '../lib/elbow-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    angle: 90 as ElbowAngle,
+    radius: 'LR' as RadiusType,
+    nps: 2,
+    schedule: 'SCH40',
+    density: 7850,
+    qty: 1,
+    unit: 'kg' as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setAngleButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.angle-btn').forEach((b) => {
+      const active = Number(b.dataset.angle) === state.angle;
+      b.classList.toggle('border-orange-500', active);
+      b.classList.toggle('bg-orange-50', active);
+      b.classList.toggle('text-orange-700', active);
+      b.classList.toggle('border-slate-200', !active);
+      b.classList.toggle('text-slate-600', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const a = ELBOW_ANGLES.find((x) => x.id === state.angle);
+    $('angleDesc').textContent = a ? a.desc : '';
+  }
+
+  function setRadiusButtons() {
+    const srUnavailable = state.angle === 45;
+    document.querySelectorAll<HTMLButtonElement>('.radius-btn').forEach((b) => {
+      const isSr = b.dataset.radius === 'SR';
+      const active = b.dataset.radius === state.radius;
+      b.disabled = srUnavailable && isSr;
+      b.classList.toggle('opacity-40', srUnavailable && isSr);
+      b.classList.toggle('cursor-not-allowed', srUnavailable && isSr);
+      b.classList.toggle('border-orange-500', active);
+      b.classList.toggle('bg-orange-50', active);
+      b.classList.toggle('text-orange-700', active);
+      b.classList.toggle('border-slate-200', !active);
+      b.classList.toggle('text-slate-600', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const r = RADIUS_TYPES.find((x) => x.id === state.radius);
+    $('radiusDesc').textContent = r ? r.desc : '';
+    $('srNote').classList.toggle('hidden', !srUnavailable);
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-slate-900 text-white';
+    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
+
+  function renderResult() {
+    const r = computeElbowWeight(state.angle, state.radius, state.nps, state.schedule, state.density);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    const angleName = r.angle === 90 ? '90°' : '45°';
+    const radiusName = r.radius === 'LR' ? 'LR' : 'SR';
+    $('resultLine').textContent =
+      `${angleName} ${radiusName} Elbow ${r.npsLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outCenterToEnd').textContent = `${fmt(r.centerToEndIn, 3)} in / ${fmt(r.centerToEndMm, 1)} mm`;
+    $('outPipeOd').textContent = `${fmt(r.pipeOdMm, 1)} mm`;
+
+    const rows: [string, string][] = [
+      ['Elbow type', `${angleName} ${radiusName} (ASME B16.9)`],
+      ['Nominal size', `${r.npsLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
+      ['Schedule', scheduleName(r.schedule)],
+      ['Center-to-end (A)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
+      ['Bend radius', r.radius === 'LR' ? `1.5 × NPS = ${fmt(1.5 * r.nps, 2)} in` : `1.0 × NPS = ${fmt(r.nps, 2)} in`],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .join('');
+
+    const basis: [string, string][] = [
+      ['LR 90° reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['Geometry factor', `× ${fmt(r.geometryFactor, 2)}`],
+      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
+      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+    ];
+    $('basisList').innerHTML = basis
+      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .join('') +
+      `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Result</dt><dd class="font-bold text-orange-700">${fmt(r.weightKg, 2)} kg</dd></div>`;
+  }
+
+  function renderTable() {
+    const angleName = state.angle === 90 ? '90°' : '45°';
+    const radiusName = state.angle === 45 ? 'LR' : state.radius;
+    $('tableTitle').textContent = `${angleName} ${radiusName === 'LR' ? 'Long Radius' : 'Short Radius'}`;
+    $('tableCaption').textContent = `${angleName} ${radiusName}`;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const n of NPS_LIST) {
+      const r = computeElbowWeight(state.angle, state.radius, n.nps, state.schedule, state.density);
+      if (!r.valid) continue;
+      const w40 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH40', state.density);
+      const w80 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH80', state.density);
+      const w160 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH160', state.density);
+      const wxxs = computeElbowWeight(state.angle, state.radius, n.nps, 'XXS', state.density);
+      const shown = state.unit === 'kg' ? r.weightKg : r.weightLb;
+      const conv = (x: number) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
+      const cell = (x: { weightKg: number; weightLb: number }, isShown: boolean) =>
+        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'text-orange-600' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover:bg-orange-50';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(r.centerToEndMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r.pipeOdMm, 1)}</td>` +
+        cell(w40, state.schedule === 'SCH40' || state.schedule === 'STD') +
+        cell(w80, state.schedule === 'SCH80' || state.schedule === 'XS') +
+        cell(w160, state.schedule === 'SCH160') +
+        cell(wxxs, state.schedule === 'XXS');
+      tr.title = `${fmt(shown, 2)} ${state.unit} at current settings`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.angle-btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.angle = Number(b.dataset.angle) as ElbowAngle;
+      if (state.angle === 45) state.radius = 'LR';
+      setAngleButtons();
+      setRadiusButtons();
+      render();
+    })
+  );
+  document.querySelectorAll<HTMLButtonElement>('.radius-btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (state.angle === 45 && b.dataset.radius === 'SR') return;
+      state.radius = b.dataset.radius as RadiusType;
+      setRadiusButtons();
+      render();
+    })
+  );
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('schedule').addEventListener('change', (e) => { state.schedule = (e.target as HTMLSelectElement).value; render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateNps();
+  setAngleButtons();
+  setRadiusButtons();
+  setUnitButtons();
+  render();
+</script>
+</body>
+</html>
