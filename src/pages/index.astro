@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 
 const title = "PVF Calculator - Pipe Fitting Weight Calculators | ASME B16.5 & B16.9";
-const description = "Free ASME B16.5 & B16.9 weight calculators for pipe fittings. Calculate flange, elbow, tee, and reducer weights in carbon steel, stainless steel, and alloy steel.";
+const description = "Free ASME B16.5 & B16.9 weight calculators for pipe fittings. Calculate flange, pipe elbow, pipe tee, and pipe reducer weights in carbon steel, stainless steel, and alloy steel.";
 const canonical = "https://pvfcalculator.com/";
 
 const tools = [
@@ -16,27 +16,27 @@ const tools = [
     icon: "M12 2L2 7v10c0 5.25 3.75 10.15 8 11 4.25-.85 8-5.75 8-11V7l-10-5zm0 2.18l8 4.02V17c0 4.52-3.275 8.7-7 9.55-3.725-.85-7-5.03-7-9.55V8.2l8-4.02zM12 6a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z",
   },
   {
-    name: "Elbow Weight Calculator",
+    name: "Pipe Elbow Weight Calculator",
     tag: "B16.9 Fitting",
-    short: "Elbow",
-    desc: "45° & 90° long radius and short radius elbows",
-    specs: "LR / SR · 13 Schedules · SCH 10-XXS",
+    short: "Pipe Elbow",
+    desc: "45° & 90° long radius and short radius butt-weld elbows",
+    specs: "LR / SR · Pipe Schedules · SCH 10-XXS",
     href: "/elbow-weight-calculator/",
     icon: "M20 6v8a4 4 0 01-4 4H8a4 4 0 01-4-4v-2a4 4 0 014-4h8a4 4 0 004-4zm0 0V4m0 2h-4",
   },
   {
-    name: "Tee Weight Calculator",
+    name: "Pipe Tee Weight Calculator",
     tag: "Smart Validation",
-    short: "Tee",
-    desc: "Equal & reducing tees with branch/run validation",
+    short: "Pipe Tee",
+    desc: "Equal & reducing butt-weld tees with branch/run validation",
     specs: "Equal / Reducing · Auto-validation · B16.9",
     href: "/tee-weight-calculator/",
     icon: "M12 2v8m0 0l4-4m-4 4L8 6M4 14a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2z",
   },
   {
-    name: "Reducer Weight Calculator",
+    name: "Pipe Reducer Weight Calculator",
     tag: "CON / ECC",
-    short: "Reducer",
+    short: "Pipe Reducer",
     desc: "Concentric & eccentric butt-weld reducers",
     specs: "CON / ECC · Smart pairing · 20+ Combos",
     href: "/reducer-weight-calculator/",
@@ -47,7 +47,7 @@ const tools = [
 const features = [
   { title: "ASME B16.5", desc: "Flange dimensions per latest standard" },
   { title: "ASME B16.9", desc: "Butt-weld fitting weights" },
-  { title: "13 Schedules", desc: "SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS" },
+  { title: "13 Pipe Schedules", desc: "SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS" },
   { title: "5 Materials", desc: "A105, F304, F316, F11 + custom density" },
   { title: "kg / lb", desc: "Instant unit switching" },
   { title: "Mobile First", desc: "Works on any device" },
@@ -56,7 +56,7 @@ const features = [
 const stats = [
   { value: "4", label: "Calculators" },
   { value: "50+", label: "Flange Types" },
-  { value: "13", label: "Schedules" },
+  { value: "13", label: "Pipe Schedules" },
   { value: "100%", label: "Free" },
 ];
 
@@ -64,7 +64,7 @@ const steps = [
   {
     num: "01",
     title: "Select the fitting",
-    desc: "Choose flange, elbow, tee, or reducer and open the matching ASME calculator.",
+    desc: "Choose flange, pipe elbow, pipe tee, or pipe reducer and open the matching ASME calculator.",
   },
   {
     num: "02",
@@ -229,7 +229,7 @@ const jsonLd = {
             <h2 class="text-lg font-bold text-theme-primary">ASME B16.9 Fitting Weights</h2>
           </div>
           <p class="text-sm leading-relaxed text-theme-secondary">
-            Butt-weld fitting weight calculators for 45°/90° elbows (long & short radius), equal/reducing tees, and
+            Butt-weld fitting weight calculators for 45°/90° pipe elbows (long & short radius), equal/reducing pipe tees, and
             concentric/eccentric reducers. Covers SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160 and XXS schedules
             with automatic geometry validation.
           </p>
