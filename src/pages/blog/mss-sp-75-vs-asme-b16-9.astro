@@ -1,0 +1,232 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "MSS SP-75 vs ASME B16.9: High-Yield Fitting Standards Compared | PVF Calculator";
+const description = "MSS SP-75 vs ASME B16.9: key differences in size range, material grades, pressure ratings, and applications. Learn when to specify WPHY fittings over standard B16.9.";
+const canonical = "https://pvfcalculator.com/blog/mss-sp-75-vs-asme-b16-9/";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "publisher": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical,
+  },
+];
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "MSS SP-75 vs ASME B16.9", url: "/blog/mss-sp-75-vs-asme-b16-9/" },
+];
+
+const quickFacts = [
+  { label: "MSS SP-75 Size Range", value: 'NPS 16" to 60"' },
+  { label: "ASME B16.9 Size Range", value: 'NPS 1/2" to 48"' },
+  { label: "MSS SP-75 Material", value: "WPHY-42/52/60/65/70" },
+  { label: "ASME B16.9 Material", value: "A234 WPB / A403 WP304/316" },
+  { label: "MSS SP-75 Yield", value: "≥ 42-70 ksi (290-485 MPa)" },
+  { label: "ASME B16.9 Yield", value: "≥ 25-35 ksi (172-240 MPa)" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="mx-auto max-w-4xl px-4 py-12 sm:py-16">
+    <!-- Header -->
+    <header class="mb-10">
+      <p class="text-sm font-semibold uppercase tracking-widest accent-text mb-2">Standards Comparison</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-theme-primary">MSS SP-75 vs ASME B16.9: High-Yield Fitting Standards Compared</h1>
+      <p class="mt-4 text-lg text-theme-secondary leading-relaxed">When your pipeline moves from standard service to high-pressure, high-stress environments, ASME B16.9 fittings may no longer be enough. MSS SP-75 covers the larger, stronger fittings that keep oil & gas transmission lines safe.</p>
+    </header>
+
+    <!-- Quick Facts -->
+    <section class="glass rounded-2xl p-6 mb-10">
+      <h2 class="text-lg font-bold text-theme-primary mb-4">Quick Facts</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {quickFacts.map(f => (
+          <div class="border-l-2 border-amber-400/50 pl-4">
+            <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium">{f.label}</p>
+            <p class="text-sm font-semibold text-theme-primary mt-1">{f.value}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <nav class="glass rounded-2xl p-6 mb-10">
+      <h2 class="text-lg font-bold text-theme-primary mb-4">Table of Contents</h2>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#what-is-mss-sp-75" class="accent-text hover:underline">1. What is MSS SP-75?</a></li>
+        <li><a href="#what-is-asme-b16-9" class="accent-text hover:underline">2. What is ASME B16.9?</a></li>
+        <li><a href="#key-differences" class="accent-text hover:underline">3. Key Differences at a Glance</a></li>
+        <li><a href="#material-grades" class="accent-text hover:underline">4. Material Grades: WPHY vs Standard</a></li>
+        <li><a href="#when-to-specify" class="accent-text hover:underline">5. When to Specify MSS SP-75</a></li>
+        <li><a href="#dimensions" class="accent-text hover:underline">6. Dimensions & Weight Calculations</a></li>
+        <li><a href="#faq" class="accent-text hover:underline">7. FAQ</a></li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="prose-custom">
+      <section id="what-is-mss-sp-75" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">1. What is MSS SP-75?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">MSS SP-75 is the Manufacturers Standardization Society (MSS) specification for <strong class="text-theme-primary">high-strength, wrought butt-welding fittings</strong>. It covers seamless and welded fittings from NPS 16" to NPS 60" for high-pressure transmission service.</p>
+        <p class="text-theme-secondary leading-relaxed mb-4">The "WPHY" prefix stands for <strong class="text-theme-primary">Wrought Pipe High-Yield</strong>. These fittings are engineered for pipeline applications where standard carbon steel lacks the mechanical strength to handle stress from internal pressure, external loads, and thermal cycling.</p>
+        <div class="bg-amber-400/10 border-l-4 border-amber-400 p-4 rounded-r-lg mb-4">
+          <p class="text-sm text-theme-primary"><strong>Common applications:</strong> Oil & gas transmission pipelines, compressor stations, power plant piping, and offshore platforms where yield strength ≥ 42 ksi is required.</p>
+        </div>
+      </section>
+
+      <section id="what-is-asme-b16-9" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">2. What is ASME B16.9?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">ASME B16.9 is the American Society of Mechanical Engineers standard for <strong class="text-theme-primary">factory-made wrought butt-welding fittings</strong>. It covers NPS 1/2" to NPS 48" and is the default specification for most process piping and general industrial applications.</p>
+        <p class="text-theme-secondary leading-relaxed mb-4">B16.9 fittings use standard material grades like ASTM A234 WPB (carbon steel), A403 WP304/316 (stainless), and A420 WPL6 (low-temperature). Yield strengths typically range from 25-35 ksi—adequate for refineries, chemical plants, and commercial buildings, but not for high-stress pipelines.</p>
+      </section>
+
+      <section id="key-differences" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">3. Key Differences at a Glance</h2>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Attribute</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">MSS SP-75</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">ASME B16.9</th>
+              </tr>
+            </thead>
+            <tbody class="text-theme-secondary">
+              <tr class="border-b border-theme/50">
+                <td class="py-3 px-4 font-medium text-theme-primary">Size Range</td>
+                <td class="py-3 px-4">NPS 16"–60"</td>
+                <td class="py-3 px-4">NPS 1/2"–48"</td>
+              </tr>
+              <tr class="border-b border-theme/50">
+                <td class="py-3 px-4 font-medium text-theme-primary">Material</td>
+                <td class="py-3 px-4">WPHY-42, 52, 60, 65, 70</td>
+                <td class="py-3 px-4">WPB, WP304/316, WPL6</td>
+              </tr>
+              <tr class="border-b border-theme/50">
+                <td class="py-3 px-4 font-medium text-theme-primary">Min Yield</td>
+                <td class="py-3 px-4">42–70 ksi (290–485 MPa)</td>
+                <td class="py-3 px-4">25–35 ksi (172–240 MPa)</td>
+              </tr>
+              <tr class="border-b border-theme/50">
+                <td class="py-3 px-4 font-medium text-theme-primary">Wall Thickness</td>
+                <td class="py-3 px-4">Up to 2" (50 mm)</td>
+                <td class="py-3 px-4">Up to 0.5" (12.7 mm)</td>
+              </tr>
+              <tr class="border-b border-theme/50">
+                <td class="py-3 px-4 font-medium text-theme-primary">Typical Use</td>
+                <td class="py-3 px-4">Pipeline transmission</td>
+                <td class="py-3 px-4">Process piping, plants</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-medium text-theme-primary">Standard Type</td>
+                <td class="py-3 px-4">MSS (industry consensus)</td>
+                <td class="py-3 px-4">ASME (code-recognized)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="material-grades" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">4. Material Grades: WPHY vs Standard</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">The core difference is yield strength. Standard A234 WPB has a minimum yield of 35 ksi (240 MPa). WPHY-52, the most common MSS SP-75 grade, requires 52 ksi (360 MPa)—a 49% increase. This allows thinner walls or higher safety margins at the same pressure.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">WPHY-52 (Most Common)</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>• Yield: 52 ksi (360 MPa)</li>
+              <li>• Tensile: 66–82 ksi (455–565 MPa)</li>
+              <li>• Impact tested at -50°F</li>
+              <li>• Used in: Gas transmission, compressor stations</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">A234 WPB (Standard)</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>• Yield: 35 ksi (240 MPa)</li>
+              <li>• Tensile: 60–85 ksi (415–585 MPa)</li>
+              <li>• No mandatory impact test</li>
+              <li>• Used in: Refineries, chemical plants, HVAC</li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-theme-secondary leading-relaxed">Higher grades like WPHY-60/65/70 are specified for arctic service or ultra-high-pressure lines. These require additional alloying (Nb, V, Ti) and heat treatment.</p>
+      </section>
+
+      <section id="when-to-specify" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">5. When to Specify MSS SP-75</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Switch from B16.9 to MSS SP-75 when your design hits any of these triggers:</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li>Pipeline design pressure exceeds ANSI Class 600 (10.2 MPa / 1480 psi)</li>
+          <li>NPS 16" or larger with high stress-to-yield ratio</li>
+          <li>Seismic, arctic, or offshore environments requiring high toughness</li>
+          <li>Code requirement: ASME B31.4/B31.8 pipelines often mandate WPHY</li>
+          <li>Weight reduction critical: higher yield allows thinner walls</li>
+        </ul>
+        <div class="bg-amber-400/10 border-l-4 border-amber-400 p-4 rounded-r-lg">
+          <p class="text-sm text-theme-primary"><strong>Rule of thumb:</strong> If the word "pipeline" appears in your project description and NPS ≥ 16", MSS SP-75 is likely the correct specification. For plant piping and NPS ≤ 12", ASME B16.9 is almost always sufficient.</p>
+        </div>
+      </section>
+
+      <section id="dimensions" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">6. Dimensions & Weight Calculations</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">MSS SP-75 fitting dimensions follow the same center-to-end formulas as B16.9, but wall thicknesses can be much heavier. Use our calculators to estimate weights for both standards:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <a href="/elbow-weight-calculator/" class="glass rounded-xl p-4 hover:border-amber-400/50 transition-colors block text-center">
+            <p class="font-semibold text-theme-primary">Elbow Weight</p>
+            <p class="text-xs text-theme-secondary mt-1">90°/45°, LR/SR</p>
+          </a>
+          <a href="/tee-weight-calculator/" class="glass rounded-xl p-4 hover:border-amber-400/50 transition-colors block text-center">
+            <p class="font-semibold text-theme-primary">Tee Weight</p>
+            <p class="text-xs text-theme-secondary mt-1">Equal & Reducing</p>
+          </a>
+          <a href="/reducer-weight-calculator/" class="glass rounded-xl p-4 hover:border-amber-400/50 transition-colors block text-center">
+            <p class="font-semibold text-theme-primary">Reducer Weight</p>
+            <p class="text-xs text-theme-secondary mt-1">Concentric & Eccentric</p>
+          </a>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">7. FAQ</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Can I use MSS SP-75 fittings in ASME B31.3 plant piping?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Yes, but only if the design engineer approves it and the material meets B31.3 impact requirements. MSS SP-75 is not automatically code-recognized for B31.3—you may need to justify the higher yield strength through stress analysis.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Is WPHY-52 the same as API 5L X52 pipe?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Mechanically similar (both require 52 ksi yield), but they are different products. API 5L X52 is pipe; MSS SP-75 WPHY-52 is fittings. You typically match them: X52 pipe + WPHY-52 fittings for a uniform stress profile.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Do MSS SP-75 fittings cost more than B16.9?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Yes, typically 20-40% more due to alloy additions, heat treatment, and impact testing. However, the higher strength often reduces total installed cost by allowing thinner schedules and less welding.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">What is the largest MSS SP-75 fitting size?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">NPS 60" (DN 1500). Above this, fabricators use custom-welded segments or induction bends rather than standard fittings.</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="glass rounded-2xl p-6 text-center">
+        <h2 class="text-xl font-bold text-theme-primary mb-2">Need WPHY Fittings?</h2>
+        <p class="text-sm text-theme-secondary mb-4">Get a quote for MSS SP-75 WPHY-52/60/65/70 elbows, tees, and reducers from a Cangzhou factory with 20+ years of pipeline experience.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="accent-bg text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors" style="color: #07090c;">Request a Quote</a>
+          <a href="/asme-b16-9-fitting-dimensions/" class="border border-theme text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-theme-tertiary transition-colors text-theme-primary">View B16.9 Dimensions</a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>

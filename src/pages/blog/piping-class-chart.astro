@@ -1,0 +1,268 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Piping Class Chart: 150#–1500# Materials, Fittings, Gaskets | PVF Calculator";
+const description = "Piping class chart for Class 150, 300, 600, 900, 1500. Standard materials, fitting specs, gasket types, flange facings, and pipe schedules for each class.";
+const canonical = "https://pvfcalculator.com/blog/piping-class-chart/";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "publisher": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical,
+  },
+];
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Piping Class Chart", url: "/blog/piping-class-chart/" },
+];
+
+const classData = [
+  {
+    class: "150#",
+    pressure: "285 psi (1.96 MPa)",
+    pipe: "A106 Gr.B / A53 Gr.B",
+    fitting: "A234 WPB",
+    flange: "A105, RF",
+    gasket: "Non-asbestos sheet",
+    bolt: "A193 B7 / A194 2H",
+    schedule: "STD / SCH 40",
+    color: "#4ade80",
+  },
+  {
+    class: "300#",
+    pressure: "740 psi (5.10 MPa)",
+    pipe: "A106 Gr.B / A53 Gr.B",
+    fitting: "A234 WPB",
+    flange: "A105, RF",
+    gasket: "Spiral wound",
+    bolt: "A193 B7 / A194 2H",
+    schedule: "STD / SCH 40",
+    color: "#60a5fa",
+  },
+  {
+    class: "600#",
+    pressure: "1480 psi (10.2 MPa)",
+    pipe: "A106 Gr.B / A335 P11",
+    fitting: "A234 WPB / A234 WP11",
+    flange: "A105, RF or RTJ",
+    gasket: "Spiral wound / RTJ",
+    bolt: "A193 B7 / A194 2H",
+    schedule: "SCH 80 / SCH 120",
+    color: "#fbbf24",
+  },
+  {
+    class: "900#",
+    pressure: "2220 psi (15.3 MPa)",
+    pipe: "A106 Gr.B / A335 P11/P22",
+    fitting: "A234 WPB / A234 WP22",
+    flange: "A182 F11/F22, RTJ",
+    gasket: "RTJ ring",
+    bolt: "A193 B16 / A194 7",
+    schedule: "SCH 120 / SCH 160",
+    color: "#fb923c",
+  },
+  {
+    class: "1500#",
+    pressure: "3705 psi (25.5 MPa)",
+    pipe: "A335 P11/P22 / A335 P91",
+    fitting: "A234 WP22 / A182 F91",
+    flange: "A182 F22/F91, RTJ",
+    gasket: "RTJ ring (BX)",
+    bolt: "A193 B16 / A194 7",
+    schedule: "SCH XXS / Double Extra Strong",
+    color: "#f87171",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="mx-auto max-w-4xl px-4 py-12 sm:py-16">
+    <!-- Header -->
+    <header class="mb-10">
+      <p class="text-sm font-semibold uppercase tracking-widest accent-text mb-2">Engineering Reference</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-theme-primary">Piping Class Chart: 150#–1500# Materials, Fittings, Gaskets</h1>
+      <p class="mt-4 text-lg text-theme-secondary leading-relaxed">A piping class defines every component in a pressure system—pipe, fittings, flanges, gaskets, bolts, and schedules. This chart shows standard configurations for Class 150 through 1500 in typical oil & gas and petrochemical service.</p>
+    </header>
+
+    <!-- TOC -->
+    <nav class="glass rounded-2xl p-6 mb-10">
+      <h2 class="text-lg font-bold text-theme-primary mb-4">Table of Contents</h2>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#what-is-class" class="accent-text hover:underline">1. What is a Piping Class?</a></li>
+        <li><a href="#class-chart" class="accent-text hover:underline">2. Piping Class Chart 150#–1500#</a></li>
+        <li><a href="#pressure-temperature" class="accent-text hover:underline">3. Pressure-Temperature Ratings</a></li>
+        <li><a href="#material-selection" class="accent-text hover:underline">4. Material Selection Logic</a></li>
+        <li><a href="#special-classes" class="accent-text hover:underline">5. Special Classes: 2500#, 4500#</a></li>
+        <li><a href="#faq" class="accent-text hover:underline">6. FAQ</a></li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="prose-custom">
+      <section id="what-is-class" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">1. What is a Piping Class?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">A piping class (or piping specification) is a complete bill of materials for a pressure-rated system. It specifies:</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li><strong class="text-theme-primary">Pipe:</strong> Material grade, schedule, and standard (A106, A53, API 5L)</li>
+          <li><strong class="text-theme-primary">Fittings:</strong> Material, standard (B16.9, B16.11), and wall thickness matching pipe</li>
+          <li><strong class="text-theme-primary">Flanges:</strong> Material, facing type (RF/FF/RTJ), and standard (B16.5, B16.47)</li>
+          <li><strong class="text-theme-primary">Gaskets:</strong> Type, material, and thickness</li>
+          <li><strong class="text-theme-primary">Bolts:</strong> Stud bolt grade, nut grade, and length</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">Engineers assign a class number (150#, 300#, etc.) based on the maximum design pressure and temperature. Every component must match or exceed the class rating.</p>
+      </section>
+
+      <section id="class-chart" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">2. Piping Class Chart 150#–1500#</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Standard configurations for carbon steel and alloy steel service (A106/A53 pipe):</p>
+        <div class="space-y-4 mb-6">
+          {classData.map(c => (
+            <div class="glass rounded-xl overflow-hidden">
+              <div class="p-4 border-b border-theme" style={`background: ${c.color}10; border-left: 4px solid ${c.color}`}>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3 class="text-xl font-bold text-theme-primary">Class {c.class}</h3>
+                  <span class="text-sm font-mono text-theme-secondary">Max pressure: {c.pressure}</span>
+                </div>
+              </div>
+              <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Pipe</p>
+                  <p class="text-theme-primary">{c.pipe}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Fittings</p>
+                  <p class="text-theme-primary">{c.fitting}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Flanges</p>
+                  <p class="text-theme-primary">{c.flange}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Gaskets</p>
+                  <p class="text-theme-primary">{c.gasket}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Bolts</p>
+                  <p class="text-theme-primary">{c.bolt}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-theme-secondary font-medium mb-1">Schedule</p>
+                  <p class="text-theme-primary">{c.schedule}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="text-sm text-theme-secondary italic">Note: Actual classes vary by project specification. Always check your project's piping material specification (PMS) before ordering.</p>
+      </section>
+
+      <section id="pressure-temperature" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">3. Pressure-Temperature Ratings</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Flange class ratings are based on <strong class="text-theme-primary">ASME B16.5 pressure-temperature tables</strong>. A Class 300 flange at 100°F handles 740 psi, but at 1000°F it drops to 170 psi. Key factors:</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li><strong class="text-theme-primary">Material group:</strong> A105 (Group 1.1) vs F304 (Group 2.2) have different ratings</li>
+          <li><strong class="text-theme-primary">Temperature derating:</strong> Ratings decrease as temperature increases</li>
+          <li><strong class="text-theme-primary">Creep range:</strong> Above 700°F for carbon steel, ratings controlled by creep strength</li>
+        </ul>
+        <div class="glass rounded-xl p-5 mb-4">
+          <h3 class="font-bold text-theme-primary mb-3">Example: A105 Carbon Steel Working Pressure (psi)</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-theme text-left">
+                  <th class="py-2 px-3 text-theme-primary">Temp (°F)</th>
+                  <th class="py-2 px-3 text-theme-primary">150#</th>
+                  <th class="py-2 px-3 text-theme-primary">300#</th>
+                  <th class="py-2 px-3 text-theme-primary">600#</th>
+                  <th class="py-2 px-3 text-theme-primary">900#</th>
+                  <th class="py-2 px-3 text-theme-primary">1500#</th>
+                </tr>
+              </thead>
+              <tbody class="text-theme-secondary">
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">-20 to 100</td><td class="py-2 px-3">285</td><td class="py-2 px-3">740</td><td class="py-2 px-3">1480</td><td class="py-2 px-3">2220</td><td class="py-2 px-3">3705</td></tr>
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">200</td><td class="py-2 px-3">260</td><td class="py-2 px-3">675</td><td class="py-2 px-3">1350</td><td class="py-2 px-3">2025</td><td class="py-2 px-3">3375</td></tr>
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">300</td><td class="py-2 px-3">230</td><td class="py-2 px-3">655</td><td class="py-2 px-3">1315</td><td class="py-2 px-3">1970</td><td class="py-2 px-3">3280</td></tr>
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">400</td><td class="py-2 px-3">200</td><td class="py-2 px-3">635</td><td class="py-2 px-3">1265</td><td class="py-2 px-3">1900</td><td class="py-2 px-3">3170</td></tr>
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">500</td><td class="py-2 px-3">170</td><td class="py-2 px-3">600</td><td class="py-2 px-3">1200</td><td class="py-2 px-3">1795</td><td class="py-2 px-3">2995</td></tr>
+                <tr class="border-b border-theme/50"><td class="py-2 px-3">600</td><td class="py-2 px-3">140</td><td class="py-2 px-3">550</td><td class="py-2 px-3">1095</td><td class="py-2 px-3">1640</td><td class="py-2 px-3">2735</td></tr>
+                <tr><td class="py-2 px-3">700</td><td class="py-2 px-3">110</td><td class="py-2 px-3">535</td><td class="py-2 px-3">1065</td><td class="py-2 px-3">1600</td><td class="py-2 px-3">2665</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-theme-secondary mt-3">Source: ASME B16.5 Table 2, Group 1.1 (A105). For exact values, consult the standard.</p>
+        </div>
+      </section>
+
+      <section id="material-selection" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">4. Material Selection Logic</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">As pressure and temperature rise, material requirements become more stringent:</p>
+        <div class="space-y-3 mb-4">
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-2">Low Pressure (150#–300#)</h3>
+            <p class="text-sm text-theme-secondary">Standard carbon steel: A106 Gr.B pipe, A234 WPB fittings, A105 flanges. Cost-effective for water, air, and low-pressure hydrocarbons.</p>
+          </div>
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-2">Medium Pressure (600#–900#)</h3>
+            <p class="text-sm text-theme-secondary">Enhanced carbon or low-alloy: A106 Gr.B or A335 P11 pipe, A234 WPB/WP11 fittings, A105 or A182 F11 flanges. Spiral wound or RTJ gaskets required.</p>
+          </div>
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-2">High Pressure (1500#–2500#)</h3>
+            <p class="text-sm text-theme-secondary">Cr-Mo alloy or stainless: A335 P22/P91 pipe, A234 WP22 or A182 F91 fittings, RTJ flanges with BX rings. B16 studs with 7 nuts mandatory.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="special-classes" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">5. Special Classes: 2500#, 4500#</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Above 1500#, flanges enter ultra-high-pressure territory:</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li><strong class="text-theme-primary">Class 2500:</strong> Up to 6170 psi at 100°F (A105). Used in high-pressure injection wells and chemical reactors.</li>
+          <li><strong class="text-theme-primary">Class 4500 (API 6A):</strong> Wellhead and Christmas tree equipment. Not covered by B16.5—uses API 6A BX flanges.</li>
+          <li><strong class="text-theme-primary">Class 15000–30000:</strong> Subsea BOP stacks and fracturing equipment. Specialty designs with metal seals.</li>
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">6. FAQ</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">What is the difference between a piping class and a flange class?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Flange class is just the pressure rating of the flange (150#, 300#, etc.). Piping class encompasses the entire system—pipe schedule, fitting material, flange type, gasket, and bolting. A piping class specifies which flange class to use.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Can I mix Class 300 flanges with Class 150 pipe?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">No. The flange class must match or exceed the piping class design pressure. Mixing lower-rated flanges creates a weak point. However, you can use higher-class flanges on lower-class pipe if the facing and dimensions match.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">What schedule pipe goes with Class 600?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Typically SCH 80 or SCH 120 for NPS 6" and below. Larger sizes may use SCH 40 or STD depending on wall thickness calculations. The schedule must be thick enough to handle the design pressure at the design temperature.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">How do I convert flange class to PN (European)?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Approximate equivalents: 150# ≈ PN20, 300# ≈ PN50, 600# ≈ PN100, 900# ≈ PN150, 1500# ≈ PN250. These are not exact—always verify pressure-temperature ratings for your specific material and temperature.</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="glass rounded-2xl p-6 text-center">
+        <h2 class="text-xl font-bold text-theme-primary mb-2">Need Components for a Specific Class?</h2>
+        <p class="text-sm text-theme-secondary mb-4">We supply complete piping packages—pipe, fittings, flanges, gaskets, and bolts—for any class from 150# to 2500#.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="accent-bg text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors" style="color: #07090c;">Request a Quote</a>
+          <a href="/blog/how-to-choose-flange-class/" class="border border-theme text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-theme-tertiary transition-colors text-theme-primary">How to Choose Flange Class</a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>

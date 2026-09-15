@@ -1,0 +1,261 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Flange Facing Types: RF, FF, RTJ, M&F, T&G Selection Guide | PVF Calculator";
+const description = "Flange facing types explained: raised face (RF), flat face (FF), ring type joint (RTJ), male & female, tongue & groove. Learn which facing to use for your pressure class and gasket type.";
+const canonical = "https://pvfcalculator.com/blog/flange-facing-types/";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "publisher": { "@type": "Organization", "name": "pvfcalculator.com" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical,
+  },
+];
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Flange Facing Types", url: "/blog/flange-facing-types/" },
+];
+
+const facingTypes = [
+  {
+    code: "RF",
+    name: "Raised Face",
+    desc: "Most common facing. A 1/16\" (1.6mm) or 1/4\" (6.4mm) raised ring on the flange face concentrates gasket compression for a tight seal.",
+    bestFor: "Class 150–2500, general process piping",
+    gasket: "Spiral wound, ring joint, non-metallic",
+    icon: "M12 2L2 7v10c0 5.25 3.75 10.15 8 11 4.25-.85 8-5.75 8-11V7l-10-5zm0 2.18l8 4.02V17c0 4.52-3.275 8.7-7 9.55-3.725-.85-7-5.03-7-9.55V8.2l8-4.02z",
+  },
+  {
+    code: "FF",
+    name: "Flat Face",
+    desc: "Full-face contact with no raised portion. Used where flange bending must be minimized, typically with cast iron or plastic equipment.",
+    bestFor: "Class 125 cast iron, plastic-lined piping",
+    gasket: "Full-face non-metallic (rubber, PTFE)",
+    icon: "M4 4h16v16H4z",
+  },
+  {
+    code: "RTJ",
+    name: "Ring Type Joint",
+    desc: "Precision-machined groove holds a metal ring gasket. Deforms plastically under load for a metal-to-metal seal.",
+    bestFor: "Class 900–2500, high-pressure gas, subsea",
+    gasket: "R, RX, BX metal rings (soft iron, SS, Inconel)",
+    icon: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 110 12 6 6 0 010-12z",
+  },
+  {
+    code: "M/F",
+    name: "Male & Female",
+    desc: "One flange has a raised male face, the mating flange has a recessed female face. Gasket sits in the female recess, protected from flow erosion.",
+    bestFor: "Class 150–600, corrosive or erosive service",
+    gasket: "Non-metallic flat gaskets",
+    icon: "M12 4v16m8-8H4",
+  },
+  {
+    code: "T/G",
+    name: "Tongue & Groove",
+    desc: "One flange has a raised tongue, the other a matching groove. Provides precise gasket alignment and blowout resistance.",
+    bestFor: "Class 150–600, toxic or hazardous media",
+    gasket: "Non-metallic flat gaskets (confined)",
+    icon: "M4 8h16v8H4zM8 4v4m8-4v4",
+  },
+];
+
+const selectionData = [
+  { service: "Water, air, low-pressure", class: "150–300", facing: "RF or FF", gasket: "Non-asbestos sheet" },
+  { service: "Steam, oil, general process", class: "150–600", facing: "RF", gasket: "Spiral wound" },
+  { service: "High-pressure gas", class: "900–2500", facing: "RTJ", gasket: "Metal ring (R/RX)" },
+  { service: "Corrosive chemicals", class: "150–600", facing: "M/F or T/G", gasket: "PTFE, graphite" },
+  { service: "Cast iron equipment", class: "125", facing: "FF", gasket: "Full-face rubber" },
+  { service: "Subsea pipeline", class: "900–2500", facing: "RTJ (BX)", gasket: "BX ring" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="mx-auto max-w-4xl px-4 py-12 sm:py-16">
+    <!-- Header -->
+    <header class="mb-10">
+      <p class="text-sm font-semibold uppercase tracking-widest accent-text mb-2">Flange Design</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-theme-primary">Flange Facing Types: RF, FF, RTJ, M&F, T&G Selection Guide</h1>
+      <p class="mt-4 text-lg text-theme-secondary leading-relaxed">The facing type determines how your flange seals, which gasket it accepts, and how much pressure it can hold. Choosing the wrong facing is a leading cause of gasket blowout and flange leaks.</p>
+    </header>
+
+    <!-- TOC -->
+    <nav class="glass rounded-2xl p-6 mb-10">
+      <h2 class="text-lg font-bold text-theme-primary mb-4">Table of Contents</h2>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#what-is-facing" class="accent-text hover:underline">1. What is a Flange Facing?</a></li>
+        <li><a href="#five-types" class="accent-text hover:underline">2. The Five Standard Facing Types</a></li>
+        <li><a href="#selection-guide" class="accent-text hover:underline">3. Facing Selection by Service & Class</a></li>
+        <li><a href="#rf-heights" class="accent-text hover:underline">4. RF Face Heights by ASME B16.5</a></li>
+        <li><a href="#rtj-rings" class="accent-text hover:underline">5. RTJ Ring Groove Dimensions</a></li>
+        <li><a href="#machining" class="accent-text hover:underline">6. Surface Finish Requirements</a></li>
+        <li><a href="#faq" class="accent-text hover:underline">7. FAQ</a></li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="prose-custom">
+      <section id="what-is-facing" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">1. What is a Flange Facing?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">The facing is the machined surface of a flange that contacts the gasket and mating flange. It is not cosmetic—its geometry directly controls:</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li><strong class="text-theme-primary">Gasket compression:</strong> Raised surfaces concentrate bolt load for higher sealing stress</li>
+          <li><strong class="text-theme-primary">Gasket retention:</strong> Grooves and recesses prevent gasket blowout under pressure</li>
+          <li><strong class="text-theme-primary">Alignment:</strong> Tongue-and-groove or male-female facings self-align and prevent lateral movement</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">ASME B16.5 defines standard facing types. API 6A adds BX ring grooves for wellhead equipment. Choosing the correct facing is as important as choosing the correct flange class.</p>
+      </section>
+
+      <section id="five-types" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">2. The Five Standard Facing Types</h2>
+        <div class="space-y-4 mb-6">
+          {facingTypes.map(ft => (
+            <div class="glass rounded-xl p-5">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg accent-bg flex items-center justify-center flex-shrink-0" style="color: #07090c;">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={ft.icon} />
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <span class="text-xs font-mono font-bold accent-bg px-2 py-0.5 rounded" style="color: #07090c;">{ft.code}</span>
+                    <h3 class="font-bold text-theme-primary">{ft.name}</h3>
+                  </div>
+                  <p class="text-sm text-theme-secondary leading-relaxed mb-2">{ft.desc}</p>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <p><span class="text-theme-secondary font-medium">Best for:</span> <span class="text-theme-primary">{ft.bestFor}</span></p>
+                    <p><span class="text-theme-secondary font-medium">Gasket:</span> <span class="text-theme-primary">{ft.gasket}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="selection-guide" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">3. Facing Selection by Service & Class</h2>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Service</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Class</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Facing</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Gasket Type</th>
+              </tr>
+            </thead>
+            <tbody class="text-theme-secondary">
+              {selectionData.map(row => (
+                <tr class="border-b border-theme/50">
+                  <td class="py-3 px-4 text-theme-primary">{row.service}</td>
+                  <td class="py-3 px-4">{row.class}</td>
+                  <td class="py-3 px-4">{row.facing}</td>
+                  <td class="py-3 px-4">{row.gasket}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="bg-amber-400/10 border-l-4 border-amber-400 p-4 rounded-r-lg">
+          <p class="text-sm text-theme-primary"><strong>Critical rule:</strong> Never mate RF with FF flanges. The raised face will crush the flat face flange, causing catastrophic failure. Always match facing types.</p>
+        </div>
+      </section>
+
+      <section id="rf-heights" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">4. RF Face Heights by ASME B16.5</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Raised face height depends on pressure class. Taller faces provide more gasket compression area and better sealing at high pressure.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-3">Class 150 & 300</h3>
+            <ul class="text-sm text-theme-secondary space-y-2">
+              <li class="flex justify-between"><span>Height</span><span class="font-mono">1/16" (1.6 mm)</span></li>
+              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125–250 µin AARH</span></li>
+              <li class="flex justify-between"><span>Gasket OD</span><span class="font-mono">Matches RF OD</span></li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-3">Class 400–2500</h3>
+            <ul class="text-sm text-theme-secondary space-y-2">
+              <li class="flex justify-between"><span>Height</span><span class="font-mono">1/4" (6.4 mm)</span></li>
+              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125–250 µin AARH</span></li>
+              <li class="flex justify-between"><span>Gasket OD</span><span class="font-mono">Matches RF OD</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="rtj-rings" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">5. RTJ Ring Groove Dimensions</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Ring Type Joint grooves are precision-machined to accept metal ring gaskets. The three standard ring types:</p>
+        <div class="space-y-3 mb-4">
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-1">Type R (Oval & Octagonal)</h3>
+            <p class="text-sm text-theme-secondary">Most common. Oval for older flanges, octagonal for modern. Sizes R-11 to R-105 covering NPS 1" to 24".</p>
+          </div>
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-1">Type RX (Pressure-Energized)</h3>
+            <p class="text-sm text-theme-secondary">Similar to R but with a wider cross-section that pressurizes the groove. Used in high-pressure API 6A flanges.</p>
+          </div>
+          <div class="glass rounded-xl p-4">
+            <h3 class="font-bold text-theme-primary mb-1">Type BX (Subsea & Ultra-High Pressure)</h3>
+            <p class="text-sm text-theme-secondary">Square cross-section with pressure passage hole. For API 6BX flanges in subsea and 15,000+ psi service.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="machining" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">6. Surface Finish Requirements</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">Facing finish is measured in Arithmetic Average Roughness Height (AARH) or Root Mean Square (RMS):</p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
+          <li><strong class="text-theme-primary">125–250 AARH</strong> (3.2–6.3 µm): Standard for RF flanges with spiral wound or non-metallic gaskets</li>
+          <li><strong class="text-theme-primary">63–125 AARH</strong> (1.6–3.2 µm): For metal-to-metal seals and some RTJ applications</li>
+          <li><strong class="text-theme-primary">32–63 AARH</strong> (0.8–1.6 µm): Mirror finish for lens ring joints or special applications</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">Phonographic (concentric serrated) finish is standard for RF. Spiral serrated is acceptable but may require harder gaskets.</p>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="mb-10">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">7. FAQ</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Can I convert an RF flange to RTJ?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Yes, by machining a ring groove into the raised face. However, this reduces flange thickness and may require engineering approval. Some shops offer "RTJ conversion" services, but verify that the remaining flange thickness meets ASME B16.5 minimums.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">What is the difference between AARH and RMS?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">AARH (Arithmetic Average Roughness Height) and RMS (Root Mean Square) both measure surface roughness. RMS values are approximately 11% higher than AARH for the same surface. 125 AARH ≈ 140 RMS. Always confirm which unit your specification uses.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Can I use a spiral wound gasket on an FF flange?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">No. Spiral wound gaskets require a raised face or ring groove to compress properly. On FF flanges, use full-face non-metallic gaskets. The spiral wound's metal windings will damage the flat face.</div>
+          </details>
+          <details class="glass rounded-xl overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Which facing is best for high-vacuum service?</summary>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">Male & Female or Tongue & Groove with a soft metal gasket (copper, aluminum) provides the best vacuum seal. The confined gasket cannot extrude into the vacuum stream, and the precise alignment prevents leaks.</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="glass rounded-2xl p-6 text-center">
+        <h2 class="text-xl font-bold text-theme-primary mb-2">Need Flanges with Specific Facing?</h2>
+        <p class="text-sm text-theme-secondary mb-4">RF, FF, RTJ, M/F, T&G—get a quote for any facing type in Class 150–2500, carbon or stainless steel.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="accent-bg text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors" style="color: #07090c;">Request a Quote</a>
+          <a href="/flange-weight-calculator/" class="border border-theme text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-theme-tertiary transition-colors text-theme-primary">Calculate Flange Weight</a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>
