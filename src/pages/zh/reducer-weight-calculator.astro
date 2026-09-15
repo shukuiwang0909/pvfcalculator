@@ -1,0 +1,574 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "异径管重量计算器（ASME B16.9）| 同心/偏心 | pvfcalculator.com";
+const description = "在线计算同心和偏心异径管重量。支持碳钢、不锈钢、合金钢，覆盖 ASME B16.9 全系列壁厚等级，结果可切换千克/磅，免费使用。";
+const canonical = "https://pvfcalculator.com/zh/reducer-weight-calculator/";
+
+const faqs = [
+  {
+    q: "如何计算管道异径管的重量？",
+    a: "异径管重量根据大端口径和壁厚等级的直管重量估算 — 同心异径管约为 0.80 ×，偏心异径管约为 0.85 × 等效长度直管重量 — 以制造商目录中基于 ASME B16.9 的同心 SCH 40 重量为基准。本计算器查找大端 × 小端 NPS 组合的目录校准参考重量，然后乘以壁厚系数（SCH 80 ≈ 1.5 × SCH 40）、异径管类型系数（偏心 ≈ 1.06 × 同心）及材质密度比（ρ / 7,850）。对于碳钢对焊异径管，结果通常与供应商报价相差在 ±10% 以内。"
+  },
+  {
+    q: "同心异径管与偏心异径管的重量差异是多少？",
+    a: "偏心异径管比同一大端、小端和壁厚等级的同心异径管重约 6%（例如 6″ × 4″ SCH 40 异径管：同心约 2.50 kg，偏心约 2.65 kg）。重量差异来自偏心孔径 — 偏心管件一侧保持完整大端壁长，另一侧锥形收缩。在功能上，同心异径管保持中轴线笔直，用于竖向管道；偏心异径管保持管道底部（或顶部）平齐，用于水平泵吸管线以避免积存气泡。"
+  },
+  {
+    q: "6 英寸乘 4 英寸 SCH 40 同心异径管重多少？",
+    a: "碳钢（ASTM A234 WPB）6″ × 4″（NPS 6 × NPS 4）SCH 40 同心对焊异径管重量约为 2.5 kg（约 5.5 lb）。同规格 SCH 80 约重 3.8 kg，偏心异径管约重 2.65 kg，304 不锈钢约重 2.55 kg。十件合计约 25 kg — 可用于运费和装箱单估算。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "异径管重量计算器（ASME B16.9）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "异径管重量计算器", url: "/zh/reducer-weight-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        异径管重量计算器 <span class="accent-text">（ASME B16.9）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        计算 ASME B16.9 对焊异径管的理论重量 — 涵盖同心（中轴线对齐）和偏心（底部平齐）两种类型，大端口径 NPS 3/4″ 至 24″，小端口径 NPS 1/2″ 至 20″，壁厚等级 SCH 10 至 XXS。支持碳钢、不锈钢和合金钢，结果可切换千克或磅显示。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="异径管重量计算工具">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">异径管类型</label>
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2" id="typeRadios" role="radiogroup" aria-label="Reducer type">
+          <label data-type="CON" class="type-opt flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 transition">
+            <input type="radio" name="rtype" value="CON" class="h-4 w-4 shrink-0 accent-radio" checked />
+            <svg viewBox="0 0 64 40" class="h-8 w-14 shrink-0" aria-hidden="true"><path d="M4 7 L60 15.5 L60 24.5 L4 33 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="7" x2="4" y2="33" stroke="currentColor" stroke-width="2"/><line x1="60" y1="15.5" x2="60" y2="24.5" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="min-w-0">
+              <span class="block text-sm font-semibold">同心</span>
+              <span class="block text-xs text-theme-muted">中轴线对齐 — 竖向管道</span>
+            </span>
+          </label>
+          <label data-type="ECC" class="type-opt flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 transition">
+            <input type="radio" name="rtype" value="ECC" class="h-4 w-4 shrink-0 accent-radio" />
+            <svg viewBox="0 0 64 40" class="h-8 w-14 shrink-0" aria-hidden="true"><path d="M4 6 L60 18 L60 31 L4 31 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="6" x2="4" y2="31" stroke="currentColor" stroke-width="2"/><line x1="60" y1="18" x2="60" y2="31" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="min-w-0">
+              <span class="block text-sm font-semibold">偏心</span>
+              <span class="block text-xs text-theme-muted">底部平齐 — 水平泵吸管</span>
+            </span>
+          </label>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">Concentric Reducer — center lines aligned, used in vertical pump suction &amp; process lines</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="largeNps" class="mb-1 block text-sm font-semibold text-theme-secondary">大端口径（NPS）</label>
+          <select id="largeNps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="smallNps" class="mb-1 block text-sm font-semibold text-theme-secondary">小端口径（NPS）</label>
+          <select id="smallNps" class="field w-full rounded-lg px-3 py-2 text-sm disabled:cursor-not-allowed disabled:bg-theme-tertiary disabled:text-theme-muted"></select>
+          <p class="mt-1 hidden text-xs font-medium accent-text" id="smallNote">小端口径必须小于大端口径。</p>
+        </div>
+        <div>
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-theme-secondary">壁厚等级</label>
+          <select id="schedule" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="SCH10">SCH 10</option>
+            <option value="SCH20">SCH 20</option>
+            <option value="SCH30">SCH 30</option>
+            <option value="STD">SCH STD</option>
+            <option value="SCH40" selected>SCH 40</option>
+            <option value="SCH60">SCH 60</option>
+            <option value="SCH80">SCH 80</option>
+            <option value="XS">SCH XS</option>
+            <option value="SCH100">SCH 100</option>
+            <option value="SCH120">SCH 120</option>
+            <option value="SCH140">SCH 140</option>
+            <option value="SCH160">SCH 160</option>
+            <option value="XXS">SCH XXS</option>
+          </select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材质</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">密度（kg/m³）</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">数量</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单件异径管重量</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">数量</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">总重量</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">端到端长度（H，典型值）</span><span class="font-semibold" id="outLength">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">大端外径</span><span class="font-semibold" id="outLargeOd">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">关键尺寸（ASME B16.9）</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">计算依据</p>
+          <dl class="text-sm" id="basisList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">数据来源</summary>
+            <p class="mt-1">参考重量来自 SCH 40 碳钢同心异径管的制造商目录值；SCH 80 / XS = × 1.5，其他壁厚等级采用 ASME B36.10M 金属质量系数；未列出的规格组合按大端 NPS² 比例外推。偏心 = 同心 × 1.06。端到端长度未被 ASME B16.9 标准化 — 显示的 H ≈ 大端外径为制造商目录的典型值。重量为理论值 — 关键应用请向管件制造商核实。</p>
+          </details>
+        </div>
+      </div>
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="异径管重量参考表">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 异径管重量参考表 — <span id="tableTitle" class="accent-text">同心管 SCH 40 参考值</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[720px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">规格组合</th>
+              <th class="px-3 py-2.5">大端外径（mm）</th>
+              <th class="px-3 py-2.5">小端外径（mm）</th>
+              <th class="px-3 py-2.5">H ≈ (mm)</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 同心</th>
+              <th class="px-3 py-2.5 text-right">SCH 80 同心</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 偏心</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">表格重量基于当前选择的材质密度，单位为 <span id="tableUnit">kg</span>。点击任意行可将其加载到计算器中。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算原理说明">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算原理 <span class="accent-text">（大端管道重量 × 校准系数）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="同心和偏心异径管几何模型">
+            <defs>
+              <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- concentric reducer -->
+            <path d="M60 60 L300 86 L300 154 L60 180 Z" fill="#fed7aa" opacity="0.5" stroke="#c2410c" stroke-width="2" />
+            <line x1="60" y1="60" x2="60" y2="180" stroke="#c2410c" stroke-width="2" />
+            <line x1="300" y1="86" x2="300" y2="154" stroke="#c2410c" stroke-width="2" />
+            <line x1="20" y1="120" x2="330" y2="120" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5" />
+            <text x="180" y="42" font-size="12" fill="#9a3412" text-anchor="middle">同心 — 中轴线对齐</text>
+            <!-- D dim -->
+            <line x1="44" y1="60" x2="44" y2="180" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="30" y="124" font-size="11" fill="#334155">D</text>
+            <!-- d dim -->
+            <line x1="316" y1="86" x2="316" y2="154" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="332" y="124" font-size="11" fill="#334155">d</text>
+            <!-- H dim -->
+            <line x1="60" y1="202" x2="300" y2="202" stroke="#64748b" marker-start="url(#arrR)" marker-end="url(#arrR)" />
+            <text x="180" y="218" font-size="11" fill="#334155" text-anchor="middle">H ≈ 大端外径（典型制造商长度）</text>
+            <!-- eccentric reducer -->
+            <path d="M60 226 L300 226 L300 214 L60 190 Z" fill="#fde68a" opacity="0.6" stroke="#b45309" stroke-width="2" />
+            <text x="180" y="182" font-size="11" fill="#92400e" text-anchor="middle">偏心 — 底部平齐（约 +6% 重量）</text>
+          </svg>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">异径管重量公式（ASME B16.9 + ASME B36.10M）</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>基本方法：</strong> W<sub>同心</sub> ≈ 0.80 × <strong>大端</strong>口径壁厚等级的直管重量 · W<sub>偏心</sub> ≈ 0.85 ×</li>
+            <li><strong>本计算器（目录校准）：</strong> W = W<sub>ref</sub>(大端 × 小端, SCH 40) × F<sub>sch</sub> × F<sub>type</sub> × (ρ / 7,850)</li>
+            <li><strong>壁厚系数 F<sub>sch</sub>：</strong> SCH 40 / STD = 1.0 · SCH 80 / XS = 1.5 · SCH 10–160 和 XXS 按其 ASME B36.10M 金属质量比缩放 SCH 40 参考值</li>
+            <li><strong>类型系数 F<sub>type</sub>：</strong> 同心 = 1.0 · 偏心 = 1.06（≈ 0.85 / 0.80）</li>
+            <li><strong>未列出的规格组合：</strong> 从最近已知组合外推，金属体积 ∝ 大端 NPS²</li>
+          </ul>
+          <p class="mt-3">原始 0.8 × 直管重量估算法需要假设异径管长度，而 ASME B16.9 未对此进行标准化 — 制造商端到端长度差异约 ±30%。以实际大端 × 小端组合的目录重量为基准可消除此误差：对于 6″ × 4″ SCH 40 异径管，计算结果约为 2.5 kg，与供应商目录吻合，而简单 0.8 × kg/m × 外径估算可能偏差 ±25%。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO content -->
+    <section class="mt-12 space-y-6" aria-label="异径管重量参考指南">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">如何计算异径管重量</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>计算对焊异径管重量需要五个输入参数：异径管类型（同心或偏心）、大端 NPS、小端 NPS、壁厚等级和材质密度。小端口径必须始终小于大端口径 — 异径管负责在同一管线中连接两种不同管径。从精确大端 × 小端组合的目录或校准同心 SCH 40 参考重量开始，乘以壁厚系数（SCH 80 ≈ 1.5 × SCH 40），若为偏心异径管再乘以 1.06，若非碳钢则乘以材质密度与 7,850 kg/m³ 的比值。</p>
+          <p>采购和运输团队通常直接按目录重量下单，因为异径管端到端长度因制造商而异。本计算器兼顾两种需求：对 20 种最常用规格组合提供校准参考重量，对其余规格按大端 NPS² 比例确定性外推，并自动进行壁厚、类型和材质换算 — 十件物料清单可即时汇总千克或磅总重。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">异径管重量计算公式</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>本计算器使用的完整公式为：</p>
+          <p class="rounded-lg bg-theme-tertiary px-4 py-3 font-mono text-sm text-theme-secondary">W = W_ref(大端 × 小端) × F_sch × F_type × ρ / 7,850</p>
+          <p>其中 W_ref 为所选规格组合的碳钢同心 SCH 40 参考重量，F_sch 为壁厚系数（SCH 40 / STD 为 1.0，SCH 80 / XS 为 1.5，其他等级使用金属质量比），F_type 同心为 1.0、偏心为 1.06，ρ 为材质密度（kg/m³）。采购订单总重量为 W × 数量。计算示例：不锈钢 F316（ρ = 7,980）的 6″ × 4″ SCH 80 偏心异径管重量为 2.50 × 1.5 × 1.06 × 7,980 / 7,850 ≈ 4.04 kg，二十件合计约 80.8 kg。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 标准</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>ASME B16.9《工厂制造锻制对焊管件》是 NPS 1/2″ 至 48″ 对焊异径管的主管标准。该标准定义了同心异径管（中轴线对齐）和偏心异径管（偏心孔径，一侧平齐），两端均为坡口对焊接头。与弯头和三通不同，B16.9 未规定异径管端到端长度 — 该尺寸由制造商与买方协议确定（不锈钢及其他管件参见 MSS SP-43 / SP-75），这也是异径管重量最好以目录值为基准而非包络几何尺寸的原因。</p>
+          <p>壁厚遵循碳钢和合金钢的 ASME B36.10M（SCH 10、20、30、STD、40、60、XS、80、100、120、140、160、XXS）和不锈钢的 ASME B36.19M。典型材质包括 ASTM A234 WPB（碳钢）、A403 WP304/WP316（不锈钢）和 A234 WP11/WP22（合金钢）。偏心异径管是水平泵吸管线的标准选型，底部平齐可防止积存气泡；同心异径管则适用于竖向管道和一般工艺配管。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 弯头重量计算器</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 三通重量计算器</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 请求报价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>计算重量为基于 ASME B16.9 异径管规格组合和碳钢目录校准参考重量的理论值。由于 B16.9 未对异径管端到端长度进行标准化，且允许壁厚存在公差，实际管件重量因制造商而异。对于关键应用（起重、运费保证、承压边界设计），请向管件制造商核实。
+    </p>
+
+  </div>
+</Base>
+
+<script>
+  import { COMBO_LIST, MATERIALS, NPS_LIST, REDUCER_TYPES, SCHEDULES, SMALL_END_MAX, type ReducerType } from '../../data/reducer-dimensions';
+  import { computeReducerWeight } from '../../lib/reducer-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    type: 'CON' as ReducerType,
+    large: 6,
+    small: 4,
+    schedule: 'SCH40',
+    density: 7850,
+    qty: 1,
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateLarge() {
+    const sel = $('largeNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (n.nps < 0.75) continue; // large ends: NPS 3/4" and up
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.large) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateSmall() {
+    const sel = $('smallNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    const valid = NPS_LIST.filter((n) => n.nps < state.large && n.nps <= SMALL_END_MAX);
+    for (const n of valid) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.small) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!valid.some((n) => n.nps === state.small)) {
+      state.small = valid.length ? valid[valid.length - 1].nps : 0;
+      sel.value = String(state.small);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setTypeStyles() {
+    document.querySelectorAll<HTMLLabelElement>('.type-opt').forEach((l) => {
+      const active = l.dataset.type === state.type;
+      l.classList.toggle('accent-border', active);
+      l.classList.toggle('accent-light-bg', active);
+      l.classList.toggle('accent-text', active);
+      l.classList.toggle('border-theme', !active);
+      l.classList.toggle('text-theme-secondary', !active);
+    });
+    const t = REDUCER_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? `${t.name} — ${t.desc}` : '';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
+  const typeName = (id: ReducerType) => (id === 'ECC' ? 'Eccentric' : 'Concentric');
+
+  function renderResult() {
+    const r = computeReducerWeight(state.type, state.large, state.small, state.schedule, state.density);
+    const invalid = !r.valid;
+    $('smallNote').classList.toggle('hidden', !invalid);
+    ($('smallNps') as HTMLSelectElement).classList.toggle('accent-border', invalid);
+    if (invalid) {
+      $('weightValue').textContent = '–';
+      $('resultLine').textContent = 'Select a small end smaller than the large end.';
+      $('totalWeight').textContent = '–';
+      return;
+    }
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    $('resultLine').textContent =
+      `${typeName(r.type)} Reducer ${r.largeLabel} × ${r.smallLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outLength').textContent = `${fmt(r.lengthMm, 1)} mm`;
+    $('outLargeOd').textContent = `${fmt(r.largeOdMm, 1)} mm`;
+
+    const rows: [string, string][] = [
+      ['Reducer type', `${typeName(r.type)} (ASME B16.9)`],
+      ['Combination', `${r.largeLabel} × ${r.smallLabel}`],
+      ['Schedule', scheduleName(r.schedule)],
+      ['Large-end OD × wall', `${fmt(r.largeOdMm, 1)} mm`],
+      ['Small-end OD', `${fmt(r.smallOdMm, 1)} mm`],
+      ['End-to-end (H, typ.)', `${fmt(r.lengthMm, 1)} mm`],
+      ['Size ratio d/D', fmt(r.smallOdMm / r.largeOdMm, 3)],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('');
+
+    const basis: [string, string][] = [
+      ['SCH 40 CON reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)}`],
+      ['Reducer-type factor', `× ${fmt(r.typeFactor, 2)}`],
+      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+    ];
+    $('basisList').innerHTML = basis
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('') +
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
+  }
+
+  function renderTable() {
+    $('tableUnit').textContent = state.unit;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const c of COMBO_LIST) {
+      const r40 = computeReducerWeight('CON', c.large, c.small, 'SCH40', state.density);
+      const r80 = computeReducerWeight('CON', c.large, c.small, 'SCH80', state.density);
+      const recc = computeReducerWeight('ECC', c.large, c.small, 'SCH40', state.density);
+      if (!r40.valid) continue;
+      const conv = (x: { weightKg: number; weightLb: number }) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
+      const isCurrent = state.large === c.large && state.small === c.small;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light' + (isCurrent ? ' accent-light-bg' : '');
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${r40.largeLabel} × ${r40.smallLabel}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.largeOdMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.smallOdMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r40.lengthMm, 1)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'CON' && (state.schedule === 'SCH40' || state.schedule === 'STD') ? 'accent-text' : ''}">${fmt(conv(r40), 2)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'CON' && (state.schedule === 'SCH80' || state.schedule === 'XS') ? 'accent-text' : ''}">${fmt(conv(r80), 2)}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${isCurrent && state.type === 'ECC' && (state.schedule === 'SCH40' || state.schedule === 'STD') ? 'accent-text' : ''}">${fmt(conv(recc), 2)}</td>`;
+      tr.addEventListener('click', () => {
+        state.large = c.large;
+        state.small = c.small;
+        ($('largeNps') as HTMLSelectElement).value = String(c.large);
+        populateSmall();
+        ($('smallNps') as HTMLSelectElement).value = String(c.small);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLInputElement>('input[name="rtype"]').forEach((radio) =>
+    radio.addEventListener('change', () => {
+      if (!radio.checked) return;
+      state.type = radio.value as ReducerType;
+      setTypeStyles();
+      render();
+    })
+  );
+  $('largeNps').addEventListener('change', (e) => {
+    state.large = Number((e.target as HTMLSelectElement).value);
+    populateSmall(); // small end options are always < large end
+    render();
+  });
+  $('smallNps').addEventListener('change', (e) => { state.small = Number((e.target as HTMLSelectElement).value); render(); });
+  $('schedule').addEventListener('change', (e) => { state.schedule = (e.target as HTMLSelectElement).value; render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateLarge();
+  populateSmall();
+  setTypeStyles();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Reducer Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/reducer-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, large: String(state.large), small: String(state.small),
+      schedule: state.schedule, material: ($('material') as HTMLSelectElement).value,
+      density: String(state.density), qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as ReducerType;
+    if (t && (['CON','ECC'] as string[]).includes(t)) { state.type = t; setTypeStyles(); document.querySelectorAll<HTMLInputElement>('input[name="rtype"]').forEach((r) => { r.checked = r.value === t; }); changed = true; }
+    const ln = Number(sp.get('large'));
+    if (ln > 0) { state.large = ln; ($('largeNps') as HTMLSelectElement).value = String(ln); populateSmall(); changed = true; }
+    const sn = Number(sp.get('small'));
+    if (sn > 0) { state.small = sn; ($('smallNps') as HTMLSelectElement).value = String(sn); changed = true; }
+    const sch = sp.get('schedule');
+    if (sch) { state.schedule = sch; ($('schedule') as HTMLSelectElement).value = sch; changed = true; }
+    const mat = sp.get('material');
+    if (mat) { const found = MATERIALS.find((m) => m.id === mat); if (found) { ($('material') as HTMLSelectElement).value = mat; state.density = found.density; ($('density') as HTMLInputElement).value = String(found.density); ($('density') as HTMLInputElement).disabled = mat !== 'custom'; changed = true; } }
+    const d = Number(sp.get('density'));
+    if (d > 0) { state.density = d; ($('density') as HTMLInputElement).value = String(d); changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

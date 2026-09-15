@@ -1,0 +1,150 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "沧州/孟村法兰管件产业带 — 中国PVF制造中心 | pvfcalculator.com";
+const description = "沧州市孟村回族自治县是全球最大的法兰、管件出口集散地。了解产业优势、产品覆盖、主要标准及出口流程，帮助您对接可靠的中国PVF工厂。";
+const canonical = "https://pvfcalculator.com/zh/cangzhou-flange-manufacturers/";
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "沧州法兰制造商", url: "/zh/cangzhou-flange-manufacturers/" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} lang="zh" ctaHref="/zh/request-a-quote/">
+  <article class="max-w-4xl mx-auto px-4 py-12 sm:py-16">
+
+    <!-- Hero -->
+    <header class="mb-12">
+      <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-4">
+        河北省 · 沧州市 · 孟村回族自治县
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-theme-primary mb-4">
+        沧州/孟村法兰管件产业带
+      </h1>
+      <p class="text-lg text-theme-secondary leading-relaxed">
+        孟村被称为"中国管件法兰之都"，是全球最集中的ASME法兰与B16.9管件制造出口基地。当地工厂年出口额超过60亿元人民币，产品销往全球120余个国家和地区。
+      </p>
+    </header>
+
+    <!-- Key Facts -->
+    <section class="grid sm:grid-cols-3 gap-4 mb-12">
+      {[
+        { value: "3,000+", label: "注册生产企业" },
+        { value: "120+", label: "覆盖出口目的地国" },
+        { value: "ASME/EN/JIS", label: "主流国际标准" },
+      ].map((stat) => (
+        <div class="rounded-xl border border-theme bg-theme-secondary p-5 text-center">
+          <p class="text-3xl font-extrabold accent-text mb-1">{stat.value}</p>
+          <p class="text-sm text-theme-secondary">{stat.label}</p>
+        </div>
+      ))}
+    </section>
+
+    <!-- 产业优势 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">产业集群优势</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {[
+          {
+            title: "完整供应链配套",
+            desc: "原材料（钢坯/钢板）、锻造、热处理、机加工、防腐涂层、检测，全部在30公里半径内完成，交货周期短、协调成本低。"
+          },
+          {
+            title: "价格竞争力",
+            desc: "规模化生产 + 本地配套 + 人民币计价，同等质量产品的FOB价格通常比欧美日本制造商低30%–50%。"
+          },
+          {
+            title: "标准覆盖广",
+            desc: "ASME B16.5/B16.9/B16.11、EN 1092、JIS B2220、MSS SP-75等主流标准均有大量工厂具备生产能力及认证。"
+          },
+          {
+            title: "出口经验丰富",
+            desc: "孟村工厂长期为中东EPC项目、欧洲石化企业、美国分销商供货，熟悉MTC、第三方检验、L/C等国际贸易流程。"
+          },
+        ].map((item) => (
+          <div class="rounded-xl border border-theme bg-theme-secondary p-5">
+            <h3 class="font-semibold text-theme-primary mb-2">{item.title}</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 产品覆盖 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">主要产品类别</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-theme-secondary">
+              <th class="border border-theme px-4 py-3 text-left font-semibold text-theme-primary">产品</th>
+              <th class="border border-theme px-4 py-3 text-left font-semibold text-theme-primary">标准</th>
+              <th class="border border-theme px-4 py-3 text-left font-semibold text-theme-primary">常见规格范围</th>
+              <th class="border border-theme px-4 py-3 text-left font-semibold text-theme-primary">常用材质</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["法兰（对焊颈/平焊/盲板等）", "ASME B16.5", "NPS 1/2\"–24\"，Class 150–2500", "A105, F304, F316, F11, F22"],
+              ["对焊弯头（90°/45°/180°）", "ASME B16.9", "NPS 1/2\"–24\"，SCH 10–XXS", "A234 WPB, A403 WP304/316"],
+              ["对焊三通（等径/异径）", "ASME B16.9", "NPS 1/2\"–24\"", "A234 WPB, A403 WP304/316"],
+              ["对焊异径管（同心/偏心）", "ASME B16.9", "NPS 3/4\"×1/2\" 至 24\"×20\"", "A234 WPB, A403 WP304/316"],
+              ["承插焊/螺纹管件", "ASME B16.11", "NPS 1/8\"–4\"，Class 3000/6000", "A105, F304, F316"],
+              ["大直径法兰", "ASME B16.47 A/B", "NPS 26\"–60\"", "A105, A694, F304/316"],
+            ].map(([product, standard, size, material]) => (
+              <tr class="hover:bg-theme-secondary/50 transition-colors">
+                <td class="border border-theme px-4 py-3 text-theme-primary font-medium">{product}</td>
+                <td class="border border-theme px-4 py-3 text-theme-secondary">{standard}</td>
+                <td class="border border-theme px-4 py-3 text-theme-secondary">{size}</td>
+                <td class="border border-theme px-4 py-3 text-theme-secondary">{material}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 采购流程 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">典型采购流程</h2>
+      <ol class="space-y-4">
+        {[
+          { step: "1", title: "提交规格询盘", desc: "提供产品类型、标准、尺寸等级、材质、数量及目的地港口。信息越详细，报价越准确。" },
+          { step: "2", title: "收到FOB报价", desc: "通常工作日24–48小时内收到报价单，含单价、交货期、付款条件（T/T 30%定金，见提单付余款为常见条件）。" },
+          { step: "3", title: "确认样品/PI", desc: "大宗订单建议要求生产前确认材质证书（MTC）模板和产品图纸；特殊规格可要求样品确认。" },
+          { step: "4", title: "安排生产与检验", desc: "交货期通常25–45天（标准规格）或45–90天（特殊材质/大尺寸）。可安排SGS/BV/TÜV第三方检验。" },
+          { step: "5", title: "装船与文件", desc: "工厂出具MTC、CO（原产地证）、Packing List、Invoice、B/L等全套出口文件，满足清关和项目要求。" },
+        ].map((item) => (
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full accent-bg flex items-center justify-center text-sm font-bold" style="color:#07090c">{item.step}</div>
+            <div>
+              <h3 class="font-semibold text-theme-primary mb-1">{item.title}</h3>
+              <p class="text-sm text-theme-secondary leading-relaxed">{item.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- 质量注意事项 -->
+    <section class="mb-12 rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
+      <h2 class="text-xl font-bold text-theme-primary mb-4">采购注意事项</h2>
+      <ul class="space-y-2 text-sm text-theme-secondary">
+        <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">索取MTC原件：</strong>材质证书须为工厂出具的原件，注明炉号、化学成分、力学性能，符合ASTM/ASME相应材质标准。</span></li>
+        <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">注意壁厚负公差：</strong>管件实际壁厚可能接近ASME允许的-12.5%下限，重要管线系统建议在询盘时注明最小壁厚要求。</span></li>
+        <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">大额订单安排第三方检验：</strong>SGS、Bureau Veritas、TÜV等机构可在出厂前进行尺寸、硬度、MT/PT检测，费用通常由买方承担（约USD 300–800/批）。</span></li>
+        <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">确认工厂资质：</strong>索要营业执照、生产许可证（TS证书用于压力管道）及近期出口记录，可通过视频验厂或第三方工厂审核降低风险。</span></li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="rounded-2xl border border-theme bg-theme-secondary p-8 text-center">
+      <h2 class="text-2xl font-bold text-theme-primary mb-3">准备好获取报价了吗？</h2>
+      <p class="text-theme-secondary mb-6">填写产品规格，我们将询盘转发给沧州/孟村的匹配工厂。</p>
+      <a href="/zh/request-a-quote/" class="inline-block accent-bg hover:opacity-90 font-bold px-8 py-3 rounded-lg transition-colors" style="color:#07090c">
+        立即提交询盘
+      </a>
+    </section>
+
+  </article>
+</Base>

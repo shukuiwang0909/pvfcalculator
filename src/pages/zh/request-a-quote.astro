@@ -1,0 +1,160 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "提交询盘 — 获取管件法兰工厂报价 | PVF Calculator";
+const description = "填写管件法兰规格与数量，我们将询盘转发给沧州/孟村匹配工厂，24小时内获得FOB报价。碳钢、不锈钢、合金钢管件均可。";
+const canonical = "https://pvfcalculator.com/zh/request-a-quote/";
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "提交询盘", url: "/zh/request-a-quote/" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} lang="zh" ctaHref="/zh/request-a-quote/">
+  <section class="relative overflow-hidden py-12 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-4">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full accent-bg"></span>
+          </span>
+          快速响应 · 竞争力报价
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-theme-primary">
+          提交<span class="accent-text">询盘</span>
+        </h1>
+        <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto">
+          获取ASME法兰、管件及定制PVF产品的竞争力报价。填写下方表单，我们将连接您与沧州/孟村合适的工厂。
+        </p>
+      </div>
+
+      <!-- Quote Form -->
+      <div class="rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8 shadow-xl">
+        <form id="quoteForm" action="https://formspree.io/f/mnpqekvo" method="POST" class="space-y-6">
+          <input type="hidden" name="_subject" value="新询盘 — PVF Calculator" />
+          <input type="hidden" name="_next" value="https://pvfcalculator.com/zh/request-a-quote/thanks/" />
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="language" value="zh" />
+
+          <!-- Contact Info -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-semibold text-theme-primary mb-2">姓名 *</label>
+              <input type="text" id="name" name="name" required
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="张工" />
+            </div>
+            <div>
+              <label for="company" class="block text-sm font-semibold text-theme-primary mb-2">公司名称</label>
+              <input type="text" id="company" name="company"
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="××工程有限公司" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="email" class="block text-sm font-semibold text-theme-primary mb-2">邮箱 *</label>
+              <input type="email" id="email" name="email" required
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="zhangsan@company.com" />
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-semibold text-theme-primary mb-2">电话 / WhatsApp</label>
+              <input type="tel" id="phone" name="phone"
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="+86 138 xxxx xxxx" />
+            </div>
+          </div>
+
+          <!-- Product Type -->
+          <div>
+            <label for="productType" class="block text-sm font-semibold text-theme-primary mb-2">产品类型 *</label>
+            <select id="productType" name="productType" required
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="">请选择…</option>
+              <option>ASME B16.5 法兰</option>
+              <option>ASME B16.9 对焊弯头</option>
+              <option>ASME B16.9 对焊三通</option>
+              <option>ASME B16.9 对焊异径管</option>
+              <option>ASME B36.10M 无缝管 / 焊管</option>
+              <option>组合订单（法兰 + 管件）</option>
+              <option>其他</option>
+            </select>
+          </div>
+
+          <!-- Specifications -->
+          <div>
+            <label for="specifications" class="block text-sm font-semibold text-theme-primary mb-2">规格说明 *</label>
+            <textarea id="specifications" name="specifications" rows="5" required
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="例如：ASME B16.5 对焊颈法兰，Class 300，NPS 6\"，ASTM A105，RF面，数量 50片；另，90°弯头 LR，NPS 6\"，SCH 40，A234 WPB，数量 30个"></textarea>
+          </div>
+
+          <!-- Quantity & Delivery -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="quantity" class="block text-sm font-semibold text-theme-primary mb-2">数量</label>
+              <input type="text" id="quantity" name="quantity"
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="如：100片，50套" />
+            </div>
+            <div>
+              <label for="delivery" class="block text-sm font-semibold text-theme-primary mb-2">期望交货期</label>
+              <input type="text" id="delivery" name="delivery"
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="如：45天内，2025年Q2" />
+            </div>
+          </div>
+
+          <!-- Destination -->
+          <div>
+            <label for="destination" class="block text-sm font-semibold text-theme-primary mb-2">目的地港口/国家</label>
+            <input type="text" id="destination" name="destination"
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="如：迪拜港，德国汉堡，Houston TX" />
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label for="notes" class="block text-sm font-semibold text-theme-primary mb-2">其他要求</label>
+            <textarea id="notes" name="notes" rows="3"
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="材质证书要求（MTC）、第三方检验、特殊包装、涂层等"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit"
+            class="w-full accent-bg hover:opacity-90 font-bold py-4 rounded-lg transition-colors text-base"
+            style="color: #07090c;">
+            提交询盘
+          </button>
+          <p class="text-xs text-center text-theme-muted">
+            提交即表示同意我们的<a href="/zh/privacy/" class="underline hover:text-theme-primary">隐私政策</a>。我们不会将您的信息出售给第三方。
+          </p>
+        </form>
+      </div>
+
+      <!-- Features -->
+      <div class="mt-12 grid sm:grid-cols-3 gap-6 text-center">
+        {[
+          { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", title: "24小时响应", desc: "工作日收到询盘后24小时内回复报价" },
+          { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", title: "ASME认证材料", desc: "MTC齐全，原厂材质报告，满足国际项目要求" },
+          { icon: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z", title: "FOB直出报价", desc: "天津/上海港装船，价格透明，无中间商加价" },
+        ].map((f) => (
+          <div class="rounded-xl border border-theme bg-theme-secondary p-5">
+            <div class="inline-flex p-2 rounded-lg accent-bg/10 mb-3">
+              <svg class="w-5 h-5 accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={f.icon} />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-theme-primary mb-1">{f.title}</h3>
+            <p class="text-sm text-theme-secondary">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

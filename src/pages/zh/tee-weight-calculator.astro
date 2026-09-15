@@ -1,0 +1,610 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "三通重量计算器（ASME B16.9）| 等径/异径 | pvfcalculator.com";
+const description = "在线计算 ASME B16.9 对焊管件三通理论重量，支持等径三通和异径三通，口径 NPS 1/2″ 至 24″，涵盖碳钢、不锈钢和合金钢，结果显示公斤或磅。免费使用。";
+const canonical = "https://pvfcalculator.com/zh/tee-weight-calculator/";
+
+const faqs = [
+  {
+    q: "管道三通的重量如何计算？",
+    a: "三通重量由 ASME B16.9 中心至端面尺寸（等径三通 C = NPS，异径三通支管采用 C1 = 支管 NPS）结合 ASME B36.10M 壁厚等级表中的单位管重估算得出。由于支管交叉处额外的金属，等径三通的重量约为相同口径和壁厚等级直管重量的 1.5 倍，异径三通约为主管尺寸直管重量的 1.3 倍。本计算器采用目录校准的 SCH 40 参考重量，并结合壁厚等级和材料密度系数，计算结果通常与碳钢对焊三通供应商报价的误差在 ±10% 以内。"
+  },
+  {
+    q: "6 英寸 SCH 40 等径三通重量是多少？",
+    a: "NPS 6 SCH 40 碳钢（ASTM A234 WPB）等径对焊三通约重 22 千克（约 48.5 磅）。同规格 SCH 80 约重 33 千克，SCH 10 约重 12 千克，304 不锈钢约重 22.4 千克。异径三通如 6\" × 4\" SCH 40 约重 19 千克，比等径三通轻约 13%，原因是支管出口的金属量较少。"
+  },
+  {
+    q: "等径三通与异径三通有什么区别？",
+    a: "等径三通的三个端口口径完全相同 — 两个主管端和一个支管出口尺寸一致。异径三通的支管出口小于主管（例如 6\" × 4\"），用于从较大的母管引出较小的支管。依据 ASME B16.9，异径三通的支管必须小于主管，中心至端面尺寸为 C = 主管 NPS，C1 = 支管 NPS。异径三通比相同主管尺寸的等径三通轻：约 1.3 倍 vs 1.5 倍直管重量。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "管道三通重量计算器（ASME B16.9）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "三通重量计算器", url: "/zh/tee-weight-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        管道三通重量计算器 <span class="accent-text">（ASME B16.9）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        计算 ASME B16.9 对焊管件三通的理论重量 — 等径三通（三端口径相同）和异径三通（支管小于主管）— 口径范围
+        NPS 1/2″ 至 24″，壁厚等级 SCH 10 至 XXS。涵盖碳钢、不锈钢和合金钢，结果可选公斤或磅显示。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="三通重量计算器工具">
+      <!-- Tee type selector (radio cards) -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">三通类型</label>
+        <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="三通类型">
+          <label class="cursor-pointer">
+            <input type="radio" name="teeType" value="EQ" class="peer sr-only" checked />
+            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-theme p-3 text-center text-theme-secondary transition peer-checked:accent-border peer-checked:accent-light-bg peer-checked:accent-text peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
+              <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M25 4 L25 16 Q25 22 31 22 L33 22 Q39 22 39 16 L39 4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="4" y="22" width="56" height="14" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+              <span class="text-xs font-semibold">等径三通</span>
+            </span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="teeType" value="RED" class="peer sr-only" />
+            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-theme p-3 text-center text-theme-secondary transition peer-checked:accent-border peer-checked:accent-light-bg peer-checked:accent-text peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
+              <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M29 4 L29 16 Q29 22 32 22 Q35 22 35 16 L35 4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="4" y="22" width="56" height="14" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+              <span class="text-xs font-semibold">异径三通</span>
+            </span>
+          </label>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">三端口径相同 — 主管两端与支管尺寸完全一致</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="runNps" class="mb-1 block text-sm font-semibold text-theme-secondary">主管口径（NPS）</label>
+          <select id="runNps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="branchNps" class="mb-1 block text-sm font-semibold text-theme-secondary">支管口径（NPS）</label>
+          <select id="branchNps" class="field w-full rounded-lg px-3 py-2 text-sm disabled:cursor-not-allowed disabled:bg-theme-tertiary disabled:text-theme-muted"></select>
+          <p class="mt-1 hidden text-xs font-medium accent-text" id="branchNote">支管口径必须小于主管口径。</p>
+        </div>
+        <div>
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-theme-secondary">壁厚等级</label>
+          <select id="schedule" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="SCH10">SCH 10</option>
+            <option value="SCH20">SCH 20</option>
+            <option value="SCH30">SCH 30</option>
+            <option value="STD">SCH STD</option>
+            <option value="SCH40" selected>SCH 40</option>
+            <option value="SCH60">SCH 60</option>
+            <option value="SCH80">SCH 80</option>
+            <option value="XS">SCH XS</option>
+            <option value="SCH100">SCH 100</option>
+            <option value="SCH120">SCH 120</option>
+            <option value="SCH140">SCH 140</option>
+            <option value="SCH160">SCH 160</option>
+            <option value="XXS">SCH XXS</option>
+          </select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材质</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">密度（kg/m³）</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">数量</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="单位制">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单个三通重量</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">数量</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">总重量</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">主管外径</span><span class="font-semibold" id="outRunOd">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">支管外径</span><span class="font-semibold" id="outBranchOd">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">关键尺寸（ASME B16.9）</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">计算依据</p>
+          <dl class="text-sm" id="basisList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">数据来源</summary>
+            <p class="mt-1">端面到端面尺寸依据 ASME B16.9（等径三通 C = NPS；异径三通 C = 主管 NPS，C1 = 支管 NPS）。参考重量来自 SCH 40 碳钢等径三通厂商目录；SCH 80 / XS = × 1.5，其他壁厚等级采用 ASME B36.10M 金属质量系数；NPS 14″–24″ 按 ∝ NPS² 外推。异径三通按主管尺寸估算（≈ 1.3 × 直管重量，等径三通约为 1.5 ×）。重量为理论值 — 关键应用请向管件制造商核实。</p>
+          </details>
+        </div>
+      </div>
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="三通重量表">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 <span id="tableTitle" class="accent-text">等径三通</span> 重量表 — <span id="tableSchedule">SCH 40</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[680px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">主管口径</th>
+              <th class="px-3 py-2.5">中心至端面 C（mm）</th>
+              <th class="px-3 py-2.5">主管外径（mm）</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 / STD</th>
+              <th class="px-3 py-2.5 text-right">SCH 80 / XS</th>
+              <th class="px-3 py-2.5 text-right">SCH 160</th>
+              <th class="px-3 py-2.5 text-right">SCH XXS</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">表中重量使用当前选定的材料密度和 <span id="tableCaption">等径三通</span> 几何参数。点击任意行可将其加载到计算器中。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算方法">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算原理 <span class="accent-text">（中心至端面 × 单位重量，目录校准）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="管道三通几何模型">
+            <defs>
+              <marker id="arrT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- run pipe -->
+            <rect x="30" y="130" width="360" height="70" fill="#fed7aa" opacity="0.5" stroke="#c2410c" stroke-width="2" />
+            <!-- branch -->
+            <rect x="175" y="30" width="70" height="100" fill="#fed7aa" opacity="0.5" stroke="#c2410c" stroke-width="2" />
+            <!-- reinforcement zone -->
+            <rect x="160" y="115" width="100" height="30" fill="#fb923c" opacity="0.45" stroke="#c2410c" stroke-width="1" stroke-dasharray="4 3" />
+            <!-- centerlines -->
+            <line x1="10" y1="165" x2="410" y2="165" stroke="#475569" stroke-width="1.5" stroke-dasharray="6 5" />
+            <line x1="210" y1="10" x2="210" y2="130" stroke="#475569" stroke-width="1.5" stroke-dasharray="6 5" />
+            <!-- dim C horizontal -->
+            <line x1="210" y1="190" x2="390" y2="190" stroke="#64748b" marker-start="url(#arrT)" marker-end="url(#arrT)" />
+            <text x="300" y="208" font-size="12" fill="#334155" text-anchor="middle">C = NPS（主管，中心至端面）</text>
+            <!-- dim C1 vertical -->
+            <line x1="140" y1="30" x2="140" y2="130" stroke="#64748b" marker-start="url(#arrT)" marker-end="url(#arrT)" />
+            <text x="80" y="82" font-size="12" fill="#334155" text-anchor="middle">C1</text>
+            <text x="210" y="52" font-size="11" fill="#9a3412" text-anchor="middle">支管出口</text>
+            <text x="300" y="152" font-size="11" fill="#9a3412">主管</text>
+            <text x="210" y="110" font-size="10" fill="#92400e" text-anchor="middle">补强区</text>
+          </svg>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">三通重量公式（ASME B16.9 + ASME B36.10M）</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>中心至端面：</strong>等径三通 C = NPS（英寸）· 异径三通 C = 主管 NPS（英寸），C1 = 支管 NPS（英寸）</li>
+            <li><strong>基本方法：</strong>W = 主管与支管处金属体积 × 密度，以壁厚等级表中的单位管重为基准</li>
+            <li><strong>等径三通：</strong>W ≈ 1.5 × 直管重量（相同口径和壁厚等级）— 支管交叉处约增加 ½ 管长的金属量</li>
+            <li><strong>异径三通：</strong>W ≈ 1.3 × 主管尺寸和壁厚等级对应的直管重量</li>
+            <li><strong>本计算器（目录校准）：</strong>W = W<sub>ref</sub>(NPS<sub>run</sub>, SCH) × F<sub>type</sub> × (ρ / 7,850)，F<sub>type</sub> = 1.0（等径）、1.3/1.5（异径）</li>
+          </ul>
+          <p class="mt-3">简单的"中心至端面 × kg/m"估算方法会<strong>低估</strong>实际三通重量，因为三通的腹部及支管与主管的交叉处有大量补强金属。6″ SCH 40 等径三通目录重量约为 22 千克，而同包络范围内的直管约为 14 千克 — 忽略补强后<strong>低估约 50%</strong>。这正是本计算器以厂商目录等径三通参考重量为基准的原因。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO content -->
+    <section class="mt-12 space-y-6" aria-label="三通重量参考指南">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">如何计算三通重量</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>计算对焊三通的重量需要五个输入参数：三通类型（等径或异径）、主管口径（NPS）、支管口径（仅异径三通，且依据 ASME B16.9 必须小于主管）、壁厚等级和材料密度。首先从 ASME B16.9 的中心至端面尺寸入手 — 等径三通 C = NPS，异径三通 C1 = 支管 NPS — 然后以 ASME B36.10M 壁厚等级表中的单位管重为基准进行估算，最后若材料非碳钢，需按材料密度与 7,850 kg/m³ 之比进行换算。</p>
+          <p>实际上，采购和运输团队通常使用厂商目录重量而非纯粹的管道计算，因为支管交叉处有大量补强金属。6″ SCH 40 等径三通目录重量约为 22 千克 — 约为同尺寸直管重量的 1.5 倍 — 而 6″ × 4″ 异径三通目录重量约为 19 千克，约为主管直管重量的 1.3 倍。本计算器结合了两种方法：目录校准的 SCH 40 参考重量，配合壁厚等级、三通类型和密度系数，异径三通自动比相同主管尺寸的等径三通轻。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">三通重量公式</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>本计算器使用的完整公式为：</p>
+          <p class="rounded-lg bg-theme-tertiary px-4 py-3 font-mono text-sm text-theme-secondary">W = W_ref(NPS_run, SCH) × F_type × ρ / 7,850</p>
+          <p>其中 W_ref 为所选主管口径和壁厚等级对应的碳钢等径三通目录重量（SCH STD = SCH 40；SCH XS = SCH 80 × 1.5），F_type 等径三通为 1.0，异径三通为 1.3/1.5 ≈ 0.867，ρ 为材料密度（kg/m³）。采购订单的总重量即为 W × 数量。计算示例：4″ SCH 80 不锈钢 F316（ρ = 7,980）等径三通重量为 10 kg × 1.5 × 7,980 / 7,850 ≈ 15.2 千克，20 件合计约 305 千克。同主管尺寸的 4″ × 2″ 异径三通约重 13.2 千克。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 标准</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>ASME B16.9《工厂制造锻制对焊管件》是 NPS 1/2″ 至 48″ 对焊三通的主要标准。该标准规定了中心至端面尺寸（主管端为 C，异径三通支管为 C1）、按壁厚等级划分的管壁厚度及尺寸公差。等径三通三端口径相同；异径三通的支管出口小于主管，该标准要求支管必须为较小的一端 — 支管大于主管的三通不符合 ASME B16.9 规定。</p>
+          <p>管壁厚度对于碳钢和合金钢遵循 ASME B36.10M（SCH 10、20、30、STD、40、60、XS、80、100、120、140、160、XXS），不锈钢遵循 ASME B36.19M。典型材料包括 ASTM A234 WPB（碳钢）、A403 WP304/WP316（不锈钢）和 A234 WP11/WP22（合金钢）。由于 B16.9 允许管壁厚度和中心至端面尺寸存在公差，各制造商实际重量可能相差几个百分点 — 精确的运费和成本估算请务必核实供应商目录。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/zh/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/zh/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 弯头重量计算器</a>
+        <a href="/zh/reducer-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 大小头重量计算器</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 询价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>计算重量为基于 ASME B16.9 中心至端面尺寸和碳钢目录校准参考重量的理论值。
+      由于 B16.9 对管壁厚度和中心至端面尺寸的公差规定，各制造商实际管件重量会有所差异。
+      对于关键应用（起重、运费承诺、承压设计），请向管件制造商核实。
+    </p>
+
+  </div>
+</Base>
+
+<script>
+  import { MATERIALS, NPS_LIST, SCHEDULES, TEE_TYPES, type TeeType } from '../../data/tee-dimensions';
+  import { computeTeeWeight } from '../../lib/tee-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    type: 'EQ' as TeeType,
+    runNps: 2,
+    branchNps: 1,
+    schedule: 'SCH40',
+    density: 7850,
+    qty: 1,
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateRunNps() {
+    const sel = $('runNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.runNps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateBranchNps() {
+    const sel = $('branchNps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    if (state.type === 'EQ') {
+      const opt = document.createElement('option');
+      opt.value = String(state.runNps);
+      opt.textContent = 'Same as run (equal tee)';
+      sel.appendChild(opt);
+      sel.disabled = true;
+      $('branchNote').classList.add('hidden');
+      return;
+    }
+    sel.disabled = false;
+    const smaller = NPS_LIST.filter((n) => n.nps < state.runNps);
+    if (smaller.length === 0) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = '— no smaller size —';
+      sel.appendChild(opt);
+      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').classList.remove('hidden');
+      return;
+    }
+    if (state.branchNps >= state.runNps) {
+      state.branchNps = smaller[smaller.length - 1].nps;
+    }
+    for (const n of smaller) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.branchNps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    $('branchNote').classList.add('hidden');
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setTypeDescription() {
+    const t = TEE_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? t.desc : '';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
+
+  function renderResult() {
+    const r = computeTeeWeight(state.type, state.runNps, state.branchNps, state.schedule, state.density);
+
+    if (!r.valid) {
+      $('weightValue').textContent = '–';
+      $('weightUnit').textContent = state.unit;
+      $('resultLine').textContent = 'Select a branch size smaller than the run size.';
+      $('outQty').textContent = String(state.qty);
+      $('totalWeight').textContent = '–';
+      $('outRunOd').textContent = '–';
+      $('outBranchOd').textContent = '–';
+      $('dimsList').innerHTML = '';
+      $('basisList').innerHTML = '';
+      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').classList.remove('hidden');
+      return;
+    }
+
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    const typeName = r.type === 'EQ' ? 'Equal Tee' : `Reducing Tee ${r.runLabel} × ${r.branchLabel}`;
+    $('resultLine').textContent =
+      `${typeName} ${r.runLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outRunOd').textContent = `${fmt(r.pipeOdMm, 1)} mm`;
+    $('outBranchOd').textContent = `${fmt(r.branchPipeOdMm, 1)} mm`;
+
+    const rows: [string, string][] = [
+      ['Tee type', r.type === 'EQ' ? 'Equal (ASME B16.9)' : 'Reducing (ASME B16.9)'],
+      ['Run size', `${r.runLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
+      ['Branch size', r.type === 'EQ' ? `${r.runLabel} (same as run)` : `${r.branchLabel} · OD ${fmt(r.branchPipeOdMm, 1)} mm`],
+      ['Schedule', scheduleName(r.schedule)],
+      ['Center-to-end C (run)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
+      ['Center-to-end C1 (branch)', r.type === 'EQ' ? `${fmt(r.centerToEndIn, 3)} in (same as C)` : `${fmt(r.branchCenterToEndIn, 3)} in (${fmt(r.branchCenterToEndMm, 1)} mm)`],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('');
+
+    const basis: [string, string][] = [
+      ['SCH 40 equal-tee reference (CS)', `${fmt(r.referenceKg, 2)} kg`],
+      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
+      ['Tee-type factor', `× ${fmt(r.typeFactor, 3)} (${r.type === 'EQ' ? 'equal' : 'reducing'})`],
+      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+    ];
+    $('basisList').innerHTML = basis
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('') +
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
+  }
+
+  function renderTable() {
+    const typeName = state.type === 'EQ' ? 'Equal Tee' : `Reducing Tee (run × ${state.branchNps}" branch)`;
+    $('tableTitle').textContent = typeName;
+    $('tableSchedule').textContent = scheduleName(state.schedule);
+    $('tableCaption').textContent = state.type === 'EQ' ? 'equal tee' : `reducing tee ${state.runNps}" × ${state.branchNps}"`;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (state.type === 'RED' && !(state.branchNps < n.nps)) continue;
+      const r = computeTeeWeight(state.type, n.nps, state.branchNps, state.schedule, state.density);
+      if (!r.valid) continue;
+      const w40 = computeTeeWeight(state.type, n.nps, state.branchNps, 'SCH40', state.density);
+      const w80 = computeTeeWeight(state.type, n.nps, state.branchNps, 'SCH80', state.density);
+      const w160 = computeTeeWeight(state.type, n.nps, state.branchNps, 'SCH160', state.density);
+      const wxxs = computeTeeWeight(state.type, n.nps, state.branchNps, 'XXS', state.density);
+      const conv = (x: { weightKg: number; weightLb: number }) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
+      const cell = (x: { weightKg: number; weightLb: number }, isShown: boolean) =>
+        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'accent-text' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(r.centerToEndMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r.pipeOdMm, 1)}</td>` +
+        cell(w40, state.schedule === 'SCH40' || state.schedule === 'STD') +
+        cell(w80, state.schedule === 'SCH80' || state.schedule === 'XS') +
+        cell(w160, state.schedule === 'SCH160') +
+        cell(wxxs, state.schedule === 'XXS');
+      tr.title = `${fmt(state.unit === 'kg' ? r.weightKg : r.weightLb, 2)} ${state.unit} at current settings`;
+      tr.addEventListener('click', () => {
+        state.runNps = n.nps;
+        ($('runNps') as HTMLSelectElement).value = String(n.nps);
+        populateBranchNps();
+        ($('branchNps') as HTMLSelectElement).value = String(state.branchNps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLInputElement>('input[name="teeType"]').forEach((r) =>
+    r.addEventListener('change', () => {
+      state.type = r.value as TeeType;
+      setTypeDescription();
+      populateBranchNps();
+      ($('branchNps') as HTMLSelectElement).value = String(state.branchNps);
+      render();
+    })
+  );
+  $('runNps').addEventListener('change', (e) => {
+    state.runNps = Number((e.target as HTMLSelectElement).value);
+    populateBranchNps();
+    ($('branchNps') as HTMLSelectElement).value = String(state.branchNps);
+    render();
+  });
+  $('branchNps').addEventListener('change', (e) => {
+    const v = Number((e.target as HTMLSelectElement).value);
+    if (state.type === 'RED' && v >= state.runNps) {
+      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').classList.remove('hidden');
+      return;
+    }
+    $('branchNote').classList.add('hidden');
+    state.branchNps = v;
+    render();
+  });
+  $('schedule').addEventListener('change', (e) => { state.schedule = (e.target as HTMLSelectElement).value; render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateRunNps();
+  setTypeDescription();
+  populateBranchNps();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Tee Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/tee-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, runNps: String(state.runNps), branchNps: String(state.branchNps),
+      schedule: state.schedule, material: ($('material') as HTMLSelectElement).value,
+      density: String(state.density), qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as TeeType;
+    if (t && (['EQ','RED'] as string[]).includes(t)) { state.type = t; setTypeDescription(); document.querySelectorAll<HTMLInputElement>('input[name="teeType"]').forEach((r) => { r.checked = r.value === t; }); changed = true; }
+    const rn = Number(sp.get('runNps'));
+    if (rn > 0) { state.runNps = rn; ($('runNps') as HTMLSelectElement).value = String(rn); populateBranchNps(); changed = true; }
+    const bn = Number(sp.get('branchNps'));
+    if (bn > 0) { state.branchNps = bn; ($('branchNps') as HTMLSelectElement).value = String(bn); changed = true; }
+    const sch = sp.get('schedule');
+    if (sch) { state.schedule = sch; ($('schedule') as HTMLSelectElement).value = sch; changed = true; }
+    const mat = sp.get('material');
+    if (mat) { const found = MATERIALS.find((m) => m.id === mat); if (found) { ($('material') as HTMLSelectElement).value = mat; state.density = found.density; ($('density') as HTMLInputElement).value = String(found.density); ($('density') as HTMLInputElement).disabled = mat !== 'custom'; changed = true; } }
+    const d = Number(sp.get('density'));
+    if (d > 0) { state.density = d; ($('density') as HTMLInputElement).value = String(d); changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

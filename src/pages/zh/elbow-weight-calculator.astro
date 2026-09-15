@@ -1,0 +1,593 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "弯头重量计算器（ASME B16.9）| 45°/90°长短半径 | pvfcalculator.com";
+const description = "计算ASME B16.9对焊管道弯头的理论重量——90°与45°，长半径（1.5D）与短半径（1D）。覆盖碳钢、不锈钢、合金钢，NPS 1/2英寸至24英寸，多种壁厚等级，结果支持千克或磅。免费在线使用。";
+const canonical = "https://pvfcalculator.com/zh/elbow-weight-calculator/";
+
+const faqs = [
+  {
+    q: "如何计算90°管道弯头的重量？",
+    a: "弯头重量根据ASME B16.9的管端至中心尺寸估算（长半径90°弯头为1.5×NPS，短半径为1.0×NPS，45°弯头为0.625×NPS），乘以ASME B36.10M壁厚表中对应壁厚等级的管道单位长度重量，再根据材料密度进行修正。本计算器采用该方法并以制造商产品目录重量进行标定，对于碳钢对焊弯头，结果通常与供应商报价偏差在±10%以内。"
+  },
+  {
+    q: "6英寸SCH 40长半径90°弯头的重量是多少？",
+    a: "6英寸（NPS 6）SCH 40长半径90°对焊弯头（碳钢ASTM A234 WPB）重约18 kg（约40 lb）。同规格SCH 80弯头重约28 kg，304不锈钢弯头重约18.3 kg，短半径版本重约12.6 kg。"
+  },
+  {
+    q: "长半径弯头与短半径弯头的重量差异是什么？",
+    a: "短半径（SR）90°弯头的管端至中心尺寸为1.0×NPS，而长半径（LR）为1.5×NPS，因此弯弧较短，金属用量较少——相同NPS和壁厚等级下，SR弯头重量通常约为LR弯头的70%。SR弯头仅用于空间受限的场合；LR是ASME B16.9的默认规格。注意：ASME B16.9未定义短半径45°弯头——45°弯头均为长半径规格。"
+  },
+  {
+    q: "45°弯头比90°弯头轻多少？",
+    a: "45°弯头的重量约为相同NPS和壁厚等级的90°长半径弯头的60%，因为其管端至中心尺寸为0.625×NPS，而90°LR为1.5×NPS，弯弧所含金属量成比例减少。例如，4英寸SCH 40 LR弯头：90°约8.0 kg，45°约4.8 kg。"
+  },
+  {
+    q: "哪个标准规定了对焊弯头的尺寸和重量？",
+    a: "ASME B16.9《工厂制造的锻制对焊管件》是适用于NPS 1/2英寸至48英寸对焊弯头的主要标准。它定义了管端至中心尺寸（90°弯头的A值、45°弯头的B值）及公差，壁厚遵循ASME B36.10M（碳钢和合金钢）及B36.19M（不锈钢）管道壁厚表。由于B16.9允许壁厚和管端至中心尺寸存在公差，不同制造商的实际弯头重量会略有差异——在关键工况下应向管件制造商确认准确重量。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "弯头重量计算器（ASME B16.9）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "弯头重量计算器", url: "/zh/elbow-weight-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        管道弯头重量计算器 <span class="accent-text">（ASME B16.9）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        计算ASME B16.9对焊管道弯头的理论重量——90°与45°，
+        长半径（1.5D）与短半径（1D）——公称尺寸NPS 1/2″至24″，
+        涵盖SCH 10至XXS各壁厚等级。支持碳钢、不锈钢和合金钢，
+        结果可选千克或磅。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Elbow weight calculator tool">
+      <!-- Angle selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">弯头角度</label>
+        <div class="grid grid-cols-2 gap-2" id="angleButtons">
+          <button data-angle="90" class="angle-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 16 A16 16 0 0 1 24 32 L56 32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 38 L8 32 M56 38 L56 32" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+            <span class="text-xs font-semibold">90° 弯头</span>
+          </button>
+          <button data-angle="45" class="angle-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 30 A22 22 0 0 1 22 16 L56 16" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 38 L8 34 M56 24 L56 20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+            <span class="text-xs font-semibold">45° 弯头</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="angleDesc">四分之一弯——完整直角转向</p>
+      </div>
+
+      <!-- Radius selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">半径类型</label>
+        <div class="grid grid-cols-2 gap-2" id="radiusButtons">
+          <button data-radius="LR" class="radius-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 22 A16 16 0 0 1 24 38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 38 L8 12 A26 26 0 0 1 34 38 L56 38" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+            <span class="text-xs font-semibold">长半径 (1.5D)</span>
+          </button>
+          <button data-radius="SR" class="radius-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 28 A10 10 0 0 1 18 38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 38 L8 18 A20 20 0 0 1 28 38 L56 38" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+            <span class="text-xs font-semibold">短半径 (1.0D)</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="radiusDesc">管端至中心 = 1.5 × NPS（1.5D）—— B16.9 默认规格</p>
+        <p class="mt-1 hidden text-xs font-medium accent-text" id="srNote">短半径仅适用于90°弯头——根据ASME B16.9，45°弯头仅以长半径制造。</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">公称尺寸（NPS）</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-theme-secondary">壁厚等级</label>
+          <select id="schedule" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="SCH10">SCH 10</option>
+            <option value="SCH20">SCH 20</option>
+            <option value="SCH30">SCH 30</option>
+            <option value="STD">SCH STD</option>
+            <option value="SCH40" selected>SCH 40</option>
+            <option value="SCH60">SCH 60</option>
+            <option value="SCH80">SCH 80</option>
+            <option value="XS">SCH XS</option>
+            <option value="SCH100">SCH 100</option>
+            <option value="SCH120">SCH 120</option>
+            <option value="SCH140">SCH 140</option>
+            <option value="SCH160">SCH 160</option>
+            <option value="XXS">SCH XXS</option>
+          </select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材料</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">密度 (kg/m³)</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">数量</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单个弯头重量</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">数量</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">总重量</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">管端至中心 (A)</span><span class="font-semibold" id="outCenterToEnd">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">管道外径</span><span class="font-semibold" id="outPipeOd">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">关键尺寸（ASME B16.9）</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">计算依据</p>
+          <dl class="text-sm" id="basisList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">数据来源</summary>
+            <p class="mt-1">管端至中心尺寸依据ASME B16.9（90° LR = 1.5 × NPS，90° SR = 1.0 × NPS，45° LR = 0.625 × NPS）。参考重量来源于SCH 40 / SCH 80碳钢LR 90°弯头的制造商产品目录；其他壁厚等级采用ASME B36.10M金属截面积系数换算，未收录尺寸按∝ NPS²外推。所有重量为理论值——关键应用场合请向管件制造商核实。</p>
+          </details>
+        </div>
+      </div>
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="Elbow weight table">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 弯头重量——<span id="tableTitle" class="accent-text">90° 长半径</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[680px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">管端至中心 A (mm)</th>
+              <th class="px-3 py-2.5">管道外径 (mm)</th>
+              <th class="px-3 py-2.5 text-right">SCH 40 / STD</th>
+              <th class="px-3 py-2.5 text-right">SCH 80 / XS</th>
+              <th class="px-3 py-2.5 text-right">SCH 160</th>
+              <th class="px-3 py-2.5 text-right">SCH XXS</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">表中重量采用当前所选材料密度及 <span id="tableCaption">90° LR</span> 几何参数。点击任意行可将其加载到计算器中。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算方法 <span class="accent-text">（管端至中心 × 单位长度重量，目录标定）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="90 degree long radius elbow geometric model">
+            <defs>
+              <marker id="arrE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- centerlines -->
+            <path d="M60 210 L60 90 A60 60 0 0 1 120 30 L360 30" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5" />
+            <!-- outer bend -->
+            <path d="M30 210 L30 90 A90 90 0 0 1 120 0 L390 0" fill="none" stroke="#c2410c" stroke-width="2" />
+            <path d="M90 210 L90 90 A30 30 0 0 1 120 60 L390 60" fill="none" stroke="#c2410c" stroke-width="2" />
+            <!-- metal fill -->
+            <path d="M30 210 L90 210 L90 90 A30 30 0 0 0 120 60 L390 60 L390 0 L120 0 A90 90 0 0 0 30 90 Z" fill="#fed7aa" opacity="0.45" stroke="none" />
+            <!-- dim A horizontal -->
+            <line x1="60" y1="120" x2="360" y2="120" stroke="#64748b" marker-start="url(#arrE)" marker-end="url(#arrE)" />
+            <text x="210" y="136" font-size="12" fill="#334155" text-anchor="middle">A = 1.5 × NPS（管端至中心）</text>
+            <!-- dim A vertical -->
+            <line x1="180" y1="90" x2="180" y2="210" stroke="#64748b" marker-start="url(#arrE)" marker-end="url(#arrE)" />
+            <text x="196" y="155" font-size="12" fill="#334155">A</text>
+            <!-- bend radius -->
+            <line x1="60" y1="90" x2="105" y2="75" stroke="#b45309" stroke-width="1.5" />
+            <text x="110" y="70" font-size="11" fill="#92400e">R = 弯曲半径（1.5D / 1.0D）</text>
+            <text x="225" y="42" font-size="12" fill="#9a3412" text-anchor="middle">90° 弯头——LR 或 SR</text>
+          </svg>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">弯头重量计算公式（ASME B16.9 + ASME B36.10M）</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>管端至中心 (A)：</strong>90° LR：A = 1.5 × NPS（英寸）· 90° SR：A = 1.0 × NPS（英寸）· 45° LR：A = 0.625 × NPS（英寸）</li>
+            <li><strong>基本方法：</strong>W = A × （壁厚等级表中管道单位长度重量）</li>
+            <li><strong>本计算器（目录标定）：</strong>W = W<sub>LR90,ref</sub>(NPS, SCH) × F<sub>geo</sub> × (ρ / 7,850)</li>
+            <li><strong>几何系数 F<sub>geo</sub>：</strong>90° LR = 1.0 · 90° SR = 0.7 · 45° LR = 0.6</li>
+            <li><strong>壁厚系数：</strong>SCH STD = SCH 40，SCH XS = SCH 80；SCH 10–160 及 XXS 按 ASME B36.10M 金属截面积比换算 SCH 40 参考值</li>
+          </ul>
+          <p class="mt-3">简单的 A × kg/m 公式会<strong>低估</strong>实际弯头重量，原因是 B16.9 弯头在弯弧内弧和外弧处的壁厚均大于直管（弯曲段壁厚补强）。因此，本计算引擎以制造商产品目录中的 LR 90° 实测重量为锚点——以 2″ SCH 40 LR 90° 弯头为例，原始公式计算约 0.4 kg，而目录实际重量约 1.8 kg，相差<strong>约4倍</strong>。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO content -->
+    <section class="mt-12 space-y-6" aria-label="Elbow weight reference guide">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">如何计算弯头重量</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>计算对焊弯头重量需要四个输入参数：公称管径（NPS）、壁厚等级、弯头几何形式（90°或45°，长半径或短半径）以及材料密度。首先查取ASME B16.9规定的管端至中心尺寸——90°长半径弯头为1.5×NPS，短半径为1.0×NPS，45°弯头为0.625×NPS——再乘以ASME B36.10M壁厚表中对应等级的管道单位长度重量，最后若材料非碳钢，则按材料密度与7,850 kg/m³之比进行换算。</p>
+          <p>实际采购和运输中，工程师通常直接使用制造商产品目录重量，而非套用原始公式，因为弯头弯弧处携带了额外的金属量。例如，6英寸SCH 40 LR 90°弯头的目录重量约为18 kg，几乎是管端至中心×kg/m简算值的两倍。本计算器结合了两种方法：以目录标定的参考重量为基础，配合几何系数和壁厚系数，使45°弯头自动输出约为长半径90°弯头的60%，短半径90°弯头约为70%。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">弯头重量计算公式</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>本计算器使用的完整公式为：</p>
+          <p class="rounded-lg bg-theme-tertiary px-4 py-3 font-mono text-sm text-theme-secondary">W = W_ref(NPS, SCH) × F_geo × ρ / 7,850</p>
+          <p>其中，W_ref 为所选NPS和壁厚等级的碳钢LR 90°目录参考重量，F_geo 为几何系数（90° LR = 1.0，90° SR = 0.7，45° LR = 0.6），ρ 为材料密度（kg/m³）。采购订单中的总重量即为 W × 数量。计算示例：4英寸SCH 80不锈钢F316（ρ = 7,980）LR 90°弯头重量 = 11.5 kg × 1.0 × 7,980 / 7,850 ≈ 11.7 kg，40件总重约468 kg。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 标准</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
+          <p>ASME B16.9《工厂制造的锻制对焊管件》是适用于NPS 1/2英寸至48英寸对焊弯头的核心标准。它规定了管端至中心尺寸（90°弯头的A值、45°弯头的B值）、壁厚等级及尺寸公差。长半径——1.5×NPS——是默认配置，也是工艺管道中最常见的形式；短半径（1.0×NPS）弯头仅在管道布局无法容纳长型管件时才予以指定。该标准涵盖长半径45°和90°弯头，以及短半径90°弯头；短半径45°弯头不在标准范围之内。</p>
+          <p>壁厚遵循ASME B36.10M（碳钢和合金钢：SCH 10、20、30、STD、40、60、XS、80、100、120、140、160、XXS）和ASME B36.19M（不锈钢）。常见材料包括ASTM A234 WPB（碳钢）、A403 WP304/WP316（不锈钢）和A234 WP11/WP22（合金钢）。由于B16.9对壁厚和管端至中心尺寸均允许存在公差，不同制造商的实际弯头重量可能相差数个百分点——对于精确运输费用核算或关键承压设计，请务必向供应商确认产品目录重量。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 三通重量计算器</a>
+        <a href="/reducer-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 异径管重量计算器</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 询价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>本计算结果为理论值，基于ASME B16.9管端至中心尺寸及碳钢目录标定参考重量。
+      由于B16.9对壁厚和管端至中心尺寸允许存在制造公差，不同制造商的实际管件重量会有所不同。
+      对于关键应用场合（如吊装、运费核算、承压设计），请向管件制造商确认实际重量。
+    </p>
+
+  </div>
+</Base>
+
+<script>
+  import { ELBOW_ANGLES, MATERIALS, NPS_LIST, RADIUS_TYPES, SCHEDULES } from '../../data/elbow-dimensions';
+  import { computeElbowWeight, type ElbowAngle, type RadiusType } from '../../lib/elbow-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    angle: 90 as ElbowAngle,
+    radius: 'LR' as RadiusType,
+    nps: 2,
+    schedule: 'SCH40',
+    density: 7850,
+    qty: 1,
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setAngleButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.angle-btn').forEach((b) => {
+      const active = Number(b.dataset.angle) === state.angle;
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const a = ELBOW_ANGLES.find((x) => x.id === state.angle);
+    $('angleDesc').textContent = a ? a.desc : '';
+  }
+
+  function setRadiusButtons() {
+    const srUnavailable = state.angle === 45;
+    document.querySelectorAll<HTMLButtonElement>('.radius-btn').forEach((b) => {
+      const isSr = b.dataset.radius === 'SR';
+      const active = b.dataset.radius === state.radius;
+      b.disabled = srUnavailable && isSr;
+      b.classList.toggle('opacity-40', srUnavailable && isSr);
+      b.classList.toggle('cursor-not-allowed', srUnavailable && isSr);
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const r = RADIUS_TYPES.find((x) => x.id === state.radius);
+    $('radiusDesc').textContent = r ? r.desc : '';
+    $('srNote').classList.toggle('hidden', !srUnavailable);
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
+
+  function renderResult() {
+    const r = computeElbowWeight(state.angle, state.radius, state.nps, state.schedule, state.density);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    const angleName = r.angle === 90 ? '90°' : '45°';
+    const radiusName = r.radius === 'LR' ? 'LR' : 'SR';
+    $('resultLine').textContent =
+      `${angleName} ${radiusName} Elbow ${r.npsLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outCenterToEnd').textContent = `${fmt(r.centerToEndIn, 3)} in / ${fmt(r.centerToEndMm, 1)} mm`;
+    $('outPipeOd').textContent = `${fmt(r.pipeOdMm, 1)} mm`;
+
+    const rows: [string, string][] = [
+      ['Elbow type', `${angleName} ${radiusName} (ASME B16.9)`],
+      ['Nominal size', `${r.npsLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
+      ['Schedule', scheduleName(r.schedule)],
+      ['Center-to-end (A)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
+      ['Bend radius', r.radius === 'LR' ? `1.5 × NPS = ${fmt(1.5 * r.nps, 2)} in` : `1.0 × NPS = ${fmt(r.nps, 2)} in`],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('');
+
+    const basis: [string, string][] = [
+      ['LR 90° reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['Geometry factor', `× ${fmt(r.geometryFactor, 2)}`],
+      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
+      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+    ];
+    $('basisList').innerHTML = basis
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('') +
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
+  }
+
+  function renderTable() {
+    const angleName = state.angle === 90 ? '90°' : '45°';
+    const radiusName = state.angle === 45 ? 'LR' : state.radius;
+    $('tableTitle').textContent = `${angleName} ${radiusName === 'LR' ? 'Long Radius' : 'Short Radius'}`;
+    $('tableCaption').textContent = `${angleName} ${radiusName}`;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const n of NPS_LIST) {
+      const r = computeElbowWeight(state.angle, state.radius, n.nps, state.schedule, state.density);
+      if (!r.valid) continue;
+      const w40 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH40', state.density);
+      const w80 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH80', state.density);
+      const w160 = computeElbowWeight(state.angle, state.radius, n.nps, 'SCH160', state.density);
+      const wxxs = computeElbowWeight(state.angle, state.radius, n.nps, 'XXS', state.density);
+      const shown = state.unit === 'kg' ? r.weightKg : r.weightLb;
+      const conv = (x: number) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
+      const cell = (x: { weightKg: number; weightLb: number }, isShown: boolean) =>
+        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'accent-text' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(r.centerToEndMm, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(r.pipeOdMm, 1)}</td>` +
+        cell(w40, state.schedule === 'SCH40' || state.schedule === 'STD') +
+        cell(w80, state.schedule === 'SCH80' || state.schedule === 'XS') +
+        cell(w160, state.schedule === 'SCH160') +
+        cell(wxxs, state.schedule === 'XXS');
+      tr.title = `${fmt(shown, 2)} ${state.unit} at current settings`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.angle-btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.angle = Number(b.dataset.angle) as ElbowAngle;
+      if (state.angle === 45) state.radius = 'LR';
+      setAngleButtons();
+      setRadiusButtons();
+      render();
+    })
+  );
+  document.querySelectorAll<HTMLButtonElement>('.radius-btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (state.angle === 45 && b.dataset.radius === 'SR') return;
+      state.radius = b.dataset.radius as RadiusType;
+      setRadiusButtons();
+      render();
+    })
+  );
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('schedule').addEventListener('change', (e) => { state.schedule = (e.target as HTMLSelectElement).value; render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateNps();
+  setAngleButtons();
+  setRadiusButtons();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Elbow Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/elbow-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      angle: String(state.angle), radius: state.radius, nps: String(state.nps),
+      schedule: state.schedule, material: ($('material') as HTMLSelectElement).value,
+      density: String(state.density), qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const a = Number(sp.get('angle'));
+    if (a && ([45,90,180] as number[]).includes(a)) { state.angle = a as ElbowAngle; setAngleButtons(); changed = true; }
+    const r = sp.get('radius');
+    if (r === 'LR' || r === 'SR') { state.radius = r; setRadiusButtons(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const sch = sp.get('schedule');
+    if (sch) { state.schedule = sch; ($('schedule') as HTMLSelectElement).value = sch; changed = true; }
+    const mat = sp.get('material');
+    if (mat) { const found = MATERIALS.find((m) => m.id === mat); if (found) { ($('material') as HTMLSelectElement).value = mat; state.density = found.density; ($('density') as HTMLInputElement).value = String(found.density); ($('density') as HTMLInputElement).disabled = mat !== 'custom'; changed = true; } }
+    const d = Number(sp.get('density'));
+    if (d > 0) { state.density = d; ($('density') as HTMLInputElement).value = String(d); changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

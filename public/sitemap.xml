@@ -29,4 +29,13 @@
   <url><loc>https://pvfcalculator.com/privacy/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pvfcalculator.com/terms/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pvfcalculator.com/disclaimer/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <!-- Chinese pages -->
+  <url><loc>https://pvfcalculator.com/zh/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/flange-weight-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/elbow-weight-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/tee-weight-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/reducer-weight-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/pipe-weight-calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/cangzhou-flange-manufacturers/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pvfcalculator.com/zh/request-a-quote/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

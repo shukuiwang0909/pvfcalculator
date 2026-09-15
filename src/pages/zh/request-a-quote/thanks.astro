@@ -1,0 +1,46 @@
+---
+import Base from "../../../layouts/Base.astro";
+
+const title = "询盘已收到 | PVF Calculator";
+const description = "您的询盘已成功提交，我们将在24小时内回复报价及交货期。";
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "提交询盘", url: "/zh/request-a-quote/" },
+  { name: "提交成功", url: "/zh/request-a-quote/thanks/" },
+];
+---
+
+<Base title={title} description={description} robots="noindex, nofollow" breadcrumbItems={breadcrumbItems} lang="zh" ctaHref="/zh/request-a-quote/">
+  <section class="relative overflow-hidden py-24 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-xl mx-auto relative z-10 text-center">
+      <div class="w-20 h-20 rounded-full accent-bg/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-6">
+        <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-theme-primary mb-4">
+        询盘<span class="accent-text">已收到</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        感谢您的询盘，我们已收到您提交的规格信息，将在 <strong class="text-theme-primary">24小时内</strong> 回复含单价、交货期及付款条件的报价单。
+      </p>
+      <div class="glass rounded-2xl p-6 text-left mb-8">
+        <h2 class="font-bold text-theme-primary mb-3">后续流程</h2>
+        <ol class="space-y-3 text-sm text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">1.</span><span>我们核对您的产品规格，匹配沧州/孟村具备对应资质的工厂。</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">2.</span><span>您将收到详细报价单，含FOB单价、最小起订量、交货期及运输方案。</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">3.</span><span>确认订单后可跟进生产进度，直至装船交货。</span></li>
+        </ol>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/zh/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-6 py-3 text-sm font-bold transition" style="color: #07090c;">
+          返回首页
+        </a>
+        <a href="/zh/flange-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-6 py-3 text-sm font-semibold text-theme-primary hover:bg-theme-secondary transition">
+          使用计算器
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

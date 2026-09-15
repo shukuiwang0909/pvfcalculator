@@ -1,0 +1,527 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "法兰重量计算器（ASME B16.5）| 对焊颈/平焊/盲板 | pvfcalculator.com";
+const description = "免费 ASME B16.5 法兰重量计算器。基于真实三维几何建模（非平板近似），支持对焊颈、平焊颈、盲板、承插焊及螺纹法兰，Class 150–2500，NPS 1/2\"–24\"，A105 / F304 / F316 / F11 等材质，结果可选 kg 或 lb。";
+const canonical = "https://pvfcalculator.com/zh/flange-weight-calculator/";
+
+const faqs = [
+  {
+    q: "ASME B16.5 法兰重量如何计算？",
+    a: "重量由法兰真实三维体积乘以材料密度得出。法兰被分解为法兰环盘、锥形（对焊颈）或直筒（平焊颈）毂部，以及突面，采用 ASME B16.5 标准尺寸——外径、内孔、环形厚度 t、毂径 X、毂长 Y。重量 = 体积 × 密度。这比大多数在线计算器采用的平板法从根本上更加精确。"
+  },
+  {
+    q: "为什么此计算器比平板近似法计算器更精确？",
+    a: "平板法按 π/4 × (OD² − 孔径²) × 厚度 × 密度计算，完全忽略毂部。对于 24\" Class 150 对焊颈法兰，该方法低估重量超过 40%。本工具明确建模了锥形毂圆锥台体积和突面，计算结果通常与制造商样本重量误差在 ±5% 以内。"
+  },
+  {
+    q: "对焊颈法兰与平焊颈法兰重量有何差异？",
+    a: "同一 NPS 和压力等级下，对焊颈法兰通常更重，因为其毂部是全长锥形（较大的尺寸 Y），专为对焊连接和抗疲劳设计；而平焊颈法兰的毂部较短且为直筒形。在 ASME B16.5 中，Class 150 和 300 的对焊颈与平焊颈法兰环体尺寸 O、t 及螺栓节圆相同。"
+  },
+  {
+    q: "24 英寸 150# 对焊颈法兰重量是多少？",
+    a: "NPS 24 Class 150 对焊颈法兰（ASTM A105 碳钢）按 ASME B16.5 几何计算，重量约为 128 kg（约 282 lb），与主要制造商样本数据一致（通常报价为 126–129 kg）。"
+  },
+  {
+    q: "24 英寸 Class 150 盲板法兰重量是多少？",
+    a: "NPS 24 Class 150 盲板法兰（ASME B16.5 盲板最小厚度 69.9 mm / 2.75 in），A105 碳钢材质，重量约为 291 kg（约 642 lb）。请注意，部分计算器显示的数值接近 193 kg——原因是错误地套用了对焊颈环形厚度，而非盲板厚度。"
+  },
+  {
+    q: "本计算器使用哪些材料密度？",
+    a: "ASTM A105 碳钢：7,850 kg/m³；ASTM A182 F304 不锈钢：8,000 kg/m³；ASTM A182 F316/F316L：7,980 kg/m³；ASTM A182 F11 合金钢：7,820 kg/m³；ASTM A182 F22：7,850 kg/m³。同时提供自定义密度输入（等效 kg/m³ 或 lb/ft³）。"
+  },
+  {
+    q: "覆盖哪些法兰类型、压力等级和规格？",
+    a: "涵盖 ASME B16.5 全部五种法兰类型——对焊颈（WN）、平焊颈（SO）、盲板（BL）、承插焊（SW）和螺纹（THD），适用于 Class 150、300、600、900、1500 和 2500，NPS 1/2\" 至 24\"，与标准本身的规格限制保持一致（Class 900/1500 无 3-1/2\"，Class 2500 最大至 NPS 12\"）。"
+  },
+  {
+    q: "计算器是否包含突面和毂部锥度？",
+    a: "是的。突面（Class 150/300 为 1.6 mm，Class 600 及以上为 6.4 mm）作为明确的环形体积单独计算，对焊颈毂部按真实圆锥台建模，介于毂根径 X 与法兰外径之间，高度为毂长 Y 减去环形厚度。"
+  },
+  {
+    q: "此计算器精度如何？",
+    a: "对于 ASME B16.5 标准法兰（碳钢材质），计算重量通常与制造商样本重量误差在 ±5% 以内（例如 24\" 150# 对焊颈 ≈ 128 kg，样本数据为 126–129 kg）。偏差来源包括内孔选取（采用 STD 壁厚管道内径）、过渡圆角及制造公差。对于关键应用场景，请务必向制造商进行确认。"
+  },
+  {
+    q: "螺栓孔是否从法兰重量中扣除？",
+    a: "否。ASME B16.5 螺栓节圆孔的扣除量可忽略不计（通常不足总重量的 0.5%），且制造商标准样本重量均未扣除螺栓孔，本计算器沿用相同惯例，以确保与供应商报价的一致性。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "法兰重量计算器（ASME B16.5）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "法兰重量计算器", url: "/zh/flange-weight-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        法兰重量计算器 <span class="accent-text">（ASME B16.5）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        基于真实三维几何模型计算 ASME B16.5 管法兰理论重量——包含锥形对焊颈毂部与突面，<strong>非</strong>平板近似。
+        涵盖对焊颈、平焊颈、盲板、承插焊和螺纹法兰，Class 150–2500，NPS 1/2″–24″。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="法兰重量计算工具">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">法兰类型</label>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-5" id="typeButtons">
+          <button data-type="WN"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M2 34 L14 12 L62 12 L62 34 Z M14 12 L14 34" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">对焊颈</span>
+          </button>
+          <button data-type="SO"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="14" y="12" width="48" height="22" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">平焊颈</span>
+          </button>
+          <button data-type="BL"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="8" y="10" width="54" height="24" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="16" x2="56" y2="16" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></svg>
+            <span class="text-xs font-semibold">盲板</span>
+          </button>
+          <button data-type="SW"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="20" y="12" width="42" height="22" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="12" width="6" height="22" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">承插焊</span>
+          </button>
+          <button data-type="THD" class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="20" y="12" width="42" height="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 14 l4 2 l-4 2 l4 2 l-4 2 l4 2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">螺纹</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">锥形毂，对焊端</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">压力等级</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="150">Class 150</option>
+            <option value="300">Class 300</option>
+            <option value="600">Class 600</option>
+            <option value="900">Class 900</option>
+            <option value="1500">Class 1500</option>
+            <option value="2500">Class 2500</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">公称管径（NPS）</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材质</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">密度（kg/m³）</label>
+          <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">数量</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="单位制">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单个法兰重量</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary">
+            <span id="resultLine">–</span>
+          </p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">数量</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">总重量</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">体积</span><span class="font-semibold" id="outVolume">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">密度</span><span class="font-semibold" id="outDensity">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">关键尺寸（ASME B16.5）</p>
+          <dl class="text-sm" id="dimsList"></dl>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">体积分布</p>
+          <dl class="text-sm" id="volList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">数据来源</summary>
+            <p class="mt-1">尺寸来源：ASME B16.5-2020：对焊颈第8表，平焊颈第9表，承插焊第10表，盲板第12表，螺纹第15表（Class 150/300），600–2500 采用对应等级表。内孔 = ASME B36.10M 标准壁管道内径。</p>
+          </details>
+        </div>
+      </div>
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full dimension & weight table -->
+    <section class="mt-10" aria-label="尺寸与重量表">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.5 <span id="tableTitle" class="accent-text">Flange</span> 尺寸与重量 — <span id="tableClass">Class 150</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[760px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">外径 OD（mm）</th>
+              <th class="px-3 py-2.5">内孔（mm）</th>
+              <th class="px-3 py-2.5">t / C（mm）</th>
+              <th class="px-3 py-2.5">X（mm）</th>
+              <th class="px-3 py-2.5">Y（mm）</th>
+              <th class="px-3 py-2.5">螺栓节圆（mm）</th>
+              <th class="px-3 py-2.5">螺栓</th>
+              <th class="px-3 py-2.5 text-right">重量（kg）</th>
+            </tr>
+          </thead>
+          <tbody id="dimsTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">表中重量使用当前所选材料密度。点击任意行可将其加载到计算器。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算方法说明">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算方法说明 <span class="accent-text">（几何模型，非平板近似）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="对焊颈法兰几何模型">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- hub frustum -->
+            <path d="M70 60 L180 60 L180 40 L70 20 Z" fill="#fde68a" stroke="#b45309" stroke-width="1.5" />
+            <!-- ring -->
+            <rect x="180" y="20" width="36" height="180" fill="#fed7aa" stroke="#c2410c" stroke-width="1.5" />
+            <!-- RF -->
+            <rect x="216" y="34" width="10" height="152" fill="#fb923c" stroke="#c2410c" stroke-width="1" />
+            <!-- bore -->
+            <line x1="0" y1="92" x2="216" y2="92" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 4" />
+            <line x1="0" y1="128" x2="216" y2="128" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 4" />
+            <!-- dims -->
+            <line x1="180" y1="215" x2="216" y2="215" stroke="#64748b" marker-start="url(#arr)" marker-end="url(#arr)" />
+            <text x="188" y="230" font-size="11" fill="#334155" text-anchor="middle">t</text>
+            <line x1="70" y1="110" x2="180" y2="110" stroke="#64748b" marker-start="url(#arr)" marker-end="url(#arr)" />
+            <text x="125" y="124" font-size="11" fill="#334155" text-anchor="middle">Y − t</text>
+            <text x="125" y="50" font-size="12" fill="#92400e" text-anchor="middle">毂部：圆锥台 X → OD</text>
+            <text x="198" y="14" font-size="12" fill="#9a3412" text-anchor="middle">法兰环盘</text>
+            <text x="241" y="110" font-size="11" fill="#9a3412">突面</text>
+            <text x="30" y="86" font-size="11" fill="#334155">内孔</text>
+            <text x="60" y="170" font-size="11" fill="#334155">X = 毂根径</text>
+            <text x="150" y="170" font-size="11" fill="#334155">OD</text>
+          </svg>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">体积方程（尺寸取自 ASME B16.5 表格）</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>对焊颈：</strong> V = disc(OD, bore, t) + frustum(X→OD, Y−t) − bore cylinder(Y−t) + 突面</li>
+            <li><strong>平焊颈 / 承插焊 / 螺纹：</strong> V = disc(OD, bore, t) + cylinder(X, Y−t) − bore cylinder(Y−t) + 突面</li>
+            <li><strong>盲板：</strong> V = disc(OD, t<sub>blind</sub>) + 突面</li>
+            <li>圆锥台：V = π·L/3 · (R₁² + R₁R₂ + R₂²)</li>
+            <li>重量 = V × ρ × 10⁻⁹（mm³ → kg，ρ 单位 kg/m³）</li>
+          </ul>
+          <p class="mt-3">平板法（π/4·(OD²−内孔²)·t·ρ）忽略了毂部。对于 24″ Class 150 对焊颈法兰，该方法得到约 90 kg，而真实值约为 128 kg——低估幅度达 <strong>42%</strong>，这正是几何建模对运费核算和报价不可或缺的原因。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 法兰尺寸表</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道重量计算器</a>
+        <a href="/cangzhou-flange-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 沧州法兰制造商</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 申请报价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>计算重量为基于 ASME B16.5-2020 标准尺寸和名义材料密度的理论值。实际重量可能因内孔选取、过渡圆角及制造公差而有所不同。对于关键应用（起重、运费保证、压力边界设计），请务必向法兰制造商进行核实。
+    </p>
+
+  </div>
+</Base>
+
+<script>
+  import { CLASS_DATA, CLASS_LIST, MATERIALS, NPS_LIST } from '../../data/flange-dimensions';
+  import { computeFlangeWeight, FLANGE_TYPES, type FlangeType } from '../../lib/flange-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = { type: 'WN' as FlangeType, cls: 150, nps: 2, density: 7850, qty: 1, unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb' };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const cd = CLASS_DATA[state.cls];
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!cd.validNps.includes(state.nps)) {
+      state.nps = cd.validNps[Math.min(5, cd.validNps.length - 1)];
+      sel.value = String(state.nps);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} (${m.standard}) — ${m.density} kg/m³`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setTypeButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) => {
+      const active = b.dataset.type === state.type;
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const t = FLANGE_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? t.desc : '';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  function renderResult() {
+    const r = computeFlangeWeight(state.type, state.cls, state.nps, state.density);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
+    $('weightUnit').textContent = state.unit;
+    $('resultLine').textContent =
+      `${FLANGE_TYPES.find((t) => t.id === state.type)!.name} ${r.npsLabel} Class ${r.cls} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
+    $('outVolume').textContent = `${fmt(r.volumeCm3, 0)} cm³`;
+    $('outDensity').textContent = `${fmt(state.density, 0)} kg/m³`;
+
+    const d = r.dims;
+    const rows: [string, string][] = state.type === 'BL'
+      ? [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Blind thickness t', `${fmt(d.t, 1)} mm`],
+         ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`], ['Bolt circle', `${fmt(d.bcd, 1)} mm`],
+         ['Bolts', d.bolts]]
+      : [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Bore (STD wall)', `${fmt(d.bore, 1)} mm`],
+         ['Ring thickness t', `${fmt(d.t, 1)} mm`], ['Hub diameter X', `${fmt(d.x, 1)} mm`],
+         ['Hub length Y', `${fmt(d.y, 1)} mm`], ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`],
+         ['Bolt circle', `${fmt(d.bcd, 1)} mm`], ['Bolts', d.bolts]];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+
+    const v = r.volumes;
+    const seg = state.type === 'BL'
+      ? [['Flange disc', v.ringMm3], ['Raised face', v.faceMm3]]
+      : [['Flange ring', v.ringMm3], [state.type === 'WN' ? 'Tapered hub (net)' : 'Straight hub (net)', v.hubMm3], ['Raised face', v.faceMm3]];
+    $('volList').innerHTML = seg
+      .map(([k, mm3]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${fmt((mm3 as number) / 1000, 1)} cm³</dd></div>`)
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Total</dt><dd class="font-bold accent-text">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
+  }
+
+  function renderTable() {
+    const cd = CLASS_DATA[state.cls];
+    const tname = FLANGE_TYPES.find((t) => t.id === state.type)!.name;
+    $('tableTitle').textContent = tname;
+    $('tableClass').textContent = `Class ${state.cls}`;
+    const tbody = $('dimsTableBody');
+    tbody.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const r = computeFlangeWeight(state.type, state.cls, n.nps, state.density);
+      if (!r.valid) continue;
+      const d = r.dims;
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(d.od, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.bore, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(d.t, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.x, 1)}</td>` +
+        `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.y, 1)}</td>` +
+        `<td class="px-3 py-2">${fmt(d.bcd, 1)}</td>` +
+        `<td class="px-3 py-2">${d.bolts}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'accent-text' : ''}">${fmt(r.weightKg, 2)}</td>`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() {
+    renderResult();
+    renderTable();
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.type = b.dataset.type as FlangeType; setTypeButtons(); render(); })
+  );
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => {
+    const m = MATERIALS.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.density = m.density;
+    ($('density') as HTMLInputElement).value = String(m.density);
+    ($('density') as HTMLInputElement).disabled = m.id !== 'custom';
+    render();
+  });
+  $('density').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (v > 0) { state.density = v; render(); }
+  });
+  $('qty').addEventListener('input', (e) => {
+    const v = Math.max(1, Math.floor(Number((e.target as HTMLSelectElement).value) || 1));
+    state.qty = v;
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); renderResult(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); renderResult(); });
+
+  // Init
+  populateMaterials();
+  ($('density') as HTMLInputElement).disabled = true;
+  populateNps();
+  setTypeButtons();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Flange Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/flange-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, cls: String(state.cls), nps: String(state.nps),
+      material: ($('material') as HTMLSelectElement).value,
+      density: String(state.density), qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as FlangeType;
+    if (t && (['WN','SO','BL','SW','THD'] as string[]).includes(t)) { state.type = t; setTypeButtons(); changed = true; }
+    const c = Number(sp.get('cls'));
+    if (c && [150,300,400,600,900,1500,2500].includes(c)) { state.cls = c; ($('cls') as HTMLSelectElement).value = String(c); populateNps(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const mat = sp.get('material');
+    if (mat) { const found = MATERIALS.find((m) => m.id === mat); if (found) { ($('material') as HTMLSelectElement).value = mat; state.density = found.density; ($('density') as HTMLInputElement).value = String(found.density); ($('density') as HTMLInputElement).disabled = mat !== 'custom'; changed = true; } }
+    const d = Number(sp.get('density'));
+    if (d > 0) { state.density = d; ($('density') as HTMLInputElement).value = String(d); changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

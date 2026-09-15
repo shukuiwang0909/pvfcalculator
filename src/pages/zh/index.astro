@@ -1,0 +1,169 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "PVF计算器 — 免费管件重量计算器 | ASME B16.5 & B16.9";
+const description = "免费ASME B16.5法兰、B16.9管件重量计算器。支持碳钢、不锈钢、合金钢，结果精确至小数点后两位，适用于工程采购、物流与项目报价。";
+
+const tools = [
+  {
+    name: "法兰重量计算器",
+    tag: "最受欢迎",
+    short: "法兰",
+    desc: "对焊颈、平焊、盲板、承插焊及螺纹法兰",
+    specs: "Class 150–2500 · NPS 1/2\"–24\" · 5种类型",
+    href: "/zh/flange-weight-calculator/",
+    icon: "M12 2L2 7v10c0 5.25 3.75 10.15 8 11 4.25-.85 8-5.75 8-11V7l-10-5zm0 2.18l8 4.02V17c0 4.52-3.275 8.7-7 9.55-3.725-.85-7-5.03-7-9.55V8.2l8-4.02zM12 6a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z",
+  },
+  {
+    name: "管道重量计算器",
+    tag: "ASME B36.10M",
+    short: "管道",
+    desc: "各壁厚等级管道每米重量计算",
+    specs: "SCH 10–XXS · NPS 1/8\"–24\" · 6种材质",
+    href: "/zh/pipe-weight-calculator/",
+    icon: "M4 8h16v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8zm0 0V6a2 2 0 012-2h12a2 2 0 012 2v2M8 12h8",
+  },
+  {
+    name: "弯头重量计算器",
+    tag: "B16.9管件",
+    short: "弯头",
+    desc: "45°/90°长半径与短半径对焊弯头",
+    specs: "LR / SR · 各壁厚 · SCH 10–XXS",
+    href: "/zh/elbow-weight-calculator/",
+    icon: "M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18",
+  },
+  {
+    name: "三通重量计算器",
+    tag: "B16.9管件",
+    short: "三通",
+    desc: "等径与异径对焊三通",
+    specs: "等径 / 异径 · NPS 1/2\"–24\"",
+    href: "/zh/tee-weight-calculator/",
+    icon: "M12 3v18M3 12h18",
+  },
+  {
+    name: "异径管重量计算器",
+    tag: "B16.9管件",
+    short: "异径管",
+    desc: "同心与偏心异径管",
+    specs: "同心 / 偏心 · 各壁厚",
+    href: "/zh/reducer-weight-calculator/",
+    icon: "M4 8h16M4 16h10",
+  },
+  {
+    name: "管道壁厚表",
+    tag: "参考资料",
+    short: "壁厚表",
+    desc: "SCH 10–XXS完整壁厚对照表",
+    specs: "NPS 1/8\"–24\" · DN 6–600 · ASME B36.10M",
+    href: "/pipe-schedule-chart/",
+    icon: "M9 17v-6m4 6V7m4 10v-3M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z",
+  },
+];
+
+const faqs = [
+  ["计算器免费吗？", "是的，所有计算器完全免费，无需注册。计算结果为基于ASME B16.5/B16.9标准尺寸的理论估算值，实际采购前请向制造商确认。"],
+  ["计算结果准确吗？", "计算基于ASME B16.5和B16.9官方尺寸数据，理论精度在±3%以内。铸件、锻件因制造公差略有差异，重要项目请以供应商实测数据为准。"],
+  ["支持哪些材质？", "支持碳钢（密度7850 kg/m³）、304不锈钢（7930）、316不锈钢（7980）、合金钢（7850）及自定义密度输入，满足特殊合金需求。"],
+  ["如何获取出口报价？", "点击页面右上角"获取报价"，填写产品规格和数量，我们会将询盘转给沧州/孟村的匹配工厂，通常24小时内获得FOB报价。"],
+  ["支持kg和lb两种单位吗？", "支持。所有计算器均可在kg和lb之间切换，并自动记住您的单位偏好。"],
+];
+---
+<Base title={title} description={description} lang="zh" ctaHref="/zh/request-a-quote/">
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-6">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full accent-bg"></span>
+        </span>
+        ASME B16.5 · B16.9 · B36.10M
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-theme-primary mb-6">
+        管件重量<span class="accent-text">计算器</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-theme-secondary max-w-3xl mx-auto mb-8">
+        免费ASME标准法兰、弯头、三通、异径管及管道重量计算工具。适用于工程采购、物流运输与项目报价。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/zh/flange-weight-calculator/" class="accent-bg hover:opacity-90 text-sm font-bold px-6 py-3 rounded-lg transition-colors" style="color:#07090c">
+          开始计算
+        </a>
+        <a href="/zh/request-a-quote/" class="border border-theme rounded-lg px-6 py-3 text-sm font-semibold text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary transition-colors">
+          获取工厂报价
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools grid -->
+  <section id="tools" class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold text-theme-primary mb-8 text-center">全部计算工具</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {tools.map((tool) => (
+        <a href={tool.href} class="group rounded-xl border border-theme bg-theme-secondary p-5 hover:border-amber-500/50 transition-all hover:shadow-lg hover:shadow-amber-500/5">
+          <div class="flex items-start justify-between mb-3">
+            <div class="p-2 rounded-lg accent-bg/10">
+              <svg class="w-5 h-5 accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={tool.icon} />
+              </svg>
+            </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border border-amber-500/30 accent-text">{tool.tag}</span>
+          </div>
+          <h3 class="font-bold text-theme-primary mb-1 group-hover:accent-text transition-colors">{tool.name}</h3>
+          <p class="text-sm text-theme-secondary mb-2">{tool.desc}</p>
+          <p class="text-xs text-theme-muted">{tool.specs}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Why section -->
+  <section class="bg-theme-secondary border-y border-theme py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-10 text-center">为什么选择 PVF Calculator</h2>
+      <div class="grid sm:grid-cols-3 gap-6">
+        {[
+          { title: "ASME标准数据", desc: "基于ASME B16.5、B16.9、B36.10M官方尺寸数据，数据来源可追溯。", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
+          { title: "支持kg/lb双单位", desc: "一键切换公制/英制，单位偏好自动记忆，多页面保持一致。", icon: "M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" },
+          { title: "一键分享链接", desc: "计算结果通过URL参数保存，支持一键分享给同事或客户。", icon: "M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" },
+        ].map((f) => (
+          <div class="text-center">
+            <div class="inline-flex p-3 rounded-full accent-bg/10 mb-4">
+              <svg class="w-6 h-6 accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={f.icon} />
+              </svg>
+            </div>
+            <h3 class="font-bold text-theme-primary mb-2">{f.title}</h3>
+            <p class="text-sm text-theme-secondary">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="max-w-3xl mx-auto px-4 py-16">
+    <h2 class="text-2xl font-bold text-theme-primary mb-8 text-center">常见问题</h2>
+    <dl class="space-y-4">
+      {faqs.map(([q, a]) => (
+        <div class="rounded-xl border border-theme bg-theme-secondary p-5">
+          <dt class="font-semibold text-theme-primary mb-2">{q}</dt>
+          <dd class="text-sm text-theme-secondary leading-relaxed">{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-theme-secondary border-t border-theme py-14 text-center">
+    <div class="max-w-2xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-3">需要沧州/孟村工厂报价？</h2>
+      <p class="text-theme-secondary mb-6">填写规格与数量，我们将询盘转发给匹配的管件法兰工厂，24小时内获得FOB报价。</p>
+      <a href="/zh/request-a-quote/" class="accent-bg hover:opacity-90 font-bold px-8 py-3 rounded-lg transition-colors inline-block" style="color:#07090c">
+        提交询盘
+      </a>
+    </div>
+  </section>
+</Base>

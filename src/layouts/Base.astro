@@ -12,6 +12,7 @@ interface Props {
   gscVerification?: string;
   breadcrumbItems?: Array<{ name: string; url: string }>;
   ogType?: "website" | "article";
+  lang?: "en" | "zh";
 }
 
 const {
@@ -25,20 +26,42 @@ const {
   gscVerification,
   breadcrumbItems,
   ogType = "website",
+  lang = "en",
 } = Astro.props;
 
 const siteOrigin = "https://pvfcalculator.com";
 const GA4_ID = "G-PKFFM8ZL3T";
 
-// Auto-compute canonical from current URL, normalise trailing slash
+// Language switching
 const rawPath = Astro.url.pathname.replace(/\/?$/, "/");
+const isZh = rawPath.startsWith("/zh/");
+const enPath = isZh ? rawPath.replace(/^\/zh(?=\/)/, "") || "/" : rawPath;
+const zhPath = enPath === "/" ? "/zh/" : `/zh${enPath}`;
+const zhModules = import.meta.glob("../pages/zh/**/*.astro");
+function toRoute(key: string): string {
+  const i = key.indexOf("/pages/");
+  let p = key.slice(i + "/pages".length).replace(/\.astro$/, "").replace(/\/index$/, "");
+  if (!p.endsWith("/")) p += "/";
+  return p || "/";
+}
+const zhRoutes = new Set(Object.keys(zhModules).map(toRoute));
+const hasZhPage = zhRoutes.has(zhPath);
+const hasEnPage = !isZh || zhRoutes.has(zhPath);
+const langSwitchHref = isZh ? enPath : (hasZhPage ? zhPath : null);
+const langSwitchLabel = isZh ? "EN" : "中文";
+
 const canonical = canonicalProp ?? `${siteOrigin}${rawPath}`;
-
 const ogImage = `${siteOrigin}/og-image.png`;
-
 const currentPath = Astro.url.pathname;
 
-const nav = [
+const nav = lang === "zh" ? [
+  { href: "/zh/flange-weight-calculator/", label: "法兰" },
+  { href: "/zh/elbow-weight-calculator/", label: "弯头" },
+  { href: "/zh/tee-weight-calculator/", label: "三通" },
+  { href: "/zh/reducer-weight-calculator/", label: "异径管" },
+  { href: "/zh/pipe-weight-calculator/", label: "管道" },
+  { href: "/zh/cangzhou-flange-manufacturers/", label: "沧州产地" },
+] : [
   { href: "/flange-weight-calculator/", label: "Flange" },
   { href: "/elbow-weight-calculator/", label: "Elbow" },
   { href: "/tee-weight-calculator/", label: "Tee" },
@@ -138,7 +161,7 @@ const siteJsonLd = [
     <div class="tech-grid"></div>
     <header class="glass sticky top-0 z-50 border-b border-theme">
       <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between relative z-10">
-        <a href="/" class="font-bold text-lg tracking-tight text-theme-primary">
+        <a href={isZh ? "/zh/" : "/"} class="font-bold text-lg tracking-tight text-theme-primary">
           PVF<span class="accent-text">Calculator</span>
         </a>
         <nav class="hidden md:flex gap-5 text-sm">
@@ -166,8 +189,13 @@ const siteJsonLd = [
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
             </svg>
           </button>
-          <a href={ctaHref} class="hidden sm:inline-block accent-bg hover:opacity-90 text-sm font-semibold px-3 md:px-4 py-2 rounded-lg transition-colors" style="color: #07090c;">
-            {ctaHref === "/request-a-quote/" ? "Get a Quote" : "Calculate Now"}
+          {langSwitchHref && (
+            <a href={langSwitchHref} class="hidden sm:inline-flex items-center px-2.5 py-1.5 rounded-lg border border-theme text-xs font-semibold text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary transition-colors" aria-label="Switch language">
+              {langSwitchLabel}
+            </a>
+          )}
+          <a href={isZh ? "/zh/request-a-quote/" : (ctaHref === "/request-a-quote/" ? "/request-a-quote/" : ctaHref)} class="hidden sm:inline-block accent-bg hover:opacity-90 text-sm font-semibold px-3 md:px-4 py-2 rounded-lg transition-colors" style="color: #07090c;">
+            {isZh ? "获取报价" : (ctaHref === "/request-a-quote/" ? "Get a Quote" : "Calculate Now")}
           </a>
         </div>
       </div>
