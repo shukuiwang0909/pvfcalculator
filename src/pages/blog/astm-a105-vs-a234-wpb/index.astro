@@ -1,0 +1,249 @@
+---
+import Base from '../../../layouts/Base.astro';
+
+const title = 'ASTM A105 vs A234 WPB: Forged Flange vs Wrought Fitting';
+const description = 'ASTM A105 and A234 WPB are the most common carbon steel materials in piping. Learn the differences in manufacturing process, mechanical properties, applications, and why they are not interchangeable.';
+const canonical = 'https://pvfcalculator.com/blog/astm-a105-vs-a234-wpb/';
+const breadcrumbItems = [
+  { name: '首页', url: '/' },
+  { name: '博客', url: '/blog/' },
+  { name: 'A105 vs A234 WPB', url: '/blog/astm-a105-vs-a234-wpb/' }
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "PVFCalculator" },
+    "publisher": { "@type": "Organization", "name": "PVFCalculator" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `https://pvfcalculator.com${item.url}`
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I substitute A105 for A234 WPB?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. A105 is for forged flanges and fittings, while A234 WPB is for wrought butt weld fittings. They have different manufacturing processes, shapes, and applications. Using one in place of the other violates code and can compromise safety." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which is stronger, A105 or A234 WPB?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A105 has slightly higher minimum tensile strength (70 ksi vs 60 ksi) and yield strength (36 ksi vs 35 ksi). However, both are sufficient for most carbon steel piping applications. The choice depends on the component type, not strength." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is A105 weldable?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, A105 is weldable using standard carbon steel procedures. Preheat and post-weld heat treatment may be required for thick sections or high-restraint joints to prevent cracking." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the equivalent of A105 in European standards?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A105 is approximately equivalent to EN 10222-2 P280GH or P355NH. A234 WPB is approximately equivalent to EN 10253-2 P265GH or P280GH." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can A105 flanges be used with A234 WPB fittings?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. A105 flanges and A234 WPB fittings are commonly used together in the same carbon steel piping system. They have compatible mechanical properties and weldability." }
+      }
+    ]
+  }
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="article-shell">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {breadcrumbItems.map((item, i) => (
+          <li>
+            {i < breadcrumbItems.length - 1 ? (
+              <a href={item.url}>{item.name}</a>
+            ) : (
+              <span aria-current="page">{item.name}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <header class="article-header">
+      <p class="eyebrow">Material Standards · 材料标准</p>
+      <h1>{title}</h1>
+      <p class="article-description">{description}</p>
+      <div class="article-meta">
+        <span>2026-09-15</span>
+        <span>·</span>
+        <span>8 min read</span>
+        <span>·</span>
+        <span>ASTM A105 / A234</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <section class="article-section">
+        <h2>Two Standards, One Purpose</h2>
+        <p>ASTM A105 and ASTM A234 WPB are the two most common material specifications in carbon steel piping. They are often specified together on the same piping class: "A105 flanges with A234 WPB fittings." Yet they are <strong>not interchangeable</strong>. Understanding the difference is essential for procurement, quality control, and field welding.</p>
+        <p>The fundamental difference is in the <strong>manufacturing process</strong>: A105 is forged, A234 is wrought.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Manufacturing Process: Forged vs Wrought</h2>
+        <h3>ASTM A105 — Forged</h3>
+        <p>A105 components are made by <strong>forging</strong> — heating a billet or ingot of steel and shaping it under high pressure. Forging refines the grain structure, aligns the metal flow with the component shape, and eliminates internal voids. The result is a dense, strong, reliable part.</p>
+        <p>Typical A105 products: weld neck flanges, slip-on flanges, blind flanges, threaded fittings, socket weld fittings.</p>
+        <h3>ASTM A234 WPB — Wrought</h3>
+        <p>A234 WPB fittings are made by <strong>wrought</strong> processes — bending, forming, or pressing pipe or plate into shape. The starting material is typically seamless pipe (for elbows) or plate (for reducers and caps). The wrought process does not refine the grain structure as much as forging, but it is suitable for the thinner walls of butt weld fittings.</p>
+        <p>Typical A234 WPB products: 90° elbows, 45° elbows, equal tees, reducing tees, concentric reducers, eccentric reducers, caps.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Chemical Composition Comparison</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Element</th><th>A105 (Max/Range)</th><th>A234 WPB (Max/Range)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Carbon (C)</td><td>≤ 0.35%</td><td>≤ 0.30%</td></tr>
+              <tr><td>Manganese (Mn)</td><td>0.60–1.05%</td><td>0.29–1.06%</td></tr>
+              <tr><td>Phosphorus (P)</td><td>≤ 0.035%</td><td>≤ 0.050%</td></tr>
+              <tr><td>Sulfur (S)</td><td>≤ 0.040%</td><td>≤ 0.058%</td></tr>
+              <tr><td>Silicon (Si)</td><td>0.10–0.35%</td><td>≥ 0.10% (min)</td></tr>
+              <tr><td>Copper (Cu)</td><td>≤ 0.40% (Ni+Cu)</td><td>≤ 0.40% (Ni+Cu)</td></tr>
+              <tr><td>Nickel (Ni)</td><td>≤ 0.40% (Ni+Cu)</td><td>≤ 0.40% (Ni+Cu)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 1: Chemical Composition (ASTM A105 vs A234 WPB)</p>
+        <p>Both materials have similar carbon content, making them weldable with standard carbon steel procedures. A105 has slightly tighter control on phosphorus and sulfur, reflecting the higher quality expected of forged components.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Mechanical Properties Comparison</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Property</th><th>A105</th><th>A234 WPB</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Tensile Strength (min)</td><td>70 ksi (485 MPa)</td><td>60 ksi (415 MPa)</td></tr>
+              <tr><td>Yield Strength (min)</td><td>36 ksi (250 MPa)</td><td>35 ksi (240 MPa)</td></tr>
+              <tr><td>Elongation (min)</td><td>22% (2 in.)</td><td>30% (2 in.)</td></tr>
+              <tr><td>Reduction of Area (min)</td><td>30%</td><td>—</td></tr>
+              <tr><td>Hardness (max)</td><td>187 HBW</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 2: Mechanical Properties (ASTM A105 vs A234 WPB)</p>
+        <p>A105 is slightly stronger in tensile and yield, but A234 WPB has higher elongation (more ductile). For most piping applications, the difference is not significant. Both meet the requirements for Class 150–2500 flanges and Sch 40–XXS fittings.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>When to Use Which</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Material Standard</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Weld neck flange</td><td>A105</td><td>Forged for strength and reliability</td></tr>
+              <tr><td>Slip-on flange</td><td>A105</td><td>Forged for hub strength</td></tr>
+              <tr><td>Blind flange</td><td>A105</td><td>Forged to withstand bolt loads</td></tr>
+              <tr><td>Socket weld fitting</td><td>A105</td><td>Forged for high-pressure integrity</td></tr>
+              <tr><td>Threaded fitting</td><td>A105</td><td>Forged for thread strength</td></tr>
+              <tr><td>90° elbow (butt weld)</td><td>A234 WPB</td><td>Wrought from pipe, economical</td></tr>
+              <tr><td>Equal tee</td><td>A234 WPB</td><td>Wrought from pipe or plate</td></tr>
+              <tr><td>Reducer</td><td>A234 WPB</td><td>Wrought from plate</td></tr>
+              <tr><td>Cap</td><td>A234 WPB</td><td>Wrought from plate</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 3: Component-to-Standard Mapping</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Common Misconceptions</h2>
+        <h3>"A105 is just a better version of WPB"</h3>
+        <p>False. They are different products for different components. A105 flanges cannot replace WPB elbows, and WPB fittings cannot replace A105 flanges. Using the wrong standard violates the piping specification and may fail inspection.</p>
+        <h3>"WPB means 'With Pressure Barrier'"</h3>
+        <p>False. WPB stands for <strong>Wrought Pipe Buttweld</strong>. It is simply the grade designation within ASTM A234.</p>
+        <h3>"A105 and A216 WCB are the same"</h3>
+        <p>They are similar in composition, but A105 is forged and A216 WCB is cast. Forged A105 is denser and has better mechanical properties than cast WCB. A105 is used for flanges; A216 WCB is used for valves and pump bodies.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Welding Considerations</h2>
+        <p>Both A105 and A234 WPB are readily weldable using standard carbon steel procedures (SMAW, GTAW, GMAW, SAW). Key considerations:</p>
+        <ul>
+          <li><strong>Preheat:</strong> For thick sections (>1") or high restraint, preheat to 200–300°F to prevent hydrogen cracking.</li>
+          <li><strong>Post-weld heat treatment (PWHT):</strong> Required for sour service (NACE MR0175) or when specified by the piping class.</li>
+          <li><strong>Filler metal:</strong> Use E7018 (SMAW) or ER70S-6 (GMAW) for matching strength.</li>
+          <li><strong>Dissimilar welding:</strong> A105 flange to A234 WPB elbow is a similar weld — no special procedure needed.</li>
+        </ul>
+      </section>
+
+      <section class="article-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Can I substitute A105 for A234 WPB?</summary>
+            <p>No. A105 is for forged flanges and fittings, while A234 WPB is for wrought butt weld fittings. They have different manufacturing processes, shapes, and applications. Using one in place of the other violates code and can compromise safety.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Which is stronger, A105 or A234 WPB?</summary>
+            <p>A105 has slightly higher minimum tensile strength (70 ksi vs 60 ksi) and yield strength (36 ksi vs 35 ksi). However, both are sufficient for most carbon steel piping applications. The choice depends on the component type, not strength.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is A105 weldable?</summary>
+            <p>Yes, A105 is weldable using standard carbon steel procedures. Preheat and post-weld heat treatment may be required for thick sections or high-restraint joints to prevent cracking.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What is the equivalent of A105 in European standards?</summary>
+            <p>A105 is approximately equivalent to EN 10222-2 P280GH or P355NH. A234 WPB is approximately equivalent to EN 10253-2 P265GH or P280GH.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can A105 flanges be used with A234 WPB fittings?</summary>
+            <p>Yes. A105 flanges and A234 WPB fittings are commonly used together in the same carbon steel piping system. They have compatible mechanical properties and weldability.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="article-section">
+        <h2>Related Tools & Resources</h2>
+        <div class="related-links">
+          <a href="/flange-weight-calculator/" class="related-card">
+            <strong>Flange Weight Calculator</strong>
+            <span>Calculate A105 flange weight by class and size</span>
+          </a>
+          <a href="/elbow-weight-calculator/" class="related-card">
+            <strong>Elbow Weight Calculator</strong>
+            <span>Calculate WPB elbow weight by NPS and schedule</span>
+          </a>
+          <a href="/blog/astm-standards-pipe-fittings-flanges/" class="related-card">
+            <strong>ASTM Standards Explained</strong>
+            <span>Complete guide to A105, A182, A234, A403, A815</span>
+          </a>
+          <a href="/blog/how-to-choose-flange-class/" class="related-card">
+            <strong>How to Choose Flange Class</strong>
+            <span>150 vs 300 vs 600 selection guide</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,261 @@
+---
+import Base from '../../../layouts/Base.astro';
+
+const title = 'Pipe Fitting Weight Chart: NPS 1/2" to 24" (kg per piece)';
+const description = 'Complete pipe fitting weight chart for elbows, tees, reducers, and caps. NPS 1/2" to 24", Sch 40 and Sch 80, carbon steel and stainless steel. Use for estimating, shipping, and procurement.';
+const canonical = 'https://pvfcalculator.com/blog/pipe-fitting-weight-chart/';
+const breadcrumbItems = [
+  { name: '首页', url: '/' },
+  { name: '博客', url: '/blog/' },
+  { name: 'Fitting Weight Chart', url: '/blog/pipe-fitting-weight-chart/' }
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "PVFCalculator" },
+    "publisher": { "@type": "Organization", "name": "PVFCalculator" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `https://pvfcalculator.com${item.url}`
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does a 6 inch 90 degree elbow weigh?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A 6 inch (NPS 6) 90 degree long radius elbow weighs approximately 7.5 kg in Sch 40 carbon steel and 11 kg in Sch 80. Use our elbow weight calculator for exact values by material and schedule." }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does a 4 inch tee weigh?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A 4 inch (NPS 4) equal tee weighs approximately 4.5 kg in Sch 40 carbon steel and 6.5 kg in Sch 80. Reducing tees are lighter on the branch side." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you calculate pipe fitting weight?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Pipe fitting weight is calculated from the component volumes and material density. For elbows, use the centerline radius and bend angle. For tees and reducers, use the intersection volume. Our online calculators handle all the geometry for you." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is stainless steel fitting heavier than carbon steel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Stainless steel (304/316) has a density of 8,000 kg/m³, while carbon steel is 7,850 kg/m³. Stainless fittings are about 2% lighter for the same dimensions. However, the difference is small and usually negligible for weight estimation." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the weight difference between Sch 40 and Sch 80 fittings?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sch 80 fittings are roughly 40–60% heavier than Sch 40 for the same NPS, due to the thicker wall. For example, a 4 inch elbow is about 2.5 kg in Sch 40 and 4 kg in Sch 80." }
+      }
+    ]
+  }
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="article-shell">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {breadcrumbItems.map((item, i) => (
+          <li>
+            {i < breadcrumbItems.length - 1 ? (
+              <a href={item.url}>{item.name}</a>
+            ) : (
+              <span aria-current="page">{item.name}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <header class="article-header">
+      <p class="eyebrow">Engineering Reference · 工程参考</p>
+      <h1>{title}</h1>
+      <p class="article-description">{description}</p>
+      <div class="article-meta">
+        <span>2026-09-15</span>
+        <span>·</span>
+        <span>8 min read</span>
+        <span>·</span>
+        <span>ASME B16.9</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <section class="article-section">
+        <h2>Why Fitting Weight Matters</h2>
+        <p>Knowing the weight of pipe fittings is essential for:</p>
+        <ul>
+          <li><strong>Shipping and logistics:</strong> Freight costs are often calculated by weight</li>
+          <li><strong>Structural design:</strong> Pipe racks and supports must support the total weight</li>
+          <li><strong>Procurement:</strong> Bulk orders are priced by weight</li>
+          <li><strong>Field handling:</strong> Crane and rigging plans require accurate weights</li>
+        </ul>
+        <p>This chart provides approximate weights for standard ASME B16.9 butt weld fittings in Sch 40 and Sch 80 carbon steel. For stainless steel, multiply by 1.02 (density 8,000 vs 7,850 kg/m³).</p>
+      </section>
+
+      <section class="article-section">
+        <h2>90° Long Radius Elbow Weight (kg)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>NPS</th><th>DN</th><th>Sch 40 LR 90°</th><th>Sch 80 LR 90°</th><th>Sch 40 SR 90°</th><th>Sch 80 SR 90°</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1/2"</td><td>15</td><td>0.08</td><td>0.11</td><td>0.05</td><td>0.07</td></tr>
+              <tr><td>3/4"</td><td>20</td><td>0.11</td><td>0.15</td><td>0.07</td><td>0.10</td></tr>
+              <tr><td>1"</td><td>25</td><td>0.18</td><td>0.25</td><td>0.12</td><td>0.16</td></tr>
+              <tr><td>1-1/2"</td><td>40</td><td>0.40</td><td>0.55</td><td>0.25</td><td>0.35</td></tr>
+              <tr><td>2"</td><td>50</td><td>0.70</td><td>1.00</td><td>0.45</td><td>0.65</td></tr>
+              <tr><td>3"</td><td>80</td><td>1.80</td><td>2.60</td><td>1.20</td><td>1.70</td></tr>
+              <tr><td>4"</td><td>100</td><td>3.20</td><td>4.80</td><td>2.10</td><td>3.10</td></tr>
+              <tr><td>6"</td><td>150</td><td>7.50</td><td>11.00</td><td>5.00</td><td>7.30</td></tr>
+              <tr><td>8"</td><td>200</td><td>13.50</td><td>20.00</td><td>9.00</td><td>13.50</td></tr>
+              <tr><td>10"</td><td>250</td><td>21.00</td><td>32.00</td><td>14.00</td><td>21.50</td></tr>
+              <tr><td>12"</td><td>300</td><td>32.00</td><td>48.00</td><td>21.00</td><td>32.00</td></tr>
+              <tr><td>14"</td><td>350</td><td>42.00</td><td>65.00</td><td>28.00</td><td>43.00</td></tr>
+              <tr><td>16"</td><td>400</td><td>55.00</td><td>85.00</td><td>37.00</td><td>57.00</td></tr>
+              <tr><td>18"</td><td>450</td><td>70.00</td><td>110.00</td><td>47.00</td><td>73.00</td></tr>
+              <tr><td>20"</td><td>500</td><td>90.00</td><td>140.00</td><td>60.00</td><td>93.00</td></tr>
+              <tr><td>24"</td><td>600</td><td>130.00</td><td>200.00</td><td>87.00</td><td>135.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 1: 90° Elbow Weights (Long Radius and Short Radius, Carbon Steel)</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Equal Tee Weight (kg)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>NPS</th><th>DN</th><th>Sch 40</th><th>Sch 80</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1/2"</td><td>15</td><td>0.12</td><td>0.16</td></tr>
+              <tr><td>3/4"</td><td>20</td><td>0.18</td><td>0.24</td></tr>
+              <tr><td>1"</td><td>25</td><td>0.30</td><td>0.40</td></tr>
+              <tr><td>1-1/2"</td><td>40</td><td>0.65</td><td>0.90</td></tr>
+              <tr><td>2"</td><td>50</td><td>1.20</td><td>1.70</td></tr>
+              <tr><td>3"</td><td>80</td><td>3.00</td><td>4.20</td></tr>
+              <tr><td>4"</td><td>100</td><td>4.50</td><td>6.50</td></tr>
+              <tr><td>6"</td><td>150</td><td>10.50</td><td>15.00</td></tr>
+              <tr><td>8"</td><td>200</td><td>18.00</td><td>27.00</td></tr>
+              <tr><td>10"</td><td>250</td><td>28.00</td><td>42.00</td></tr>
+              <tr><td>12"</td><td>300</td><td>42.00</td><td>63.00</td></tr>
+              <tr><td>14"</td><td>350</td><td>55.00</td><td>82.00</td></tr>
+              <tr><td>16"</td><td>400</td><td>72.00</td><td>108.00</td></tr>
+              <tr><td>18"</td><td>450</td><td>92.00</td><td>138.00</td></tr>
+              <tr><td>20"</td><td>500</td><td>115.00</td><td>175.00</td></tr>
+              <tr><td>24"</td><td>600</td><td>165.00</td><td>250.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 2: Equal Tee Weights (Carbon Steel)</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Concentric & Eccentric Reducer Weight (kg)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>NPS</th><th>DN</th><th>Sch 40</th><th>Sch 80</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>3/4" × 1/2"</td><td>20 × 15</td><td>0.10</td><td>0.14</td></tr>
+              <tr><td>1" × 3/4"</td><td>25 × 20</td><td>0.15</td><td>0.20</td></tr>
+              <tr><td>1-1/2" × 1"</td><td>40 × 25</td><td>0.30</td><td>0.42</td></tr>
+              <tr><td>2" × 1-1/2"</td><td>50 × 40</td><td>0.50</td><td>0.70</td></tr>
+              <tr><td>3" × 2"</td><td>80 × 50</td><td>1.20</td><td>1.70</td></tr>
+              <tr><td>4" × 3"</td><td>100 × 80</td><td>2.00</td><td>2.80</td></tr>
+              <tr><td>6" × 4"</td><td>150 × 100</td><td>4.50</td><td>6.50</td></tr>
+              <tr><td>8" × 6"</td><td>200 × 150</td><td>7.50</td><td>11.00</td></tr>
+              <tr><td>10" × 8"</td><td>250 × 200</td><td>12.00</td><td>17.00</td></tr>
+              <tr><td>12" × 10"</td><td>300 × 250</td><td>17.00</td><td>24.00</td></tr>
+              <tr><td>14" × 12"</td><td>350 × 300</td><td>22.00</td><td>31.00</td></tr>
+              <tr><td>16" × 14"</td><td>400 × 350</td><td>28.00</td><td>40.00</td></tr>
+              <tr><td>18" × 16"</td><td>450 × 400</td><td>35.00</td><td>50.00</td></tr>
+              <tr><td>20" × 18"</td><td>500 × 450</td><td>43.00</td><td>62.00</td></tr>
+              <tr><td>24" × 20"</td><td>600 × 500</td><td>60.00</td><td>85.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 3: Reducer Weights (Concentric and Eccentric, Carbon Steel)</p>
+      </section>
+
+      <section class="article-section">
+        <h2>How to Use This Chart</h2>
+        <p>These weights are approximate and based on ASME B16.9 standard dimensions. For accurate weights:</p>
+        <ol>
+          <li>Identify your fitting type, NPS, and schedule</li>
+          <li>Look up the weight in the appropriate table</li>
+          <li>For stainless steel, multiply by 1.02</li>
+          <li>For alloy steel (Cr-Mo), multiply by 1.01–1.03 depending on grade</li>
+          <li>For exact procurement, request manufacturer certified weights</li>
+        </ol>
+        <p><strong>Note:</strong> Manufacturer weights may vary ±5% due to tolerances and manufacturing processes.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How much does a 6 inch 90 degree elbow weigh?</summary>
+            <p>A 6 inch (NPS 6) 90 degree long radius elbow weighs approximately 7.5 kg in Sch 40 carbon steel and 11 kg in Sch 80. Use our elbow weight calculator for exact values by material and schedule.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much does a 4 inch tee weigh?</summary>
+            <p>A 4 inch (NPS 4) equal tee weighs approximately 4.5 kg in Sch 40 carbon steel and 6.5 kg in Sch 80. Reducing tees are lighter on the branch side.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do you calculate pipe fitting weight?</summary>
+            <p>Pipe fitting weight is calculated from the component volumes and material density. For elbows, use the centerline radius and bend angle. For tees and reducers, use the intersection volume. Our online calculators handle all the geometry for you.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is stainless steel fitting heavier than carbon steel?</summary>
+            <p>No. Stainless steel (304/316) has a density of 8,000 kg/m³, while carbon steel is 7,850 kg/m³. Stainless fittings are about 2% lighter for the same dimensions. However, the difference is small and usually negligible for weight estimation.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What is the weight difference between Sch 40 and Sch 80 fittings?</summary>
+            <p>Sch 80 fittings are roughly 40–60% heavier than Sch 40 for the same NPS, due to the thicker wall. For example, a 4 inch elbow is about 2.5 kg in Sch 40 and 4 kg in Sch 80.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="article-section">
+        <h2>Related Tools & Resources</h2>
+        <div class="related-links">
+          <a href="/elbow-weight-calculator/" class="related-card">
+            <strong>Elbow Weight Calculator</strong>
+            <span>Calculate exact elbow weight by size and material</span>
+          </a>
+          <a href="/tee-weight-calculator/" class="related-card">
+            <strong>Tee Weight Calculator</strong>
+            <span>Calculate exact tee weight by size and material</span>
+          </a>
+          <a href="/reducer-weight-calculator/" class="related-card">
+            <strong>Reducer Weight Calculator</strong>
+            <span>Calculate exact reducer weight by size and material</span>
+          </a>
+          <a href="/pipe-schedule-chart/" class="related-card">
+            <strong>Pipe Schedule Chart</strong>
+            <span>Wall thickness for all schedules and sizes</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>

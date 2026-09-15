@@ -1,0 +1,296 @@
+---
+import Base from '../../../layouts/Base.astro';
+
+const title = 'Weld Neck vs Slip-On vs Socket Weld vs Threaded: Flange Type Selection Guide';
+const description = 'Compare weld neck, slip-on, socket weld, threaded, and lap joint flanges. Learn which flange type to use for high pressure, high temperature, corrosive media, and cost-sensitive applications.';
+const canonical = 'https://pvfcalculator.com/blog/weld-neck-vs-slip-on-flange/';
+const breadcrumbItems = [
+  { name: '首页', url: '/' },
+  { name: '博客', url: '/blog/' },
+  { name: 'Flange Type Selection', url: '/blog/weld-neck-vs-slip-on-flange/' }
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": { "@type": "Organization", "name": "PVFCalculator" },
+    "publisher": { "@type": "Organization", "name": "PVFCalculator" },
+    "datePublished": "2026-09-15",
+    "dateModified": "2026-09-15",
+    "mainEntityOfPage": canonical
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `https://pvfcalculator.com${item.url}`
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between weld neck and slip-on flange?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Weld neck flanges have a long tapered neck that is butt-welded to the pipe, providing full structural integrity and smooth flow transition. Slip-on flanges slide over the pipe and are fillet-welded inside and outside. Weld neck is stronger and preferred for high pressure and high temperature; slip-on is cheaper and easier to install." }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use socket weld flange?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Socket weld flanges are used for small-bore piping (NPS 2 inch and smaller) at moderate pressure (Class 300–600). They are easier to install than butt weld and do not require pipe beveling. However, they create a crevice that can trap corrosive media." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use threaded flange for high pressure?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Threaded flanges are generally limited to low-pressure, non-critical services (Class 150–300, NPS 4 inch and smaller). They are not recommended for high pressure, high temperature, or cyclic loading because the threads can loosen." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a lap joint flange used for?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Lap joint flanges are used with a stub end (lap joint stub end) to create a flanged connection that can rotate for bolt alignment. They are ideal for systems requiring frequent dismantling, lined piping, or where bolt hole alignment is difficult." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which flange type is best for high pressure?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Weld neck flanges are the best choice for high pressure (Class 600 and above) and high temperature. The tapered neck distributes stress evenly and the butt weld provides full penetration. For the highest pressures (Class 1500–2500), weld neck is essentially mandatory." }
+      }
+    ]
+  }
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <article class="article-shell">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {breadcrumbItems.map((item, i) => (
+          <li>
+            {i < breadcrumbItems.length - 1 ? (
+              <a href={item.url}>{item.name}</a>
+            ) : (
+              <span aria-current="page">{item.name}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <header class="article-header">
+      <p class="eyebrow">Flange Design · 法兰选型</p>
+      <h1>{title}</h1>
+      <p class="article-description">{description}</p>
+      <div class="article-meta">
+        <span>2026-09-15</span>
+        <span>·</span>
+        <span>10 min read</span>
+        <span>·</span>
+        <span>ASME B16.5</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <section class="article-section">
+        <h2>Five Flange Types, Five Different Jobs</h2>
+        <p>ASME B16.5 defines many flange types, but five cover 95% of industrial applications:</p>
+        <ul>
+          <li><strong>Weld Neck (WN)</strong> — 对焊法兰</li>
+          <li><strong>Slip-On (SO)</strong> — 平焊法兰</li>
+          <li><strong>Socket Weld (SW)</strong> — 承插焊法兰</li>
+          <li><strong>Threaded (THD)</strong> — 螺纹法兰</li>
+          <li><strong>Lap Joint (LJ)</strong> — 松套法兰</li>
+        </ul>
+        <p>Each type has distinct advantages, limitations, and cost profiles. Choosing the wrong type leads to leaks, premature failure, or unnecessary expense.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Weld Neck Flange (WN) — 对焊法兰</h2>
+        <p>The weld neck flange has a long, tapered neck that is butt-welded to the pipe. The neck transitions gradually from the flange ring to the pipe wall thickness, creating a smooth flow path and distributing stress evenly.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Highest structural integrity of all flange types</li>
+          <li>Smooth bore eliminates turbulence and erosion</li>
+          <li>Ideal for high pressure (Class 600–2500)</li>
+          <li>Ideal for high temperature (>800°F)</li>
+          <li>Excellent fatigue resistance for cyclic service</li>
+          <li>Radiographic testing (RT) of weld is possible</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>Most expensive flange type</li>
+          <li>Requires skilled welder and pipe beveling</li>
+          <li>Higher installation labor cost</li>
+        </ul>
+        <h3>Best For</h3>
+        <p>High-pressure steam, hydrocarbons, safety-critical services, and any application where flange failure is unacceptable. Weld neck is the default choice for process piping in refineries and chemical plants.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Slip-On Flange (SO) — 平焊法兰</h2>
+        <p>The slip-on flange slides over the pipe end and is fillet-welded on both the inside and outside. It is the most common and economical flange type.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Lowest cost of all flange types</li>
+          <li>Easy to install — just slide on and weld</li>
+          <li>No pipe beveling required</li>
+          <li>Good for low-pressure, non-critical service</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>Two fillet welds create stress concentration points</li>
+          <li>Not suitable for high pressure (>Class 300 generally)</li>
+          <li>Not suitable for high temperature or cyclic service</li>
+          <li>Higher pressure drop due to protruding pipe end</li>
+          <li>Cannot be radiographically tested effectively</li>
+        </ul>
+        <h3>Best For</h3>
+        <p>Utility water, air, low-pressure steam, and non-critical services where cost is a primary concern. Common in HVAC, fire protection, and municipal systems.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Socket Weld Flange (SW) — 承插焊法兰</h2>
+        <p>The socket weld flange has a recessed socket into which the pipe end is inserted, then fillet-welded around the outside. The pipe does not protrude into the flange bore.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Easy alignment — pipe sits in socket</li>
+          <li>No beveling required</li>
+          <li>Smoother bore than slip-on (no protrusion)</li>
+          <li>Good for small-bore, high-pressure piping</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>Crevice between pipe and socket can trap corrosive media</li>
+          <li>Not recommended for sour service (H₂S)</li>
+          <li>Limited to NPS 2" and smaller (typically)</li>
+          <li>Fillet weld is not as strong as butt weld</li>
+        </ul>
+        <h3>Best For</h3>
+        <p>Small-bore (NPS 1/2"–2") high-pressure piping, hydraulic systems, and instrument connections. Common in oilfield and chemical plant utilities.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Threaded Flange (THD) — 螺纹法兰</h2>
+        <p>The threaded flange screws onto the pipe with NPT threads. No welding is required.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>No welding required — no hot work permit needed</li>
+          <li>Fast installation and removal</li>
+          <li>Good for explosive environments where welding is dangerous</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>Threads are a leak path</li>
+          <li>Not suitable for high pressure or temperature</li>
+          <li>Cannot be used with thin-wall pipe (insufficient thread engagement)</li>
+          <li>Vulnerable to loosening under vibration</li>
+        </ul>
+        <h3>Best For</h3>
+        <p>Low-pressure air, water, and utility services where welding is impractical. Sometimes used in explosive atmospheres (no spark from welding). Rare in modern process plants.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Lap Joint Flange (LJ) — 松套法兰</h2>
+        <p>The lap joint flange is a two-piece assembly: a stub end (which is butt-welded to the pipe) and a loose backing flange. The backing flange slides over the stub end and is free to rotate.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Flange can rotate for easy bolt alignment</li>
+          <li>Stub end can be made of expensive material; backing flange of cheap material</li>
+          <li>Easy to dismantle and reassemble</li>
+          <li>Ideal for lined piping (glass-lined, PTFE-lined)</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>More expensive than slip-on (two pieces)</li>
+          <li>Not suitable for high pressure (Class 600+)</li>
+          <li>Requires more space for assembly</li>
+        </ul>
+        <h3>Best For</h3>
+        <p>Systems requiring frequent dismantling, lined piping, or where bolt hole alignment is difficult. Common in food, pharmaceutical, and corrosive services.</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Comparison Table</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Type</th><th>Pressure Range</th><th>Temp Range</th><th>Size Range</th><th>Cost</th><th>Best Application</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Weld Neck</td><td>150–2500</td><td>-20 to 1,500°F</td><td>NPS 1/2"–24"</td><td>$$$$</td><td>High P/T, critical service</td></tr>
+              <tr><td>Slip-On</td><td>150–300</td><td>-20 to 800°F</td><td>NPS 1/2"–24"</td><td>$</td><td>Low P/T, utilities</td></tr>
+              <tr><td>Socket Weld</td><td>150–600</td><td>-20 to 800°F</td><td>NPS 1/2"–2"</td><td>$$</td><td>Small-bore, high P</td></tr>
+              <tr><td>Threaded</td><td>150–300</td><td>-20 to 400°F</td><td>NPS 1/2"–4"</td><td>$$</td><td>No-weld installation</td></tr>
+              <tr><td>Lap Joint</td><td>150–300</td><td>-20 to 800°F</td><td>NPS 1/2"–24"</td><td>$$$</td><td>Frequent dismantling, lined pipe</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-caption">Table 1: Flange Type Comparison</p>
+      </section>
+
+      <section class="article-section">
+        <h2>Selection Decision Tree</h2>
+        <p>Follow this logic:</p>
+        <ol>
+          <li><strong>Pressure > Class 300 or temp > 800°F?</strong> → Weld neck only</li>
+          <li><strong>NPS ≤ 2" and pressure ≥ Class 300?</strong> → Socket weld or weld neck</li>
+          <li><strong>Frequent dismantling required?</strong> → Lap joint</li>
+          <li><strong>No welding allowed?</strong> → Threaded (low pressure only)</li>
+          <li><strong>Everything else?</strong> → Slip-on (cost) or weld neck (reliability)</li>
+        </ol>
+      </section>
+
+      <section class="article-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>What is the difference between weld neck and slip-on flange?</summary>
+            <p>Weld neck flanges have a long tapered neck that is butt-welded to the pipe, providing full structural integrity and smooth flow transition. Slip-on flanges slide over the pipe and are fillet-welded inside and outside. Weld neck is stronger and preferred for high pressure and high temperature; slip-on is cheaper and easier to install.</p>
+          </details>
+          <details class="faq-item">
+            <summary>When should I use socket weld flange?</summary>
+            <p>Socket weld flanges are used for small-bore piping (NPS 2 inch and smaller) at moderate pressure (Class 300–600). They are easier to install than butt weld and do not require pipe beveling. However, they create a crevice that can trap corrosive media.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I use threaded flange for high pressure?</summary>
+            <p>Threaded flanges are generally limited to low-pressure, non-critical services (Class 150–300, NPS 4" and smaller). They are not recommended for high pressure, high temperature, or cyclic loading because the threads can loosen.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What is a lap joint flange used for?</summary>
+            <p>Lap joint flanges are used with a stub end (lap joint stub end) to create a flanged connection that can rotate for bolt alignment. They are ideal for systems requiring frequent dismantling, lined piping, or where bolt hole alignment is difficult.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Which flange type is best for high pressure?</summary>
+            <p>Weld neck flanges are the best choice for high pressure (Class 600 and above) and high temperature. The tapered neck distributes stress evenly and the butt weld provides full penetration. For the highest pressures (Class 1500–2500), weld neck is essentially mandatory.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="article-section">
+        <h2>Related Tools & Resources</h2>
+        <div class="related-links">
+          <a href="/flange-weight-calculator/" class="related-card">
+            <strong>Flange Weight Calculator</strong>
+            <span>Calculate weight by type, class, and size</span>
+          </a>
+          <a href="/asme-b16-5-flange-dimensions/" class="related-card">
+            <strong>ASME B16.5 Flange Dimensions</strong>
+            <span>Complete dimension tables for all types</span>
+          </a>
+          <a href="/blog/how-to-choose-flange-class/" class="related-card">
+            <strong>How to Choose Flange Class</strong>
+            <span>150 vs 300 vs 600 selection guide</span>
+          </a>
+          <a href="/blog/flange-facing-types/" class="related-card">
+            <strong>Flange Facing Types</strong>
+            <span>RF, FF, RTJ, M&F, T&G selection guide</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>
