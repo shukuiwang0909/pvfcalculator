@@ -1,0 +1,302 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Pipe Schedule Chart (SCH 10–XXS) | NPS, DN & Wall Thickness";
+const description =
+  "Complete pipe schedule chart for NPS 1/8\" to 24\". Wall thickness in mm and inches for SCH 10, 20, 30, 40, 60, 80, 100, 120, 140, 160, STD, XS, XXS. ASME B36.10M compliant.";
+const canonical = "https://pvfcalculator.com/pipe-schedule-chart/";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: canonical,
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://pvfcalculator.com/" },
+      { "@type": "ListItem", position: 2, name: "Pipe Schedule Chart", item: canonical },
+    ],
+  },
+};
+
+// ASME B36.10M pipe schedule data
+// Format: [NPS, DN, OD_mm, SCH10, SCH20, SCH30, STD, SCH40, SCH60, XS, SCH80, SCH100, SCH120, SCH140, SCH160, XXS]
+// Wall thickness in mm
+const pipeData: number[][] = [
+  [0.125, 6, 10.3, 1.24, 0, 0, 1.73, 1.73, 0, 2.41, 2.41, 0, 0, 0, 0, 0],
+  [0.25, 8, 13.7, 1.65, 0, 0, 2.24, 2.24, 0, 3.02, 3.02, 0, 0, 0, 0, 0],
+  [0.375, 10, 17.1, 1.65, 0, 0, 2.31, 2.31, 0, 3.20, 3.20, 0, 0, 0, 0, 0],
+  [0.5, 15, 21.3, 2.11, 0, 0, 2.77, 2.77, 0, 3.73, 3.73, 0, 0, 0, 0, 0],
+  [0.75, 20, 26.7, 2.11, 0, 0, 2.87, 2.87, 0, 3.91, 3.91, 0, 0, 0, 0, 0],
+  [1.0, 25, 33.4, 2.77, 0, 0, 3.38, 3.38, 0, 4.55, 4.55, 0, 0, 0, 0, 0],
+  [1.25, 32, 42.2, 2.77, 0, 0, 3.56, 3.56, 0, 4.85, 4.85, 0, 0, 0, 0, 0],
+  [1.5, 40, 48.3, 2.77, 0, 0, 3.68, 3.68, 0, 5.08, 5.08, 0, 0, 0, 0, 0],
+  [2.0, 50, 60.3, 2.77, 0, 0, 3.91, 3.91, 0, 5.54, 5.54, 0, 0, 0, 0, 0],
+  [2.5, 65, 73.0, 3.05, 0, 0, 5.16, 5.16, 0, 7.01, 7.01, 0, 0, 0, 0, 0],
+  [3.0, 80, 88.9, 3.05, 0, 0, 5.49, 5.49, 0, 7.62, 7.62, 0, 0, 0, 0, 0],
+  [3.5, 90, 101.6, 3.05, 0, 0, 5.74, 5.74, 0, 8.08, 8.08, 0, 0, 0, 0, 0],
+  [4.0, 100, 114.3, 3.05, 0, 0, 6.02, 6.02, 0, 8.56, 8.56, 0, 0, 0, 0, 0],
+  [5.0, 125, 141.3, 3.40, 0, 0, 6.55, 6.55, 0, 9.53, 9.53, 0, 0, 0, 0, 0],
+  [6.0, 150, 168.3, 3.40, 0, 0, 7.11, 7.11, 0, 10.97, 10.97, 0, 0, 0, 0, 0],
+  [8.0, 200, 219.1, 3.76, 0, 0, 8.18, 8.18, 0, 12.70, 12.70, 0, 0, 0, 0, 0],
+  [10.0, 250, 273.0, 4.19, 0, 0, 9.27, 9.27, 0, 12.70, 12.70, 0, 0, 0, 0, 0],
+  [12.0, 300, 323.8, 4.57, 0, 0, 9.53, 10.31, 0, 12.70, 14.27, 0, 0, 0, 0, 0],
+  [14.0, 350, 355.6, 4.78, 0, 0, 9.53, 11.13, 0, 12.70, 15.09, 0, 0, 0, 0, 0],
+  [16.0, 400, 406.4, 4.78, 0, 0, 9.53, 12.70, 0, 12.70, 16.66, 0, 0, 0, 0, 0],
+  [18.0, 450, 457.0, 4.78, 0, 0, 9.53, 14.27, 0, 12.70, 19.05, 0, 0, 0, 0, 0],
+  [20.0, 500, 508.0, 5.54, 0, 0, 9.53, 15.09, 0, 12.70, 20.62, 0, 0, 0, 0, 0],
+  [22.0, 550, 559.0, 5.54, 0, 0, 9.53, 15.88, 0, 12.70, 22.23, 0, 0, 0, 0, 0],
+  [24.0, 600, 610.0, 6.35, 0, 0, 9.53, 17.48, 0, 12.70, 24.61, 0, 0, 0, 0, 0],
+];
+
+const schedules = ["SCH 10", "SCH 20", "SCH 30", "STD", "SCH 40", "SCH 60", "XS", "SCH 80", "SCH 100", "SCH 120", "SCH 140", "SCH 160", "XXS"];
+
+// Map schedule names to column indices
+const colMap: Record<string, number> = {
+  "SCH 10": 3,
+  "SCH 20": 4,
+  "SCH 30": 5,
+  "STD": 6,
+  "SCH 40": 7,
+  "SCH 60": 8,
+  "XS": 9,
+  "SCH 80": 10,
+  "SCH 100": 11,
+  "SCH 120": 12,
+  "SCH 140": 13,
+  "SCH 160": 14,
+  "XXS": 15,
+};
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-10 sm:py-14">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-3">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Pipe Schedule Chart</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Pipe <span class="accent-text">Schedule</span> Chart
+      </h1>
+      <p class="mt-3 text-theme-secondary max-w-2xl mx-auto">
+        Complete ASME B36.10M pipe schedule chart with wall thickness for SCH 10–XXS.
+        Covers NPS 1/8" to 24" (DN 6–600) in metric and imperial units.
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick Nav -->
+  <section class="pb-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-wrap gap-2 justify-center">
+      <a href="#chart" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Full Chart</a>
+      <a href="#understanding" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Understanding Schedules</a>
+      <a href="#calculator" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Weight Calculator</a>
+      <a href="#faq" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">FAQ</a>
+    </div>
+  </section>
+
+  <!-- Full Chart -->
+  <section id="chart" class="py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="card card-accent overflow-hidden">
+        <div class="p-6 border-b border-theme">
+          <h2 class="text-xl font-bold text-theme-primary">Complete Pipe Schedule Chart</h2>
+          <p class="mt-1 text-sm text-theme-secondary">Wall thickness in millimeters. ASME B36.10M standard.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" id="pipeTable">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-3 py-3 text-left font-semibold text-theme-primary">NPS</th>
+                <th class="px-3 py-3 text-left font-semibold text-theme-primary">DN</th>
+                <th class="px-3 py-3 text-left font-semibold text-theme-primary">OD (mm)</th>
+                {schedules.map(s => (
+                  <th class="px-3 py-3 text-center font-semibold text-theme-primary whitespace-nowrap">{s}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {pipeData.map((row, i) => (
+                <tr class={`border-b border-theme/50 ${i % 2 === 0 ? "bg-theme/30" : ""} hover:bg-theme-secondary/50 transition-colors`}>
+                  <td class="px-3 py-2 font-mono font-semibold text-theme-primary">{row[0]}"</td>
+                  <td class="px-3 py-2 text-theme-secondary">{row[1]}</td>
+                  <td class="px-3 py-2 font-mono text-theme-secondary">{row[2]}</td>
+                  {schedules.map(s => {
+                    const val = row[colMap[s]];
+                    return (
+                      <td class="px-3 py-2 text-center font-mono text-theme-secondary">
+                        {val > 0 ? val : "—"}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Understanding Schedules -->
+  <section id="understanding" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">Understanding Pipe Schedules</h2>
+
+      <div class="space-y-6">
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">What Does Schedule Mean?</h3>
+          <p class="text-sm leading-relaxed text-theme-secondary">
+            Pipe schedule (SCH) is a standardized measure of wall thickness. The same NPS (Nominal Pipe Size)
+            can have different wall thicknesses depending on the schedule. Higher schedule numbers = thicker walls = higher pressure rating.
+            Schedule does <strong class="text-theme-primary">not</strong> change the outside diameter (OD) — only the wall thickness and inside diameter (ID).
+          </p>
+        </div>
+
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">Common Schedule Abbreviations</h3>
+          <div class="grid sm:grid-cols-3 gap-4 text-sm">
+            <div>
+              <p class="font-semibold accent-text">STD</p>
+              <p class="text-theme-secondary">Standard — same as SCH 40 for NPS 1/8" to 10"</p>
+            </div>
+            <div>
+              <p class="font-semibold accent-text">XS</p>
+              <p class="text-theme-secondary">Extra Strong — same as SCH 80 for NPS 1/8" to 8"</p>
+            </div>
+            <div>
+              <p class="font-semibold accent-text">XXS</p>
+              <p class="text-theme-secondary">Double Extra Strong — no direct SCH equivalent</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">How to Read This Chart</h3>
+          <ol class="list-decimal list-inside space-y-2 text-sm text-theme-secondary">
+            <li>Find your NPS (Nominal Pipe Size) in column 1</li>
+            <li>Find your schedule across the top row</li>
+            <li>The intersection shows wall thickness in millimeters</li>
+            <li>Calculate ID: <code class="accent-text">ID = OD - 2 × Wall Thickness</code></li>
+            <li>Calculate weight per meter: <code class="accent-text">W = 0.02466 × t × (D - t)</code> kg/m</li>
+          </ol>
+        </div>
+
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">Quick Reference: Most Common Combinations</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-theme">
+                  <th class="px-3 py-2 text-left font-semibold text-theme-primary">Application</th>
+                  <th class="px-3 py-2 text-left font-semibold text-theme-primary">Typical Schedule</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-theme/50">
+                  <td class="px-3 py-2 text-theme-secondary">Low-pressure water, air</td>
+                  <td class="px-3 py-2 font-mono accent-text">SCH 40 / STD</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="px-3 py-2 text-theme-secondary">Process piping, steam</td>
+                  <td class="px-3 py-2 font-mono accent-text">SCH 80 / XS</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="px-3 py-2 text-theme-secondary">High-pressure oil & gas</td>
+                  <td class="px-3 py-2 font-mono accent-text">SCH 160 / XXS</td>
+                </tr>
+                <tr>
+                  <td class="px-3 py-2 text-theme-secondary">Large diameter low-pressure</td>
+                  <td class="px-3 py-2 font-mono accent-text">SCH 10 / SCH 20</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator CTA -->
+  <section id="calculator" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary">Calculate Pipe Weight</h2>
+        <p class="mt-3 text-theme-secondary max-w-xl mx-auto">
+          Use our free calculator to compute pipe weight per meter and total weight for any NPS and schedule combination.
+        </p>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/pipe-weight-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            Pipe Weight Calculator
+          </a>
+          <a href="/flange-weight-calculator/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Flange Weight Calculator
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            What is the difference between SCH 40 and SCH 80?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">SCH 80 has thicker walls than SCH 40 for the same NPS, giving it higher pressure rating. For example, 2" NPS: SCH 40 = 3.91 mm wall, SCH 80 = 5.54 mm wall. SCH 80 is roughly 40% heavier and handles about 1.5× the pressure.</p>
+        </details>
+
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            Is STD the same as SCH 40?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">For NPS 1/8" through 10", yes — STD and SCH 40 have identical wall thickness. For NPS 12" and larger, STD remains at 9.53 mm wall while SCH 40 continues to increase. Always verify with the chart for large bore piping.</p>
+        </details>
+
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            What schedule should I use for high-pressure steam?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">For high-pressure steam (above 150 psi / 10 bar), SCH 80 or XS is typically minimum. For superheated steam above 300 psi, consider SCH 160 or XXS. Always check ASME B31.1 Power Piping code requirements for your specific pressure and temperature.</p>
+        </details>
+
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            Do stainless steel pipes use the same schedule chart?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">ASME B36.10M covers carbon and alloy steel. Stainless steel uses ASME B36.19M, which has schedules 5S, 10S, 40S, and 80S. The "S" suffix indicates stainless. Wall thicknesses are generally thinner than equivalent carbon steel schedules for corrosion allowance.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Links -->
+  <section class="py-8 border-t border-theme">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-lg font-bold text-theme-primary mb-4">Related Resources</h3>
+      <div class="flex flex-wrap gap-3">
+        <a href="/pipe-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Weight Calculator</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">ASME B16.5 Flange Dimensions</a>
+        <a href="/blog/pipe-schedule-chart-explained/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Blog: Pipe Schedule Explained</a>
+        <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Blog: Flange Class Guide</a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,225 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "ASME B16.9 Fitting Dimensions | Elbow, Tee, Reducer Size Charts";
+const description =
+  "Complete ASME B16.9 butt-weld fitting dimensions: 90° elbow, 45° elbow, equal tee, concentric reducer, eccentric reducer. NPS 1/2\" to 24\" with center-to-end and end-to-end dimensions.";
+const canonical = "https://pvfcalculator.com/asme-b16-9-fitting-dimensions/";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: canonical,
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://pvfcalculator.com/" },
+      { "@type": "ListItem", position: 2, name: "ASME B16.9 Fitting Dimensions", item: canonical },
+    ],
+  },
+};
+
+// ASME B16.9 fitting dimensions (mm)
+// Format: [NPS, 90D A, 45D B, Tee C, Tee M, Reducer H]
+const fittingData: number[][] = [
+  [0.5, 38, 16, 25, 25, 0],
+  [0.75, 38, 19, 29, 29, 0],
+  [1.0, 38, 22, 38, 38, 51],
+  [1.25, 48, 25, 48, 48, 51],
+  [1.5, 48, 29, 57, 57, 64],
+  [2.0, 60, 35, 64, 64, 76],
+  [2.5, 76, 44, 76, 76, 89],
+  [3.0, 86, 51, 86, 86, 102],
+  [3.5, 95, 57, 95, 95, 108],
+  [4.0, 105, 64, 105, 105, 127],
+  [5.0, 124, 79, 124, 124, 152],
+  [6.0, 143, 95, 143, 143, 178],
+  [8.0, 178, 127, 178, 178, 229],
+  [10.0, 216, 159, 216, 216, 279],
+  [12.0, 254, 190, 254, 254, 330],
+  [14.0, 279, 222, 279, 279, 381],
+  [16.0, 305, 254, 305, 305, 432],
+  [18.0, 343, 279, 343, 343, 483],
+  [20.0, 381, 305, 381, 381, 533],
+  [22.0, 419, 343, 419, 419, 584],
+  [24.0, 432, 381, 432, 432, 660],
+];
+
+const fittings = [
+  {
+    name: "90° Long Radius Elbow",
+    desc: "Most common elbow for direction change. Center-to-end dimension = 1.5 × NPS.",
+    formula: "A = 1.5 × NPS",
+  },
+  {
+    name: "45° Elbow",
+    desc: "Gradual direction change, less pressure drop than 90°.",
+    formula: "B = 0.625 × NPS",
+  },
+  {
+    name: "Equal Tee",
+    desc: "Branch connection with same bore as run pipe.",
+    formula: "C = M = NPS",
+  },
+  {
+    name: "Concentric Reducer",
+    desc: "Center-aligned bore reduction, no pocket for air/gas traps.",
+    formula: "H = 4 × (NPS difference)",
+  },
+  {
+    name: "Eccentric Reducer",
+    desc: "Flat-side reduction, used at pump suction to prevent cavitation.",
+    formula: "H = 4 × (NPS difference)",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-10 sm:py-14">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-3">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">ASME B16.9 Fitting Dimensions</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        ASME B16.9 <span class="accent-text">Fitting Dimensions</span>
+      </h1>
+      <p class="mt-3 text-theme-secondary max-w-2xl mx-auto">
+        Standard butt-weld fitting dimensions for 90° elbows, 45° elbows, equal tees,
+        and concentric/eccentric reducers. NPS 1/2" to 24".
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick Nav -->
+  <section class="pb-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-wrap gap-2 justify-center">
+      <a href="#elbow90" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">90° Elbow</a>
+      <a href="#elbow45" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">45° Elbow</a>
+      <a href="#tee" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Equal Tee</a>
+      <a href="#reducer" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Reducer</a>
+      <a href="#types" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Fitting Types</a>
+    </div>
+  </section>
+
+  <!-- Dimension Chart -->
+  <section class="py-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="card card-accent overflow-hidden">
+        <div class="p-6 border-b border-theme">
+          <h2 class="text-xl font-bold text-theme-primary">Complete Dimension Chart</h2>
+          <p class="mt-1 text-sm text-theme-secondary">All dimensions in millimeters. ASME B16.9 standard.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">NPS</th>
+                <th class="px-4 py-3 text-center font-semibold text-theme-primary" id="elbow90">90° Elbow A</th>
+                <th class="px-4 py-3 text-center font-semibold text-theme-primary" id="elbow45">45° Elbow B</th>
+                <th class="px-4 py-3 text-center font-semibold text-theme-primary" id="tee">Tee C</th>
+                <th class="px-4 py-3 text-center font-semibold text-theme-primary">Tee M</th>
+                <th class="px-4 py-3 text-center font-semibold text-theme-primary" id="reducer">Reducer H</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fittingData.map((row, i) => (
+                <tr class={`border-b border-theme/50 ${i % 2 === 0 ? "bg-theme/30" : ""} hover:bg-theme-secondary/50 transition-colors`}>
+                  <td class="px-4 py-2.5 font-mono font-semibold text-theme-primary">{row[0]}"</td>
+                  <td class="px-4 py-2.5 text-center font-mono text-theme-secondary">{row[1]}</td>
+                  <td class="px-4 py-2.5 text-center font-mono text-theme-secondary">{row[2]}</td>
+                  <td class="px-4 py-2.5 text-center font-mono text-theme-secondary">{row[3]}</td>
+                  <td class="px-4 py-2.5 text-center font-mono text-theme-secondary">{row[4]}</td>
+                  <td class="px-4 py-2.5 text-center font-mono text-theme-secondary">{row[5] > 0 ? row[5] : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fitting Types -->
+  <section id="types" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">Fitting Types & Applications</h2>
+      <div class="space-y-4">
+        {fittings.map(f => (
+          <div class="glass rounded-2xl p-6">
+            <h3 class="font-bold text-theme-primary">{f.name}</h3>
+            <p class="mt-1 text-sm text-theme-secondary">{f.desc}</p>
+            <p class="mt-2 text-xs font-mono accent-text">{f.formula}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Long Radius vs Short Radius -->
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="card card-accent p-6 sm:p-8">
+        <h2 class="text-xl font-bold text-theme-primary mb-4">Long Radius vs Short Radius Elbows</h2>
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold accent-text mb-2">Long Radius (LR)</h3>
+            <ul class="list-disc list-inside space-y-1 text-sm text-theme-secondary">
+              <li>Center radius = 1.5 × NPS</li>
+              <li>Lower pressure drop</li>
+              <li>Standard in process piping</li>
+              <li>ASME B16.9 default</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold accent-text mb-2">Short Radius (SR)</h3>
+            <ul class="list-disc list-inside space-y-1 text-sm text-theme-secondary">
+              <li>Center radius = 1.0 × NPS</li>
+              <li>Compact installation</li>
+              <li>Higher pressure drop</li>
+              <li>Only available in 90°</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator CTA -->
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary">Calculate Fitting Weights</h2>
+        <p class="mt-3 text-theme-secondary max-w-xl mx-auto">
+          Use our free calculators to compute exact weights for elbows, tees, and reducers based on ASME B16.9 dimensions.
+        </p>
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <a href="/elbow-weight-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-4 py-3 text-sm font-bold shadow-lg transition" style="color: #07090c;">Elbow</a>
+          <a href="/tee-weight-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-4 py-3 text-sm font-bold shadow-lg transition" style="color: #07090c;">Tee</a>
+          <a href="/reducer-weight-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-4 py-3 text-sm font-bold shadow-lg transition" style="color: #07090c;">Reducer</a>
+          <a href="/flange-weight-calculator/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-4 py-3 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">Flange</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related -->
+  <section class="py-8 border-t border-theme">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-lg font-bold text-theme-primary mb-4">Related Resources</h3>
+      <div class="flex flex-wrap gap-3">
+        <a href="/elbow-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Elbow Weight Calculator</a>
+        <a href="/tee-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Tee Weight Calculator</a>
+        <a href="/reducer-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Reducer Weight Calculator</a>
+        <a href="/pipe-schedule-chart/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Schedule Chart</a>
+        <a href="/blog/asme-b16-5-vs-b16-47/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Blog: B16.5 vs B16.47</a>
+      </div>
+    </div>
+  </section>
+</Base>
