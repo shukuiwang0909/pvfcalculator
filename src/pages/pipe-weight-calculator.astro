@@ -28,9 +28,13 @@ const jsonLd = {
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
 };
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Pipe Weight Calculator", url: "/pipe-weight-calculator/" },
+];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>>
   <section class="relative overflow-hidden py-12 sm:py-16">
     <div class="max-w-4xl mx-auto px-4">
       <!-- Header -->

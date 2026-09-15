@@ -58,9 +58,13 @@ const jsonLd = {
   "datePublished": "2024-01-01",
   "dateModified": new Date().toISOString().split('T')[0],
 };
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "ASME B16.5 Flange Dimensions", url: "/asme-b16-5-flange-dimensions/" },
+];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>>
   <section class="relative overflow-hidden py-12 sm:py-16">
     <div class="max-w-7xl mx-auto px-4">
       <!-- Header -->

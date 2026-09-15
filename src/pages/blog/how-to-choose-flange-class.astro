@@ -16,9 +16,14 @@ const jsonLd = {
   dateModified: "2026-09-15",
   mainEntityOfPage: "https://pvfcalculator.com/blog/how-to-choose-flange-class/",
 };
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "How to Choose Flange Class", url: "/blog/how-to-choose-flange-class/" },
+];
 ---
 
-<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/flange-weight-calculator/">
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}> ctaHref="/flange-weight-calculator/">
   <section class="relative overflow-hidden py-20 px-4">
     <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
     <div class="max-w-4xl mx-auto relative z-10">

@@ -52,9 +52,13 @@ const posts = [
     category: "Flange Selection",
   },
 ];
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+];
 ---
 
-<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/request-a-quote/">
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}> ctaHref="/request-a-quote/">
   <section class="relative overflow-hidden py-20 px-4">
     <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
     <div class="max-w-4xl mx-auto relative z-10 text-center">

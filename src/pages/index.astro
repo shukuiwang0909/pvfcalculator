@@ -105,21 +105,41 @@ const steps = [
   },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "PVF Calculator",
-  "url": canonical,
-  "description": description,
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": canonical + "?q={search_term_string}",
-    "query-input": "required name=search_term_string",
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PVF Calculator",
+    "url": canonical,
+    "description": description,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": canonical + "?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
   },
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": title,
+    "url": canonical,
+    "description": description,
+    "hasPart": [
+      { "@type": "WebPage", "name": "Flange Weight Calculator", "url": "https://pvfcalculator.com/flange-weight-calculator/" },
+      { "@type": "WebPage", "name": "Pipe Weight Calculator", "url": "https://pvfcalculator.com/pipe-weight-calculator/" },
+      { "@type": "WebPage", "name": "Elbow Weight Calculator", "url": "https://pvfcalculator.com/elbow-weight-calculator/" },
+      { "@type": "WebPage", "name": "Tee Weight Calculator", "url": "https://pvfcalculator.com/tee-weight-calculator/" },
+      { "@type": "WebPage", "name": "Reducer Weight Calculator", "url": "https://pvfcalculator.com/reducer-weight-calculator/" },
+      { "@type": "WebPage", "name": "Pipe Schedule Chart", "url": "https://pvfcalculator.com/pipe-schedule-chart/" },
+      { "@type": "WebPage", "name": "ASME B16.9 Fitting Dimensions", "url": "https://pvfcalculator.com/asme-b16-9-fitting-dimensions/" },
+    ],
+  },
+];
+
+const breadcrumbItems = [{ name: "Home", url: "/" }];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
   <!-- Hero -->
   <section class="relative overflow-hidden py-16 sm:py-20">
     <div class="max-w-6xl mx-auto px-4 text-center">

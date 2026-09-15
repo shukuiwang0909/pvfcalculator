@@ -5,11 +5,12 @@ interface Props {
   title: string;
   description?: string;
   canonical?: string;
-  jsonLd?: unknown;
+  jsonLd?: unknown | unknown[];
   ctaHref?: string;
   robots?: string;
   gaId?: string;
   gscVerification?: string;
+  breadcrumbItems?: Array<{ name: string; url: string }>;
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   robots,
   gaId,
   gscVerification,
+  breadcrumbItems,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -66,7 +68,23 @@ const nav = [
         gtag('config', gaId);
       </script>
     )}
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {breadcrumbItems && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbItems.map((item, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": item.name,
+          "item": `https://pvfcalculator.com${item.url}`
+        }))
+      })} />
+    )}
+    {jsonLd && Array.isArray(jsonLd) ? (
+      jsonLd.map(obj => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)
+    ) : (
+      jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
     <script is:inline>
       (function() {
         const theme = localStorage.getItem('theme') || 'dark';
