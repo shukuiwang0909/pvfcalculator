@@ -1,0 +1,260 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Pipe Schedule Chart Explained: Complete Guide to SCH 10–XXS";
+const description =
+  "Learn what pipe schedule numbers mean, how to read a pipe schedule chart, and the difference between SCH 10, 40, 80, 160, and XXS wall thicknesses.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-15",
+  dateModified: "2026-09-15",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/pipe-schedule-chart-explained/",
+};
+
+const schedules = [
+  { sch: "SCH 5", wall10: "1.24", wall40: "-", wall80: "-", wall160: "-", xxs: "-" },
+  { sch: "SCH 10", wall10: "2.77", wall40: "2.87", wall80: "3.38", wall160: "-", xxs: "-" },
+  { sch: "SCH 20", wall10: "3.38", wall40: "3.91", wall80: "-", wall160: "-", xxs: "-" },
+  { sch: "SCH 30", wall10: "4.55", wall40: "5.56", wall80: "-", wall160: "-", xxs: "-" },
+  { sch: "SCH 40", wall10: "6.02", wall40: "7.11", wall80: "8.18", wall160: "9.27", xxs: "12.70" },
+  { sch: "SCH 60", wall10: "7.62", wall40: "10.97", wall80: "12.70", wall160: "-", xxs: "-" },
+  { sch: "SCH 80", wall10: "11.13", wall40: "15.09", wall80: "18.26", wall160: "21.44", xxs: "25.40" },
+  { sch: "SCH 100", wall10: "14.02", wall40: "19.05", wall80: "-", wall160: "-", xxs: "-" },
+  { sch: "SCH 120", wall10: "17.12", wall40: "23.83", wall80: "28.58", wall160: "-", xxs: "-" },
+  { sch: "SCH 140", wall10: "21.41", wall40: "29.36", wall80: "33.32", wall160: "-", xxs: "-" },
+  { sch: "SCH 160", wall10: "26.97", wall40: "36.53", wall80: "40.49", wall160: "46.02", xxs: "50.01" },
+  { sch: "STD", wall10: "6.35", wall40: "7.14", wall80: "8.74", wall160: "10.31", xxs: "12.70" },
+  { sch: "XS", wall10: "8.74", wall40: "11.13", wall80: "13.49", wall160: "15.88", xxs: "19.05" },
+  { sch: "XXS", wall10: "15.88", wall40: "22.23", wall80: "28.58", wall160: "34.93", xxs: "50.01" },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/pipe-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Pipe Schedule Chart Explained</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Pipe Schedule Chart <span class="accent-text">Explained</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Pipe schedule numbers (SCH) are one of the most confusing concepts for new engineers and buyers. This guide breaks down what schedule numbers actually mean, how wall thickness varies by pipe size, and when to use each schedule.
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: September 15, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- What is Pipe Schedule -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">What Does Pipe Schedule Mean?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A pipe schedule (SCH) is a standardized wall thickness designation used in the pipe industry. The schedule number tells you how thick the pipe wall is relative to its nominal pipe size (NPS). Higher schedule numbers mean thicker walls and higher pressure ratings.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The schedule number system was developed by the American National Standards Institute (ANSI) and is now maintained under <strong class="text-theme-primary">ASME B36.10M</strong> for carbon and alloy steel pipes, and <strong class="text-theme-primary">ASME B36.19M</strong> for stainless steel pipes.
+        </p>
+        <div class="glass rounded-xl p-6 mt-6">
+          <p class="text-theme-primary font-semibold mb-2">Key Insight</p>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            Pipe schedule is NOT a direct measurement. A SCH 40 pipe has different wall thickness depending on the pipe size. For example, NPS 1/2" SCH 40 has 2.77 mm wall, while NPS 12" SCH 40 has 10.31 mm wall. The schedule number represents a <em>ratio</em> of pressure capacity, not a fixed dimension.
+          </p>
+        </div>
+      </div>
+
+      <!-- Pipe Schedule Chart -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Pipe Schedule Wall Thickness Chart</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          The following chart shows wall thickness (in millimeters) for common pipe schedules at various NPS sizes. All dimensions follow ASME B36.10M.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Schedule</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">NPS 1/2"</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">NPS 2"</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">NPS 4"</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">NPS 8"</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">NPS 12"</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schedules.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-primary font-medium">{row.sch}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.wall10}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.wall40}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.wall80}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.wall160}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.xxs}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mt-3">Wall thickness in millimeters. "-" indicates the schedule is not commonly available at that size.</p>
+      </div>
+
+      <!-- Common Schedules -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Common Pipe Schedules and Their Uses</h2>
+
+        <div class="space-y-6 mt-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">SCH 40 (Standard Weight)</h3>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              The most common pipe schedule for general-purpose applications. Used for water, air, oil, and gas lines at moderate pressures. Available in NPS 1/8" through NPS 36" and larger. For NPS 10" and below, SCH 40 is the same as "Standard" (STD).
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">SCH 80 (Extra Strong)</h3>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Thicker wall for higher-pressure applications. Common in chemical processing, high-pressure steam, and hydraulic systems. For NPS 8" and below, SCH 80 is the same as "Extra Strong" (XS).
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">SCH 160 & Double Extra Strong (XXS)</h3>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Heavy-wall pipe for very high-pressure or high-temperature services. SCH 160 is available up to NPS 24". XXS has even thicker walls and is typically available up to NPS 12". These are used in power plants, refinery high-pressure lines, and severe service applications.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">SCH 5 & SCH 10 (Light Wall)</h3>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Thin-wall pipe used for low-pressure applications where weight and cost matter. Common in HVAC, fire sprinkler systems, and stainless steel process lines. SCH 10 is especially popular for stainless steel piping because it offers good flow capacity with reduced material cost.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Read -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">How to Read a Pipe Schedule Chart</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          To find the correct pipe wall thickness, you need two pieces of information:
+        </p>
+        <ol class="list-decimal list-inside text-theme-secondary space-y-2 mb-6">
+          <li><strong class="text-theme-primary">Nominal Pipe Size (NPS)</strong> — The approximate inside diameter in inches (e.g., NPS 2", NPS 4")</li>
+          <li><strong class="text-theme-primary">Schedule Number (SCH)</strong> — The wall thickness designation (e.g., SCH 40, SCH 80)</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          With these two values, you can look up the exact wall thickness, outside diameter, and inside diameter from the ASME B36.10M table. Remember that NPS is NOT the actual inside diameter — it is a trade name. The actual dimensions depend on the schedule.
+        </p>
+        <div class="glass rounded-xl p-6">
+          <p class="text-theme-primary font-semibold mb-2">Example: NPS 4" SCH 80</p>
+          <ul class="text-theme-secondary text-sm space-y-1">
+            <li>Outside Diameter: 114.3 mm (4.500")</li>
+            <li>Wall Thickness: 8.56 mm (0.337")</li>
+            <li>Inside Diameter: 97.18 mm (3.826")</li>
+            <li>Weight per meter: ~22.3 kg (carbon steel)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pipe Schedule vs Pressure Rating -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Pipe Schedule vs Pressure Rating</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Pipe schedule is related to pressure capacity, but the relationship is not linear. The same schedule number can handle different pressures depending on the pipe material and temperature. For example:
+        </p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-6">
+          <li>NPS 2" SCH 40 carbon steel: ~2,000 psi at ambient temperature</li>
+          <li>NPS 12" SCH 40 carbon steel: ~1,400 psi at ambient temperature</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          Always check the actual pressure-temperature rating for your specific pipe material and size. The schedule chart gives you dimensions, not pressure ratings.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the difference between SCH 40 and SCH 80?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              SCH 80 has a thicker wall than SCH 40 for the same pipe size. This means higher pressure capacity but also higher weight and cost. For example, NPS 2" SCH 40 has 3.91 mm wall, while SCH 80 has 5.54 mm wall.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Is schedule the same as pressure class?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              No. Pipe schedule refers to wall thickness, while pressure class (e.g., Class 150, 300, 600) is used for flanges and fittings. They are related but different systems. A SCH 80 pipe may be paired with a Class 300 flange, for example.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What does STD, XS, and XXS mean?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              STD = Standard (same as SCH 40 for NPS 10" and below), XS = Extra Strong (same as SCH 80 for NPS 8" and below), XXS = Double Extra Strong. These are older designations that predate the schedule number system but are still widely used.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Can I use the same schedule for stainless steel?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Stainless steel pipes follow ASME B36.19M, which uses the same schedule designations but limits the available schedules to SCH 5S, 10S, 40S, and 80S for most sizes. The "S" suffix indicates stainless steel. Wall thicknesses are identical to the corresponding carbon steel schedules.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Calculate Pipe Weight Instantly</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Use our free pipe weight calculator with built-in schedule chart data. Select NPS, schedule, and material to get exact weight per meter.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/pipe-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Pipe Weight Calculator
+          </a>
+          <a href="/blog/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Back to Blog
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>

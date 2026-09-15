@@ -30,6 +30,7 @@ const nav = [
   { href: "/elbow-weight-calculator/", label: "Pipe Elbow" },
   { href: "/tee-weight-calculator/", label: "Pipe Tee" },
   { href: "/reducer-weight-calculator/", label: "Pipe Reducer" },
+  { href: "/pipe-weight-calculator/", label: "Pipe" },
 ];
 ---
 <!doctype html>
@@ -133,7 +134,7 @@ const nav = [
       <slot />
     </main>
     <footer class="bg-theme-secondary border-t border-theme text-theme-secondary text-sm mt-16 relative z-10">
-      <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
+      <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
         <div>
           <p class="text-theme-primary font-semibold mb-2">PVFCalculator</p>
           <p>Free ASME B16.5 & B16.9 pipe fitting weight calculators for procurement, logistics, and project engineering.</p>
@@ -145,8 +146,17 @@ const nav = [
             <li><a href="/elbow-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Elbow Weight Calculator</a></li>
             <li><a href="/tee-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Tee Weight Calculator</a></li>
             <li><a href="/reducer-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Reducer Weight Calculator</a></li>
+            <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
           </ul>
         </div>
+      <div>
+        <p class="text-theme-primary font-semibold mb-2">Resources</p>
+        <ul class="space-y-1">
+          <li><a href="/blog/" class="hover:text-theme-primary transition-colors">Blog & Guides</a></li>
+          <li><a href="/asme-b16-5-flange-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.5 Dimensions</a></li>
+          <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
+        </ul>
+      </div>
         <div>
           <p class="text-theme-primary font-semibold mb-2">Disclaimer</p>
           <p class="text-xs text-theme-muted">Calculations are theoretical estimates based on ASME B16.5 and ASME B16.9 dimensional data. Verify critical weights with manufacturers before procurement or load planning.</p>

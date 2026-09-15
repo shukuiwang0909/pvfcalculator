@@ -1,0 +1,274 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "ASME B16.5 vs B16.47: Flange Standard Comparison";
+const description =
+  "Compare ASME B16.5 and B16.47 flange standards. Learn the differences in size range, pressure classes, applications, and how to choose the right standard for your project.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-15",
+  dateModified: "2026-09-15",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/asme-b16-5-vs-b16-47/",
+};
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/flange-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">ASME B16.5 vs B16.47</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        ASME B16.5 vs <span class="accent-text">B16.47</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Two standards govern most flanges in the oil and gas, petrochemical, and power industries. Understanding when to use ASME B16.5 versus B16.47 is critical for procurement, engineering, and project planning.
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: September 15, 2026</span>
+        <span>·</span>
+        <span>7 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Overview -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Overview: Two Standards, Different Ranges</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">ASME B16.5</strong> covers pipe flanges and flanged fittings from NPS 1/2" through NPS 24". It is the most commonly used flange standard in the world, covering pressure classes 150, 300, 600, 900, 1500, and 2500.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">ASME B16.47</strong> covers large-diameter steel flanges from NPS 26" through NPS 60". It was created to standardize the large flanges that were previously covered by MSS SP-44 and API 605. B16.47 has two series: Series A (formerly MSS SP-44) and Series B (formerly API 605).
+        </p>
+      </div>
+
+      <!-- Comparison Table -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Key Differences at a Glance</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Feature</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">ASME B16.5</th>
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">ASME B16.47</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Size Range</td>
+                <td class="py-3 px-4 text-theme-secondary">NPS 1/2" – 24"</td>
+                <td class="py-3 px-4 text-theme-secondary">NPS 26" – 60"</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Pressure Classes</td>
+                <td class="py-3 px-4 text-theme-secondary">150, 300, 600, 900, 1500, 2500</td>
+                <td class="py-3 px-4 text-theme-secondary">150, 300, 400, 600, 900</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Series</td>
+                <td class="py-3 px-4 text-theme-secondary">Single series</td>
+                <td class="py-3 px-4 text-theme-secondary">Series A & Series B</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Flange Types</td>
+                <td class="py-3 px-4 text-theme-secondary">WN, SO, BL, SW, THD, LJ</td>
+                <td class="py-3 px-4 text-theme-secondary">WN, BL primarily</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Facing</td>
+                <td class="py-3 px-4 text-theme-secondary">RF, FF, RTJ, LF, LM, LG, LT, LE</td>
+                <td class="py-3 px-4 text-theme-secondary">RF, RTJ primarily</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Typical Use</td>
+                <td class="py-3 px-4 text-theme-secondary">General industrial piping</td>
+                <td class="py-3 px-4 text-theme-secondary">Large-bore pipelines, compressors, turbines</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Series A vs B -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">B16.47 Series A vs Series B</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          Within B16.47, there are two distinct series with different dimensional requirements:
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Series A (MSS SP-44)</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Thicker, heavier flanges</li>
+              <li>• Larger bolt circle diameter</li>
+              <li>• More bolts, larger bolt diameter</li>
+              <li>• Higher pressure capacity</li>
+              <li>• Higher cost</li>
+              <li>• Common in offshore, refinery, high-stress applications</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Series B (API 605)</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Thinner, lighter flanges</li>
+              <li>• Smaller bolt circle diameter</li>
+              <li>• Fewer bolts, smaller bolt diameter</li>
+              <li>• Lower pressure capacity</li>
+              <li>• Lower cost</li>
+              <li>• Common in water treatment, HVAC, lower-stress applications</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="glass rounded-xl p-6 mt-6">
+          <p class="text-theme-primary font-semibold mb-2">Important</p>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            Series A and Series B flanges are NOT interchangeable. They have different bolt circle diameters, bolt sizes, and flange thicknesses. Always verify which series is specified on drawings and RFQs.
+          </p>
+        </div>
+      </div>
+
+      <!-- When to Use -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">When to Use Each Standard</h2>
+
+        <div class="space-y-6 mt-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">Use ASME B16.5 When:</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Pipe size is NPS 24" or smaller</li>
+              <li>• You need slip-on, threaded, or socket weld flanges</li>
+              <li>• Pressure class is 1500 or 2500</li>
+              <li>• You need flat face (FF) or lap joint (LJ) flanges</li>
+              <li>• General industrial piping, chemical plants, oil refineries</li>
+            </ul>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">Use ASME B16.47 When:</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Pipe size is NPS 26" or larger</li>
+              <li>• Large-bore pipeline connections</li>
+              <li>• Compressor and turbine inlet/outlet piping</li>
+              <li>• Water treatment plants with large diameter piping</li>
+              <li>• Power plant cooling water systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlap Zone -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">The Overlap Zone: NPS 22" – 24"</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          There is a small overlap where both standards cover the same sizes. ASME B16.5 goes up to NPS 24", and B16.47 Series A starts at NPS 26" (though some manufacturers produce B16.47 flanges in NPS 22" and 24" as well).
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          In this overlap zone, B16.5 flanges are generally preferred because they offer more flange types (SO, SW, THD) and higher pressure classes. However, if the project specifies B16.47, follow the specification.
+        </p>
+      </div>
+
+      <!-- Common Mistakes -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Common Mistakes to Avoid</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Mixing Series A and Series B</p>
+            <p class="text-theme-secondary text-sm">Never mix Series A and Series B flanges in the same connection. The bolt patterns are different and they will not mate properly.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Assuming same pressure class = same dimensions</p>
+            <p class="text-theme-secondary text-sm">A Class 300 B16.5 flange and a Class 300 B16.47 flange have completely different dimensions. Pressure class numbers are not comparable across standards.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Using B16.5 flanges above NPS 24"</p>
+            <p class="text-theme-secondary text-sm">B16.5 does not cover sizes above NPS 24". For larger sizes, you must use B16.47 or industry-specific standards like AWWA C207.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Can I replace a B16.47 Series A flange with Series B?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              No. Series A and Series B have different bolt circle diameters, bolt sizes, and flange thicknesses. They are not interchangeable. Replacing one with the other will result in a leaking or failed connection.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the largest flange size in ASME B16.5?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              ASME B16.5 covers flanges up to NPS 24" (DN 600). For larger sizes, you need ASME B16.47 (NPS 26"–60") or other standards like AWWA C207 for water applications.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Which standard is more common in the oil and gas industry?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              ASME B16.5 is more common because most process piping is NPS 24" or smaller. However, B16.47 Series A is widely used for large-bore connections at compressor stations, pump stations, and pipeline terminals.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Are B16.47 flanges more expensive than B16.5?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Generally yes, due to larger size, more material, and larger bolts. Series A flanges are more expensive than Series B due to heavier construction. However, the total installed cost depends on many factors including material, facing, and coating requirements.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Calculate Flange Weight by Standard</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Use our free flange weight calculator with ASME B16.5 dimensional data for all pressure classes from 150 to 2500.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/flange-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Flange Weight Calculator
+          </a>
+          <a href="/blog/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Back to Blog
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>

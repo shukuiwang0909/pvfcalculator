@@ -1,0 +1,363 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "How to Choose the Right Flange Class (150–2500)";
+const description =
+  "Learn how to select the correct ASME flange pressure class for your application. Compare Class 150, 300, 600, 900, 1500, and 2500 ratings with temperature-pressure tables and selection guidelines.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-15",
+  dateModified: "2026-09-15",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/how-to-choose-flange-class/",
+};
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/flange-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">How to Choose Flange Class</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        How to Choose the Right <span class="accent-text">Flange Class</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Selecting the wrong flange pressure class is one of the most expensive mistakes in piping design. Too low and you risk leaks or catastrophic failure. Too high and you're wasting money on unnecessarily heavy flanges, bolts, and gaskets. This guide helps you get it right.
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: September 15, 2026</span>
+        <span>·</span>
+        <span>9 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- What is Flange Class -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">What Does Flange Class Mean?</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A flange class (also called pressure class or rating) is a dimensionless number that represents the pressure-temperature rating of a flange. ASME B16.5 defines classes from 150 to 2500. The class number is approximately the maximum pressure (in psi) that a flange can handle at room temperature for certain materials.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          However, this is only a rough approximation. The actual pressure rating depends on:
+        </p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2">
+          <li>Flange material (carbon steel, stainless steel, alloy steel)</li>
+          <li>Operating temperature</li>
+          <li>Flange size (NPS)</li>
+          <li>Gasket type and facing</li>
+        </ul>
+      </div>
+
+      <!-- Pressure-Temperature Ratings -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Pressure-Temperature Ratings (Carbon Steel)</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          The following table shows pressure ratings (in psi) for ASME B16.5 carbon steel flanges (Group 1.1 materials, e.g., A105) at various temperatures:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Temp (°F)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 150</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 300</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 600</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 900</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 1500</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Class 2500</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">-20 to 100</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">285</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">740</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,480</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2,220</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,705</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">6,170</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">200</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">260</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">680</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,360</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2,040</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,405</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">5,675</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">300</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">230</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">655</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,310</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,965</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,280</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">5,465</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">400</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">200</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">635</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,270</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,900</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,170</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">5,280</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">500</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">170</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">600</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,200</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,800</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,000</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">4,995</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">600</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">140</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">550</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,095</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,645</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2,740</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">4,570</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">700</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">110</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">510</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,020</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,530</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2,555</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">4,255</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">750</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">95</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">475</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">950</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1,425</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2,375</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">3,955</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mt-3">
+          Values are from ASME B16.5 Table 2 for Group 1.1 materials (e.g., ASTM A105). Ratings decrease with increasing temperature.
+        </p>
+      </div>
+
+      <!-- Class Comparison -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Flange Class Comparison: Key Characteristics</h2>
+
+        <div class="space-y-6 mt-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Class 150 — Low Pressure</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Most economical flange class</li>
+              <li>• Rated ~285 psi at ambient temperature</li>
+              <li>• Common for water, air, low-pressure steam</li>
+              <li>• Widely available, many manufacturers</li>
+              <li>• Thin flange body, fewer/smaller bolts</li>
+              <li>• Not suitable for high-pressure or high-temperature</li>
+            </ul>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Class 300 — Medium Pressure</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Rated ~740 psi at ambient temperature</li>
+              <li>• Good balance of cost and capability</li>
+              <li>• Common for process piping, oil and gas</li>
+              <li>• Thicker flange body than Class 150</li>
+              <li>• More bolts, larger bolt circle</li>
+              <li>• Suitable for moderate temperatures</li>
+            </ul>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Class 600 — High Pressure</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Rated ~1,480 psi at ambient temperature</li>
+              <li>• Heavy-duty flanges for demanding service</li>
+              <li>• Common in refinery, chemical, and power plants</li>
+              <li>• Thick flange body, large bolts</li>
+              <li>• RTJ (ring-type joint) facing common</li>
+              <li>• Significantly heavier and more expensive</li>
+            </ul>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Class 900 — Very High Pressure</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Rated ~2,220 psi at ambient temperature</li>
+              <li>• Used in high-pressure process lines</li>
+              <li>• Common in upstream oil and gas</li>
+              <li>• Very thick, heavy flanges</li>
+              <li>• Usually RTJ facing</li>
+              <li>• Higher bolt torque requirements</li>
+            </ul>
+          </div>
+
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Class 1500 & 2500 — Extreme Pressure</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Rated ~3,705 and ~6,170 psi at ambient</li>
+              <li>• Used in severe service, high-pressure steam</li>
+              <li>• Common in power plant main steam lines</li>
+              <li>• Extremely thick, massive flanges</li>
+              <li>• RTJ facing almost always required</li>
+              <li>• Specialized bolting and gasket requirements</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Choose -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">How to Select the Right Flange Class</h2>
+
+        <div class="glass rounded-xl p-6 mb-6">
+          <p class="text-theme-primary font-semibold mb-4">Step-by-Step Selection Process:</p>
+          <ol class="list-decimal list-inside text-theme-secondary space-y-3">
+            <li><strong>Determine design pressure and temperature.</strong> Use the maximum operating conditions, not normal conditions. Include upset conditions and safety margins.</li>
+            <li><strong>Identify the piping material.</strong> Different materials have different pressure-temperature ratings. Carbon steel, stainless steel, and alloy steels each have their own rating tables in ASME B16.5.</li>
+            <li><strong>Look up the pressure-temperature rating.</strong> Find the rating table for your material group and read across to your design temperature.</li>
+            <li><strong>Select the next higher class.</strong> Always round UP to the next available class. Never interpolate or round down.</li>
+            <li><strong>Verify flange dimensions.</strong> Confirm that the selected class has acceptable bolt spacing, flange thickness, and weight for your application.</li>
+            <li><strong>Check gasket compatibility.</strong> Higher classes may require different gasket types (e.g., RTJ gaskets instead of spiral wound).</li>
+          </ol>
+        </div>
+
+        <div class="glass rounded-xl p-6">
+          <p class="text-theme-primary font-semibold mb-2">Example Selection</p>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            Design conditions: 400 psi at 500°F, carbon steel piping (A106 Gr. B).<br /><br />
+            From the table: Class 300 carbon steel is rated 600 psi at 500°F. Class 150 is rated only 170 psi at 500°F. Therefore, <strong>Class 300</strong> is the correct selection. Class 600 would also work but is unnecessarily expensive and heavy.
+          </p>
+        </div>
+      </div>
+
+      <!-- Common Mistakes -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Common Mistakes to Avoid</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Using Class 150 for everything</p>
+            <p class="text-theme-secondary text-sm">Class 150 is tempting because it's cheap and common, but it has very limited pressure and temperature capability. Many process applications require Class 300 or higher.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Ignoring temperature derating</p>
+            <p class="text-theme-secondary text-sm">A flange rated for 285 psi at room temperature may only be rated for 140 psi at 600°F. Always check the rating at your actual operating temperature.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Mixing different class flanges</p>
+            <p class="text-theme-secondary text-sm">Never bolt a Class 150 flange to a Class 300 flange. The bolt patterns, flange thicknesses, and facing dimensions are different. They will not seal properly.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Assuming class number = pressure rating</p>
+            <p class="text-theme-secondary text-sm">Class 300 is not exactly 300 psi. At room temperature, it's actually 740 psi for carbon steel. The class number is a historical designation, not a direct pressure measurement.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Forgetting about bolt torque</p>
+            <p class="text-theme-secondary text-sm">Higher class flanges require much higher bolt torques. Make sure your assembly team has the right tools and procedures for the selected class.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the most common flange class?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Class 150 is the most common for general-purpose applications due to its low cost and wide availability. Class 300 is the most common for process piping in oil and gas, chemical, and petrochemical industries.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Can I use a higher class flange than required?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Yes, using a higher class is always safe from a pressure standpoint. However, it costs more, weighs more, and may require different gaskets and bolting. It can also create fit-up problems if mating flanges are different classes.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the difference between Class 150 and Class 300 dimensions?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Class 300 flanges are thicker, have larger bolt circles, more bolts, and larger bolt diameters than Class 150 flanges of the same NPS. For example, NPS 4" Class 150 has 8 bolts of 5/8" diameter, while Class 300 has 8 bolts of 3/4" diameter and a thicker flange body.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Do stainless steel flanges have the same ratings?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              No. Stainless steel flanges have different pressure-temperature ratings than carbon steel. Generally, stainless steel flanges have LOWER pressure ratings at elevated temperatures. Always consult the correct ASME B16.5 table for your material group.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What facing type should I use for high-pressure flanges?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              For Class 600 and above, RTJ (Ring-Type Joint) facing is strongly recommended. RTJ facings use a metal ring gasket that provides excellent sealing at high pressures and temperatures. RF (Raised Face) is acceptable for Class 150–300 in most services.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Calculate Flange Weight by Class</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Use our free flange weight calculator with all ASME B16.5 pressure classes. Select NPS, class, and flange type for instant weight estimates.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/flange-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Flange Weight Calculator
+          </a>
+          <a href="/asme-b16-5-flange-dimensions/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Flange Dimensions Table
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,350 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "304 vs 316 Stainless Steel Flanges: Which One Do You Need?";
+const description =
+  "Compare 304 and 316 stainless steel flanges for corrosion resistance, temperature limits, cost, and applications. Learn when to upgrade from 304 to 316 in coastal, chemical, and high-chloride environments.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-15",
+  dateModified: "2026-09-15",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/304-vs-316-stainless-steel-flanges/",
+};
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/flange-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">304 vs 316 Stainless Steel Flanges</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        304 vs 316 Stainless Steel <span class="accent-text">Flanges</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Choosing between 304 and 316 stainless steel flanges is one of the most common material decisions in piping design. The wrong choice can lead to premature corrosion, costly replacements, and safety risks. This guide helps you make the right call.
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: September 15, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Chemical Composition -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Chemical Composition: The Key Difference</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          Both 304 and 316 are austenitic stainless steels, but their alloying elements differ significantly:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Element</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">304 (UNS S30400)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">316 (UNS S31600)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Chromium (Cr)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">18.0–20.0%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">16.0–18.0%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Nickel (Ni)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">8.0–10.5%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">10.0–14.0%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Molybdenum (Mo)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2.0–3.0%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Carbon (C), max</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.08%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.08%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Manganese (Mn), max</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2.0%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2.0%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Silicon (Si), max</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.75%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.75%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Phosphorus (P), max</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.045%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.045%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Sulfur (S), max</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.030%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">0.030%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="glass rounded-xl p-6 mt-6">
+          <p class="text-theme-primary font-semibold mb-2">The Molybdenum Factor</p>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            The 2–3% molybdenum in 316 is the game-changer. Molybdenum dramatically improves resistance to chloride pitting and crevice corrosion. This is why 316 costs 20–30% more than 304 — and why it is essential in marine and chemical environments.
+          </p>
+        </div>
+      </div>
+
+      <!-- Corrosion Resistance -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Corrosion Resistance Comparison</h2>
+
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">304 Stainless Steel</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Excellent general corrosion resistance</li>
+              <li>• Good oxidation resistance up to 870°C (1600°F)</li>
+              <li>• Moderate chloride resistance (limit ~200 ppm Cl⁻)</li>
+              <li>• Susceptible to pitting in coastal environments</li>
+              <li>• Susceptible to stress corrosion cracking above 60°C (140°F) in chlorides</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">316 Stainless Steel</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Superior corrosion resistance in most media</li>
+              <li>• Excellent chloride resistance (limit ~1000 ppm Cl⁻)</li>
+              <li>• Better resistance to sulfuric acid and reducing acids</li>
+              <li>• Suitable for coastal and marine applications</li>
+              <li>• Reduced risk of stress corrosion cracking</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mechanical Properties -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Mechanical & Physical Properties</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Property</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">304</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">316</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Tensile Strength (min)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">515 MPa (75 ksi)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">515 MPa (75 ksi)</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Yield Strength (min, 0.2% offset)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">205 MPa (30 ksi)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">205 MPa (30 ksi)</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Elongation (min, 2 in)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">40%</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">40%</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Hardness (max, Brinell)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">201 HB</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">217 HB</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Density</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">8.00 g/cm³</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">8.00 g/cm³</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-primary font-medium">Melting Range</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1400–1450°C</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1370–1400°C</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-theme-muted text-sm mt-3">
+          Mechanical properties are essentially identical for flanges. The choice between 304 and 316 is driven by corrosion environment, not strength.
+        </p>
+      </div>
+
+      <!-- Temperature Limits -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Temperature Limits</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Both grades perform well at cryogenic and elevated temperatures, but there are differences:
+        </p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2">
+          <li><strong class="text-theme-primary">304:</strong> Excellent oxidation resistance in continuous service to 925°C (1700°F), intermittent to 870°C (1600°F)</li>
+          <li><strong class="text-theme-primary">316:</strong> Better resistance to carbide precipitation during welding; suitable for continuous service to 925°C (1700°F) in oxidizing atmospheres; superior resistance to creep at elevated temperatures</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed mt-4">
+          For high-temperature applications above 500°C (932°F), consider 304H or 316H — the "H" grades have controlled carbon content for improved creep strength.
+        </p>
+      </div>
+
+      <!-- Cost -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Cost Comparison</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          316 stainless steel typically costs <strong class="text-theme-primary">20–30% more</strong> than 304 due to the nickel and molybdenum content. For a NPS 4" SCH 40 weld neck flange:
+        </p>
+        <ul class="list-disc list-inside text-theme-secondary space-y-2">
+          <li>304 flange: ~$45–65 USD (Class 150)</li>
+          <li>316 flange: ~$55–85 USD (Class 150)</li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed mt-4">
+          The price premium is justified when the alternative is premature failure, unplanned shutdowns, or safety incidents. However, using 316 in a 304-suitable environment is unnecessary over-specification.
+        </p>
+      </div>
+
+      <!-- When to Use -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">When to Use 304 vs 316</h2>
+
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Choose 304 When:</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Indoor or sheltered applications</li>
+              <li>• Freshwater, steam, air, oil, and gas</li>
+              <li>• Food and beverage processing (except high-chloride)</li>
+              <li>• Cost is a primary concern</li>
+              <li>• Chloride levels are below 200 ppm</li>
+              <li>• Temperature is below 60°C (140°F) in chloride service</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Choose 316 When:</h3>
+            <ul class="text-theme-secondary text-sm space-y-2">
+              <li>• Coastal or marine environments</li>
+              <li>• Chemical processing with chlorides</li>
+              <li>• Pulp and paper mills (bleach plants)</li>
+              <li>• Pharmaceutical and biotech (cleanability)</li>
+              <li>• Chloride levels above 200 ppm</li>
+              <li>• Temperature above 60°C (140°F) in chloride service</li>
+              <li>• De-icing salt exposure (roads, bridges)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Mistakes -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Common Mistakes to Avoid</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Using 304 in coastal environments</p>
+            <p class="text-theme-secondary text-sm">Salt spray and coastal humidity will cause 304 to pit and rust within months. Always use 316 within 5 km of the coast or in marine applications.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Assuming "stainless" means "no corrosion"</p>
+            <p class="text-theme-secondary text-sm">All stainless steels can corrode under the wrong conditions. 304 is not suitable for concentrated chlorides, hydrochloric acid, or sulfuric acid at elevated temperatures.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Mixing 304 and 316 in the same system</p>
+            <p class="text-theme-secondary text-sm">While galvanic corrosion between 304 and 316 is minimal, welding dissimilar grades requires filler metal selection (typically 308L or 316L) to maintain corrosion resistance in the weld zone.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Forgetting about 304L and 316L</p>
+            <p class="text-theme-secondary text-sm">For welded construction, low-carbon grades (304L, 316L) are preferred to prevent carbide precipitation (sensitization) in the heat-affected zone. The "L" grades have carbon limited to 0.03% max.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Can I use a magnet to distinguish 304 from 316?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              No. Both 304 and 316 are austenitic and essentially non-magnetic in the annealed condition. Cold working can induce slight magnetism in both grades equally. Use a PMI (Positive Material Identification) analyzer or chemical spot test for reliable identification.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Is 316 always better than 304?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Not necessarily. 316 is superior in chloride environments, but 304 is actually better in some nitric acid applications and is more readily available. The "best" grade depends on the specific corrosive media, temperature, and concentration.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the difference between 316 and 316L?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              316L has a maximum carbon content of 0.03% versus 0.08% for standard 316. The lower carbon content reduces carbide precipitation during welding, making 316L preferred for welded construction. Mechanical properties are slightly lower but corrosion resistance is equivalent or better.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Can I paint or coat stainless steel flanges?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Yes, but surface preparation is critical. The passive chromium oxide layer must be removed by abrasive blasting or acid etching for coating adhesion. However, coating stainless steel is usually unnecessary if the correct grade is selected for the environment.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Calculate Stainless Steel Flange Weight</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Use our free flange weight calculator with SS304 and SS316 density options. Get accurate weight estimates for procurement and logistics planning.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/flange-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Flange Weight Calculator
+          </a>
+          <a href="/request-a-quote/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>

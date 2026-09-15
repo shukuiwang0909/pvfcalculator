@@ -1,0 +1,115 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Blog | PVF Calculator";
+const description =
+  "Technical guides and reference articles on pipe fittings, flanges, ASME standards, and material selection for industrial piping applications.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  headline: "PVF Calculator Blog",
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+};
+
+const posts = [
+  {
+    slug: "/blog/pipe-schedule-chart-explained/",
+    title: "Pipe Schedule Chart Explained: Complete Guide to SCH 10–XXS",
+    description:
+      "Learn what pipe schedule numbers mean, how to read a pipe schedule chart, and the difference between SCH 10, 40, 80, 160, and XXS wall thicknesses.",
+    date: "September 15, 2026",
+    readTime: "8 min",
+    category: "Pipe Basics",
+  },
+  {
+    slug: "/blog/asme-b16-5-vs-b16-47/",
+    title: "ASME B16.5 vs B16.47: Flange Standard Comparison",
+    description:
+      "Compare ASME B16.5 and B16.47 flange standards. Learn the differences in size range, pressure classes, applications, and how to choose the right standard for your project.",
+    date: "September 15, 2026",
+    readTime: "7 min",
+    category: "Flange Standards",
+  },
+  {
+    slug: "/blog/304-vs-316-stainless-steel-flanges/",
+    title: "304 vs 316 Stainless Steel Flanges: Which One Do You Need?",
+    description:
+      "Compare 304 and 316 stainless steel flanges for corrosion resistance, temperature limits, cost, and applications. Learn when to upgrade from 304 to 316 in coastal, chemical, and high-chloride environments.",
+    date: "September 15, 2026",
+    readTime: "8 min",
+    category: "Materials",
+  },
+  {
+    slug: "/blog/how-to-choose-flange-class/",
+    title: "How to Choose the Right Flange Class (150–2500)",
+    description:
+      "Learn how to select the correct ASME flange pressure class for your application. Compare Class 150, 300, 600, 900, 1500, and 2500 ratings with temperature-pressure tables and selection guidelines.",
+    date: "September 15, 2026",
+    readTime: "9 min",
+    category: "Flange Selection",
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} ctaHref="/request-a-quote/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold mb-4 text-theme-primary">
+        PVF <span class="accent-text">Blog</span>
+      </h1>
+      <p class="text-lg text-theme-secondary max-w-2xl mx-auto">
+        Technical guides on pipe fittings, flanges, ASME standards, and material selection for industrial piping professionals.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="space-y-6">
+        {posts.map((post) => (
+          <a href={post.slug} class="glass rounded-2xl p-6 md:p-8 block group hover:border-theme transition-colors">
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="text-xs font-medium px-3 py-1 rounded-full accent-bg" style="color: #07090c;">
+                    {post.category}
+                  </span>
+                  <span class="text-xs text-theme-muted">{post.date}</span>
+                  <span class="text-xs text-theme-muted">·</span>
+                  <span class="text-xs text-theme-muted">{post.readTime} read</span>
+                </div>
+                <h2 class="text-xl md:text-2xl font-bold text-theme-primary mb-2 group-hover:text-theme-primary transition-colors">
+                  {post.title}
+                </h2>
+                <p class="text-theme-secondary text-sm leading-relaxed">
+                  {post.description}
+                </p>
+              </div>
+              <div class="shrink-0">
+                <div class="w-10 h-10 rounded-full border border-theme flex items-center justify-center group-hover:bg-theme-tertiary transition-colors">
+                  <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/request-a-quote/"
+          class="inline-block accent-bg hover:opacity-90 font-semibold px-8 py-3 rounded-xl transition-colors"
+          style="color: #07090c;"
+        >
+          Request a Quote
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
