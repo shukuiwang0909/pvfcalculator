@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = "404 | Page Not Found | pvfcalculator.com";
+const description = "The requested page could not be found. Use the navigation to return to the PVF calculator tools.";
+---
+<Base title={title} description={description} robots="noindex,follow" ctaHref="/">
+  <section class="mx-auto max-w-3xl px-4 py-20 text-center">
+    <p class="text-6xl font-extrabold tracking-tight accent-text sm:text-7xl">404</p>
+    <h1 class="mt-4 text-2xl font-bold text-theme-primary sm:text-3xl">Page not found</h1>
+    <p class="mt-3 text-theme-secondary">
+      The page you requested does not exist or may have been moved.
+      Start again from the homepage, or jump directly to one of the ASME calculator tools.
+    </p>
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href="/" class="accent-bg hover:opacity-90 text-sm font-semibold px-4 py-2 rounded-lg transition-colors" style="color:#07090c;">
+        Back to homepage
+      </a>
+      <a href="/flange-weight-calculator/" class="rounded-lg border border-theme px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-theme-tertiary">
+        Flange calculator
+      </a>
+      <a href="/elbow-weight-calculator/" class="rounded-lg border border-theme px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-theme-tertiary">
+        Elbow calculator
+      </a>
+    </div>
+  </section>
+</Base>

@@ -7,14 +7,20 @@ interface Props {
   canonical?: string;
   jsonLd?: unknown;
   ctaHref?: string;
+  robots?: string;
+  gaId?: string;
+  gscVerification?: string;
 }
 
 const {
   title,
   description = "Free ASME B16.5 & B16.9 pipe fitting weight calculators for flanges, elbows, tees, and reducers.",
-  canonical = "https://pvfcalculator.com/",
+  canonical,
   jsonLd,
   ctaHref = "#tools",
+  robots,
+  gaId,
+  gscVerification,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -33,12 +39,14 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {robots && <meta name="robots" content={robots} />}
+    {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:site_name" content="pvfcalculator.com" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
@@ -46,6 +54,15 @@ const nav = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    {gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />}
+    {gaId && (
+      <script is:inline define:vars={{ gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    )}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <script is:inline>
       (function() {

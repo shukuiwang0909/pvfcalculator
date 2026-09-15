@@ -1,4 +1,5 @@
 ---
+import Base from '../layouts/Base.astro';
 const title = "Flange Weight Calculator (ASME B16.5) | Weld Neck, Slip On, Blind | pvfcalculator.com";
 const description = "Free ASME B16.5 flange weight calculator. Accurate geometric modeling (not flat-plate) for Weld Neck, Slip On, Blind, Socket Weld & Threaded flanges, Class 150–2500, NPS 1/2\"–24\", A105 / F304 / F316 / F11 materials. Results in kg or lb.";
 const canonical = "https://pvfcalculator.com/flange-weight-calculator/";
@@ -68,46 +69,14 @@ const appJsonLd = {
   "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
 };
 ---
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonical} />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:url" content={canonical} />
-  <meta property="og:site_name" content="pvfcalculator.com" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
-</head>
-<body class="bg-slate-100 text-slate-800 antialiased">
-  <header class="bg-slate-900 text-white shadow">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
-      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
-        <a href="/flange-weight-calculator/" class="text-orange-400 font-medium">Flange Weight</a>
-        <a href="/asme-b16-5-flange-dimensions/" class="hover:text-white">B16.5 Dimensions</a>
-        <a href="/pipe-weight-calculator/" class="hover:text-white">Pipe Weight</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="mx-auto max-w-5xl px-4 py-8">
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
     <!-- Hero -->
     <div class="mb-8">
-      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-        Flange Weight Calculator <span class="text-orange-600">(ASME B16.5)</span>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Flange Weight Calculator <span class="accent-text">(ASME B16.5)</span>
       </h1>
-      <p class="mt-3 max-w-3xl text-slate-600">
+      <p class="mt-3 max-w-3xl text-theme-secondary">
         Calculate the theoretical weight of ASME B16.5 pipe flanges from true 3-D geometry —
         tapered weld-neck hubs and raised faces included, <strong>not</strong> a flat-plate approximation.
         Covers Weld Neck, Slip On, Blind, Socket Weld and Threaded flanges, Class 150–2500, NPS 1/2″–24″.
@@ -115,10 +84,10 @@ const appJsonLd = {
     </div>
 
     <!-- Tool -->
-    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Flange weight calculator tool">
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Flange weight calculator tool">
       <!-- Type selector -->
       <div class="mb-5">
-        <label class="mb-2 block text-sm font-semibold text-slate-700">Flange Type</label>
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">Flange Type</label>
         <div class="grid grid-cols-2 gap-2 sm:grid-cols-5" id="typeButtons">
           <button data-type="WN"  class="type-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
             <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M2 34 L14 12 L62 12 L62 34 Z M14 12 L14 34" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="6" x2="62" y2="6" stroke="currentColor" stroke-width="2"/></svg>
@@ -141,14 +110,14 @@ const appJsonLd = {
             <span class="text-xs font-semibold">Threaded</span>
           </button>
         </div>
-        <p class="mt-1 text-xs text-slate-500" id="typeDesc">Tapered hub, butt-weld end</p>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">Tapered hub, butt-weld end</p>
       </div>
 
       <!-- Inputs -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <label for="cls" class="mb-1 block text-sm font-semibold text-slate-700">Pressure Class</label>
-          <select id="cls" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">Pressure Class</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
             <option value="150">Class 150</option>
             <option value="300">Class 300</option>
             <option value="600">Class 600</option>
@@ -158,26 +127,26 @@ const appJsonLd = {
           </select>
         </div>
         <div>
-          <label for="nps" class="mb-1 block text-sm font-semibold text-slate-700">Nominal Size (NPS)</label>
-          <select id="nps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">Nominal Size (NPS)</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
-          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">Material</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">Density (kg/m³)</label>
           <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">Quantity</label>
           <input id="qty" type="number" min="1" max="99999" step="1" value="1"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
-          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
             <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
             <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
           </div>
@@ -186,33 +155,33 @@ const appJsonLd = {
 
       <!-- Results -->
       <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
-          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Flange Weight</p>
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Single Flange Weight</p>
           <p class="mt-2 text-4xl font-extrabold tabular-nums">
             <span id="weightValue">–</span>
-            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
           </p>
-          <p class="mt-3 text-sm text-slate-300">
+          <p class="mt-3 text-sm text-theme-secondary">
             <span id="resultLine">–</span>
           </p>
-          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
-            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Volume</span><span class="font-semibold" id="outVolume">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Density</span><span class="font-semibold" id="outDensity">–</span></div>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Total weight</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Volume</span><span class="font-semibold" id="outVolume">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Density</span><span class="font-semibold" id="outDensity">–</span></div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.5)</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Key Dimensions (ASME B16.5)</p>
           <dl class="text-sm" id="dimsList"></dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Volume Breakdown</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Volume Breakdown</p>
           <dl class="text-sm" id="volList"></dl>
-          <details class="mt-3 text-xs text-slate-500">
-            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">Data source</summary>
             <p class="mt-1">Dimensions per ASME B16.5-2020: WN Table 8, SO Table 9, SW Table 10, BL Table 12, THD Table 15 (Class 150/300), equivalent class tables for 600–2500. Bore = STD-wall pipe ID per ASME B36.10M.</p>
           </details>
         </div>
@@ -221,10 +190,10 @@ const appJsonLd = {
 
     <!-- Full dimension & weight table -->
     <section class="mt-10" aria-label="Dimension and weight table">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.5 <span id="tableTitle" class="text-orange-600">Flange</span> Dimensions &amp; Weights — <span id="tableClass">Class 150</span></h2>
-      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.5 <span id="tableTitle" class="accent-text">Flange</span> Dimensions &amp; Weights — <span id="tableClass">Class 150</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
         <table class="w-full min-w-[760px] text-sm">
-          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
             <tr>
               <th class="px-3 py-2.5">NPS</th>
               <th class="px-3 py-2.5">OD (mm)</th>
@@ -237,17 +206,17 @@ const appJsonLd = {
               <th class="px-3 py-2.5 text-right">Weight (kg)</th>
             </tr>
           </thead>
-          <tbody id="dimsTableBody" class="divide-y divide-slate-100"></tbody>
+          <tbody id="dimsTableBody" class="divide-y divide-theme"></tbody>
         </table>
       </div>
-      <p class="mt-2 text-xs text-slate-500">Weights in the table use the currently selected material density. Tap any row to load it into the calculator.</p>
+      <p class="mt-2 text-xs text-theme-muted">Weights in the table use the currently selected material density. Tap any row to load it into the calculator.</p>
     </section>
 
     <!-- Methodology -->
     <section class="mt-12" aria-label="Calculation methodology">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(geometric model, not flat plate)</span></h2>
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">How the calculation works <span class="accent-text">(geometric model, not flat plate)</span></h2>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div class="rounded-xl bg-white p-5 shadow-md">
+        <div class="card">
           <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="Weld neck flange geometric model">
             <defs>
               <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -276,8 +245,8 @@ const appJsonLd = {
             <text x="150" y="170" font-size="11" fill="#334155">OD</text>
           </svg>
         </div>
-        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
-          <p class="font-semibold text-slate-900">Volume equations (dimensions from ASME B16.5 tables)</p>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Volume equations (dimensions from ASME B16.5 tables)</p>
           <ul class="mt-2 list-disc space-y-1.5 pl-5">
             <li><strong>Weld Neck:</strong> V = disc(OD, bore, t) + frustum(X→OD, Y−t) − bore cylinder(Y−t) + raised face</li>
             <li><strong>Slip On / Socket Weld / Threaded:</strong> V = disc(OD, bore, t) + cylinder(X, Y−t) − bore cylinder(Y−t) + raised face</li>
@@ -292,43 +261,41 @@ const appJsonLd = {
 
     <!-- FAQ -->
     <section class="mt-12" aria-label="Frequently asked questions">
-      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
-          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
-            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
               {f.q}
-              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
             </summary>
-            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
           </details>
         ))}
       </div>
     </section>
 
     <!-- Internal links -->
-    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
       <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
       <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ ASME B16.5 Flange Dimensions Chart</a>
-        <a href="/pipe-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Pipe Weight Calculator</a>
-        <a href="/cangzhou-flange-manufacturers/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Cangzhou Flange Manufacturers</a>
-        <a href="/request-a-quote/" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Request a Quote</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 Flange Dimensions Chart</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Weight Calculator</a>
+        <a href="/cangzhou-flange-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Cangzhou Flange Manufacturers</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
       </div>
     </section>
 
     <!-- Disclaimer -->
-    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
       <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.5-2020 dimensions and
       nominal material densities. Actual weights may vary due to bore selection, fillet radii, and manufacturing
       tolerances. For critical applications (lifting, shipping cost guarantees, pressure-boundary design), verify
       with the flange manufacturer.
     </p>
-  </main>
-
-  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-    <p>© 2026 pvfcalculator.com — ASME B16.5 Flange Weight Calculator. Data traceable to ASME B16.5-2020 Tables 8–15.</p>
-  </footer>
+  
+  </div>
+</Base>
 
 <script>
   import { CLASS_DATA, CLASS_LIST, MATERIALS, NPS_LIST } from '../data/flange-dimensions';
@@ -372,11 +339,11 @@ const appJsonLd = {
   function setTypeButtons() {
     document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) => {
       const active = b.dataset.type === state.type;
-      b.classList.toggle('border-orange-500', active);
-      b.classList.toggle('bg-orange-50', active);
-      b.classList.toggle('text-orange-700', active);
-      b.classList.toggle('border-slate-200', !active);
-      b.classList.toggle('text-slate-600', !active);
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
       b.setAttribute('aria-pressed', String(active));
     });
     const t = FLANGE_TYPES.find((x) => x.id === state.type);
@@ -384,8 +351,8 @@ const appJsonLd = {
   }
 
   function setUnitButtons() {
-    const on = 'bg-slate-900 text-white';
-    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
     $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
     $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
   }
@@ -414,7 +381,7 @@ const appJsonLd = {
          ['Hub length Y', `${fmt(d.y, 1)} mm`], ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`],
          ['Bolt circle', `${fmt(d.bcd, 1)} mm`], ['Bolts', d.bolts]];
     $('dimsList').innerHTML = rows
-      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800">${v}</dd></div>`)
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
       .join('');
 
     const v = r.volumes;
@@ -422,8 +389,8 @@ const appJsonLd = {
       ? [['Flange disc', v.ringMm3], ['Raised face', v.faceMm3]]
       : [['Flange ring', v.ringMm3], [state.type === 'WN' ? 'Tapered hub (net)' : 'Straight hub (net)', v.hubMm3], ['Raised face', v.faceMm3]];
     $('volList').innerHTML = seg
-      .map(([k, mm3]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800">${fmt((mm3 as number) / 1000, 1)} cm³</dd></div>`)
-      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Total</dt><dd class="font-bold text-orange-700">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
+      .map(([k, mm3]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${fmt((mm3 as number) / 1000, 1)} cm³</dd></div>`)
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Total</dt><dd class="font-bold accent-text">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
   }
 
   function renderTable() {
@@ -439,7 +406,7 @@ const appJsonLd = {
       if (!r.valid) continue;
       const d = r.dims;
       const tr = document.createElement('tr');
-      tr.className = 'cursor-pointer hover:bg-orange-50';
+      tr.className = 'cursor-pointer hover-accent-light';
       tr.innerHTML =
         `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
         `<td class="px-3 py-2">${fmt(d.od, 1)}</td>` +
@@ -449,7 +416,7 @@ const appJsonLd = {
         `<td class="px-3 py-2">${state.type === 'BL' ? '—' : fmt(d.y, 1)}</td>` +
         `<td class="px-3 py-2">${fmt(d.bcd, 1)}</td>` +
         `<td class="px-3 py-2">${d.bolts}</td>` +
-        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'text-orange-600' : ''}">${fmt(r.weightKg, 2)}</td>`;
+        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'accent-text' : ''}">${fmt(r.weightKg, 2)}</td>`;
       tr.addEventListener('click', () => {
         state.nps = n.nps;
         ($('nps') as HTMLSelectElement).value = String(n.nps);
@@ -498,5 +465,3 @@ const appJsonLd = {
   setUnitButtons();
   render();
 </script>
-</body>
-</html>

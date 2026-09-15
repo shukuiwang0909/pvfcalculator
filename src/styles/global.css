@@ -193,3 +193,51 @@ body::before {
 .accent-text { color: var(--accent); }
 .accent-bg { background-color: var(--accent); }
 .accent-border { border-color: var(--accent); }
+.accent-light-bg { background-color: var(--accent-light); }
+.hover-accent-light:hover { background-color: var(--accent-light); }
+.divide-theme > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color); }
+
+/* Form fields */
+.accent-radio {
+  accent-color: var(--accent);
+}
+
+.field {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.field:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.field:disabled {
+  background-color: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+select.field option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Calculator result panel */
+.result-panel {
+  background: linear-gradient(180deg, var(--bg-tertiary), var(--bg-secondary));
+  border: 1px solid var(--border-color);
+}
+
+.mono-block {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.disclaimer {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: var(--accent-light);
+  color: var(--text-secondary);
+}
+.dark .disclaimer {
+  color: #fde68a;
+}

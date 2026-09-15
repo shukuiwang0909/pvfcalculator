@@ -1,4 +1,5 @@
 ---
+import Base from '../layouts/Base.astro';
 const title = "Pipe Elbow Weight Calculator | 45° & 90° LR/SR Elbow Weight | pvfcalculator.com";
 const description = "Calculate 90° and 45° elbow weight (LR/SR). ASME B16.9 elbow weight calculator for carbon steel, stainless steel, alloy steel. Free online.";
 const canonical = "https://pvfcalculator.com/elbow-weight-calculator/";
@@ -48,46 +49,14 @@ const appJsonLd = {
   "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
 };
 ---
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonical} />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:url" content={canonical} />
-  <meta property="og:site_name" content="pvfcalculator.com" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
-</head>
-<body class="bg-slate-100 text-slate-800 antialiased">
-  <header class="bg-slate-900 text-white shadow">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
-      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
-        <a href="/flange-weight-calculator/" class="hover:text-white">Flange Weight</a>
-        <a href="/elbow-weight-calculator/" class="text-orange-400 font-medium">Elbow Weight</a>
-        <a href="/pipe-weight-calculator/" class="hover:text-white">Pipe Weight</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="mx-auto max-w-5xl px-4 py-8">
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
     <!-- Hero -->
     <div class="mb-8">
-      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-        Pipe Elbow Weight Calculator <span class="text-orange-600">(ASME B16.9)</span>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Pipe Elbow Weight Calculator <span class="accent-text">(ASME B16.9)</span>
       </h1>
-      <p class="mt-3 max-w-3xl text-slate-600">
+      <p class="mt-3 max-w-3xl text-theme-secondary">
         Calculate the theoretical weight of ASME B16.9 butt-weld pipe elbows — 90° and 45°,
         long radius (1.5D) and short radius (1D) — from NPS 1/2″ to 24″ in schedules
         SCH 10 through XXS. Covers carbon steel, stainless steel and alloy steel with
@@ -96,10 +65,10 @@ const appJsonLd = {
     </div>
 
     <!-- Tool -->
-    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Elbow weight calculator tool">
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Elbow weight calculator tool">
       <!-- Angle selector -->
       <div class="mb-5">
-        <label class="mb-2 block text-sm font-semibold text-slate-700">Elbow Angle</label>
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">Elbow Angle</label>
         <div class="grid grid-cols-2 gap-2" id="angleButtons">
           <button data-angle="90" class="angle-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
             <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 16 A16 16 0 0 1 24 32 L56 32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 38 L8 32 M56 38 L56 32" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
@@ -110,12 +79,12 @@ const appJsonLd = {
             <span class="text-xs font-semibold">45° Elbow</span>
           </button>
         </div>
-        <p class="mt-1 text-xs text-slate-500" id="angleDesc">Quarter bend — full right-angle change of direction</p>
+        <p class="mt-1 text-xs text-theme-muted" id="angleDesc">Quarter bend — full right-angle change of direction</p>
       </div>
 
       <!-- Radius selector -->
       <div class="mb-5">
-        <label class="mb-2 block text-sm font-semibold text-slate-700">Radius Type</label>
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">Radius Type</label>
         <div class="grid grid-cols-2 gap-2" id="radiusButtons">
           <button data-radius="LR" class="radius-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
             <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M8 38 L8 22 A16 16 0 0 1 24 38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 38 L8 12 A26 26 0 0 1 34 38 L56 38" fill="none" stroke="currentColor" stroke-width="3"/></svg>
@@ -126,19 +95,19 @@ const appJsonLd = {
             <span class="text-xs font-semibold">Short Radius (1.0D)</span>
           </button>
         </div>
-        <p class="mt-1 text-xs text-slate-500" id="radiusDesc">Center-to-end = 1.5 × NPS (1.5D) — the B16.9 default</p>
-        <p class="mt-1 hidden text-xs font-medium text-amber-700" id="srNote">Short radius is only available for 90° elbows — per ASME B16.9, 45° elbows are made in long radius only.</p>
+        <p class="mt-1 text-xs text-theme-muted" id="radiusDesc">Center-to-end = 1.5 × NPS (1.5D) — the B16.9 default</p>
+        <p class="mt-1 hidden text-xs font-medium accent-text" id="srNote">Short radius is only available for 90° elbows — per ASME B16.9, 45° elbows are made in long radius only.</p>
       </div>
 
       <!-- Inputs -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <label for="nps" class="mb-1 block text-sm font-semibold text-slate-700">Nominal Size (NPS)</label>
-          <select id="nps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">Nominal Size (NPS)</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="schedule" class="mb-1 block text-sm font-semibold text-slate-700">Schedule</label>
-          <select id="schedule" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-theme-secondary">Schedule</label>
+          <select id="schedule" class="field w-full rounded-lg px-3 py-2 text-sm">
             <option value="SCH10">SCH 10</option>
             <option value="SCH20">SCH 20</option>
             <option value="SCH30">SCH 30</option>
@@ -155,22 +124,22 @@ const appJsonLd = {
           </select>
         </div>
         <div>
-          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
-          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">Material</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">Density (kg/m³)</label>
           <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">Quantity</label>
           <input id="qty" type="number" min="1" max="99999" step="1" value="1"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
-          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
             <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
             <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
           </div>
@@ -179,33 +148,33 @@ const appJsonLd = {
 
       <!-- Results -->
       <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
-          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Elbow Weight</p>
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Single Elbow Weight</p>
           <p class="mt-2 text-4xl font-extrabold tabular-nums">
             <span id="weightValue">–</span>
-            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
           </p>
-          <p class="mt-3 text-sm text-slate-300">
+          <p class="mt-3 text-sm text-theme-secondary">
             <span id="resultLine">–</span>
           </p>
-          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
-            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Center-to-end (A)</span><span class="font-semibold" id="outCenterToEnd">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Pipe OD</span><span class="font-semibold" id="outPipeOd">–</span></div>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Total weight</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Center-to-end (A)</span><span class="font-semibold" id="outCenterToEnd">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Pipe OD</span><span class="font-semibold" id="outPipeOd">–</span></div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.9)</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Key Dimensions (ASME B16.9)</p>
           <dl class="text-sm" id="dimsList"></dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Calculation Basis</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Calculation Basis</p>
           <dl class="text-sm" id="basisList"></dl>
-          <details class="mt-3 text-xs text-slate-500">
-            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">Data source</summary>
             <p class="mt-1">Center-to-end dimensions per ASME B16.9 (90° LR = 1.5 × NPS, 90° SR = 1.0 × NPS, 45° LR = 0.625 × NPS). Reference weights are manufacturer-catalog LR 90° values for SCH 40 / SCH 80 carbon steel; other schedules use ASME B36.10M metal-mass factors and unlisted sizes extrapolate ∝ NPS². Weights are theoretical — verify with the fitting manufacturer for critical applications.</p>
           </details>
         </div>
@@ -214,10 +183,10 @@ const appJsonLd = {
 
     <!-- Full weight table -->
     <section class="mt-10" aria-label="Elbow weight table">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Elbow Weights — <span id="tableTitle" class="text-orange-600">90° Long Radius</span></h2>
-      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 Elbow Weights — <span id="tableTitle" class="accent-text">90° Long Radius</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
         <table class="w-full min-w-[680px] text-sm">
-          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
             <tr>
               <th class="px-3 py-2.5">NPS</th>
               <th class="px-3 py-2.5">Center-to-End A (mm)</th>
@@ -228,17 +197,17 @@ const appJsonLd = {
               <th class="px-3 py-2.5 text-right">SCH XXS</th>
             </tr>
           </thead>
-          <tbody id="weightTableBody" class="divide-y divide-slate-100"></tbody>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
         </table>
       </div>
-      <p class="mt-2 text-xs text-slate-500">Table weights use the currently selected material density and <span id="tableCaption">90° LR</span> geometry. Tap any row to load it into the calculator.</p>
+      <p class="mt-2 text-xs text-theme-muted">Table weights use the currently selected material density and <span id="tableCaption">90° LR</span> geometry. Tap any row to load it into the calculator.</p>
     </section>
 
     <!-- Methodology -->
     <section class="mt-12" aria-label="Calculation methodology">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(center-to-end × weight-per-length, catalog-calibrated)</span></h2>
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">How the calculation works <span class="accent-text">(center-to-end × weight-per-length, catalog-calibrated)</span></h2>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div class="rounded-xl bg-white p-5 shadow-md">
+        <div class="card">
           <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="90 degree long radius elbow geometric model">
             <defs>
               <marker id="arrE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -264,8 +233,8 @@ const appJsonLd = {
             <text x="225" y="42" font-size="12" fill="#9a3412" text-anchor="middle">90° elbow — LR or SR</text>
           </svg>
         </div>
-        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
-          <p class="font-semibold text-slate-900">Elbow weight equations (ASME B16.9 + ASME B36.10M)</p>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Elbow weight equations (ASME B16.9 + ASME B36.10M)</p>
           <ul class="mt-2 list-disc space-y-1.5 pl-5">
             <li><strong>Center-to-end (A):</strong> 90° LR: A = 1.5 × NPS in · 90° SR: A = 1.0 × NPS in · 45° LR: A = 0.625 × NPS in</li>
             <li><strong>Base method:</strong> W = A × (pipe weight per unit length from the schedule table)</li>
@@ -280,24 +249,24 @@ const appJsonLd = {
 
     <!-- SEO content -->
     <section class="mt-12 space-y-6" aria-label="Elbow weight reference guide">
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">How to Calculate Elbow Weight</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">How to Calculate Elbow Weight</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>To calculate the weight of a butt-weld elbow you need four inputs: the nominal pipe size (NPS), the wall schedule, the bend geometry (90° or 45°, long or short radius) and the material density. Start from the ASME B16.9 center-to-end dimension — 1.5 × NPS for a 90° long-radius elbow, 1.0 × NPS for short radius and 0.625 × NPS for a 45° elbow — then multiply by the pipe weight per meter taken from the ASME B36.10M schedule tables, and finally scale by the ratio of your material density to 7,850 kg/m³ if you are not working in carbon steel.</p>
           <p>In practice, procurement and freight teams use manufacturer catalog weights rather than the raw formula, because elbows carry extra metal at the bend. A 6″ SCH 40 LR 90° elbow catalogs at about 18 kg — nearly double what the center-to-end × kg/m shortcut predicts. This calculator combines both approaches: catalog-calibrated reference weights with geometry and schedule factors, so a 45° elbow automatically comes out at roughly 60% and a short-radius 90° at roughly 70% of the long-radius 90° weight.</p>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">Elbow Weight Formula</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">Elbow Weight Formula</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>The complete formula used by this calculator is:</p>
-          <p class="rounded-lg bg-slate-100 px-4 py-3 font-mono text-sm text-slate-800">W = W_ref(NPS, SCH) × F_geo × ρ / 7,850</p>
+          <p class="rounded-lg bg-theme-tertiary px-4 py-3 font-mono text-sm text-theme-secondary">W = W_ref(NPS, SCH) × F_geo × ρ / 7,850</p>
           <p>where W_ref is the carbon-steel LR 90° catalog weight for the selected NPS and schedule, F_geo is 1.0 for 90° LR, 0.7 for 90° SR and 0.6 for 45° LR, and ρ is the material density in kg/m³. Total weight for a purchase order is simply W × quantity. Worked example: a 4″ SCH 80 stainless F316 (ρ = 7,980) LR 90° elbow weighs 11.5 kg × 1.0 × 7,980 / 7,850 ≈ 11.7 kg, and forty pieces weigh ≈ 468 kg.</p>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Standard</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 Standard</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>ASME B16.9, “Factory-Made Wrought Buttwelding Fittings,” is the governing standard for butt-weld elbows in sizes NPS 1/2″ through 48″. It defines the center-to-end dimensions (A for 90° elbows, B for 45° elbows), wall thicknesses by schedule, and dimensional tolerances. Long radius — 1.5 × NPS — is the default configuration and is by far the most common in process piping; short radius (1.0 × NPS) elbows are specified only where the piping layout cannot accommodate the longer fitting. The standard covers 45° and 90° elbows in long radius, and 90° elbows in short radius; short-radius 45° elbows are not part of the standard.</p>
           <p>Wall thicknesses follow ASME B36.10M for carbon and alloy steel (SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS) and ASME B36.19M for stainless steel. Typical materials include ASTM A234 WPB (carbon steel), A403 WP304/WP316 (stainless) and A234 WP11/WP22 (alloy steel). Because B16.9 permits tolerances on wall thickness and center-to-end, individual manufacturer weights can vary by a few percent — always confirm against the supplier’s catalog for exact freight and cost estimates.</p>
         </div>
@@ -306,44 +275,42 @@ const appJsonLd = {
 
     <!-- FAQ -->
     <section class="mt-12" aria-label="Frequently asked questions">
-      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
-          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
-            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
               {f.q}
-              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
             </summary>
-            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
           </details>
         ))}
       </div>
     </section>
 
     <!-- Internal links -->
-    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
       <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
       <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-        <a href="/flange-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Flange Weight Calculator</a>
-        <a href="/tee-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Tee Weight Calculator</a>
-        <a href="/reducer-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Reducer Weight Calculator</a>
-        <a href="/products/pipe-elbow" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Pipe Elbow Products</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Tee Weight Calculator</a>
+        <a href="/reducer-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Reducer Weight Calculator</a>
+        <a href="/products/pipe-elbow" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Pipe Elbow Products</a>
       </div>
     </section>
 
     <!-- Disclaimer -->
-    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
       <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.9
       center-to-end dimensions and catalog-calibrated reference weights for carbon steel.
       Actual fitting weights vary between manufacturers due to B16.9 tolerances on wall
       thickness and center-to-end dimensions. For critical applications (lifting, shipping
       cost guarantees, pressure-boundary design), verify with the fitting manufacturer.
     </p>
-  </main>
-
-  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-    <p>© 2026 pvfcalculator.com — ASME B16.9 Pipe Elbow Weight Calculator. Dimensions per ASME B16.9, schedules per ASME B36.10M.</p>
-  </footer>
+  
+  </div>
+</Base>
 
 <script>
   import { ELBOW_ANGLES, MATERIALS, NPS_LIST, RADIUS_TYPES, SCHEDULES } from '../data/elbow-dimensions';
@@ -389,11 +356,11 @@ const appJsonLd = {
   function setAngleButtons() {
     document.querySelectorAll<HTMLButtonElement>('.angle-btn').forEach((b) => {
       const active = Number(b.dataset.angle) === state.angle;
-      b.classList.toggle('border-orange-500', active);
-      b.classList.toggle('bg-orange-50', active);
-      b.classList.toggle('text-orange-700', active);
-      b.classList.toggle('border-slate-200', !active);
-      b.classList.toggle('text-slate-600', !active);
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
       b.setAttribute('aria-pressed', String(active));
     });
     const a = ELBOW_ANGLES.find((x) => x.id === state.angle);
@@ -408,11 +375,11 @@ const appJsonLd = {
       b.disabled = srUnavailable && isSr;
       b.classList.toggle('opacity-40', srUnavailable && isSr);
       b.classList.toggle('cursor-not-allowed', srUnavailable && isSr);
-      b.classList.toggle('border-orange-500', active);
-      b.classList.toggle('bg-orange-50', active);
-      b.classList.toggle('text-orange-700', active);
-      b.classList.toggle('border-slate-200', !active);
-      b.classList.toggle('text-slate-600', !active);
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
       b.setAttribute('aria-pressed', String(active));
     });
     const r = RADIUS_TYPES.find((x) => x.id === state.radius);
@@ -421,8 +388,8 @@ const appJsonLd = {
   }
 
   function setUnitButtons() {
-    const on = 'bg-slate-900 text-white';
-    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
     $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
     $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
   }
@@ -453,7 +420,7 @@ const appJsonLd = {
       ['Bend radius', r.radius === 'LR' ? `1.5 × NPS = ${fmt(1.5 * r.nps, 2)} in` : `1.0 × NPS = ${fmt(r.nps, 2)} in`],
     ];
     $('dimsList').innerHTML = rows
-      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('');
 
     const basis: [string, string][] = [
@@ -463,9 +430,9 @@ const appJsonLd = {
       ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
     ];
     $('basisList').innerHTML = basis
-      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('') +
-      `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Result</dt><dd class="font-bold text-orange-700">${fmt(r.weightKg, 2)} kg</dd></div>`;
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
   }
 
   function renderTable() {
@@ -485,9 +452,9 @@ const appJsonLd = {
       const shown = state.unit === 'kg' ? r.weightKg : r.weightLb;
       const conv = (x: number) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
       const cell = (x: { weightKg: number; weightLb: number }, isShown: boolean) =>
-        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'text-orange-600' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
+        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'accent-text' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
       const tr = document.createElement('tr');
-      tr.className = 'cursor-pointer hover:bg-orange-50';
+      tr.className = 'cursor-pointer hover-accent-light';
       tr.innerHTML =
         `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
         `<td class="px-3 py-2">${fmt(r.centerToEndMm, 1)}</td>` +
@@ -560,5 +527,3 @@ const appJsonLd = {
   setUnitButtons();
   render();
 </script>
-</body>
-</html>

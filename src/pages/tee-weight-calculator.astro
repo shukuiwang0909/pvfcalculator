@@ -1,4 +1,5 @@
 ---
+import Base from '../layouts/Base.astro';
 const title = "Pipe Tee Weight Calculator | Equal & Reducing Tee Weight";
 const description = "Calculate equal and reducing tee weight. ASME B16.9 tee weight calculator for carbon steel, stainless steel, alloy steel. Free online.";
 const canonical = "https://pvfcalculator.com/tee-weight-calculator/";
@@ -40,46 +41,14 @@ const appJsonLd = {
   "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
 };
 ---
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonical} />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:url" content={canonical} />
-  <meta property="og:site_name" content="pvfcalculator.com" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(appJsonLd)} />
-</head>
-<body class="bg-slate-100 text-slate-800 antialiased">
-  <header class="bg-slate-900 text-white shadow">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-      <a href="/" class="text-lg font-bold tracking-tight">pvf<span class="text-orange-400">calculator</span>.com</a>
-      <nav class="hidden gap-5 text-sm text-slate-300 sm:flex">
-        <a href="/flange-weight-calculator/" class="hover:text-white">Flange Weight</a>
-        <a href="/elbow-weight-calculator/" class="hover:text-white">Elbow Weight</a>
-        <a href="/tee-weight-calculator/" class="text-orange-400 font-medium">Tee Weight</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="mx-auto max-w-5xl px-4 py-8">
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
     <!-- Hero -->
     <div class="mb-8">
-      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-        Pipe Tee Weight Calculator <span class="text-orange-600">(ASME B16.9)</span>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Pipe Tee Weight Calculator <span class="accent-text">(ASME B16.9)</span>
       </h1>
-      <p class="mt-3 max-w-3xl text-slate-600">
+      <p class="mt-3 max-w-3xl text-theme-secondary">
         Calculate the theoretical weight of ASME B16.9 butt-weld pipe tees — equal tees
         (all ends the same NPS) and reducing tees (smaller branch outlet) — from NPS 1/2″
         to 24″ in schedules SCH 10 through XXS. Covers carbon steel, stainless steel and
@@ -88,43 +57,43 @@ const appJsonLd = {
     </div>
 
     <!-- Tool -->
-    <section id="tool" class="rounded-2xl bg-white p-4 shadow-md sm:p-6" aria-label="Tee weight calculator tool">
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Tee weight calculator tool">
       <!-- Tee type selector (radio cards) -->
       <div class="mb-5">
-        <label class="mb-2 block text-sm font-semibold text-slate-700">Tee Type</label>
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">Tee Type</label>
         <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Tee type">
           <label class="cursor-pointer">
             <input type="radio" name="teeType" value="EQ" class="peer sr-only" checked />
-            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-slate-200 p-3 text-center text-slate-600 transition peer-checked:border-orange-500 peer-checked:bg-orange-50 peer-checked:text-orange-700 peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
+            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-theme p-3 text-center text-theme-secondary transition peer-checked:accent-border peer-checked:accent-light-bg peer-checked:accent-text peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
               <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M25 4 L25 16 Q25 22 31 22 L33 22 Q39 22 39 16 L39 4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="4" y="22" width="56" height="14" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
               <span class="text-xs font-semibold">Equal Tee</span>
             </span>
           </label>
           <label class="cursor-pointer">
             <input type="radio" name="teeType" value="RED" class="peer sr-only" />
-            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-slate-200 p-3 text-center text-slate-600 transition peer-checked:border-orange-500 peer-checked:bg-orange-50 peer-checked:text-orange-700 peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
+            <span class="flex flex-col items-center gap-1 rounded-xl border-2 border-theme p-3 text-center text-theme-secondary transition peer-checked:accent-border peer-checked:accent-light-bg peer-checked:accent-text peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400">
               <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><path d="M29 4 L29 16 Q29 22 32 22 Q35 22 35 16 L35 4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="4" y="22" width="56" height="14" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
               <span class="text-xs font-semibold">Reducing Tee</span>
             </span>
           </label>
         </div>
-        <p class="mt-1 text-xs text-slate-500" id="typeDesc">All three ends the same NPS — run and branch identical</p>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">All three ends the same NPS — run and branch identical</p>
       </div>
 
       <!-- Inputs -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <label for="runNps" class="mb-1 block text-sm font-semibold text-slate-700">Run Size (NPS)</label>
-          <select id="runNps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="runNps" class="mb-1 block text-sm font-semibold text-theme-secondary">Run Size (NPS)</label>
+          <select id="runNps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="branchNps" class="mb-1 block text-sm font-semibold text-slate-700">Branch Size (NPS)</label>
-          <select id="branchNps" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"></select>
-          <p class="mt-1 hidden text-xs font-medium text-amber-700" id="branchNote">Branch size must be smaller than the run size.</p>
+          <label for="branchNps" class="mb-1 block text-sm font-semibold text-theme-secondary">Branch Size (NPS)</label>
+          <select id="branchNps" class="field w-full rounded-lg px-3 py-2 text-sm disabled:cursor-not-allowed disabled:bg-theme-tertiary disabled:text-theme-muted"></select>
+          <p class="mt-1 hidden text-xs font-medium accent-text" id="branchNote">Branch size must be smaller than the run size.</p>
         </div>
         <div>
-          <label for="schedule" class="mb-1 block text-sm font-semibold text-slate-700">Schedule</label>
-          <select id="schedule" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+          <label for="schedule" class="mb-1 block text-sm font-semibold text-theme-secondary">Schedule</label>
+          <select id="schedule" class="field w-full rounded-lg px-3 py-2 text-sm">
             <option value="SCH10">SCH 10</option>
             <option value="SCH20">SCH 20</option>
             <option value="SCH30">SCH 30</option>
@@ -141,22 +110,22 @@ const appJsonLd = {
           </select>
         </div>
         <div>
-          <label for="material" class="mb-1 block text-sm font-semibold text-slate-700">Material</label>
-          <select id="material" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"></select>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">Material</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
         </div>
         <div>
-          <label for="density" class="mb-1 block text-sm font-semibold text-slate-700">Density (kg/m³)</label>
+          <label for="density" class="mb-1 block text-sm font-semibold text-theme-secondary">Density (kg/m³)</label>
           <input id="density" type="number" min="1000" max="12000" step="10" value="7850"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label for="qty" class="mb-1 block text-sm font-semibold text-slate-700">Quantity</label>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">Quantity</label>
           <input id="qty" type="number" min="1" max="99999" step="1" value="1"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500" />
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label class="mb-1 block text-sm font-semibold text-slate-700">Units</label>
-          <div class="flex overflow-hidden rounded-lg border border-slate-300" role="group" aria-label="Unit system">
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
             <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
             <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
           </div>
@@ -165,33 +134,33 @@ const appJsonLd = {
 
       <!-- Results -->
       <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div class="rounded-xl bg-slate-900 p-5 text-white lg:col-span-1">
-          <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Single Tee Weight</p>
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Single Tee Weight</p>
           <p class="mt-2 text-4xl font-extrabold tabular-nums">
             <span id="weightValue">–</span>
-            <span class="ml-1 text-xl font-semibold text-orange-400" id="weightUnit">kg</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
           </p>
-          <p class="mt-3 text-sm text-slate-300">
+          <p class="mt-3 text-sm text-theme-secondary">
             <span id="resultLine">–</span>
           </p>
-          <div class="mt-4 border-t border-slate-700 pt-3 text-sm">
-            <div class="flex justify-between py-1"><span class="text-slate-400">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Total weight</span><span class="font-semibold text-orange-300" id="totalWeight">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Run pipe OD</span><span class="font-semibold" id="outRunOd">–</span></div>
-            <div class="flex justify-between py-1"><span class="text-slate-400">Branch pipe OD</span><span class="font-semibold" id="outBranchOd">–</span></div>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Total weight</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Run pipe OD</span><span class="font-semibold" id="outRunOd">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Branch pipe OD</span><span class="font-semibold" id="outBranchOd">–</span></div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Key Dimensions (ASME B16.9)</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Key Dimensions (ASME B16.9)</p>
           <dl class="text-sm" id="dimsList"></dl>
         </div>
 
-        <div class="rounded-xl border border-slate-200 p-5 lg:col-span-1">
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Calculation Basis</p>
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Calculation Basis</p>
           <dl class="text-sm" id="basisList"></dl>
-          <details class="mt-3 text-xs text-slate-500">
-            <summary class="cursor-pointer font-medium text-orange-600 hover:underline">Data source</summary>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">Data source</summary>
             <p class="mt-1">Center-to-end dimensions per ASME B16.9 (equal tee C = NPS; reducing tee C = run NPS, C1 = branch NPS). Reference weights are manufacturer-catalog equal-tee values for SCH 40 carbon steel; SCH 80 / XS = × 1.5 and other schedules use ASME B36.10M metal-mass factors; NPS 14″–24″ extrapolate ∝ NPS². Reducing tees are estimated from the run size (≈ 1.3 × straight-pipe weight vs 1.5 × for equal tees). Weights are theoretical — verify with the fitting manufacturer for critical applications.</p>
           </details>
         </div>
@@ -200,10 +169,10 @@ const appJsonLd = {
 
     <!-- Full weight table -->
     <section class="mt-10" aria-label="Tee weight table">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 <span id="tableTitle" class="text-orange-600">Equal Tee</span> Weights — <span id="tableSchedule">SCH 40</span></h2>
-      <div class="overflow-x-auto rounded-xl bg-white shadow-md">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 <span id="tableTitle" class="accent-text">Equal Tee</span> Weights — <span id="tableSchedule">SCH 40</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
         <table class="w-full min-w-[680px] text-sm">
-          <thead class="bg-slate-900 text-left text-xs uppercase tracking-wider text-slate-300">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
             <tr>
               <th class="px-3 py-2.5">Run NPS</th>
               <th class="px-3 py-2.5">Center-to-End C (mm)</th>
@@ -214,17 +183,17 @@ const appJsonLd = {
               <th class="px-3 py-2.5 text-right">SCH XXS</th>
             </tr>
           </thead>
-          <tbody id="weightTableBody" class="divide-y divide-slate-100"></tbody>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
         </table>
       </div>
-      <p class="mt-2 text-xs text-slate-500">Table weights use the currently selected material density and <span id="tableCaption">equal tee</span> geometry. Tap any row to load it into the calculator.</p>
+      <p class="mt-2 text-xs text-theme-muted">Table weights use the currently selected material density and <span id="tableCaption">equal tee</span> geometry. Tap any row to load it into the calculator.</p>
     </section>
 
     <!-- Methodology -->
     <section class="mt-12" aria-label="Calculation methodology">
-      <h2 class="mb-3 text-xl font-bold text-slate-900">How the calculation works <span class="text-orange-600">(center-to-end × weight-per-length, catalog-calibrated)</span></h2>
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">How the calculation works <span class="accent-text">(center-to-end × weight-per-length, catalog-calibrated)</span></h2>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div class="rounded-xl bg-white p-5 shadow-md">
+        <div class="card">
           <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="Pipe tee geometric model">
             <defs>
               <marker id="arrT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -251,8 +220,8 @@ const appJsonLd = {
             <text x="210" y="110" font-size="10" fill="#92400e" text-anchor="middle">Reinforcement</text>
           </svg>
         </div>
-        <div class="rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-700 shadow-md">
-          <p class="font-semibold text-slate-900">Tee weight equations (ASME B16.9 + ASME B36.10M)</p>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Tee weight equations (ASME B16.9 + ASME B36.10M)</p>
           <ul class="mt-2 list-disc space-y-1.5 pl-5">
             <li><strong>Center-to-end:</strong> equal tee C = NPS in · reducing tee C = run NPS in, C1 = branch NPS in</li>
             <li><strong>Base method:</strong> W = metal volume at the run &amp; branch × density, anchored on pipe weight per unit length from the schedule table</li>
@@ -267,24 +236,24 @@ const appJsonLd = {
 
     <!-- SEO content -->
     <section class="mt-12 space-y-6" aria-label="Tee weight reference guide">
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">How to Calculate Tee Weight</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">How to Calculate Tee Weight</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>To calculate the weight of a butt-weld tee you need five inputs: the tee type (equal or reducing), the run size (NPS), the branch size (reducing tees only, and always smaller than the run per ASME B16.9), the wall schedule, and the material density. Start from the ASME B16.9 center-to-end dimensions — C = NPS for the run of an equal tee, with C1 = branch NPS on a reducing tee — then anchor the estimate on the pipe weight per meter from the ASME B36.10M schedule tables, and finally scale by the ratio of your material density to 7,850 kg/m³ if you are not working in carbon steel.</p>
           <p>In practice, procurement and freight teams use manufacturer catalog weights rather than raw pipe arithmetic, because the branch intersection carries substantial reinforcement metal. A 6″ SCH 40 equal tee catalogs at about 22 kg — roughly 1.5 × the weight of the same length of straight pipe — while a 6″ × 4″ reducing tee catalogs closer to 19 kg, about 1.3 × the run-pipe weight. This calculator combines both approaches: catalog-calibrated SCH 40 reference weights with schedule, tee-type and density factors, so reducing tees automatically come out lighter than equal tees of the run size.</p>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">Tee Weight Formula</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">Tee Weight Formula</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>The complete formula used by this calculator is:</p>
-          <p class="rounded-lg bg-slate-100 px-4 py-3 font-mono text-sm text-slate-800">W = W_ref(NPS_run, SCH) × F_type × ρ / 7,850</p>
+          <p class="rounded-lg bg-theme-tertiary px-4 py-3 font-mono text-sm text-theme-secondary">W = W_ref(NPS_run, SCH) × F_type × ρ / 7,850</p>
           <p>where W_ref is the carbon-steel equal-tee catalog weight for the selected run NPS and schedule (SCH STD = SCH 40; SCH XS = SCH 80 at × 1.5), F_type is 1.0 for an equal tee and 1.3/1.5 ≈ 0.867 for a reducing tee, and ρ is the material density in kg/m³. Total weight for a purchase order is simply W × quantity. Worked example: a 4″ SCH 80 stainless F316 (ρ = 7,980) equal tee weighs 10 kg × 1.5 × 7,980 / 7,850 ≈ 15.2 kg, and twenty pieces weigh ≈ 305 kg. The same run size as a 4″ × 2″ reducing tee weighs ≈ 13.2 kg.</p>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-6 shadow-md">
-        <h2 class="mb-3 text-xl font-bold text-slate-900">ASME B16.9 Standard</h2>
-        <div class="space-y-3 text-sm leading-relaxed text-slate-600">
+      <div class="card">
+        <h2 class="mb-3 text-xl font-bold text-theme-primary">ASME B16.9 Standard</h2>
+        <div class="space-y-3 text-sm leading-relaxed text-theme-secondary">
           <p>ASME B16.9, “Factory-Made Wrought Buttwelding Fittings,” is the governing standard for butt-weld tees in sizes NPS 1/2″ through 48″. It defines the center-to-end dimensions (C for the run ends, C1 for the branch of a reducing tee), wall thicknesses by schedule, and dimensional tolerances. Equal tees have all three ends at one NPS; reducing tees have a branch outlet smaller than the run, and the standard requires the branch to be the smaller of the two — a tee with a branch larger than its run is not an ASME B16.9 configuration.</p>
           <p>Wall thicknesses follow ASME B36.10M for carbon and alloy steel (SCH 10, 20, 30, STD, 40, 60, XS, 80, 100, 120, 140, 160, XXS) and ASME B36.19M for stainless steel. Typical materials include ASTM A234 WPB (carbon steel), A403 WP304/WP316 (stainless) and A234 WP11/WP22 (alloy steel). Because B16.9 permits tolerances on wall thickness and center-to-end, individual manufacturer weights can vary by a few percent — always confirm against the supplier’s catalog for exact freight and cost estimates.</p>
         </div>
@@ -293,44 +262,42 @@ const appJsonLd = {
 
     <!-- FAQ -->
     <section class="mt-12" aria-label="Frequently asked questions">
-      <h2 class="mb-4 text-xl font-bold text-slate-900">Frequently Asked Questions</h2>
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
       <div class="space-y-3">
         {faqs.map((f) => (
-          <details class="group rounded-xl bg-white shadow-sm open:shadow-md">
-            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-slate-800 marker:hidden group-open:text-orange-700">
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
               {f.q}
-              <span class="float-right text-slate-400 transition group-open:rotate-45 group-open:text-orange-500">+</span>
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
             </summary>
-            <p class="px-5 pb-4 text-sm leading-relaxed text-slate-600">{f.a}</p>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
           </details>
         ))}
       </div>
     </section>
 
     <!-- Internal links -->
-    <section class="mt-12 rounded-xl bg-slate-900 p-6 text-white" aria-label="Related tools">
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
       <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
       <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-        <a href="/flange-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Flange Weight Calculator</a>
-        <a href="/elbow-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Elbow Weight Calculator</a>
-        <a href="/reducer-weight-calculator/" class="rounded-lg bg-slate-800 p-3 transition hover:bg-slate-700">→ Reducer Weight Calculator</a>
-        <a href="/products/equal-tee" class="rounded-lg bg-orange-600 p-3 font-semibold transition hover:bg-orange-500">→ Equal Tee Products</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Elbow Weight Calculator</a>
+        <a href="/reducer-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Reducer Weight Calculator</a>
+        <a href="/products/equal-tee" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Equal Tee Products</a>
       </div>
     </section>
 
     <!-- Disclaimer -->
-    <p class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
       <strong>Disclaimer:</strong> Calculated weights are theoretical values based on ASME B16.9
       center-to-end dimensions and catalog-calibrated reference weights for carbon steel.
       Actual fitting weights vary between manufacturers due to B16.9 tolerances on wall
       thickness and center-to-end dimensions. For critical applications (lifting, shipping
       cost guarantees, pressure-boundary design), verify with the fitting manufacturer.
     </p>
-  </main>
-
-  <footer class="mt-10 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-    <p>© 2026 pvfcalculator.com — ASME B16.9 Pipe Tee Weight Calculator. Dimensions per ASME B16.9, schedules per ASME B36.10M.</p>
-  </footer>
+  
+  </div>
+</Base>
 
 <script>
   import { MATERIALS, NPS_LIST, SCHEDULES, TEE_TYPES, type TeeType } from '../data/tee-dimensions';
@@ -415,8 +382,8 @@ const appJsonLd = {
   }
 
   function setUnitButtons() {
-    const on = 'bg-slate-900 text-white';
-    const off = 'bg-white text-slate-600 hover:bg-slate-50';
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
     $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
     $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
   }
@@ -462,7 +429,7 @@ const appJsonLd = {
       ['Center-to-end C1 (branch)', r.type === 'EQ' ? `${fmt(r.centerToEndIn, 3)} in (same as C)` : `${fmt(r.branchCenterToEndIn, 3)} in (${fmt(r.branchCenterToEndMm, 1)} mm)`],
     ];
     $('dimsList').innerHTML = rows
-      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('');
 
     const basis: [string, string][] = [
@@ -472,9 +439,9 @@ const appJsonLd = {
       ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
     ];
     $('basisList').innerHTML = basis
-      .map(([k, v]) => `<div class="flex justify-between border-b border-slate-100 py-1.5"><dt class="text-slate-500">${k}</dt><dd class="font-semibold text-slate-800 text-right">${v}</dd></div>`)
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('') +
-      `<div class="flex justify-between py-1.5"><dt class="text-slate-500">Result</dt><dd class="font-bold text-orange-700">${fmt(r.weightKg, 2)} kg</dd></div>`;
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
   }
 
   function renderTable() {
@@ -494,9 +461,9 @@ const appJsonLd = {
       const wxxs = computeTeeWeight(state.type, n.nps, state.branchNps, 'XXS', state.density);
       const conv = (x: { weightKg: number; weightLb: number }) => (state.unit === 'kg' ? x.weightKg : x.weightLb);
       const cell = (x: { weightKg: number; weightLb: number }, isShown: boolean) =>
-        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'text-orange-600' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
+        `<td class="px-3 py-2 text-right font-semibold ${isShown ? 'accent-text' : ''}">${fmt(conv(x), conv(x) >= 100 ? 1 : 2)}</td>`;
       const tr = document.createElement('tr');
-      tr.className = 'cursor-pointer hover:bg-orange-50';
+      tr.className = 'cursor-pointer hover-accent-light';
       tr.innerHTML =
         `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
         `<td class="px-3 py-2">${fmt(r.centerToEndMm, 1)}</td>` +
@@ -579,5 +546,3 @@ const appJsonLd = {
   setUnitButtons();
   render();
 </script>
-</body>
-</html>
