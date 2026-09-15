@@ -1,0 +1,256 @@
+---
+import Base from "../layouts/Base.astro";
+import { NPS_LIST, CLASS_DATA } from "../data/flange-dimensions";
+
+const title = "ASME B16.5 Flange Dimensions Chart | Class 150-2500";
+const description = "Complete ASME B16.5 flange dimensions chart for Class 150, 300, 600, 900, 1500, and 2500. Includes OD, thickness, hub dimensions, bolt circle, and bolt patterns for weld neck, slip on, blind, socket weld, and threaded flanges.";
+const canonical = "https://pvfcalculator.com/asme-b16-5-flange-dimensions/";
+
+// Build dimension table data
+const classes = [150, 300, 600, 900, 1500, 2500];
+
+// Get dimensions for a specific class and NPS
+function getDims(cls: number, nps: number) {
+  const cd = CLASS_DATA[cls];
+  if (!cd) return null;
+  const idx = NPS_LIST.findIndex(n => n.nps === nps);
+  if (idx < 0 || !cd.validNps.includes(nps)) return null;
+  return {
+    od: cd.od[idx],
+    tWn: cd.tWn[idx],
+    tBl: cd.tBl[idx],
+    x: cd.x[idx],
+    y: cd.y[idx],
+    bcd: cd.bcd[idx],
+    bolts: cd.bolts[idx],
+    rfDia: cd.rfDia[idx],
+  };
+}
+
+// Generate table rows for each class
+function generateTableRows(cls: number) {
+  const cd = CLASS_DATA[cls];
+  if (!cd) return [];
+  
+  return NPS_LIST.map((nps, idx) => {
+    if (!cd.validNps.includes(nps.nps)) return null;
+    return {
+      nps: nps.label,
+      od: cd.od[idx],
+      tWn: cd.tWn[idx],
+      tBl: cd.tBl[idx],
+      x: cd.x[idx],
+      y: cd.y[idx],
+      bcd: cd.bcd[idx],
+      bolts: cd.bolts[idx],
+      rfDia: cd.rfDia[idx],
+    };
+  }).filter(Boolean);
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TechnicalArticle",
+  "headline": "ASME B16.5 Flange Dimensions Chart",
+  "description": description,
+  "author": { "@type": "Organization", "name": "PVF Calculator" },
+  "publisher": { "@type": "Organization", "name": "PVF Calculator" },
+  "datePublished": "2024-01-01",
+  "dateModified": new Date().toISOString().split('T')[0],
+};
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <section class="relative overflow-hidden py-12 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-4">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full accent-bg"></span>
+          </span>
+          ASME B16.5-2020 · Reference Chart
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-theme-primary">
+          ASME B16.5 <span class="accent-text">Flange Dimensions</span>
+        </h1>
+        <p class="mt-4 text-lg text-theme-secondary max-w-3xl mx-auto">
+          Complete dimensional reference for ASME B16.5 pipe flanges, Class 150 through 2500. 
+          Includes weld neck, slip on, blind, socket weld, and threaded flange dimensions.
+        </p>
+      </div>
+
+      <!-- Quick Nav -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        {classes.map(cls => (
+          <a 
+            href={`#class-${cls}`}
+            class="rounded-lg border border-theme bg-theme-secondary px-4 py-2 text-sm font-medium text-theme-primary hover:border-amber-500/50 hover:text-amber-400 transition"
+          >
+            Class {cls}
+          </a>
+        ))}
+      </div>
+
+      <!-- Dimension Tables -->
+      {classes.map(cls => {
+        const rows = generateTableRows(cls);
+        if (rows.length === 0) return null;
+        
+        return (
+          <div id={`class-${cls}`} class="mb-12 scroll-mt-24">
+            <div class="rounded-2xl border border-theme bg-theme-secondary overflow-hidden">
+              <div class="bg-theme px-6 py-4 border-b border-theme">
+                <h2 class="text-xl font-bold text-theme-primary">
+                  ASME B16.5 Class {cls} Flange Dimensions
+                </h2>
+                <p class="text-sm text-theme-secondary mt-1">
+                  All dimensions in millimeters (mm)
+                </p>
+              </div>
+              
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-theme bg-theme/50">
+                      <th class="text-left py-3 px-4 font-semibold text-theme-primary">NPS</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">OD</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">t (WN)</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">t (BL)</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">X (Hub)</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">Y (Length)</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">BCD</th>
+                      <th class="text-left py-3 px-4 font-semibold text-theme-primary">Bolts</th>
+                      <th class="text-right py-3 px-4 font-semibold text-theme-primary">RF Dia</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((row, i) => (
+                      <tr class={`border-b border-theme/30 ${i % 2 === 0 ? 'bg-theme/20' : ''}`}>
+                        <td class="py-2.5 px-4 font-medium text-theme-primary">{row.nps}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.od}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.tWn}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.tBl}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.x}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.y}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.bcd}</td>
+                        <td class="py-2.5 px-4 text-theme-secondary">{row.bolts}</td>
+                        <td class="py-2.5 px-4 text-right text-theme-secondary">{row.rfDia}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- Notes Section -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Important Notes</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-theme-secondary">
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">Dimension Definitions</h3>
+            <ul class="space-y-2 text-sm">
+              <li><strong class="text-theme-primary">OD</strong> - Flange outside diameter</li>
+              <li><strong class="text-theme-primary">t (WN)</strong> - Weld neck flange minimum ring thickness</li>
+              <li><strong class="text-theme-primary">t (BL)</strong> - Blind flange minimum thickness</li>
+              <li><strong class="text-theme-primary">X</strong> - Hub diameter at base (WN) or hub end (SO/SW/THD)</li>
+              <li><strong class="text-theme-primary">Y</strong> - Length through hub (overall length)</li>
+              <li><strong class="text-theme-primary">BCD</strong> - Bolt circle diameter</li>
+              <li><strong class="text-theme-primary">RF Dia</strong> - Raised face diameter</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-3">General Notes</h3>
+            <ul class="space-y-2 text-sm list-disc pl-4">
+              <li>Dimensions per ASME B16.5-2020</li>
+              <li>Class 900 and 1500 do not include NPS 3-1/2</li>
+              <li>Class 2500 covers NPS 1/2" through 12" only</li>
+              <li>RF height: 1.6mm for Class 150/300, 6.4mm for Class 600-2500</li>
+              <li>Bolt holes are not deducted from theoretical weights</li>
+              <li>SO/SW/THD ring thickness equals WN thickness for Class 150/300</li>
+              <li>For Class 600+, SO/SW/THD ring thickness is reduced by 3.2mm</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flange Types -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">ASME B16.5 Flange Types</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Weld Neck (WN)</h3>
+            <p class="text-sm text-theme-secondary">
+              Tapered hub design for high-pressure applications. Butt-welded to pipe for maximum strength and fatigue resistance.
+            </p>
+          </div>
+          
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Slip On (SO)</h3>
+            <p class="text-sm text-theme-secondary">
+              Slips over pipe end, then fillet welded. Easier to align than weld neck, suitable for low to medium pressure.
+            </p>
+          </div>
+          
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Blind (BL)</h3>
+            <p class="text-sm text-theme-secondary">
+              Solid disk used to block off pipe ends or valves. Bolted between two flanges for isolation.
+            </p>
+          </div>
+          
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Socket Weld (SW)</h3>
+            <p class="text-sm text-theme-secondary">
+              Pipe inserts into socket, then fillet welded. Good for small bore, high-pressure applications.
+            </p>
+          </div>
+          
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Threaded (THD)</h3>
+            <p class="text-sm text-theme-secondary">
+              Screwed connection, no welding required. Used for low-pressure, non-critical services.
+            </p>
+          </div>
+          
+          <div class="rounded-xl bg-theme p-4 border border-theme">
+            <h3 class="font-semibold text-theme-primary mb-2">Lap Joint (LJ)</h3>
+            <p class="text-sm text-theme-secondary">
+              Used with stub ends. Freely rotates for easy bolt alignment, common in lined piping systems.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Related Tools</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/flange-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Flange Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Calculate flange weight by type, class, and size</div>
+          </a>
+          <a href="/pipe-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Pipe Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Pipe weight per meter for all schedules</div>
+          </a>
+          <a href="/elbow-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Elbow Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">45° & 90° elbow weights</div>
+          </a>
+          <a href="/tee-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Tee Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Equal & reducing tee weights</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

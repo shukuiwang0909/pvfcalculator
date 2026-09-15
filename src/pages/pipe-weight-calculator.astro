@@ -1,0 +1,405 @@
+---
+import Base from "../layouts/Base.astro";
+import { PIPE_DATA, getAvailableSchedules } from "../data/pipe-dimensions";
+
+const title = "Pipe Weight Calculator | ASME B36.10M Pipe Weight per Meter";
+const description = "Free ASME B36.10M pipe weight calculator. Calculate pipe weight per meter and total weight for all NPS sizes and schedules (SCH 10-XXS). Supports carbon steel, stainless steel, and custom density.";
+const canonical = "https://pvfcalculator.com/pipe-weight-calculator/";
+
+// Build schedule options for JS
+const npsData = PIPE_DATA.map(p => ({
+  nps: p.nps,
+  label: p.label,
+  od: p.od,
+  schedules: p.schedules.filter(s => s.wallThickness > 0).map(s => ({
+    id: s.id,
+    label: s.label,
+    t: s.wallThickness,
+  })),
+}));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Pipe Weight Calculator",
+  "url": canonical,
+  "description": description,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <section class="relative overflow-hidden py-12 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-4">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full accent-bg"></span>
+          </span>
+          ASME B36.10M · Free Tool
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-theme-primary">
+          Pipe <span class="accent-text">Weight Calculator</span>
+        </h1>
+        <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto">
+          Calculate pipe weight per meter and total weight for any NPS size and schedule. 
+          Supports carbon steel, stainless steel, and custom materials.
+        </p>
+      </div>
+
+      <!-- Calculator Card -->
+      <div class="rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8 shadow-xl">
+        <form id="pipeCalc" class="space-y-6">
+          <!-- NPS Selection -->
+          <div>
+            <label for="nps" class="block text-sm font-semibold text-theme-primary mb-2">
+              Nominal Pipe Size (NPS)
+            </label>
+            <select id="nps" name="nps" class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+              {PIPE_DATA.map(p => (
+                <option value={p.nps}>{p.label} - OD {p.od}mm</option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Schedule Selection -->
+          <div>
+            <label for="schedule" class="block text-sm font-semibold text-theme-primary mb-2">
+              Pipe Schedule
+            </label>
+            <select id="schedule" name="schedule" class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <!-- Length Input -->
+          <div>
+            <label for="length" class="block text-sm font-semibold text-theme-primary mb-2">
+              Pipe Length (meters)
+            </label>
+            <input 
+              type="number" 
+              id="length" 
+              name="length" 
+              value="6" 
+              min="0.1" 
+              step="0.1"
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+            />
+          </div>
+
+          <!-- Material Selection -->
+          <div>
+            <label for="material" class="block text-sm font-semibold text-theme-primary mb-2">
+              Material
+            </label>
+            <select id="material" name="material" class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="7850">Carbon Steel (A106 / A53) - 7850 kg/m³</option>
+              <option value="8000">Stainless Steel 304 - 8000 kg/m³</option>
+              <option value="7980">Stainless Steel 316 - 7980 kg/m³</option>
+              <option value="7750">Alloy Steel (P11 / P22) - 7750 kg/m³</option>
+              <option value="2700">Aluminum - 2700 kg/m³</option>
+              <option value="custom">Custom Density</option>
+            </select>
+          </div>
+
+          <!-- Custom Density (hidden by default) -->
+          <div id="customDensityDiv" class="hidden">
+            <label for="customDensity" class="block text-sm font-semibold text-theme-primary mb-2">
+              Custom Density (kg/m³)
+            </label>
+            <input 
+              type="number" 
+              id="customDensity" 
+              name="customDensity" 
+              value="7850" 
+              min="100" 
+              max="25000"
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+            />
+          </div>
+
+          <!-- Calculate Button -->
+          <button 
+            type="submit" 
+            class="w-full accent-bg hover:opacity-90 rounded-xl px-8 py-4 text-sm font-bold shadow-lg transition"
+            style="color: #07090c;"
+          >
+            Calculate Pipe Weight
+          </button>
+        </form>
+
+        <!-- Results Section -->
+        <div id="results" class="mt-8 pt-8 border-t border-theme hidden">
+          <h3 class="text-xl font-bold text-theme-primary mb-4">Calculation Results</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Pipe Specs -->
+            <div class="rounded-xl bg-theme p-4 border border-theme">
+              <div class="text-sm text-theme-secondary mb-1">Pipe Specifications</div>
+              <div class="text-lg font-semibold text-theme-primary" id="resultSpecs">-</div>
+              <div class="text-sm text-theme-secondary mt-1" id="resultDims">-</div>
+            </div>
+
+            <!-- Weight per Meter -->
+            <div class="rounded-xl bg-theme p-4 border border-theme">
+              <div class="text-sm text-theme-secondary mb-1">Weight per Meter</div>
+              <div class="text-2xl font-bold accent-text" id="resultWeightPerM">-</div>
+              <div class="text-sm text-theme-secondary">kg/m</div>
+            </div>
+
+            <!-- Total Weight -->
+            <div class="rounded-xl bg-theme p-4 border border-theme sm:col-span-2">
+              <div class="text-sm text-theme-secondary mb-1">Total Weight</div>
+              <div class="flex items-baseline gap-4">
+                <div class="text-3xl font-bold accent-text" id="resultTotalKg">-</div>
+                <div class="text-xl text-theme-secondary" id="resultTotalLb">-</div>
+              </div>
+            </div>
+
+            <!-- Volume -->
+            <div class="rounded-xl bg-theme p-4 border border-theme sm:col-span-2">
+              <div class="text-sm text-theme-secondary mb-1">Metal Volume</div>
+              <div class="text-lg font-semibold text-theme-primary" id="resultVolume">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Use -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">How to Calculate Pipe Weight</h2>
+        <div class="prose prose-invert max-w-none text-theme-secondary">
+          <p class="mb-4">
+            Pipe weight is calculated using the cylindrical shell formula. The weight depends on the 
+            outside diameter (OD), wall thickness (t), length, and material density.
+          </p>
+          
+          <h3 class="text-lg font-semibold text-theme-primary mt-6 mb-3">Formula</h3>
+          <div class="rounded-lg bg-theme p-4 border border-theme mb-4">
+            <code class="text-amber-400">
+              W = (OD - t) × t × 0.02466 × L
+            </code>
+            <div class="text-sm text-theme-secondary mt-2">
+              Where: W = weight (kg), OD = outside diameter (mm), t = wall thickness (mm), L = length (m)
+            </div>
+          </div>
+
+          <h3 class="text-lg font-semibold text-theme-primary mt-6 mb-3">Example Calculation</h3>
+          <p class="mb-2">
+            For a 6" SCH 40 carbon steel pipe, 12 meters long:
+          </p>
+          <ul class="list-disc pl-6 mb-4 space-y-1">
+            <li>OD = 168.3 mm</li>
+            <li>Wall thickness (SCH 40) = 7.11 mm</li>
+            <li>Length = 12 m</li>
+            <li>Density = 7850 kg/m³</li>
+          </ul>
+          <p class="mb-4">
+            <strong class="text-theme-primary">Result:</strong> ~28.3 kg per meter, ~339.6 kg total for 12 meters.
+          </p>
+
+          <h3 class="text-lg font-semibold text-theme-primary mt-6 mb-3">Common Pipe Schedules</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-theme">
+                  <th class="text-left py-2 text-theme-primary">Schedule</th>
+                  <th class="text-left py-2 text-theme-primary">Description</th>
+                </tr>
+              </thead>
+              <tbody class="text-theme-secondary">
+                <tr class="border-b border-theme/50">
+                  <td class="py-2 font-medium">STD</td>
+                  <td class="py-2">Standard - same as SCH 40 for NPS ≤ 10"</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="py-2 font-medium">XS</td>
+                  <td class="py-2">Extra Strong - same as SCH 80 for NPS ≤ 8"</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="py-2 font-medium">XXS</td>
+                  <td class="py-2">Double Extra Strong</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="py-2 font-medium">SCH 10 / 20 / 30</td>
+                  <td class="py-2">Light wall schedules</td>
+                </tr>
+                <tr class="border-b border-theme/50">
+                  <td class="py-2 font-medium">SCH 40 / 60 / 80 / 100 / 120 / 140 / 160</td>
+                  <td class="py-2">Heavy wall schedules</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+        
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">What is the difference between STD, XS, and SCH 40?</h3>
+            <p class="text-theme-secondary">
+              For NPS 1/8" through 10", STD (Standard) has the same wall thickness as SCH 40. 
+              For NPS 12" and larger, STD wall is thinner than SCH 40. XS (Extra Strong) equals SCH 80 
+              for NPS 8" and smaller, but is thicker than SCH 80 for larger sizes.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">How accurate is this pipe weight calculator?</h3>
+            <p class="text-theme-secondary">
+              This calculator uses the exact ASME B36.10M dimensions and the theoretical formula. 
+              Actual weight may vary slightly due to manufacturing tolerances (typically ±5-10%). 
+              Always verify critical weights with actual measurements for shipping and structural calculations.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">What is the density of carbon steel pipe?</h3>
+            <p class="text-theme-secondary">
+              Standard carbon steel (A106, A53, A105) has a density of approximately 7850 kg/m³ (0.284 lb/in³). 
+              Stainless steel 304 is about 8000 kg/m³, and stainless 316 is about 7980 kg/m³.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-theme-primary mb-2">Can I calculate weight for custom materials?</h3>
+            <p class="text-theme-secondary">
+              Yes. Select "Custom Density" from the material dropdown and enter your material's density 
+              in kg/m³. This is useful for alloy steels, aluminum, copper, or plastic pipes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Related Calculators</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <a href="/flange-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Flange Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Weld neck, slip on, blind, socket weld & threaded</div>
+          </a>
+          <a href="/elbow-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Elbow Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">45° & 90° long radius and short radius</div>
+          </a>
+          <a href="/tee-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Tee Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Equal & reducing butt-weld tees</div>
+          </a>
+          <a href="/reducer-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Reducer Weight Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Concentric & eccentric reducers</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ npsData }}>
+    // Pipe data embedded from server
+    const PIPE_NPS_DATA = npsData;
+    
+    // DOM elements
+    const npsSelect = document.getElementById('nps');
+    const scheduleSelect = document.getElementById('schedule');
+    const materialSelect = document.getElementById('material');
+    const customDensityDiv = document.getElementById('customDensityDiv');
+    const customDensityInput = document.getElementById('customDensity');
+    const form = document.getElementById('pipeCalc');
+    const resultsDiv = document.getElementById('results');
+
+    // Populate schedules when NPS changes
+    function updateSchedules() {
+      const nps = parseFloat(npsSelect.value);
+      const pipeData = PIPE_NPS_DATA.find(p => p.nps === nps);
+      
+      scheduleSelect.innerHTML = '';
+      if (pipeData) {
+        pipeData.schedules.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.label} - ${s.t}mm`;
+          scheduleSelect.appendChild(opt);
+        });
+      }
+    }
+
+    // Handle material change
+    function handleMaterialChange() {
+      if (materialSelect.value === 'custom') {
+        customDensityDiv.classList.remove('hidden');
+      } else {
+        customDensityDiv.classList.add('hidden');
+      }
+    }
+
+    // Calculate
+    function calculate(e) {
+      e.preventDefault();
+      
+      const nps = parseFloat(npsSelect.value);
+      const scheduleId = scheduleSelect.value;
+      const length = parseFloat(document.getElementById('length').value) || 0;
+      
+      let density;
+      if (materialSelect.value === 'custom') {
+        density = parseFloat(customDensityInput.value) || 7850;
+      } else {
+        density = parseFloat(materialSelect.value);
+      }
+
+      const pipeData = PIPE_NPS_DATA.find(p => p.nps === nps);
+      if (!pipeData || length <= 0) return;
+
+      const sched = pipeData.schedules.find(s => s.id === scheduleId);
+      if (!sched) return;
+
+      const od = pipeData.od;
+      const t = sched.t;
+      const id = od - 2 * t;
+      
+      // Calculate
+      const areaMm2 = (Math.PI / 4) * (od * od - id * id);
+      const volumeM3PerM = areaMm2 * 1000 * 1e-9;
+      const weightPerMeter = volumeM3PerM * density;
+      const totalWeight = weightPerMeter * length;
+      const totalWeightLb = totalWeight * 2.20462;
+      const volumeM3 = volumeM3PerM * length;
+
+      // Display results
+      document.getElementById('resultSpecs').textContent = 
+        `${pipeData.label} ${sched.label} Pipe`;
+      document.getElementById('resultDims').textContent = 
+        `OD: ${od}mm × WT: ${t}mm × ID: ${id.toFixed(1)}mm`;
+      document.getElementById('resultWeightPerM').textContent = 
+        weightPerMeter.toFixed(2);
+      document.getElementById('resultTotalKg').textContent = 
+        `${totalWeight.toFixed(1)} kg`;
+      document.getElementById('resultTotalLb').textContent = 
+        `(${totalWeightLb.toFixed(1)} lb)`;
+      document.getElementById('resultVolume').textContent = 
+        `${volumeM3.toFixed(4)} m³`;
+
+      resultsDiv.classList.remove('hidden');
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Event listeners
+    npsSelect.addEventListener('change', updateSchedules);
+    materialSelect.addEventListener('change', handleMaterialChange);
+    form.addEventListener('submit', calculate);
+
+    // Initialize
+    updateSchedules();
+  </script>
+</Base>

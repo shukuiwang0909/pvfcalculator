@@ -1,0 +1,350 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Request a Quote | PVF Calculator";
+const description = "Request a quotation for ASME B16.5 flanges, ASME B16.9 pipe fittings, and custom PVF products. Fast response from qualified manufacturers.";
+const canonical = "https://pvfcalculator.com/request-a-quote/";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Request a Quote - PVF Calculator",
+  "description": description,
+  "url": canonical,
+};
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <section class="relative overflow-hidden py-12 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-theme bg-theme-secondary px-4 py-1.5 text-sm font-medium text-theme-secondary mb-4">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full accent-bg"></span>
+          </span>
+          Fast Response · Competitive Pricing
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-theme-primary">
+          Request a <span class="accent-text">Quote</span>
+        </h1>
+        <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto">
+          Get competitive pricing for ASME flanges, pipe fittings, and custom PVF products. 
+          Fill out the form below and we'll connect you with qualified manufacturers.
+        </p>
+      </div>
+
+      <!-- Quote Form -->
+      <div class="rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8 shadow-xl">
+        <form id="quoteForm" class="space-y-6">
+          <!-- Contact Info -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-semibold text-theme-primary mb-2">
+                Your Name *
+              </label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="John Smith"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-semibold text-theme-primary mb-2">
+                Email Address *
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="john@company.com"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="company" class="block text-sm font-semibold text-theme-primary mb-2">
+                Company Name
+              </label>
+              <input 
+                type="text" 
+                id="company" 
+                name="company" 
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="ABC Trading Co."
+              />
+            </div>
+            <div>
+              <label for="country" class="block text-sm font-semibold text-theme-primary mb-2">
+                Country / Region
+              </label>
+              <input 
+                type="text" 
+                id="country" 
+                name="country" 
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="United States"
+              />
+            </div>
+          </div>
+
+          <!-- Product Type -->
+          <div>
+            <label class="block text-sm font-semibold text-theme-primary mb-3">
+              Product Type *
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="flanges" class="accent-radio" />
+                <span class="text-theme-primary">Flanges</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="elbows" class="accent-radio" />
+                <span class="text-theme-primary">Elbows</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="tees" class="accent-radio" />
+                <span class="text-theme-primary">Tees</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="reducers" class="accent-radio" />
+                <span class="text-theme-primary">Reducers</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="pipe" class="accent-radio" />
+                <span class="text-theme-primary">Pipe</span>
+              </label>
+              <label class="flex items-center gap-2 rounded-lg border border-theme bg-theme px-4 py-3 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" name="product" value="custom" class="accent-radio" />
+                <span class="text-theme-primary">Custom</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Specifications -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label for="standard" class="block text-sm font-semibold text-theme-primary mb-2">
+                Standard
+              </label>
+              <select id="standard" name="standard" class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Select Standard</option>
+                <option value="asme-b16-5">ASME B16.5 (Flanges)</option>
+                <option value="asme-b16-9">ASME B16.9 (Fittings)</option>
+                <option value="asme-b16-47">ASME B16.47 (Large Flanges)</option>
+                <option value="en-1092">EN 1092 (European)</option>
+                <option value="jis">JIS (Japanese)</option>
+                <option value="custom">Custom / Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="material" class="block text-sm font-semibold text-theme-primary mb-2">
+                Material
+              </label>
+              <select id="material" name="material" class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Select Material</option>
+                <option value="a105">Carbon Steel A105</option>
+                <option value="a106">Carbon Steel A106</option>
+                <option value="304">Stainless 304 / 304L</option>
+                <option value="316">Stainless 316 / 316L</option>
+                <option value="alloy">Alloy Steel (F11, F22, F91)</option>
+                <option value="custom">Custom Material</option>
+              </select>
+            </div>
+            <div>
+              <label for="quantity" class="block text-sm font-semibold text-theme-primary mb-2">
+                Estimated Quantity
+              </label>
+              <input 
+                type="text" 
+                id="quantity" 
+                name="quantity" 
+                class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="e.g., 100 pcs"
+              />
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div>
+            <label for="message" class="block text-sm font-semibold text-theme-primary mb-2">
+              Additional Details
+            </label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="4"
+              class="w-full rounded-lg border border-theme bg-theme px-4 py-3 text-theme-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="Please include sizes, classes, schedules, delivery terms, or any special requirements..."
+            ></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button 
+            type="submit" 
+            class="w-full accent-bg hover:opacity-90 rounded-xl px-8 py-4 text-sm font-bold shadow-lg transition"
+            style="color: #07090c;"
+          >
+            Submit Quote Request
+          </button>
+
+          <p class="text-sm text-theme-secondary text-center">
+            We'll respond within 24 hours with pricing and lead time information.
+          </p>
+        </form>
+
+        <!-- Success Message (hidden) -->
+        <div id="successMessage" class="hidden mt-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+          <div class="flex items-center gap-3">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+              <div class="font-semibold text-theme-primary">Quote Request Submitted</div>
+              <div class="text-sm text-theme-secondary">Thank you! We'll be in touch shortly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What Happens Next -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">What Happens Next?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-full accent-bg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-2xl font-bold" style="color: #07090c;">1</span>
+            </div>
+            <h3 class="font-semibold text-theme-primary mb-2">Review</h3>
+            <p class="text-sm text-theme-secondary">
+              Our team reviews your requirements and confirms specifications with manufacturers.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-full accent-bg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-2xl font-bold" style="color: #07090c;">2</span>
+            </div>
+            <h3 class="font-semibold text-theme-primary mb-2">Quote</h3>
+            <p class="text-sm text-theme-secondary">
+              Receive competitive pricing with lead times, MOQ, and shipping options.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-full accent-bg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-2xl font-bold" style="color: #07090c;">3</span>
+            </div>
+            <h3 class="font-semibold text-theme-primary mb-2">Delivery</h3>
+            <p class="text-sm text-theme-secondary">
+              Confirm your order and track production through to delivery at your facility.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why Choose Us -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Why Request Quotes Through Us?</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+              <div class="font-semibold text-theme-primary">Verified Manufacturers</div>
+              <div class="text-sm text-theme-secondary">We work with qualified ASME-certified factories</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+              <div class="font-semibold text-theme-primary">Competitive Pricing</div>
+              <div class="text-sm text-theme-secondary">Direct factory pricing without middlemen</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <div>
+              <div class="font-semibold text-theme-primary">Fast Response</div>
+              <div class="text-sm text-theme-secondary">Quotes within 24 hours for standard items</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <div>
+              <div class="font-semibold text-theme-primary">Quality Assurance</div>
+              <div class="text-sm text-theme-secondary">MTRs, PMI testing, and third-party inspection available</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12 rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Need to Calculate Weights First?</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/flange-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Flange Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Calculate flange weights</div>
+          </a>
+          <a href="/pipe-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Pipe Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Calculate pipe weights</div>
+          </a>
+          <a href="/elbow-weight-calculator/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Elbow Calculator</div>
+            <div class="text-sm text-theme-secondary mt-1">Calculate elbow weights</div>
+          </a>
+          <a href="/asme-b16-5-flange-dimensions/" class="block rounded-xl bg-theme p-4 border border-theme hover:border-amber-500/50 transition group">
+            <div class="font-semibold text-theme-primary group-hover:text-amber-400 transition">Dimension Charts</div>
+            <div class="text-sm text-theme-secondary mt-1">ASME B16.5 dimensions</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Simple form handling
+    document.getElementById('quoteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Get selected products
+      const products = [];
+      document.querySelectorAll('input[name="product"]:checked').forEach(cb => {
+        products.push(cb.value);
+      });
+      
+      // Here you would normally send to your backend
+      // For now, just show success message
+      console.log('Quote request:', { ...data, products });
+      
+      // Hide form, show success
+      this.style.display = 'none';
+      document.getElementById('successMessage').classList.remove('hidden');
+    });
+  </script>
+</Base>
