@@ -1,0 +1,213 @@
+---
+import Base from "../layouts/Base.astro";
+import FaqJsonLd from "../components/FaqJsonLd.astro";
+
+const title = "Cangzhou Flange Manufacturers & Pipe Fitting Suppliers | Hebei, China";
+const description =
+  "Cangzhou, Hebei is China's largest concentration of flange and pipe fitting manufacturers. Learn about the Mengcun and Yanshan industrial clusters, product range, certifications, and how to source from verified factories.";
+const canonical = "https://pvfcalculator.com/cangzhou-flange-manufacturers/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Cangzhou Flange Manufacturers", url: "/cangzhou-flange-manufacturers/" },
+];
+const faqItems = [
+  {
+    question: "Why is Cangzhou famous for flanges and pipe fittings?",
+    answer: "Cangzhou, and specifically Mengcun County, has been producing carbon steel flanges since the 1970s. Decades of cluster development means the full supply chain — forging, machining, heat treatment, testing, and export documentation — is concentrated within a 30 km radius, driving down costs and lead times.",
+  },
+  {
+    question: "What standards do Cangzhou manufacturers produce to?",
+    answer: "Most established Cangzhou factories produce to ASME B16.5 and B16.47 (flanges), ASME B16.9 (buttweld fittings), EN 1092-1, DIN standards, and JIS B2220. Many hold ISO 9001, PED (EU), and CRN (Canada) certifications. Always confirm the specific standard and edition in your purchase order.",
+  },
+  {
+    question: "What materials are available from Cangzhou suppliers?",
+    answer: "Carbon steel (ASTM A105, A234 WPB, A516), stainless steel (304, 304L, 316, 316L, 321), alloy steel (A182 F11, F22, F91, F5), and duplex grades (F51, F53) are all commonly manufactured. Carbon steel dominates volume; exotic alloys are available but require careful mill verification.",
+  },
+  {
+    question: "How do I verify a Cangzhou factory's certifications?",
+    answer: "Request ISO 9001 certificates directly with the certificate number, then verify against the issuing body's online database (e.g., Bureau Veritas, SGS, TÜV). For ASME stamps, verify through the ASME manufacturer's directory at asme.org. Always include third-party inspection (SGS, Bureau Veritas, Intertek) in your PO for first orders.",
+  },
+  {
+    question: "What is the typical lead time for flanges from Cangzhou?",
+    answer: "Standard carbon steel flanges in ASME B16.5 Class 150–900: 3–6 weeks ex-works for common sizes. High-pressure Class 1500/2500, large bore (16\"+), or exotic alloys: 6–12 weeks. Container loading and sea freight to European or US ports typically adds 25–35 days.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Cangzhou Flange Manufacturers</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        Cangzhou <span class="accent-text">Flange Manufacturers</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        China's largest flange and pipe fitting production cluster — Mengcun County, Cangzhou, Hebei — manufactures ASME B16.5, B16.9, and EN 1092 products for export worldwide. Here's what buyers need to know.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Why Cangzhou -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">The Cangzhou–Mengcun PVF Cluster</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Mengcun County, within Cangzhou City in Hebei Province, is recognized internationally as China's primary hub for carbon steel flange and pipe fitting manufacturing. The cluster accounts for an estimated 60–70% of China's flange export volume and a significant share of global ASME B16.5 supply for the NPS ½"–24" range.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Nearby Yanshan County (also Cangzhou) specializes in buttweld fittings — elbows, tees, reducers, caps — primarily to ASME B16.9. Together these two counties represent a vertically integrated supply chain that has been refined over 50 years of export-oriented production.
+        </p>
+        <div class="grid sm:grid-cols-3 gap-4 mt-6">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">500+</div>
+            <div class="text-sm text-theme-secondary">Registered flange and fitting factories in Mengcun–Yanshan</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">50+ yrs</div>
+            <div class="text-sm text-theme-secondary">Export-oriented manufacturing history</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">NPS ½–60</div>
+            <div class="text-sm text-theme-secondary">Size range covered across the cluster</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Products Manufactured</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Flanges (Mengcun)</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Weld Neck (WN) — ASME B16.5 / B16.47</li>
+              <li>Slip On (SO)</li>
+              <li>Blind (BL)</li>
+              <li>Socket Weld (SW)</li>
+              <li>Threaded (TH)</li>
+              <li>Lap Joint (LJ)</li>
+              <li>Orifice, Reducing, Long Weld Neck (specialty)</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Pipe Fittings (Yanshan)</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>90° and 45° LR / SR Elbows — ASME B16.9</li>
+              <li>Equal and Reducing Tees</li>
+              <li>Concentric and Eccentric Reducers</li>
+              <li>Pipe Caps</li>
+              <li>Stub Ends (Lap Joint Ends)</li>
+              <li>MSS SP-75 high-yield fittings for oil & gas</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Standards Covered</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>ASME B16.5 (flanges NPS ½–24, Class 150–2500)</li>
+              <li>ASME B16.47 (large flanges NPS 26–60)</li>
+              <li>ASME B16.9 (buttweld fittings)</li>
+              <li>EN 1092-1 / DIN 2631–2638</li>
+              <li>JIS B2220</li>
+              <li>BS 4504</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Materials Available</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Carbon steel: A105, A234 WPB, A516 Gr.70</li>
+              <li>Stainless: 304/304L, 316/316L, 321, 347</li>
+              <li>Alloy steel: F11, F22, F91, F5, F9</li>
+              <li>Duplex / super duplex: F51, F53, F55, F60</li>
+              <li>Nickel alloys (selected factories): Inconel, Hastelloy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sourcing considerations -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">What to Verify Before Ordering</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">1. Certifications and Scope</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Request the factory's ISO 9001 certificate and check the scope — a factory certified "for flanges to Class 600" is not automatically certified for Class 2500. For PED (EU Pressure Equipment Directive) compliance, verify the CE Declaration of Conformity and notified body involvement for Category II/III equipment.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">2. Material Traceability</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Specify that Mill Test Reports (MTRs) accompany every heat/lot and include heat number, chemical analysis, mechanical properties, and heat treatment records. Chinese factories can and do produce proper MTRs — but only if your PO explicitly requires them with applicable standard reference (ASTM A961 for flanges).</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">3. Dimensional and Visual Inspection</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Third-party pre-shipment inspection (SGS, Bureau Veritas, Intertek) should include dimensional check against ASME B16.5/B16.9 tables, hardness testing, visual inspection per MSS SP-55, and marking verification. Budget $400–800 per inspection for a standard container lot.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">4. Correct Incoterms and Packaging</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">FOB Tianjin or FOB Qingdao are the standard terms from Cangzhou-area factories. Ensure pipe end protection caps and anti-rust treatment are included in the packing spec — carbon steel flanges can corrode significantly during 30-day sea transit without proper protection.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Request a Quote from Cangzhou Suppliers</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Use our weight calculators to generate accurate specifications, then submit an inquiry. We work with verified Cangzhou-area factories for ASME B16.5 flanges and B16.9 fittings.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Request a Quote →
+          </a>
+          <a href="/flange-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Flange Weight Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Tools & Resources</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/flange-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Weight Calculator</a>
+          <a href="/asme-b16-5-flange-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">ASME B16.5 Dimensions</a>
+          <a href="/pipe-schedule-chart/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Schedule Chart</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

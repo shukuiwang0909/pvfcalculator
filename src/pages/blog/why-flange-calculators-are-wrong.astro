@@ -1,0 +1,235 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "Why Most Online Flange Weight Calculators Give Wrong Results";
+const description =
+  "Most flange weight calculators online are wrong — sometimes by 10x or more. Here's why, and how ASME B16.5 geometric modeling fixes it.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-07-28",
+  dateModified: "2026-07-28",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/why-flange-calculators-are-wrong/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Why Flange Calculators Are Wrong", url: "/blog/why-flange-calculators-are-wrong/" },
+];
+const faqItems = [
+  {
+    question: "How accurate is a flange weight calculator?",
+    answer: "A geometrically correct calculator using ASME B16.5 dimensions typically matches mill theoretical weight within ±3–5%. Flat-plate calculators are commonly off 15–50%, and worst-case unit errors can reach 10x.",
+  },
+  {
+    question: "Why do different calculators give different flange weights?",
+    answer: "Different underlying dimension data, different geometric models (with or without hub/raised face), different unit handling, and different density assumptions. Two calculators rarely disagree 'a little' for the same reason.",
+  },
+  {
+    question: "Is the flange weight on a supplier invoice reliable?",
+    answer: "Usually — manufacturers compute from actual B16.5 dimensions. Verify it with a geometric calculator; if yours disagrees by more than a few percent, one of you is using the wrong model.",
+  },
+  {
+    question: "Does flange material affect the weight?",
+    answer: "Yes — weight scales with density. A105 carbon steel (~7.85 g/cm³) vs. 316L stainless (~7.95–8.0 g/cm³) differs ~1.5%. Nickel alloys can differ more. A good calculator lets you select the material.",
+  },
+  {
+    question: "What about ASME B16.47 (large diameter) flanges?",
+    answer: "Series A and B flanges (NPS 26+) use different tables. Most lightweight calculators don't cover them at all; ensure your tool supports the applicable series.",
+  },
+  {
+    question: "What's the tolerance on theoretical flange weight?",
+    answer: "Allow ±3–5% for mill tolerances, bore variation, and machining. Use theoretical weight for freight and reconciliation; use certified scale weights for customs-critical declarations.",
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/flange-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Why Flange Calculators Are Wrong</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Why Most Online <span class="accent-text">Flange Weight Calculators</span> Give Wrong Results
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Most flange weight calculators on the internet are built on the same three shortcuts, and those shortcuts break in predictable ways. Here's exactly where the errors come from, why they can reach 10x, and what a properly engineered calculator actually looks like under the hood.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: July 28, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">The Problem: Two Calculators, Two Answers</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Run a quick experiment. Take an ASME B16.5 welding neck flange, 8" Class 600, and ask three different online calculators what it weighs. You'll typically get three answers spread over a range of several kilograms — sometimes more. All three claim to be "accurate." None of them show their work.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The commercial stakes are real: freight is quoted per kilogram, customs declarations require accurate gross weights, and supplier invoices often reference "theoretical weight." <strong class="text-theme-primary">Flange weight accuracy isn't a theoretical nicety — it's a procurement control point.</strong>
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">Short answer:</strong> a real flange is not a flat plate. It is a multi-volume solid — disc, hub, raised face, bolt ring, chamfers — defined by 15+ dimensions in ASME B16.5. Calculators that model it as a flat annular plate, mix up imperial and metric units, or ignore the welding neck geometry will be wrong, and the error grows with flange size and class rating.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #1: The Flat Plate Approximation</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The most common shortcut is modeling the flange as an annular disc:
+        </p>
+        <div class="glass rounded-xl p-4 font-mono text-sm text-theme-secondary mb-4">
+          Weight = π/4 × (OD² − ID²) × thickness × density
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          This formula appears in hundreds of "flange weight calculators" and in Excel sheets passed around for decades. It's not wrong as arithmetic — it's wrong as geometry. A welding neck flange has at least five distinct volumes:
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li><strong class="text-theme-primary">The flange disc</strong> (the annular plate the formula does capture)</li>
+          <li><strong class="text-theme-primary">The hub/welding neck</strong> — a tapered conical frustum that connects the disc to the pipe</li>
+          <li><strong class="text-theme-primary">The raised face</strong> — an additional cylindrical ring machined onto the sealing surface</li>
+          <li><strong class="text-theme-primary">The bore</strong> — which the disc formula subtracts, but often with the wrong diameter</li>
+          <li><strong class="text-theme-primary">Chamfers and fillets</strong> — small, but they add up at larger sizes</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          The hub alone is the biggest miss. On a 12" Class 300 WN flange, the tapered neck can account for 25–40% of total weight. Ignore it and you're under-reporting by a third before any other error is introduced.
+        </p>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3 text-theme-primary">Why 10x Errors Happen</h3>
+        <ul class="space-y-3 text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Diameter squared, wrong units.</strong> Use inches instead of millimeters and the area is off by a factor of 645. Even a "minor" unit mix-up, partially corrected, leaves results 5–15x out.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">OD vs. bolt circle confusion.</strong> Some calculators use the bolt circle diameter as "OD." On large flanges the difference is 10–15% per dimension — squared, that's 20–30% before anything else.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Wrong class rating tables.</strong> Flange dimensions change significantly between Class 150 and 2500. Calculators that apply a generic thickness formula can be catastrophically off at high pressure classes.</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #2: Missing or Generic Dimension Data</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A serious flange weight calculator needs real per-size, per-class dimension data — not formulas fitted to a trend line.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          ASME B16.5 defines the governing dimensions for each NPS and pressure class combination: outside diameter, bore diameter, flange thickness (C), overall length through hub (O), hub diameter at base (X) and at the weld point (A), raised face diameter and height. That's roughly 10 dimensions per flange, and they are <strong class="text-theme-primary">not</strong> linearly related to nominal pipe size.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">The fix is boring and correct: hard-code the actual ASME B16.5 tables.</strong> Every NPS, every class, every flange type. If the calculator can't show you the dimensions it used, it probably doesn't have them.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #3: Unit Conversion Done Sloppily</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Steel density is 7.85 g/cm³ — or 0.283 lb/in³ — or 7850 kg/m³. All three are the same material. Many calculators fail at this exact step.
+        </p>
+        <div class="glass rounded-xl p-4 space-y-2 text-sm text-theme-secondary mb-4">
+          <p><strong class="text-theme-primary">Common failure modes:</strong></p>
+          <ul class="list-disc list-inside space-y-1">
+            <li>Inch-based geometry, metric density — the result is meaningless</li>
+            <li>Rounded conversion factors that introduce a fixed 1–2% error, multiplied across thousands of flanges</li>
+            <li>lb vs. lbf vs. kg vs. tonne confusion — in international trade, a "ton" can mean 1,000 kg, 2,000 lb, or 2,240 lb</li>
+          </ul>
+        </div>
+        <p class="text-theme-secondary leading-relaxed">
+          A rigorous calculator computes volume in a single consistent unit system (SI — millimeters and kilograms), applies density once, and only converts at the display layer — never mid-calculation.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Real Consequences: A Concrete Example</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Say you're procuring 200 pieces of a 10" Class 600 WN flange in A105 carbon steel. True weight is approximately 65–70 kg per flange. The flat-plate approximation ignoring the hub typically yields 40–48 kg.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          An under-reported calculator leaves you believing the shipment weighs ~9–10 tonnes when it's closer to 13–14 tonnes. Consequences cascade:
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary">
+          <li>Freight under-budgeted by 30%+ — your logistics team quotes a container that won't close</li>
+          <li>Customs mismatch — declared gross weight inconsistent with manifest; shipment held</li>
+          <li>Invoice reconciliation fights — supplier bills on real dimensions; you audit against a number that was never real</li>
+          <li>Structural/handling plans built on wrong flange weights — a safety issue, not just commercial</li>
+        </ol>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">What Accurate Looks Like: Geometric Modeling</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A proper calculation decomposes the flange into primitives and sums the volumes:
+        </p>
+        <div class="glass rounded-xl p-4 font-mono text-sm text-theme-secondary space-y-1 mb-4">
+          <p>V_disc = π/4 × (OD² − B²) × C</p>
+          <p>V_hub = (π/12) × L_hub × (D_base² + D_base × D_weld + D_weld²)</p>
+          <p>V_raised_face = π/4 × (R² − B²) × RF_height</p>
+          <p>Weight = (V_disc + V_hub + V_raised_face) × ρ_steel</p>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The critical properties of this approach:
+        </p>
+        <ul class="space-y-2 text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">1.</span><span><strong class="text-theme-primary">Dimension-driven, not formula-driven.</strong> Every number comes from an ASME B16.5 table entry.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">2.</span><span><strong class="text-theme-primary">Per-type modeling.</strong> A blind flange, a slip-on, and a welding neck are three different solids — not one plate with different labels.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">3.</span><span><strong class="text-theme-primary">Single-unit discipline.</strong> All geometry in mm, density in g/cm³, result in kg; imperial output by exact conversion only.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">4.</span><span><strong class="text-theme-primary">Disclosed tolerance.</strong> Results stated as theoretical weight with an explicit ±3–5% tolerance, not false-precision exact figures.</span></li>
+        </ul>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Try an Accurate Flange Weight Calculator</h2>
+        <p class="text-theme-secondary mb-6">
+          Full ASME B16.5 geometric modeling: disc + conical hub + raised face. Every NPS, every pressure class, every flange type.
+        </p>
+        <a href="/flange-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Open Flange Weight Calculator →
+        </a>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/flange-weight-chart-errors/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Weight Chart Errors Audit</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/pipe-fitting-weight-calculator-comparison/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Fitting Calculator Comparison</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

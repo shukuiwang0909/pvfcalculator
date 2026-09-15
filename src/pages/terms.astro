@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Terms of Use | PVF Calculator";
+const description = "Terms of use for pvfcalculator.com — acceptable use, disclaimers, and intellectual property.";
+const canonical = "https://pvfcalculator.com/terms/";
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Terms of Use", url: "/terms/" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems}>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Terms of Use</span>
+      </nav>
+
+      <h1 class="text-3xl font-bold text-theme-primary mb-2">Terms of Use</h1>
+      <p class="text-sm text-theme-muted mb-10">Last updated: September 15, 2026</p>
+
+      <div class="space-y-8 text-theme-secondary leading-relaxed">
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">1. Acceptance of Terms</h2>
+          <p>By accessing or using pvfcalculator.com ("the Site"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Site.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">2. Purpose and Use of Calculators</h2>
+          <p class="mb-3">The calculators provided on this Site are intended as <strong class="text-theme-primary">engineering estimation tools</strong> based on published ASME standards (B16.5, B16.9, B36.10M). Results are theoretical weights and dimensions computed from standard dimensional data.</p>
+          <p>Calculator results are provided for:</p>
+          <ul class="list-disc list-inside space-y-1 mt-2">
+            <li>Preliminary engineering estimates and budgeting</li>
+            <li>Freight and logistics planning</li>
+            <li>Sanity-checking supplier invoices and quotations</li>
+            <li>Educational and reference purposes</li>
+          </ul>
+          <p class="mt-3">Results must <strong class="text-theme-primary">not</strong> be used as a substitute for certified manufacturer data, certified material test reports (MTRs), or professional engineering sign-off for safety-critical applications.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">3. Accuracy Disclaimer</h2>
+          <p>While we strive for accuracy, calculated results are <strong class="text-theme-primary">theoretical estimates</strong> subject to manufacturing tolerances, mill variation, and the specific edition of the ASME standard in use. Typical accuracy is ±3–5% of actual manufactured weights. We do not warrant that results are error-free or suitable for any specific engineering application.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">4. Intellectual Property</h2>
+          <p>The Site's design, content (excluding ASME standard data which is subject to ASME copyright), code, and original text are the intellectual property of PVF Calculator. You may not reproduce, distribute, or create derivative works without written permission, except for fair use quotation with attribution.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">5. Prohibited Uses</h2>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Automated scraping or bulk extraction of calculation results</li>
+            <li>Using calculator output in safety-critical structural or pressure system design without independent professional engineering review</li>
+            <li>Misrepresenting PVF Calculator as an endorsement or certification of any product or manufacturer</li>
+            <li>Any use that violates applicable laws or regulations</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">6. Third-Party Links and Manufacturers</h2>
+          <p>The Site may link to third-party manufacturer websites or refer users to manufacturers in response to quote requests. We do not endorse, verify, or warranty any third-party manufacturer's products, quality, or representations. Users must independently verify manufacturer qualifications and certifications.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">7. Limitation of Liability</h2>
+          <p>To the maximum extent permitted by applicable law, PVF Calculator shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Site or reliance on calculator results, including but not limited to freight cost disputes, procurement errors, or engineering decisions.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">8. Changes to Terms</h2>
+          <p>We may update these Terms at any time. Continued use of the Site following a change constitutes acceptance of the revised Terms.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">9. Governing Law</h2>
+          <p>These Terms are governed by applicable law. Disputes shall be resolved through good-faith negotiation before any formal proceedings.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Base>

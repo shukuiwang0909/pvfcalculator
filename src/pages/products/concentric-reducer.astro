@@ -1,0 +1,132 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "ASME B16.9 Concentric & Eccentric Reducer — Buttweld Pipe Reducer";
+const description =
+  "ASME B16.9 buttweld concentric and eccentric reducers. NPS ½\"–48\", all schedules. Dimensions, materials, applications, and free weight calculator.";
+const canonical = "https://pvfcalculator.com/products/concentric-reducer/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "ASME B16.9 Pipe Reducer",
+  description,
+  url: canonical,
+  brand: { "@type": "Organization", name: "PVF Calculator" },
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Products", url: "/products/" },
+  { name: "Pipe Reducer", url: "/products/concentric-reducer/" },
+];
+const faqItems = [
+  {
+    question: "What is the difference between a concentric and eccentric reducer?",
+    answer: "A concentric reducer has both ends centered on the same axis — the transition is symmetrical. An eccentric reducer has one flat side, so the centerlines of the two ends are offset. Eccentric reducers are used in horizontal pump suction lines to avoid air pockets (flat side up) and in pipe racks to maintain a common bottom-of-pipe elevation.",
+  },
+  {
+    question: "How is the reducer end-to-end length determined?",
+    answer: "ASME B16.9 specifies the end-to-end length of reducers based on the larger end NPS and the ratio of the smaller-to-larger end. This 'H' dimension is tabulated in the standard and is used as the basis for weight and geometry calculations.",
+  },
+  {
+    question: "Can a reducer be used in both flow directions?",
+    answer: "Yes — a reducer can be installed with flow from large-to-small (convergent, standard practice) or small-to-large (divergent, used in expansion sections). Weight and dimensions are identical regardless of flow direction. Note that a concentric reducer and eccentric reducer of the same end sizes have different weights due to geometry.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/reducer-weight-calculator/">
+  <section class="relative overflow-hidden py-14 sm:py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Pipe Reducer</span>
+      </nav>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-theme-primary mb-4">
+        Pipe <span class="accent-text">Reducer</span> (ASME B16.9)
+      </h1>
+      <p class="text-lg text-theme-secondary max-w-2xl leading-relaxed">
+        Buttweld concentric and eccentric reducers to ASME B16.9. NPS ½"–48", all schedules. Available in carbon steel, stainless, alloy, and duplex grades.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Specifications</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Parameter</th>
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Concentric</th>
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Eccentric</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Standard</td><td class="px-4 py-2 text-theme-secondary" colspan="2">ASME B16.9</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Axis alignment</td><td class="px-4 py-2 text-theme-secondary">Co-axial (both ends centered)</td><td class="px-4 py-2 text-theme-secondary">Offset (one flat side)</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Size range</td><td class="px-4 py-2 text-theme-secondary" colspan="2">NPS ½" × ¼" to 48" × 40" (large end × small end)</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Wall thickness</td><td class="px-4 py-2 text-theme-secondary" colspan="2">Controlled by larger end schedule per ASME B36.10M</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">End preparation</td><td class="px-4 py-2 text-theme-secondary" colspan="2">Beveled per ASME B16.25</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Typical use</td><td class="px-4 py-2 text-theme-secondary">Vertical runs, symmetric flow change</td><td class="px-4 py-2 text-theme-secondary">Pump suction, horizontal rack alignment</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Materials</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Carbon Steel</p><p class="text-sm text-theme-secondary mt-1">A234 WPB, WPC — standard service</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Stainless Steel</p><p class="text-sm text-theme-secondary mt-1">A403 WP304/L, WP316/L — corrosion resistant</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Alloy Steel</p><p class="text-sm text-theme-secondary mt-1">A234 WP11, WP22, WP91 — elevated temperature</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Duplex / Super Duplex</p><p class="text-sm text-theme-secondary mt-1">F51, F53 — offshore and chemical plant</p></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Applications</h2>
+        <ul class="space-y-2 text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Pump suction reducers (eccentric, flat side up) to prevent air entrainment</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Pipe rack transitions where bottom-of-pipe elevation must remain constant (eccentric)</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Vertical header to branch run-down transitions (concentric)</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Compressor suction and discharge transitions in oil & gas facilities</span></li>
+        </ul>
+      </div>
+
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Calculate Reducer Weight</h2>
+        <p class="text-theme-secondary mb-6">Select large end NPS, small end NPS, type (concentric/eccentric), schedule, and material.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/reducer-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Reducer Weight Calculator →
+          </a>
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">FAQ</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

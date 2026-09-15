@@ -1,4 +1,4 @@
----
+﻿---
 import Base from "../../layouts/Base.astro";
 
 const title = "Flange Facing Types: RF, FF, RTJ, M&F, T&G Selection Guide | PVF Calculator";
@@ -13,8 +13,8 @@ const jsonLd = [
     "description": description,
     "author": { "@type": "Organization", "name": "pvfcalculator.com" },
     "publisher": { "@type": "Organization", "name": "pvfcalculator.com" },
-    "datePublished": "2026-09-15",
-    "dateModified": "2026-09-15",
+    "datePublished": "2026-09-10",
+    "dateModified": "2026-09-10",
     "mainEntityOfPage": canonical,
   },
 ];
@@ -30,7 +30,7 @@ const facingTypes = [
     code: "RF",
     name: "Raised Face",
     desc: "Most common facing. A 1/16\" (1.6mm) or 1/4\" (6.4mm) raised ring on the flange face concentrates gasket compression for a tight seal.",
-    bestFor: "Class 150–2500, general process piping",
+    bestFor: "Class 150鈥?500, general process piping",
     gasket: "Spiral wound, ring joint, non-metallic",
     icon: "M12 2L2 7v10c0 5.25 3.75 10.15 8 11 4.25-.85 8-5.75 8-11V7l-10-5zm0 2.18l8 4.02V17c0 4.52-3.275 8.7-7 9.55-3.725-.85-7-5.03-7-9.55V8.2l8-4.02z",
   },
@@ -46,7 +46,7 @@ const facingTypes = [
     code: "RTJ",
     name: "Ring Type Joint",
     desc: "Precision-machined groove holds a metal ring gasket. Deforms plastically under load for a metal-to-metal seal.",
-    bestFor: "Class 900–2500, high-pressure gas, subsea",
+    bestFor: "Class 900鈥?500, high-pressure gas, subsea",
     gasket: "R, RX, BX metal rings (soft iron, SS, Inconel)",
     icon: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 110 12 6 6 0 010-12z",
   },
@@ -54,7 +54,7 @@ const facingTypes = [
     code: "M/F",
     name: "Male & Female",
     desc: "One flange has a raised male face, the mating flange has a recessed female face. Gasket sits in the female recess, protected from flow erosion.",
-    bestFor: "Class 150–600, corrosive or erosive service",
+    bestFor: "Class 150鈥?00, corrosive or erosive service",
     gasket: "Non-metallic flat gaskets",
     icon: "M12 4v16m8-8H4",
   },
@@ -62,19 +62,19 @@ const facingTypes = [
     code: "T/G",
     name: "Tongue & Groove",
     desc: "One flange has a raised tongue, the other a matching groove. Provides precise gasket alignment and blowout resistance.",
-    bestFor: "Class 150–600, toxic or hazardous media",
+    bestFor: "Class 150鈥?00, toxic or hazardous media",
     gasket: "Non-metallic flat gaskets (confined)",
     icon: "M4 8h16v8H4zM8 4v4m8-4v4",
   },
 ];
 
 const selectionData = [
-  { service: "Water, air, low-pressure", class: "150–300", facing: "RF or FF", gasket: "Non-asbestos sheet" },
-  { service: "Steam, oil, general process", class: "150–600", facing: "RF", gasket: "Spiral wound" },
-  { service: "High-pressure gas", class: "900–2500", facing: "RTJ", gasket: "Metal ring (R/RX)" },
-  { service: "Corrosive chemicals", class: "150–600", facing: "M/F or T/G", gasket: "PTFE, graphite" },
+  { service: "Water, air, low-pressure", class: "150鈥?00", facing: "RF or FF", gasket: "Non-asbestos sheet" },
+  { service: "Steam, oil, general process", class: "150鈥?00", facing: "RF", gasket: "Spiral wound" },
+  { service: "High-pressure gas", class: "900鈥?500", facing: "RTJ", gasket: "Metal ring (R/RX)" },
+  { service: "Corrosive chemicals", class: "150鈥?00", facing: "M/F or T/G", gasket: "PTFE, graphite" },
   { service: "Cast iron equipment", class: "125", facing: "FF", gasket: "Full-face rubber" },
-  { service: "Subsea pipeline", class: "900–2500", facing: "RTJ (BX)", gasket: "BX ring" },
+  { service: "Subsea pipeline", class: "900鈥?500", facing: "RTJ (BX)", gasket: "BX ring" },
 ];
 ---
 
@@ -105,7 +105,7 @@ const selectionData = [
     <div class="prose-custom">
       <section id="what-is-facing" class="mb-10">
         <h2 class="text-2xl font-bold text-theme-primary mb-4">1. What is a Flange Facing?</h2>
-        <p class="text-theme-secondary leading-relaxed mb-4">The facing is the machined surface of a flange that contacts the gasket and mating flange. It is not cosmetic—its geometry directly controls:</p>
+        <p class="text-theme-secondary leading-relaxed mb-4">The facing is the machined surface of a flange that contacts the gasket and mating flange. It is not cosmetic鈥攊ts geometry directly controls:</p>
         <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
           <li><strong class="text-theme-primary">Gasket compression:</strong> Raised surfaces concentrate bolt load for higher sealing stress</li>
           <li><strong class="text-theme-primary">Gasket retention:</strong> Grooves and recesses prevent gasket blowout under pressure</li>
@@ -179,15 +179,15 @@ const selectionData = [
             <h3 class="font-bold text-theme-primary mb-3">Class 150 & 300</h3>
             <ul class="text-sm text-theme-secondary space-y-2">
               <li class="flex justify-between"><span>Height</span><span class="font-mono">1/16" (1.6 mm)</span></li>
-              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125–250 µin AARH</span></li>
+              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125鈥?50 碌in AARH</span></li>
               <li class="flex justify-between"><span>Gasket OD</span><span class="font-mono">Matches RF OD</span></li>
             </ul>
           </div>
           <div class="glass rounded-xl p-5">
-            <h3 class="font-bold text-theme-primary mb-3">Class 400–2500</h3>
+            <h3 class="font-bold text-theme-primary mb-3">Class 400鈥?500</h3>
             <ul class="text-sm text-theme-secondary space-y-2">
               <li class="flex justify-between"><span>Height</span><span class="font-mono">1/4" (6.4 mm)</span></li>
-              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125–250 µin AARH</span></li>
+              <li class="flex justify-between"><span>Surface finish</span><span class="font-mono">125鈥?50 碌in AARH</span></li>
               <li class="flex justify-between"><span>Gasket OD</span><span class="font-mono">Matches RF OD</span></li>
             </ul>
           </div>
@@ -217,9 +217,9 @@ const selectionData = [
         <h2 class="text-2xl font-bold text-theme-primary mb-4">6. Surface Finish Requirements</h2>
         <p class="text-theme-secondary leading-relaxed mb-4">Facing finish is measured in Arithmetic Average Roughness Height (AARH) or Root Mean Square (RMS):</p>
         <ul class="list-disc list-inside text-theme-secondary space-y-2 mb-4">
-          <li><strong class="text-theme-primary">125–250 AARH</strong> (3.2–6.3 µm): Standard for RF flanges with spiral wound or non-metallic gaskets</li>
-          <li><strong class="text-theme-primary">63–125 AARH</strong> (1.6–3.2 µm): For metal-to-metal seals and some RTJ applications</li>
-          <li><strong class="text-theme-primary">32–63 AARH</strong> (0.8–1.6 µm): Mirror finish for lens ring joints or special applications</li>
+          <li><strong class="text-theme-primary">125鈥?50 AARH</strong> (3.2鈥?.3 碌m): Standard for RF flanges with spiral wound or non-metallic gaskets</li>
+          <li><strong class="text-theme-primary">63鈥?25 AARH</strong> (1.6鈥?.2 碌m): For metal-to-metal seals and some RTJ applications</li>
+          <li><strong class="text-theme-primary">32鈥?3 AARH</strong> (0.8鈥?.6 碌m): Mirror finish for lens ring joints or special applications</li>
         </ul>
         <p class="text-theme-secondary leading-relaxed">Phonographic (concentric serrated) finish is standard for RF. Spiral serrated is acceptable but may require harder gaskets.</p>
       </section>
@@ -234,7 +234,7 @@ const selectionData = [
           </details>
           <details class="glass rounded-xl overflow-hidden">
             <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">What is the difference between AARH and RMS?</summary>
-            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">AARH (Arithmetic Average Roughness Height) and RMS (Root Mean Square) both measure surface roughness. RMS values are approximately 11% higher than AARH for the same surface. 125 AARH ≈ 140 RMS. Always confirm which unit your specification uses.</div>
+            <div class="px-5 pb-4 text-sm text-theme-secondary leading-relaxed">AARH (Arithmetic Average Roughness Height) and RMS (Root Mean Square) both measure surface roughness. RMS values are approximately 11% higher than AARH for the same surface. 125 AARH 鈮?140 RMS. Always confirm which unit your specification uses.</div>
           </details>
           <details class="glass rounded-xl overflow-hidden">
             <summary class="px-5 py-4 cursor-pointer font-semibold text-theme-primary hover:bg-theme-tertiary transition-colors">Can I use a spiral wound gasket on an FF flange?</summary>
@@ -250,7 +250,7 @@ const selectionData = [
       <!-- CTA -->
       <section class="glass rounded-2xl p-6 text-center">
         <h2 class="text-xl font-bold text-theme-primary mb-2">Need Flanges with Specific Facing?</h2>
-        <p class="text-sm text-theme-secondary mb-4">RF, FF, RTJ, M/F, T&G—get a quote for any facing type in Class 150–2500, carbon or stainless steel.</p>
+        <p class="text-sm text-theme-secondary mb-4">RF, FF, RTJ, M/F, T&G鈥攇et a quote for any facing type in Class 150鈥?500, carbon or stainless steel.</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a href="/request-a-quote/" class="accent-bg text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors" style="color: #07090c;">Request a Quote</a>
           <a href="/flange-weight-calculator/" class="border border-theme text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-theme-tertiary transition-colors text-theme-primary">Calculate Flange Weight</a>

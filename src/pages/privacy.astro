@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Privacy Policy | PVF Calculator";
+const description = "Privacy Policy for pvfcalculator.com — how we collect, use, and protect your information.";
+const canonical = "https://pvfcalculator.com/privacy/";
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Privacy Policy", url: "/privacy/" },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems}>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Privacy Policy</span>
+      </nav>
+
+      <h1 class="text-3xl font-bold text-theme-primary mb-2">Privacy Policy</h1>
+      <p class="text-sm text-theme-muted mb-10">Last updated: September 15, 2026</p>
+
+      <div class="space-y-8 text-theme-secondary leading-relaxed">
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">1. Who We Are</h2>
+          <p>PVF Calculator ("we," "our," "us") operates the website at pvfcalculator.com — a free tool for calculating pipe, valve, and fitting weights and dimensions based on ASME standards. We do not sell products directly; we provide calculation tools and connect procurement engineers with qualified manufacturers on request.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">2. Information We Collect</h2>
+          <p class="mb-3"><strong class="text-theme-primary">Calculator usage:</strong> All calculator inputs (NPS, schedule, flange class, etc.) are processed locally in your browser. We do not store or transmit individual calculation inputs to our servers.</p>
+          <p class="mb-3"><strong class="text-theme-primary">Inquiry forms:</strong> When you submit a quote request, we collect your name, email address, company name, country, and the product specifications you provide. This information is transmitted to our inquiry management system (Formspree) and forwarded to our team.</p>
+          <p><strong class="text-theme-primary">Analytics:</strong> We use Google Analytics 4 (GA4) to collect anonymised usage data including pages visited, time on site, general geographic region, and browser/device type. GA4 does not identify you personally. You can opt out using the <a href="https://tools.google.com/dlpage/gaoptout" class="accent-text hover:underline" target="_blank" rel="noopener">GA opt-out browser add-on</a>.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">3. How We Use Your Information</h2>
+          <ul class="list-disc list-inside space-y-2">
+            <li>To respond to quote requests and connect you with manufacturers</li>
+            <li>To improve our calculators and content based on aggregated usage patterns</li>
+            <li>To understand which tools and pages are most useful to our audience</li>
+          </ul>
+          <p class="mt-3">We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">4. Cookies</h2>
+          <p>We use minimal cookies: Google Analytics sets standard analytics cookies, and we set a single `theme` preference cookie (dark/light mode) which contains no personal data. We do not use advertising or tracking cookies.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">5. Third-Party Services</h2>
+          <p><strong class="text-theme-primary">Google Analytics 4</strong> — analytics processing. <a href="https://policies.google.com/privacy" class="accent-text hover:underline" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+          <p class="mt-2"><strong class="text-theme-primary">Formspree</strong> — form processing for quote requests. <a href="https://formspree.io/legal/privacy-policy" class="accent-text hover:underline" target="_blank" rel="noopener">Formspree Privacy Policy</a>.</p>
+          <p class="mt-2"><strong class="text-theme-primary">Google Fonts</strong> — font delivery (Inter, JetBrains Mono). Subject to Google's privacy policy.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">6. Data Retention</h2>
+          <p>Inquiry form submissions are retained for up to 24 months to allow for follow-up on procurement requests. Analytics data is retained per GA4's default 14-month retention period.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">7. Your Rights</h2>
+          <p>Depending on your jurisdiction, you may have the right to access, correct, or request deletion of personal data we hold about you. To exercise these rights, contact us at the address in Section 9.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">8. Children</h2>
+          <p>This site is intended for professional engineering and procurement use. We do not knowingly collect personal information from children under 13.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">9. Contact</h2>
+          <p>For privacy-related enquiries, use the <a href="/request-a-quote/" class="accent-text hover:underline">contact form</a> and include "Privacy" in your message. We will respond within 14 business days.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Base>

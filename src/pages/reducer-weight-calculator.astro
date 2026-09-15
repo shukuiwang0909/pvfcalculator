@@ -1,4 +1,4 @@
----
+﻿---
 import Base from '../layouts/Base.astro';
 const title = "Pipe Reducer Weight Calculator | Concentric & Eccentric Reducer Weight | pvfcalculator.com";
 const description = "Calculate concentric and eccentric reducer weight. ASME B16.9 reducer weight calculator for carbon steel, stainless steel, alloy steel. Free online.";
@@ -45,7 +45,7 @@ const breadcrumbItems = [
   { name: "Reducer Weight Calculator", url: "/reducer-weight-calculator/" },
 ];
 ---
-<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems}> ctaHref="#tool">
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
   <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
     <!-- Hero -->
     <div class="mb-8">
@@ -171,6 +171,17 @@ const breadcrumbItems = [
           </details>
         </div>
       </div>
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">Copy Result</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">Share Link</span>
+        </button>
+      </div>
     </section>
 
     <!-- Full weight table -->
@@ -289,7 +300,7 @@ const breadcrumbItems = [
         <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
         <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Elbow Weight Calculator</a>
         <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Tee Weight Calculator</a>
-        <a href="/products/concentric-reducer" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Concentric Reducer Products</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
       </div>
     </section>
 
@@ -318,7 +329,7 @@ const breadcrumbItems = [
     schedule: 'SCH40',
     density: 7850,
     qty: 1,
-    unit: 'kg' as 'kg' | 'lb',
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
   };
 
   const fmt = (v: number, d = 2) =>
@@ -506,8 +517,8 @@ const breadcrumbItems = [
     state.qty = v;
     renderResult();
   });
-  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; setUnitButtons(); render(); });
-  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; setUnitButtons(); render(); });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); render(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); render(); });
 
   // Init
   populateMaterials();
@@ -517,4 +528,55 @@ const breadcrumbItems = [
   setTypeStyles();
   setUnitButtons();
   render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Reducer Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/reducer-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, large: String(state.large), small: String(state.small),
+      schedule: state.schedule, material: ($('material') as HTMLSelectElement).value,
+      density: String(state.density), qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as ReducerType;
+    if (t && (['CON','ECC'] as string[]).includes(t)) { state.type = t; setTypeStyles(); document.querySelectorAll<HTMLInputElement>('input[name="rtype"]').forEach((r) => { r.checked = r.value === t; }); changed = true; }
+    const ln = Number(sp.get('large'));
+    if (ln > 0) { state.large = ln; ($('largeNps') as HTMLSelectElement).value = String(ln); populateSmall(); changed = true; }
+    const sn = Number(sp.get('small'));
+    if (sn > 0) { state.small = sn; ($('smallNps') as HTMLSelectElement).value = String(sn); changed = true; }
+    const sch = sp.get('schedule');
+    if (sch) { state.schedule = sch; ($('schedule') as HTMLSelectElement).value = sch; changed = true; }
+    const mat = sp.get('material');
+    if (mat) { const found = MATERIALS.find((m) => m.id === mat); if (found) { ($('material') as HTMLSelectElement).value = mat; state.density = found.density; ($('density') as HTMLInputElement).value = String(found.density); ($('density') as HTMLInputElement).disabled = mat !== 'custom'; changed = true; } }
+    const d = Number(sp.get('density'));
+    if (d > 0) { state.density = d; ($('density') as HTMLInputElement).value = String(d); changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
 </script>

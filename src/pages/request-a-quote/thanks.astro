@@ -1,0 +1,46 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Quote Request Received | PVF Calculator";
+const description = "Your quote request has been submitted. We'll get back to you within 24 hours.";
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Request a Quote", url: "/request-a-quote/" },
+  { name: "Thank You", url: "/request-a-quote/thanks/" },
+];
+---
+
+<Base title={title} description={description} robots="noindex, nofollow" breadcrumbItems={breadcrumbItems}>
+  <section class="relative overflow-hidden py-24 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-xl mx-auto relative z-10 text-center">
+      <div class="w-20 h-20 rounded-full accent-bg/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-6">
+        <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-theme-primary mb-4">
+        Quote Request <span class="accent-text">Received</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Thank you — we've received your inquiry and will respond within <strong class="text-theme-primary">24 hours</strong> with pricing, lead times, and availability.
+      </p>
+      <div class="glass rounded-2xl p-6 text-left mb-8">
+        <h2 class="font-bold text-theme-primary mb-3">What happens next</h2>
+        <ol class="space-y-3 text-sm text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">1.</span><span>Our team reviews your specifications and confirms them with qualified manufacturers.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">2.</span><span>You receive a detailed quote with pricing, MOQ, lead time, and shipping options.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">3.</span><span>Confirm your order and track production through to delivery.</span></li>
+        </ol>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-6 py-3 text-sm font-bold transition" style="color: #07090c;">
+          Back to Home
+        </a>
+        <a href="/flange-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-6 py-3 text-sm font-semibold text-theme-primary hover:bg-theme-secondary transition">
+          Try a Calculator
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

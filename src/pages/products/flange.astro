@@ -1,0 +1,152 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "ASME B16.5 Flanges — Weld Neck, Slip On, Blind & More";
+const description =
+  "ASME B16.5 pipe flanges: weld neck, slip on, blind, socket weld, threaded, and lap joint. NPS ½\"–24\", Class 150–2500. Dimensions, materials, weight calculator.";
+const canonical = "https://pvfcalculator.com/products/flange/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "ASME B16.5 Pipe Flange",
+  description,
+  url: canonical,
+  brand: { "@type": "Organization", name: "PVF Calculator" },
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Products", url: "/products/" },
+  { name: "Flanges", url: "/products/flange/" },
+];
+const faqItems = [
+  {
+    question: "Which flange type should I use — weld neck or slip on?",
+    answer: "Weld neck flanges are the preferred choice for high-pressure, high-temperature, and cyclic service. The tapered hub provides a smooth bore transition and the single weld is easier to inspect radiographically. Slip on flanges require two welds (inside and outside), are cheaper, and suit lower-pressure, non-critical service. For any Class 600+ application, specify weld neck unless the engineer of record approves otherwise.",
+  },
+  {
+    question: "What does ASME B16.5 cover?",
+    answer: "ASME B16.5 covers pipe flanges and flanged fittings from NPS ½\" through 24\" in Classes 150, 300, 400, 600, 900, 1500, and 2500. It specifies dimensions, tolerances, pressure-temperature ratings, materials, and marking requirements. For NPS 26\" and above, ASME B16.47 (Series A and B) applies.",
+  },
+  {
+    question: "What is the difference between raised face (RF) and ring type joint (RTJ) facing?",
+    answer: "A raised face (RF) flange has a raised seating surface that contacts a soft gasket (spiral wound, ring, or full face). An RTJ flange has a machined groove in the sealing face that accepts a solid metal ring gasket. RTJ is preferred for high-pressure Class 900+ or where zero leakage is required under cyclic loads. See our flange facing types guide for full details.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/flange-weight-calculator/">
+  <section class="relative overflow-hidden py-14 sm:py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Flanges</span>
+      </nav>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-theme-primary mb-4">
+        Pipe <span class="accent-text">Flanges</span> (ASME B16.5)
+      </h1>
+      <p class="text-lg text-theme-secondary max-w-2xl leading-relaxed">
+        ASME B16.5 flanges in weld neck, slip on, blind, socket weld, threaded, and lap joint configurations. NPS ½"–24", Classes 150–2500, all standard materials.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Flange Types</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Weld Neck (WN)</h3>
+            <p class="text-sm text-theme-secondary">Long tapered hub, single butt weld to pipe. Preferred for high-pressure/temperature, cyclic, and critical service. Hub provides gradual bore transition and excellent fatigue resistance.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Slip On (SO)</h3>
+            <p class="text-sm text-theme-secondary">Slips over pipe end, double fillet welded inside and outside. Lower cost than WN, suits Class 150–600 standard service. Weaker under cyclic load.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Blind (BL)</h3>
+            <p class="text-sm text-theme-secondary">Solid plate flange used to close a pipeline end or isolate a branch. Subject to full pressure differential across its face — heavier than WN of the same size and class.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Socket Weld (SW) / Threaded (TH)</h3>
+            <p class="text-sm text-theme-secondary">Socket weld: pipe inserts into socket, single fillet weld. Threaded: no welding, screwed to threaded pipe end. Both suited to small bore NPS ½"–2", non-corrosive service only for threaded.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Size and Pressure Classes</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Parameter</th>
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Standard</td><td class="px-4 py-2 text-theme-secondary">ASME B16.5 (½"–24") / ASME B16.47 (26"–60")</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Pressure Classes</td><td class="px-4 py-2 text-theme-secondary">150, 300, 400, 600, 900, 1500, 2500</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">NPS range (B16.5)</td><td class="px-4 py-2 text-theme-secondary">½" to 24" (DN15–DN600)</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Facing types</td><td class="px-4 py-2 text-theme-secondary">RF (raised face), FF (flat face), RTJ (ring type joint)</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Material groups</td><td class="px-4 py-2 text-theme-secondary">Group 1.1–1.15 (per B16.5 Annex A)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Materials</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Carbon Steel</p><p class="text-sm text-theme-secondary mt-1">ASTM A105 (forgings), Group 1.1 — most common industrial piping</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Stainless Steel</p><p class="text-sm text-theme-secondary mt-1">ASTM A182 F304/F304L, F316/F316L, F321 — corrosion-resistant service</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Alloy Steel</p><p class="text-sm text-theme-secondary mt-1">A182 F11, F22, F5, F9, F91 — high-temperature power and process</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Duplex / Super Duplex</p><p class="text-sm text-theme-secondary mt-1">A182 F51, F53, F60 — offshore, sour service, high-chloride environments</p></div>
+        </div>
+      </div>
+
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Calculate Flange Weight</h2>
+        <p class="text-theme-secondary mb-6">ASME B16.5 geometric modeling — full hub + disc + raised face. Every NPS, every class, every flange type.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/flange-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Flange Weight Calculator →
+          </a>
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">FAQ</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Resources</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/asme-b16-5-flange-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">B16.5 Dimension Tables</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/flange-facing-types/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Facing Types</a>
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Manufacturers</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

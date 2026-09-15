@@ -1,0 +1,133 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "ASME B16.9 Pipe Elbow — 45° & 90° Long & Short Radius";
+const description =
+  "ASME B16.9 buttweld pipe elbows: 45° and 90° in long radius (LR) and short radius (SR). Dimensions, wall thickness by schedule, materials, and weight calculator.";
+const canonical = "https://pvfcalculator.com/products/pipe-elbow/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "ASME B16.9 Pipe Elbow",
+  description,
+  url: canonical,
+  brand: { "@type": "Organization", name: "PVF Calculator" },
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Products", url: "/products/" },
+  { name: "Pipe Elbow", url: "/products/pipe-elbow/" },
+];
+const faqItems = [
+  {
+    question: "What is the difference between long radius and short radius elbows?",
+    answer: "Long radius (LR) elbows have a centerline radius equal to 1.5× the nominal pipe size (1.5D). Short radius (SR) elbows have a centerline radius equal to 1.0× the nominal pipe size (1D). LR elbows are preferred for most process piping because they have lower pressure drop and stress concentration. SR elbows are used where space is restricted.",
+  },
+  {
+    question: "How heavy is a 6\" SCH 40 90° LR elbow?",
+    answer: "A 6\" SCH 40 (7.11 mm wall) 90° LR elbow in carbon steel (A234 WPB) weighs approximately 7–8 kg. Use our elbow weight calculator for exact values based on your material and schedule.",
+  },
+  {
+    question: "What materials are buttweld elbows available in?",
+    answer: "ASME B16.9 elbows are available in carbon steel (A234 WPB, WPC), stainless steel (A403 WP304, WP316), alloy steel (A234 WP11, WP22, WP91), and duplex/super duplex grades. Material selection depends on operating temperature, pressure, and process fluid compatibility.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/elbow-weight-calculator/">
+  <section class="relative overflow-hidden py-14 sm:py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Pipe Elbow</span>
+      </nav>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-theme-primary mb-4">
+        Pipe <span class="accent-text">Elbow</span> (ASME B16.9)
+      </h1>
+      <p class="text-lg text-theme-secondary max-w-2xl leading-relaxed">
+        Factory-made buttweld elbows to ASME B16.9 in 45°, 90°, and 180° configurations. Long radius (LR) and short radius (SR) available in all standard schedules from NPS ½" to 48".
+      </p>
+    </div>
+  </section>
+
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Specifications</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">Parameter</th>
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">LR Elbow</th>
+                <th class="px-4 py-3 text-left font-semibold text-theme-primary">SR Elbow</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Standard</td><td class="px-4 py-2 text-theme-secondary" colspan="2">ASME B16.9</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Angles</td><td class="px-4 py-2 text-theme-secondary">45°, 90°, 180°</td><td class="px-4 py-2 text-theme-secondary">90°</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Centerline radius</td><td class="px-4 py-2 text-theme-secondary">1.5 × NPS (1.5D)</td><td class="px-4 py-2 text-theme-secondary">1.0 × NPS (1.0D)</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">Size range</td><td class="px-4 py-2 text-theme-secondary" colspan="2">NPS ½" to 48"</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Wall thickness</td><td class="px-4 py-2 text-theme-secondary" colspan="2">Per ASME B36.10M schedule (SCH 10–XXS)</td></tr>
+              <tr class="border-b border-theme/50 bg-theme/30"><td class="px-4 py-2 text-theme-secondary">End preparation</td><td class="px-4 py-2 text-theme-secondary" colspan="2">Beveled per ASME B16.25</td></tr>
+              <tr class="border-b border-theme/50"><td class="px-4 py-2 text-theme-secondary">Marking</td><td class="px-4 py-2 text-theme-secondary" colspan="2">Material grade, heat number, schedule, standard</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Materials</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Carbon Steel</p><p class="text-sm text-theme-secondary mt-1">A234 WPB, WPC — standard process piping, up to 425°C (800°F)</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Stainless Steel</p><p class="text-sm text-theme-secondary mt-1">A403 WP304/304L, WP316/316L, WP321 — corrosion-resistant service</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Alloy Steel</p><p class="text-sm text-theme-secondary mt-1">A234 WP11, WP22, WP5, WP91 — high-temperature/creep service</p></div>
+          <div class="glass rounded-xl p-4"><p class="font-semibold accent-text">Duplex / Super Duplex</p><p class="text-sm text-theme-secondary mt-1">F51 (SAF 2205), F53 (SAF 2507) — offshore, chemical, high-chloride</p></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Applications</h2>
+        <ul class="space-y-2 text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Process piping direction changes in refineries, petrochemical plants, and power stations</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>High-pressure steam and condensate systems (SCH 80+, alloy grades)</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Offshore oil & gas topsides and subsea jumpers (duplex/super duplex)</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span>Chemical plant acid and corrosive media service (stainless, Hastelloy)</span></li>
+        </ul>
+      </div>
+
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Calculate Pipe Elbow Weight</h2>
+        <p class="text-theme-secondary mb-6">Free ASME B16.9 elbow weight calculator — select angle, radius, NPS, schedule, and material.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/elbow-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Elbow Weight Calculator →
+          </a>
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">FAQ</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

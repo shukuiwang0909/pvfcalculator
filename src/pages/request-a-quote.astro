@@ -1,4 +1,4 @@
----
+﻿---
 import Base from "../layouts/Base.astro";
 
 const title = "Request a Quote | PVF Calculator";
@@ -18,7 +18,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>>
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
   <section class="relative overflow-hidden py-12 sm:py-16">
     <div class="max-w-4xl mx-auto px-4">
       <!-- Header -->
@@ -41,7 +41,10 @@ const breadcrumbItems = [
 
       <!-- Quote Form -->
       <div class="rounded-2xl border border-theme bg-theme-secondary p-6 sm:p-8 shadow-xl">
-        <form id="quoteForm" class="space-y-6">
+        <form id="quoteForm" action="https://formspree.io/f/mnpqekvo" method="POST" class="space-y-6">
+          <input type="hidden" name="_subject" value="New PVF Calculator Quote Request" />
+          <input type="hidden" name="_next" value="https://pvfcalculator.com/request-a-quote/thanks/" />
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
           <!-- Contact Info -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -328,27 +331,13 @@ const breadcrumbItems = [
   </section>
 
   <script>
-    // Simple form handling
-    document.getElementById('quoteForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Get form data
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      
-      // Get selected products
-      const products = [];
-      document.querySelectorAll('input[name="product"]:checked').forEach(cb => {
-        products.push(cb.value);
-      });
-      
-      // Here you would normally send to your backend
-      // For now, just show success message
-      console.log('Quote request:', { ...data, products });
-      
-      // Hide form, show success
-      this.style.display = 'none';
-      document.getElementById('successMessage').classList.remove('hidden');
+    // Show loading state on submit
+    document.getElementById('quoteForm')?.addEventListener('submit', function() {
+      const btn = this.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.textContent = 'Submitting…';
+        btn.disabled = true;
+      }
     });
   </script>
 </Base>

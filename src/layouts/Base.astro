@@ -11,19 +11,30 @@ interface Props {
   gaId?: string;
   gscVerification?: string;
   breadcrumbItems?: Array<{ name: string; url: string }>;
+  ogType?: "website" | "article";
 }
 
 const {
   title,
   description = "Free ASME B16.5 & B16.9 pipe fitting weight calculators for flanges, elbows, tees, and reducers.",
-  canonical,
+  canonical: canonicalProp,
   jsonLd,
   ctaHref = "#tools",
   robots,
   gaId,
   gscVerification,
   breadcrumbItems,
+  ogType = "website",
 } = Astro.props;
+
+const siteOrigin = "https://pvfcalculator.com";
+const GA4_ID = "G-PKFFM8ZL3T";
+
+// Auto-compute canonical from current URL, normalise trailing slash
+const rawPath = Astro.url.pathname.replace(/\/?$/, "/");
+const canonical = canonicalProp ?? `${siteOrigin}${rawPath}`;
+
+const ogImage = `${siteOrigin}/og-image.png`;
 
 const currentPath = Astro.url.pathname;
 
@@ -34,7 +45,39 @@ const nav = [
   { href: "/reducer-weight-calculator/", label: "Reducer" },
   { href: "/pipe-weight-calculator/", label: "Pipe" },
   { href: "/pipe-schedule-chart/", label: "Schedule Chart" },
-  { href: "/asme-b16-9-fitting-dimensions/", label: "B16.9 Dimensions" },
+  { href: "/asme-b16-9-fitting-dimensions/", label: "B16.9 Dims" },
+  { href: "/blog/", label: "Blog" },
+];
+
+const siteJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteOrigin}/#organization`,
+    "name": "PVF Calculator",
+    "url": siteOrigin,
+    "logo": `${siteOrigin}/favicon.svg`,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteOrigin}/#website`,
+    "url": siteOrigin,
+    "name": "PVF Calculator",
+    "publisher": { "@id": `${siteOrigin}/#organization` },
+    "inLanguage": "en",
+  },
+  ...(breadcrumbItems ? [{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems.map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": item.name,
+      "item": `${siteOrigin}${item.url}`,
+    })),
+  }] : []),
+  ...(Array.isArray(jsonLd) ? jsonLd : (jsonLd ? [jsonLd] : [])),
 ];
 ---
 <!doctype html>
@@ -44,47 +87,42 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="canonical" href={canonical} />
     {robots && <meta name="robots" content={robots} />}
     {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta property="og:type" content="website" />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="PVF Calculator" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {canonical && <meta property="og:url" content={canonical} />}
-    <meta property="og:site_name" content="pvfcalculator.com" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    {gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />}
-    {gaId && (
-      <script is:inline define:vars={{ gaId }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', gaId);
-      </script>
-    )}
-    {breadcrumbItems && (
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": breadcrumbItems.map((item, idx) => ({
-          "@type": "ListItem",
-          "position": idx + 1,
-          "name": item.name,
-          "item": `https://pvfcalculator.com${item.url}`
-        }))
-      })} />
-    )}
-    {jsonLd && Array.isArray(jsonLd) ? (
-      jsonLd.map(obj => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)
-    ) : (
-      jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    )}
+    <!-- GA4 -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+    <script is:inline define:vars={{ GA4_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', GA4_ID);
+    </script>
+    <!-- JSON-LD -->
+    {siteJsonLd.map(obj => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+    <!-- Dark mode init (prevents FOUC) -->
     <script is:inline>
       (function() {
         const theme = localStorage.getItem('theme') || 'dark';
@@ -103,9 +141,9 @@ const nav = [
         <a href="/" class="font-bold text-lg tracking-tight text-theme-primary">
           PVF<span class="accent-text">Calculator</span>
         </a>
-        <nav class="hidden md:flex gap-6 text-sm">
+        <nav class="hidden md:flex gap-5 text-sm">
           {nav.map((n) => {
-            const isActive = currentPath === n.href || currentPath.startsWith(n.href);
+            const isActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
             return (
               <a href={n.href} class={`transition-colors relative ${isActive ? "accent-text font-semibold" : "text-theme-secondary hover:text-theme-primary"}`}>
                 {n.label}
@@ -129,7 +167,7 @@ const nav = [
             </svg>
           </button>
           <a href={ctaHref} class="hidden sm:inline-block accent-bg hover:opacity-90 text-sm font-semibold px-3 md:px-4 py-2 rounded-lg transition-colors" style="color: #07090c;">
-            Calculate Now
+            {ctaHref === "/request-a-quote/" ? "Get a Quote" : "Calculate Now"}
           </a>
         </div>
       </div>
@@ -139,13 +177,13 @@ const nav = [
       <div class="absolute top-14 left-0 right-0 bg-theme-primary border-b border-theme shadow-xl">
         <nav class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
           {nav.map((n) => {
-            const isActive = currentPath === n.href || currentPath.startsWith(n.href);
+            const isActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
             return (
               <a href={n.href} class={`mobile-menu-link py-3 px-4 rounded-lg transition-colors text-base font-medium ${isActive ? "accent-text bg-theme-tertiary" : "text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary"}`}>{n.label}</a>
             );
           })}
-          <a href={ctaHref} class="mobile-menu-link mt-2 py-3 px-4 rounded-lg accent-bg text-center font-semibold" style="color: #07090c;">
-            Calculate Now
+          <a href="/request-a-quote/" class="mobile-menu-link mt-2 py-3 px-4 rounded-lg accent-bg text-center font-semibold" style="color: #07090c;">
+            Get a Quote
           </a>
         </nav>
       </div>
@@ -169,16 +207,23 @@ const nav = [
             <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
           </ul>
         </div>
-      <div>
-        <p class="text-theme-primary font-semibold mb-2">Resources</p>
-        <ul class="space-y-1">
-          <li><a href="/blog/" class="hover:text-theme-primary transition-colors">Blog & Guides</a></li>
-          <li><a href="/asme-b16-5-flange-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.5 Dimensions</a></li>
-          <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
-        </ul>
-      </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Disclaimer</p>
+          <p class="text-theme-primary font-semibold mb-2">Resources</p>
+          <ul class="space-y-1">
+            <li><a href="/blog/" class="hover:text-theme-primary transition-colors">Blog & Guides</a></li>
+            <li><a href="/asme-b16-5-flange-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.5 Dimensions</a></li>
+            <li><a href="/asme-b16-9-fitting-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.9 Dimensions</a></li>
+            <li><a href="/pipe-schedule-chart/" class="hover:text-theme-primary transition-colors">Pipe Schedule Chart</a></li>
+            <li><a href="/request-a-quote/" class="hover:text-theme-primary transition-colors">Request a Quote</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-theme-primary font-semibold mb-2">Legal</p>
+          <ul class="space-y-1 mb-3">
+            <li><a href="/privacy/" class="hover:text-theme-primary transition-colors">Privacy Policy</a></li>
+            <li><a href="/terms/" class="hover:text-theme-primary transition-colors">Terms of Use</a></li>
+            <li><a href="/disclaimer/" class="hover:text-theme-primary transition-colors">Disclaimer</a></li>
+          </ul>
           <p class="text-xs text-theme-muted">Calculations are theoretical estimates based on ASME B16.5 and ASME B16.9 dimensional data. Verify critical weights with manufacturers before procurement or load planning.</p>
         </div>
       </div>
@@ -207,17 +252,47 @@ const nav = [
           document.body.style.overflow = '';
         }
         btn?.addEventListener('click', () => {
-          if (menu.classList.contains('hidden')) {
-            openMenu();
-          } else {
-            closeMenu();
-          }
+          if (menu.classList.contains('hidden')) { openMenu(); } else { closeMenu(); }
         });
         backdrop?.addEventListener('click', closeMenu);
         links.forEach(l => l.addEventListener('click', closeMenu));
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && !menu.classList.contains('hidden')) closeMenu();
         });
+      })();
+    </script>
+    <!-- GA4 custom events -->
+    <script is:inline>
+      (function() {
+        function gtagEvent(name, params) {
+          if (typeof gtag === 'function') gtag('event', name, params);
+        }
+        // tool_start: first interaction with a calculator form field
+        document.querySelectorAll('select, input[type="number"], input[type="radio"]').forEach(function(el) {
+          el.addEventListener('change', function() {
+            gtagEvent('tool_start', { tool_name: document.title });
+          }, { once: true });
+        });
+        // tool_complete: result panel becomes visible
+        var resultPanels = document.querySelectorAll('.result-panel, #result, #results, [id*="result"]');
+        if (resultPanels.length && typeof MutationObserver !== 'undefined') {
+          var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(m) {
+              if (m.type === 'childList' && m.addedNodes.length > 0) {
+                gtagEvent('tool_complete', { tool_name: document.title });
+                observer.disconnect();
+              }
+            });
+          });
+          resultPanels.forEach(function(p) { observer.observe(p, { childList: true, subtree: true }); });
+        }
+        // inquiry_submit
+        var form = document.querySelector('form[id="inquiry"], form[name="inquiry"], form');
+        if (form) {
+          form.addEventListener('submit', function() {
+            gtagEvent('inquiry_submit', {});
+          });
+        }
       })();
     </script>
   </body>

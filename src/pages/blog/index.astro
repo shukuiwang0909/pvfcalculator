@@ -1,4 +1,4 @@
----
+﻿---
 import Base from "../../layouts/Base.astro";
 
 const title = "Blog | PVF Calculator";
@@ -20,7 +20,7 @@ const posts = [
     title: "MSS SP-75 vs ASME B16.9: High-Yield Fitting Standards Compared",
     description:
       "MSS SP-75 vs ASME B16.9: key differences in size range, material grades, pressure ratings, and applications. Learn when to specify WPHY fittings over standard B16.9.",
-    date: "September 15, 2026",
+    date: "September 13, 2026",
     readTime: "8 min",
     category: "Standards",
   },
@@ -29,7 +29,7 @@ const posts = [
     title: "Flange Facing Types: RF, FF, RTJ, M&F, T&G Selection Guide",
     description:
       "Flange facing types explained: raised face (RF), flat face (FF), ring type joint (RTJ), male & female, tongue & groove. Learn which facing to use for your pressure class and gasket type.",
-    date: "September 15, 2026",
+    date: "September 10, 2026",
     readTime: "9 min",
     category: "Flange Design",
   },
@@ -38,7 +38,7 @@ const posts = [
     title: "Piping Class Chart: 150#–1500# Materials, Fittings, Gaskets",
     description:
       "Piping class chart for Class 150, 300, 600, 900, 1500. Standard materials, fitting specs, gasket types, flange facings, and pipe schedules for each class.",
-    date: "September 15, 2026",
+    date: "September 6, 2026",
     readTime: "10 min",
     category: "Engineering Reference",
   },
@@ -47,16 +47,25 @@ const posts = [
     title: "Pipe Schedule Chart Explained: Complete Guide to SCH 10–XXS",
     description:
       "Learn what pipe schedule numbers mean, how to read a pipe schedule chart, and the difference between SCH 10, 40, 80, 160, and XXS wall thicknesses.",
-    date: "September 15, 2026",
+    date: "September 2, 2026",
     readTime: "8 min",
     category: "Pipe Basics",
+  },
+  {
+    slug: "/blog/flange-weight-chart-errors/",
+    title: "We Checked 3 Popular Online Flange Weight Charts. 9 Values Were Wrong by 10x.",
+    description:
+      "We audited 3 widely used online flange weight charts against ASME B16.5 geometric calculations. 9 of the published values were off by a factor of 10 or more.",
+    date: "August 25, 2026",
+    readTime: "9 min",
+    category: "Accuracy",
   },
   {
     slug: "/blog/asme-b16-5-vs-b16-47/",
     title: "ASME B16.5 vs B16.47: Flange Standard Comparison",
     description:
       "Compare ASME B16.5 and B16.47 flange standards. Learn the differences in size range, pressure classes, applications, and how to choose the right standard for your project.",
-    date: "September 15, 2026",
+    date: "August 21, 2026",
     readTime: "7 min",
     category: "Flange Standards",
   },
@@ -65,7 +74,7 @@ const posts = [
     title: "304 vs 316 Stainless Steel Flanges: Which One Do You Need?",
     description:
       "Compare 304 and 316 stainless steel flanges for corrosion resistance, temperature limits, cost, and applications. Learn when to upgrade from 304 to 316 in coastal, chemical, and high-chloride environments.",
-    date: "September 15, 2026",
+    date: "August 17, 2026",
     readTime: "8 min",
     category: "Materials",
   },
@@ -74,16 +83,25 @@ const posts = [
     title: "How to Choose the Right Flange Class (150–2500)",
     description:
       "Learn how to select the correct ASME flange pressure class for your application. Compare Class 150, 300, 600, 900, 1500, and 2500 ratings with temperature-pressure tables and selection guidelines.",
-    date: "September 15, 2026",
+    date: "August 13, 2026",
     readTime: "9 min",
     category: "Flange Selection",
+  },
+  {
+    slug: "/blog/pipe-fitting-weight-calculator-comparison/",
+    title: "Pipe Fitting Weight Calculator Comparison: We Tested 5 Tools",
+    description:
+      "We tested 5 popular pipe fitting weight calculators against ASME B16.9 reference values. Here's what we found — including 10x errors, missing inputs, and what an accurate calculator actually requires.",
+    date: "August 11, 2026",
+    readTime: "10 min",
+    category: "Accuracy",
   },
   {
     slug: "/blog/astm-a105-vs-a234-wpb/",
     title: "ASTM A105 vs A234 WPB: Forged Flange vs Wrought Fitting",
     description:
       "ASTM A105 and A234 WPB are the most common carbon steel materials in piping. Learn the differences in manufacturing process, mechanical properties, applications, and why they are not interchangeable.",
-    date: "September 15, 2026",
+    date: "August 7, 2026",
     readTime: "8 min",
     category: "Materials",
   },
@@ -92,7 +110,7 @@ const posts = [
     title: "Weld Neck vs Slip-On vs Socket Weld vs Threaded: Flange Type Selection Guide",
     description:
       "Compare weld neck, slip-on, socket weld, threaded, and lap joint flanges. Learn which flange type to use for high pressure, high temperature, corrosive media, and cost-sensitive applications.",
-    date: "September 15, 2026",
+    date: "August 3, 2026",
     readTime: "10 min",
     category: "Flange Design",
   },
@@ -101,9 +119,18 @@ const posts = [
     title: "Pipe Fitting Weight Chart: NPS 1/2\" to 24\" (kg per piece)",
     description:
       "Complete pipe fitting weight chart for elbows, tees, reducers, and caps. NPS 1/2\" to 24\", Sch 40 and Sch 80, carbon steel and stainless steel. Use for estimating, shipping, and procurement.",
-    date: "September 15, 2026",
+    date: "July 30, 2026",
     readTime: "8 min",
     category: "Engineering Reference",
+  },
+  {
+    slug: "/blog/why-flange-calculators-are-wrong/",
+    title: "Why Most Online Flange Weight Calculators Give Wrong Results",
+    description:
+      "Most flange weight calculators online are wrong — sometimes by 10x or more. Here's why, and how ASME B16.5 geometric modeling fixes it.",
+    date: "July 28, 2026",
+    readTime: "8 min",
+    category: "Accuracy",
   },
 ];
 const breadcrumbItems = [
@@ -112,7 +139,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}> ctaHref="/request-a-quote/">
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/request-a-quote/">
   <section class="relative overflow-hidden py-20 px-4">
     <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
     <div class="max-w-4xl mx-auto relative z-10 text-center">
