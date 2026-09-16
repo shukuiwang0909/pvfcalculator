@@ -1,0 +1,375 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+import factoriesData from "../../data/factories.json";
+
+const title = "温州阀门制造商与永嘉泵阀产业集群 | Zhejiang, China";
+const description =
+  "温州——永嘉、龙湾、瑞安——是中国最大的泵阀制造集群：约3,900家阀门企业、约8万名从业者、超600亿元产业规模。集群分布、产品标准、质量分层与采购验厂建议。";
+const canonical = "https://pvfcalculator.com/zh/wenzhou-valve-manufacturers/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: "zh-CN",
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "温州阀门制造商", url: "/zh/wenzhou-valve-manufacturers/" },
+];
+const wenzhouFactories = factoriesData.filter((f) => ["Wenzhou", "Yongjia"].includes(f.city));
+const faqItems = [
+  {
+    question: "永嘉为什么被称为“中国泵阀之乡”？",
+    answer: "永嘉县隶属温州，自20世纪70年代开始生产工业阀门，被正式授予“中国泵阀之乡”称号。公开报道显示，永嘉现有泵阀企业超过3,700家，约占全国总数的四分之一，集中在瓯江沿岸的瓯北镇，已形成铸造—加工—装配—检测一体化的完整产业链。",
+  },
+  {
+    question: "温州阀门制造商执行哪些标准？",
+    answer: "成熟的温州企业通常按 API 600（闸阀）、API 602（锻钢阀）、API 594（止回阀）、API 608 与 API 6D（球阀）、API 609（蝶阀）设计制造，并遵循 ASME B16.34 的压力-温度额定体系；EN、DIN、JIS 与 GB 标准也很常见。采购合同中务必注明标准代号及版本。",
+  },
+  {
+    question: "温州阀门产业的规模有多大？",
+    answer: "不同来源与年份的数字略有差异。公开报道显示，温州全市约有3,900家阀门企业、从业人员约8万，总产值约600–680亿元（2022年数据）；永嘉县2024年泵阀规上产值约210亿元，含中小企业的全县产业规模估计接近500亿元。所有数字均为约数，仅供参考。",
+  },
+  {
+    question: "如何区分作坊式工厂与出口级工厂？",
+    answer: "看三点：（1）认证——ISO 9001 只是底线，API 6D/600/609 产品许可与欧盟 CE/PED 意味着经过审核的质量体系；（2）检测设备——正规工厂拥有试压机、壁厚与材质光谱设备，并可提供 MTR 材质追溯；（3）行业业绩。不愿接受视频验厂或第三方检验（SGS、BV、Intertek）的供应商，无论展示什么证书都应提高警惕。",
+  },
+  {
+    question: "温州阀门的典型交期与起订量是多少？",
+    answer: "Class 150–300、NPS 2″–12″ 的标准铸钢闸/截止/止回阀：拼箱订单通常3–6周出厂，起订量常可低至每规格5–20台。API 6D 固定球阀、Class 600 以上或特殊合金材质：6–12周。海运至欧洲或美国港口另需约25–35天。",
+  },
+  {
+    question: "不同阀种应该找温州哪个子集群？",
+    answer: "永嘉（瓯北）是品类最全的深度集群，适合 API 闸阀/截止阀/止回阀/球阀及管线球阀；龙湾（永强）一带以通用工业阀门与不锈钢产品见长；温州市区的特种阀企业（安全阀、严苛工况阀、液控阀）分散布局；瑞安则以泵及泵阀配套为主。先按阀种匹配子集群，再筛选具体供应商。",
+  },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/zh/" class="hover:text-theme-primary">首页</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">温州阀门制造商</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        温州<span class="accent-text">阀门制造商</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        永嘉——“中国泵阀之乡”——是温州产业集群的核心，也是中国最大的工业阀门生产集中地：
+        API 600 闸阀、API 6D 球阀、止回阀与控制阀从这里销往全球。这是一份采购地图。
+      </p>
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">3,700+</div>
+          <div class="text-xs text-theme-secondary">永嘉泵阀企业数（约占全国 1/4）</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">~¥500亿</div>
+          <div class="text-xs text-theme-secondary">永嘉泵阀产业规模估计值（2025年报道口径）</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">~3,900</div>
+          <div class="text-xs text-theme-secondary">温州全市阀门企业数（约 8 万从业者）</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">50+ 年</div>
+          <div class="text-xs text-theme-secondary">自上世纪70年代延续的阀门制造历史</div>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-theme-muted">数据整理自县域及行业公开报道，均为约数/估计值，仅作参考。</p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Cluster overview -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">温州—永嘉阀门产业集群</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          如果说沧州是中国的法兰之都，温州就是中国的阀门之都。该集群从上世纪70年代的乡镇作坊起步，
+          如今已覆盖全产业链——树脂砂铸造与精密铸造、CNC 加工、橡胶/塑料阀座、执行器与齿轮箱、
+          压力检测与出口物流——全部集中在浙南这一座城市圈内。
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          永嘉县瓯北镇是历史核心：沿瓯江分布着数千家企业的密集产业带，一只阀体从浇铸、机加工、
+          装配、试压到装柜发运，数天内即可完成。公开报道显示永嘉拥有泵阀企业3,700余家、
+          约占全国四分之一，2024年规上产值约210亿元（2025年超230亿元），含小微企业的
+          全县产业规模估计接近500亿元；温州全市则约有3,900家企业、8万名从业者。
+        </p>
+        <div class="overflow-x-auto mt-6">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">子集群</th>
+                <th class="px-3 py-2.5">专业化方向</th>
+                <th class="px-3 py-2.5 rounded-r-lg">典型买家</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">永嘉（瓯北）</td>
+                <td class="px-3 py-2.5 text-theme-secondary">API 闸阀/截止阀/止回阀/球阀、管线球阀、铸造到成品一体化</td>
+                <td class="px-3 py-2.5 text-theme-secondary">油气、石化、EPC 总承包商</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">龙湾（永强）</td>
+                <td class="px-3 py-2.5 text-theme-secondary">通用工业阀门、不锈钢产品、OEM/ODM 批量订单</td>
+                <td class="px-3 py-2.5 text-theme-secondary">水处理、暖通、工业经销商</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">温州市区</td>
+                <td class="px-3 py-2.5 text-theme-secondary">特种阀门：安全阀/泄压阀、严苛工况阀、控制阀、大型水电阀</td>
+                <td class="px-3 py-2.5 text-theme-secondary">电力、化工、专项工程</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">瑞安</td>
+                <td class="px-3 py-2.5 text-theme-secondary">泵及泵阀配套、机械装备基础</td>
+                <td class="px-3 py-2.5 text-theme-secondary">泵组撬装、供水系统</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Product specialization -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">产品专业化与对应标准</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          集群的一大优势是深度专业化——单个工厂往往精通单一阀类的全规格范围。按阀种匹配
+          对应的专精企业是高效采购的关键：
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">闸阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">按 API 600 / BS 1414 的楔式闸板隔离阀，WCB–WC9 铸钢，NPS 2″–48″，Class 150–2500。集群出口量最大的品类。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 600 · ASME B16.34 · B16.10 · B16.5</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">截止阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">API 602/623（锻钢）及 API 600 型铸钢截止阀，蒸汽与低泄漏工况可选波纹管密封结构。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 602/623 · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">止回阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">旋启式、升降式、对夹双板式与轴流式止回阀；大口径对夹双板是本地走量特色产品。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 594 · API 6D · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">球阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">NPS 6″ 以下浮动球、至 NPS 48″ 固定球，软密封与金属硬密封，管线及装置区工况。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 608 · API 6D/ISO 14313 · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">蝶阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">从给水用弹性密封到流程装置用三偏心高性能蝶阀。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 609 · AWWA C504</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">控制阀与特种阀</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">直通式控制阀、安全阀与泄压阀、水泵出口液控缓闭止回阀及水电专用阀。</p>
+            <p class="mt-2 text-xs accent-text font-semibold">IEC 60534 · ASME B16.34</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">集群内的质量分层</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          温州工厂的质量跨度很大——分层基本决定了价格、文件质量与失效风险：
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">层级</th>
+                <th class="px-3 py-2.5">典型资质</th>
+                <th class="px-3 py-2.5">你能得到什么</th>
+                <th class="px-3 py-2.5 rounded-r-lg">适用场景</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">作坊</td>
+                <td class="px-3 py-2.5 text-theme-secondary">无 / 仅营业执照</td>
+                <td class="px-3 py-2.5 text-theme-secondary">价格低，检测简陋，材质风险</td>
+                <td class="px-3 py-2.5 text-theme-secondary">非关键给排水；承压等级产品请回避</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">标准工厂</td>
+                <td class="px-3 py-2.5 text-theme-secondary">ISO 9001</td>
+                <td class="px-3 py-2.5 text-theme-secondary">加工一致性较好，基本水压试验，可索取 MTR</td>
+                <td class="px-3 py-2.5 text-theme-secondary">一般工业工况、经销商备货</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">出口级</td>
+                <td class="px-3 py-2.5 text-theme-secondary">ISO 9001 + CE/PED、API 600/609 审核</td>
+                <td class="px-3 py-2.5 text-theme-secondary">全程追溯、接受第三方检验、按 EN 12266/API 598 测试</td>
+                <td class="px-3 py-2.5 text-theme-secondary">欧洲项目、油气改造、EPC 合格供应商名录</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">API 6D 持证</td>
+                <td class="px-3 py-2.5 font-semibold accent-text">API 6D 会标许可证（在 API Q1 名录中核实）</td>
+                <td class="px-3 py-2.5 text-theme-secondary">管线级球/止回/闸阀、防火试验、可选低泄漏</td>
+                <td class="px-3 py-2.5 text-theme-secondary">长输管线、站场、关键切断场合</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Export markets -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">出口市场与物流</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          温州阀门销往全球。公开报道显示，永嘉泵阀出口在2020年代中期保持快速增长
+          （2022年曾报道同比增长约57%），主要目的地包括：
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">东南亚</div>
+            <p class="text-xs text-theme-secondary">印尼、越南、泰国、马来西亚——EPC 与水务工程，海运航程最短</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">中东</div>
+            <p class="text-xs text-theme-secondary">阿联酋、沙特、伊朗——油气与海水淡化采购</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">欧洲与中亚</div>
+            <p class="text-xs text-theme-secondary">俄罗斯、中亚、欧盟经销商——进入欧盟需 PED/CE 文件</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">美洲与非洲</div>
+            <p class="text-xs text-theme-secondary">矿业、水务与消防工程，份额持续增长</p>
+          </div>
+        </div>
+        <p class="text-sm text-theme-secondary leading-relaxed mt-4">
+          物流：温州阀门出口商多按 FOB 宁波或 FOB 上海报价（卡车运输约3–5小时）；标准海运至
+          欧洲或美国港口另需约25–35天。
+        </p>
+      </div>
+
+      <!-- Audit advice -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">温州阀门供应商验厂清单</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">1. 在发证机构数据库中核实认证</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">ISO 9001 通过发证机构在线名录（SGS、BV、TÜV、CQC）核验；API 产品许可（API 6D/600/609）在 api.org 持证企业名录中核对——宣传册上的许可号只有在与名录中的法人实体一致时才有效。</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">2. 要求材质可追溯</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">在合同中要求每个炉批号提供 MTR（材质报告）并与阀体铸件对应。WCB 阀体需询问铸件来源——温州不少工厂外购铸件，而铸件质量正是集群最大的变量。</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">3. 见证压力试验——或请人见证</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">正规工厂均配有按 API 598 / EN 12266 的水压壳体与密封试验台。首批订单建议委托第三方检验（SGS、BV、Intertek、TÜV），每批次约400–800美元，内容含 ASME B16.10 尺寸抽查与标志核验。</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">4. 核对营业执照经营范围</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">索取营业执照（营业执照）并确认经营范围含“阀门制造”而非仅“销售”。温州不少“制造商”实为贸易公司——未必是坏事，但价格与责任主体不同。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured suppliers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">温州/永嘉知名阀门企业</h2>
+        <p class="text-theme-secondary mb-6">
+          整理自公开资料的集群知名企业。收录仅为信息参考，不构成背书；下单前请核实最新资质与产能。
+          <a href="/zh/request-a-quote/" class="underline accent-text">立即询价 →</a>
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {wenzhouFactories.map((f) => (
+            <div class="glass rounded-xl p-5">
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-bold text-theme-primary text-sm leading-snug">{f.name}</h3>
+                {f.tier === "verified" && (
+                  <span class="shrink-0 text-xs px-2 py-0.5 rounded-full accent-bg/10 accent-text border border-amber-500/30">已核验</span>
+                )}
+              </div>
+              <p class="text-xs text-theme-muted mb-3">{f.nameZh}</p>
+              <dl class="text-xs space-y-1 text-theme-secondary mb-4">
+                {f.founded && <div><span class="font-medium text-theme-primary">成立</span> {f.founded}</div>}
+                {f.certifications && f.certifications.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">认证</span> {f.certifications.join(", ")}</div>
+                )}
+                {f.exportMarkets && f.exportMarkets.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">市场</span> {f.exportMarkets.join(" · ")}</div>
+                )}
+              </dl>
+              <div class="flex flex-wrap gap-3 text-xs">
+                {f.website && (
+                  <a href={f.website} target="_blank" rel="noopener noreferrer" class="underline text-theme-secondary hover:text-theme-primary transition-colors">官网 →</a>
+                )}
+                {f.tier === "verified" && f.contact?.email && (
+                  <a href={`mailto:${f.contact.email}`} class="underline accent-text">{f.contact.email}</a>
+                )}
+              </div>
+              {f.note && <p class="mt-3 text-[11px] text-theme-muted italic">信息整理自公开资料——{f.note === "verify before publishing" ? "发布前请核实" : f.note}。</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">规格化询价温州阀门</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          用重量计算器建立准确的阀门 BOM，用 Cv 计算器核算流通能力，然后一次询价送达温州集群供应商。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/zh/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            立即询价 →
+          </a>
+          <a href="/zh/valve-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            阀门重量计算器
+          </a>
+          <a href="/zh/valve-cv-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            阀门 Cv 计算器
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">常见问题</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">相关工具与资源</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/zh/valve-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">阀门重量计算器</a>
+          <a href="/zh/valve-cv-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">阀门 Cv 计算器</a>
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">沧州法兰制造商</a>
+          <a href="/blog/valve-weight-chart-by-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">阀门重量表（按磅级）</a>
+          <a href="/zh/request-a-quote/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">询价 Request a Quote</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} inLanguage="zh-CN" />

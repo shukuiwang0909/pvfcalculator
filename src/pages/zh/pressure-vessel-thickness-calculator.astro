@@ -1,0 +1,653 @@
+---
+import Base from '../../layouts/Base.astro';
+import { TEMP_ROWS_C, TEMP_ROWS_F, VESSEL_MATERIALS } from '../../data/vessel-materials';
+const title = "压力容器壁厚计算器（ASME VIII-1 UG-27/UG-32）| 圆筒与封头 | pvfcalculator.com";
+const description = "免费 ASME 第 VIII 卷第 1 册壁厚计算器：圆筒（UG-27，纵缝/环缝双向校核）、2:1 椭圆封头、碟形封头与半球封头（UG-32）。允许应力按 II-D 表在设计温度自动插值查取，支持焊缝系数（UW-12）、腐蚀裕量、标准板厚向上取整与 MAWP 回算，支持公制/英制。";
+const canonical = "https://pvfcalculator.com/zh/pressure-vessel-thickness-calculator/";
+
+const faqs = [
+  {
+    q: "压力容器壁厚计算和管道 Schedule 壁厚有什么区别？",
+    a: "两者解决的是不同问题。管道 Schedule（ASME B36.10M）是按公称尺寸预先标准化的商用壁厚系列，它并不知道你的实际压力、温度、材料允许应力和焊缝质量。UG-27 容器壁厚是真正的工程设计计算：t = P·R/(S·E − 0.6P)，其中 S 来自设计温度下的 ASME II-D 允许应力表，E 反映焊缝射线检测等级。同一根 SCH 40 管子用于不同工况可能严重过厚或不足——容器公式是按真实载荷条件来确定壁厚的。"
+  },
+  {
+    q: "UG-27 公式里的 0.6P 系数是怎么来的？",
+    a: "UG-27(c)(1) 不是薄壁理论加一个经验修正，而是厚壁圆筒 Lamé 精确解的改写形式。环向最大应力出现在内壁面，规范将其重排为 t = P·R/(S·E − 0.6P)（纵缝公式）和 t = P·R/(2S·E + 0.4P)（环缝公式），0.6P 与 0.4P 正是内壁面 Lamé 解的精确系数。因此 UG-27 在 t ≤ R/2、P ≤ 0.385·S·E 范围内保持准确，远比简单的'环向应力 = PR/t'薄壁公式更安全——后者在该范围外会危险地偏于不保守。"
+  },
+  {
+    q: "焊缝系数 E 应该取多少？",
+    a: "E 由 UW-12 表决定，取决于接头型式与射线检测程度，而非主观选取。对于 Type (1) 双面焊对接接头：100% 射线检测（RT-1，UW-11 全检）取 E = 1.00；局部射线检测（RT-2，UW-52 抽检）取 E = 0.85；不作射线检测取 E = 0.70。多数 ASME 打证工艺容器纵缝采用全检 E = 1.00；中低压储罐常用 0.85 抽检。盛装剧毒介质的容器按 UW-2 必须全检。"
+  },
+  {
+    q: "MAWP 回算中是否扣除了腐蚀裕量？",
+    a: "是。MAWP 按腐蚀后厚度（名义厚度减去腐蚀裕量）计算，这是保守的寿命末期状态。本计算器用 t（腐蚀后）= t（名义）− CA 代入 UG-27/UG-32 的反算公式，给出设计温度下的 MAWP。真实设备铭牌 MAWP 由制造商确认，还可能受接管、法兰或安全阀整定压力限制。"
+  },
+  {
+    q: "为什么计算器拒绝了我的设计温度？",
+    a: "本工具的允许应力表止于 650°F（343°C）。超过该温度后，碳钢与低合金钢进入时间相关（蠕变）区间，允许应力取决于设计寿命，必须查阅最新版 ASME II-D 原文——对公开转载表做插值或外推不符合工程规范。奥氏体不锈钢的表格范围更宽；SA-387 Gr.11 等 Cr-Mo 钢请直接核对 II-D。"
+  },
+  {
+    q: "这个计算器能做外压（真空）设计吗？",
+    a: "不能——外压设计本期刻意不覆盖。真空下薄壁圆筒的失效模式是失稳（屈曲）而非屈服，壁厚需按 UG-28 用 L/Do、Do/t 几何参数结合 II-D Subpart 3 材料曲线计算，必要时还要设计加强圈。若容器承受全真空或夹套外压，请单独完成 UG-28 计算；初步估算时可按承受 0.1 MPa（约 15 psi）外压保守设计筒体。"
+  },
+  {
+    q: "我能用这个计算器做 ASME U 钢印容器设计吗？",
+    a: "可用于方案估算、预算编制和核对制造厂报价，但不能作为正式设计文件。打证容器必须由持证制造商按 VIII-1（或 VIII-2）设计并经受权检验师（AI）审核；U 钢印仅在液压/气压试验和数据报告签署后授予。本工具忠实实现了 UG-27/UG-32，但不覆盖接管补强（UG-37）、疲劳、风/地震载荷、最低设计金属温度冲击豁免（UCS-66）及外压（UG-28）。"
+  },
+  {
+    q: "为什么碟形（F&D）封头比 2:1 椭圆封头厚这么多？",
+    a: "标准碟形封头 6% 的转角半径会在转角区产生很大的弯曲应力集中，UG-32(e) 的应力放大系数 M = ¼(3+√(L/r)) ≈ 1.77 正是为此设置的。2:1 椭圆封头曲率平滑过渡，K = 1，同等工况下所需壁厚通常只有碟形的一半甚至更少。这正是 2:1 椭圆封头尽管成形成本略高却在现代容器设计中占主导的原因。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "压力容器壁厚计算器（ASME VIII-1）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "压力容器壁厚计算器", url: "/zh/pressure-vessel-thickness-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        压力容器壁厚计算器 <span class="accent-text">（ASME VIII-1）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        计算圆筒（<strong>UG-27</strong>，纵缝/环缝双向校核）与成形封头——2:1 椭圆、碟形（F&amp;D）、半球（<strong>UG-32</strong>）的设计壁厚。
+        允许应力按设计温度从 ASME II-D 表自动插值查取，并计入焊缝系数（UW-12）、腐蚀裕量、标准板厚向上取整与 <strong>MAWP 回算</strong>。
+        这是本站 ASME 体系最完整的工具——与压力容器设计师在 U 钢印项目发包前运行的公式完全一致。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="压力容器壁厚计算工具">
+      <!-- Component selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">计算对象</label>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" id="compButtons">
+          <button data-comp="shell" class="comp-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><rect x="6" y="10" width="52" height="20" fill="none" stroke="currentColor" stroke-width="2"/><line x1="6" y1="14" x2="58" y2="14" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/><line x1="6" y1="26" x2="58" y2="26" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/></svg>
+            <span class="text-xs font-semibold">圆筒</span>
+          </button>
+          <button data-comp="ellipsoidal21" class="comp-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><line x1="4" y1="10" x2="60" y2="10" stroke="currentColor" stroke-width="2"/><path d="M8 10 A24 16 0 0 0 56 10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">2:1 椭圆封头</span>
+          </button>
+          <button data-comp="torispherical" class="comp-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><line x1="4" y1="10" x2="60" y2="10" stroke="currentColor" stroke-width="2"/><path d="M8 10 A30 30 0 0 0 44 26" fill="none" stroke="currentColor" stroke-width="2"/><path d="M44 26 A4 4 0 0 0 56 10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">碟形封头（F&amp;D）</span>
+          </button>
+          <button data-comp="hemispherical" class="comp-btn flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition">
+            <svg viewBox="0 0 64 40" class="h-8 w-14" aria-hidden="true"><line x1="4" y1="10" x2="60" y2="10" stroke="currentColor" stroke-width="2"/><path d="M12 10 A20 20 0 0 0 52 10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            <span class="text-xs font-semibold">半球封头</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="compDesc">UG-27 — 纵缝/环缝双向校核</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">尺寸基准</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="内径或内半径">
+            <button id="modeId" class="mode-btn flex-1 px-3 py-2 text-sm font-semibold transition">内径 ID</button>
+            <button id="modeIr" class="mode-btn flex-1 px-3 py-2 text-sm font-semibold transition">内半径 IR</button>
+          </div>
+        </div>
+        <div>
+          <label for="dimVal" class="mb-1 block text-sm font-semibold text-theme-secondary"><span id="dimLabel">内径</span>（<span class="dim-unit">mm</span>）</label>
+          <input id="dimVal" type="number" min="1" max="20000" step="any" value="2000" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="pressure" class="mb-1 block text-sm font-semibold text-theme-secondary">设计内压（<span class="p-unit">MPa</span>）</label>
+          <input id="pressure" type="number" min="0.001" max="100" step="any" value="1.0" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="temp" class="mb-1 block text-sm font-semibold text-theme-secondary">设计温度（<span id="tempUnit">°C</span>）</label>
+          <input id="temp" type="number" min="-50" max="400" step="1" value="100" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材料（II-D 查表）</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="jeff" class="mb-1 block text-sm font-semibold text-theme-secondary">焊缝系数 E</label>
+          <select id="jeff" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="ca" class="mb-1 block text-sm font-semibold text-theme-secondary">腐蚀裕量（<span class="dim-unit">mm</span>）</label>
+          <input id="ca" type="number" min="0" max="50" step="any" value="1.5" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位制</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="单位制">
+            <button id="unitMetric" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">公制</button>
+            <button id="unitImperial" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">英制</button>
+          </div>
+        </div>
+        <div id="toriRow" class="hidden gap-4 sm:col-span-2 lg:col-span-4 lg:grid lg:grid-cols-2">
+          <div>
+            <label for="crownL" class="mb-1 block text-sm font-semibold text-theme-secondary">球冠半径 L（<span class="dim-unit">mm</span>，留空 = 内径）</label>
+            <input id="crownL" type="number" min="0" step="any" placeholder="= 内径 ID" class="field w-full rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label for="knuckR" class="mb-1 block text-sm font-semibold text-theme-secondary">转角半径 r（<span class="dim-unit">mm</span>，留空 = 6%·L）</label>
+            <input id="knuckR" type="number" min="0" step="any" placeholder="= 6% × L（标准 F&D）" class="field w-full rounded-lg px-3 py-2 text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">所需壁厚（含腐蚀裕量）</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="tValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="tUnit">mm</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary"><span id="resultLine">–</span></p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">设计壁厚（公式值）</span><span class="font-semibold" id="outTdesign">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">+ 腐蚀裕量</span><span class="font-semibold" id="outTca">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">建议名义壁厚（标准板厚）</span><span class="font-semibold accent-text" id="outNominal">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">MAWP（设计温度）</span><span class="font-semibold" id="outMawp">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">允许应力 S（查表插值）</span><span class="font-semibold" id="outS">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">UG-16(b) 成形后最小厚度</span><span class="font-semibold" id="outUg16">–</span></div>
+          </div>
+          <div id="warnBox" class="mt-3 hidden rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-theme-secondary"></div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">分缝校核明细</p>
+          <dl class="text-sm" id="seamList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">UW-12 焊缝系数依据</summary>
+            <p class="mt-1">E 针对被校核的焊缝：UG-27 环向应力（纵缝）公式采用 Category A 纵缝系数；轴向应力公式采用 Category B 环缝系数。RT-1 全检 = 1.00，RT-2 局部抽检 = 0.85，不检测 = 0.70（UW-12 Type 1 对接接头）。</p>
+          </details>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">几何参数与数据来源</p>
+          <dl class="text-sm" id="geomList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">允许应力来源</summary>
+            <p class="mt-1">S 由 ASME BPVC II-D Table 1A 公开转载值在 100–650°F 间线性插值（见下表）。设计使用前请核对你所持版本的 II-D 原文。</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 01-2-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full allowable stress table -->
+    <section class="mt-10" aria-label="允许应力表">
+      <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-xl font-bold text-theme-primary">ASME II-D 允许应力表 <span class="accent-text">（S，公开转载值）</span></h2>
+        <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="应力单位">
+          <button id="tabMpa" class="tab-btn px-3 py-1.5 text-xs font-semibold transition">MPa</button>
+          <button id="tabKsi" class="tab-btn px-3 py-1.5 text-xs font-semibold transition">ksi</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[720px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">材料</th>
+              {TEMP_ROWS_F.map((f, i) => (
+                <th class="px-3 py-2.5 text-center">{f}°F<br /><span class="font-normal normal-case text-theme-muted">≈ {TEMP_ROWS_C[i]}°C</span></th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-theme">
+            {VESSEL_MATERIALS.map((m) => (
+              <tr class="cursor-pointer hover-accent-light" data-mat={m.id}>
+                <td class="px-3 py-2">
+                  <span class="font-semibold">{m.name}</span>
+                  <span class="block text-xs text-theme-muted">{m.form}</span>
+                </td>
+                {m.stressMpa.map((v, i) => (
+                  <td class="px-3 py-2 text-center tabular-nums" data-mpa={v} data-ksi={m.stressKsi[i]}>
+                    <span class="cell-val">{v}</span>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">
+        点击材料行即可载入计算器。表中为 II-D 公开转载值——设计使用前请以最新版规范原文为准。
+      </p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算方法说明">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算方法说明 <span class="accent-text">（UG-27 / UG-32 逐项）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <svg viewBox="0 0 420 240" class="w-full" role="img" aria-label="内压圆筒变量示意">
+            <defs>
+              <marker id="varr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+              </marker>
+            </defs>
+            <rect x="60" y="40" width="300" height="160" fill="none" stroke="#b45309" stroke-width="2" />
+            <line x1="60" y1="46" x2="360" y2="46" stroke="#f59e0b" stroke-width="3" />
+            <line x1="60" y1="194" x2="360" y2="194" stroke="#f59e0b" stroke-width="3" />
+            <line x1="110" y1="80" x2="110" y2="150" stroke="#64748b" marker-end="url(#varr)" />
+            <line x1="180" y1="80" x2="180" y2="150" stroke="#64748b" marker-end="url(#varr)" />
+            <line x1="250" y1="80" x2="250" y2="150" stroke="#64748b" marker-end="url(#varr)" />
+            <line x1="320" y1="80" x2="320" y2="150" stroke="#64748b" marker-end="url(#varr)" />
+            <text x="210" y="126" font-size="16" fill="#334155" text-anchor="middle" font-style="italic">P（内压）</text>
+            <line x1="30" y1="120" x2="390" y2="120" stroke="#475569" stroke-width="1" stroke-dasharray="8 5" />
+            <line x1="36" y1="120" x2="60" y2="120" stroke="#64748b" marker-start="url(#varr)" marker-end="url(#varr)" />
+            <text x="46" y="112" font-size="12" fill="#334155" text-anchor="middle" font-style="italic">R</text>
+            <line x1="392" y1="40" x2="392" y2="46" stroke="#64748b" marker-start="url(#varr)" marker-end="url(#varr)" />
+            <text x="404" y="46" font-size="12" fill="#334155" font-style="italic">t</text>
+            <text x="60" y="30" font-size="12" fill="#92400e">内半径 R，壁厚 t，内压 P</text>
+            <text x="60" y="222" font-size="12" fill="#334155">纵缝（Category A）→ 环向应力公式</text>
+            <text x="60" y="238" font-size="12" fill="#334155">环缝（Category B）→ 轴向应力公式</text>
+          </svg>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">本工具实现的规范公式</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>圆筒环向应力</strong>（UG-27(c)(1)）：t = P·R / (S·E − 0.6P) — 通常控制</li>
+            <li><strong>圆筒轴向应力</strong>（UG-27(c)(2)）：t = P·R / (2S·E + 0.4P)</li>
+            <li><strong>2:1 椭圆封头</strong>（UG-32(d)，K=1）：t = P·D / (2S·E − 0.2P)，等价半球法 L = 0.9D：t = P·L/(2SE−0.2P)</li>
+            <li><strong>碟形封头</strong>（UG-32(e)）：t = 0.885·P·L·M / (S·E − 0.1P)，M = ¼(3+√(L/r))</li>
+            <li><strong>半球封头</strong>（UG-32(f)）：t = P·R / (2S·E − 0.2P)</li>
+            <li>随后：t<sub>所需</sub> = t<sub>设计</sub> + CA → 标准板厚向上取整 → 用腐蚀后厚度 t<sub>名义</sub> − CA 回算 MAWP</li>
+          </ul>
+          <p class="mt-3">
+            <strong class="text-theme-primary">为什么要两个圆筒公式？</strong>环向应力是轴向应力的两倍，但纵缝系数 E 往往较小——
+            UG-27 要求两个方向分别满足。纵缝系数相同时环向公式控制；纵缝检测等级差时轴向公式可能控制。
+          </p>
+          <p class="mt-3">
+            <strong class="text-theme-primary">外压？</strong>本期不覆盖——外压失稳按 UG-28 用 II-D Subpart 3 图表计算，见 FAQ。
+            UG-16(b) 成形后最小厚度为 1/16 in（≈1.6 mm），不含腐蚀裕量。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sourcing CTA -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-8 text-center" aria-label="压力容器采购">
+      <h2 class="text-2xl font-bold text-theme-primary mb-3">需要制造？<span class="accent-text">对接 ASME U 钢印工厂</span></h2>
+      <p class="text-theme-secondary max-w-2xl mx-auto mb-6">
+        壁厚初算完成后，下一步是找持有 ASME U 钢印、具备 II-D 材料追溯能力并经受权检验师（AI）审核的制造厂——
+        包括 NDT、PWHT 与液压试验文件。把容器或换热器规格发给我们，我们将转接河北/沧州产业带的合格工厂：
+        SA-516-70 筒体、成形封头、管束与撬装整体供货。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/zh/request-a-quote/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          向 ASME 工厂申请报价 →
+        </a>
+        <a href="/zh/cangzhou-flange-manufacturers/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+          河北制造产业带
+        </a>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道重量计算器</a>
+        <a href="/pipe-schedule-chart/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道 Schedule 表</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 弯头重量计算器</a>
+        <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 三通重量计算器</a>
+        <a href="/reducer-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 异径管重量计算器</a>
+        <a href="/zh/cangzhou-flange-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 沧州法兰制造商</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 申请报价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>本计算器按 ASME VIII-1 UG-27/UG-32 公式、基于 100–650°F 公开转载的 II-D 允许应力值进行初步壁厚估算，
+      不能替代注册压力容器工程师与授权检验师（AI）的设计、审核与认证；U 钢印打证容器须由持证制造商完成全套焊接文件、
+      NDT 与液压试验。本工具不覆盖接管补强（UG-37）、外压（UG-28）、疲劳、最低设计金属温度冲击豁免（UCS-66）、
+      风/地震载荷及各辖区附加要求。
+    </p>
+  </div>
+</Base>
+
+<script>
+  import { JOINT_EFFICIENCIES, TEMP_ROWS_C, TEMP_ROWS_F, VESSEL_MATERIALS } from '../../data/vessel-materials';
+  import { COMPONENT_LIST, computeVesselThickness, type VesselComponent } from '../../lib/vessel-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    component: 'shell' as VesselComponent,
+    units: (localStorage.getItem('pvf_vessel_unit') === 'imperial' ? 'imperial' : 'metric') as 'metric' | 'imperial',
+    dimMode: 'id' as 'id' | 'ir',
+    p: 1.0, dim: 2000, temp: 100, mat: 'sa516-70', e: 1.0, ca: 1.5,
+    crownL: 0, knuckleR: 0,
+    stressUnit: 'mpa' as 'mpa' | 'ksi',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  const compName = (id: VesselComponent) => COMPONENT_LIST.find((c) => c.id === id)?.nameZh ?? id;
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of VESSEL_MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} — ${m.form}`;
+      if (m.id === state.mat) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateE() {
+    const sel = $('jeff') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const j of JOINT_EFFICIENCIES) {
+      const opt = document.createElement('option');
+      opt.value = String(j.e);
+      opt.textContent = `E = ${j.e.toFixed(2)} — ${j.nameZh}`;
+      if (j.e === state.e) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setCompButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.comp-btn').forEach((b) => {
+      const active = b.dataset.comp === state.component;
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const c = COMPONENT_LIST.find((x) => x.id === state.component);
+    $('compDesc').textContent = c ? c.descZh : '';
+    $('toriRow').classList.toggle('hidden', state.component !== 'torispherical');
+    $('toriRow').classList.toggle('lg:grid', state.component === 'torispherical');
+  }
+
+  function setModeButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('modeId').className = 'mode-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.dimMode === 'id' ? on : off);
+    $('modeIr').className = 'mode-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.dimMode === 'ir' ? on : off);
+    $('dimLabel').textContent = state.dimMode === 'id' ? '内径' : '内半径';
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitMetric').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.units === 'metric' ? on : off);
+    $('unitImperial').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.units === 'imperial' ? on : off);
+    document.querySelectorAll('.dim-unit').forEach((el) => { el.textContent = state.units === 'metric' ? 'mm' : 'in'; });
+    document.querySelectorAll('.p-unit').forEach((el) => { el.textContent = state.units === 'metric' ? 'MPa' : 'psi'; });
+    $('tempUnit').textContent = state.units === 'metric' ? '°C' : '°F';
+  }
+
+  function setTabButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('tabMpa').className = 'tab-btn px-3 py-1.5 text-xs font-semibold transition ' + (state.stressUnit === 'mpa' ? on : off);
+    $('tabKsi').className = 'tab-btn px-3 py-1.5 text-xs font-semibold transition ' + (state.stressUnit === 'ksi' ? on : off);
+    document.querySelectorAll<HTMLElement>('[data-mpa]').forEach((td) => {
+      td.querySelector('.cell-val')!.textContent = state.stressUnit === 'mpa' ? td.dataset.mpa! : td.dataset.ksi!;
+    });
+  }
+
+  function tempF(): number {
+    return state.units === 'metric' ? state.temp * 9 / 5 + 32 : state.temp;
+  }
+
+  function render() {
+    const tF = tempF();
+    const r = computeVesselThickness({
+      component: state.component,
+      units: state.units,
+      pressure: state.p,
+      dimMode: state.dimMode,
+      dimValue: state.dim,
+      tempF: tF,
+      materialId: state.mat,
+      jointE: state.e,
+      ca: state.ca,
+      crownL: state.crownL > 0 ? state.crownL : undefined,
+      knuckleR: state.knuckleR > 0 ? state.knuckleR : undefined,
+    });
+
+    const warnBox = $('warnBox');
+    if (!r.valid) {
+      $('tValue').textContent = '–';
+      $('resultLine').textContent = r.error === 'over-temperature'
+        ? '设计温度超过 650°F（343°C），允许应力超出列表范围——请使用最新版 ASME II-D 查取蠕变区数值。'
+        : '请检查输入。';
+      $('outTdesign').textContent = '–';
+      $('outTca').textContent = '–';
+      $('outNominal').textContent = '–';
+      $('outMawp').textContent = '–';
+      $('outS').textContent = '–';
+      $('outUg16').textContent = '–';
+      $('seamList').innerHTML = '';
+      $('geomList').innerHTML = '';
+      warnBox.classList.remove('hidden');
+      warnBox.innerHTML = r.warnings.map((w) => `<p>⚠ ${w}</p>`).join('');
+      return;
+    }
+
+    const inThk = r.tWithCaMm / 25.4;
+    const showMm = state.units === 'metric';
+    $('tValue').textContent = fmt(showMm ? r.tWithCaMm : inThk, r.tWithCaMm < 10 ? 3 : 2);
+    $('tUnit').textContent = showMm ? 'mm' : 'in';
+    $('resultLine').textContent = `${compName(r.component)} · ${r.material?.name ?? ''} · ${Math.round(tF)}°F（≈ ${Math.round((tF - 32) * 5 / 9)}°C）`;
+
+    const conv = (mm: number) => showMm ? `${fmt(mm, mm < 10 ? 3 : 2)} mm` : `${fmt(mm / 25.4, mm / 25.4 < 1 ? 4 : 3)} in`;
+    $('outTdesign').textContent = conv(r.tDesignMm);
+    $('outTca').textContent = conv(r.tWithCaMm);
+    $('outNominal').textContent = conv(r.nominalMm);
+    $('outMawp').textContent = `${fmt(r.mawpMpa, 3)} MPa · ${fmt(r.mawpPsi, 1)} psi`;
+    $('outS').textContent = `${fmt(r.sMpa, 1)} MPa（${fmt(r.sKsi, 1)} ksi）`;
+    $('outUg16').textContent = r.ug16Ok ? 'PASS（≥ 1/16 in）' : 'FAIL — 需加厚';
+    $('outUg16').classList.toggle('accent-text', r.ug16Ok);
+
+    if (r.warnings.length) {
+      warnBox.classList.remove('hidden');
+      warnBox.innerHTML = r.warnings.map((w) => `<p>⚠ ${w}</p>`).join('');
+    } else {
+      warnBox.classList.add('hidden');
+      warnBox.innerHTML = '';
+    }
+
+    const rows: [string, string][] = [];
+    if (r.shell) {
+      rows.push(['环向应力壁厚（纵缝）', conv(r.shell.tCircMm)]);
+      rows.push(['轴向应力壁厚（环缝）', conv(r.shell.tLongMm)]);
+      rows.push(['控制方向', r.shell.governing === 'circ' ? '环向（纵缝控制）' : '轴向（环缝控制）']);
+    } else if (r.head) {
+      if (r.component === 'ellipsoidal21') rows.push(['等效球冠半径 L = 0.9D', conv(r.head.crownLMm!)]);
+      if (r.component === 'torispherical') {
+        rows.push(['球冠半径 L', conv(r.head.crownLMm!)]);
+        rows.push(['转角半径 r', conv(r.head.knuckleRMm!)]);
+        rows.push(['应力系数 M', fmt(r.head.mFactor!, 3)]);
+      }
+      if (r.component === 'hemispherical') rows.push(['球半径 R', conv(r.head.crownLMm!)]);
+    }
+    rows.push(['焊缝系数 E', state.e.toFixed(2)]);
+    rows.push(['腐蚀裕量', conv(state.units === 'metric' ? state.ca : state.ca * 25.4)]);
+    $('seamList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+
+    const g: [string, string][] = [
+      ['计算对象', compName(r.component)],
+      [state.dimMode === 'id' ? '内径' : '内半径', showMm ? `${fmt(state.dim, 1)} mm` : `${fmt(state.dim, 2)} in`],
+      ['设计内压', showMm ? `${fmt(state.p, 3)} MPa` : `${fmt(state.p, 1)} psi`],
+      ['设计温度', `${Math.round(tF)}°F / ≈${Math.round((tF - 32) * 5 / 9)}°C`],
+    ];
+    $('geomList').innerHTML = g
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.comp-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.component = b.dataset.comp as VesselComponent; setCompButtons(); render(); })
+  );
+  $('modeId').addEventListener('click', () => { state.dimMode = 'id'; setModeButtons(); render(); });
+  $('modeIr').addEventListener('click', () => { state.dimMode = 'ir'; setModeButtons(); render(); });
+  $('dimVal').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); if (v > 0) { state.dim = v; render(); } });
+  $('pressure').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); if (v > 0) { state.p = v; render(); } });
+  $('temp').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); state.temp = v; render(); });
+  $('ca').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); if (v >= 0) { state.ca = v; render(); } });
+  $('crownL').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); state.crownL = v > 0 ? v : 0; render(); });
+  $('knuckR').addEventListener('input', (e) => { const v = Number((e.target as HTMLInputElement).value); state.knuckleR = v > 0 ? v : 0; render(); });
+  $('material').addEventListener('change', (e) => { state.mat = (e.target as HTMLSelectElement).value; render(); });
+  $('jeff').addEventListener('change', (e) => { state.e = Number((e.target as HTMLSelectElement).value); render(); });
+  $('tabMpa').addEventListener('click', () => { state.stressUnit = 'mpa'; setTabButtons(); });
+  $('tabKsi').addEventListener('click', () => { state.stressUnit = 'ksi'; setTabButtons(); });
+
+  function convertInputs(to: 'metric' | 'imperial') {
+    if (to === state.units) return;
+    if (to === 'imperial') {
+      state.dim = state.dim / 25.4; state.ca = state.ca / 25.4;
+      state.p = state.p / 0.006894757; state.temp = state.temp * 9 / 5 + 32;
+      if (state.crownL > 0) state.crownL /= 25.4;
+      if (state.knuckleR > 0) state.knuckleR /= 25.4;
+    } else {
+      state.dim = state.dim * 25.4; state.ca = state.ca * 25.4;
+      state.p = state.p * 0.006894757; state.temp = (state.temp - 32) * 5 / 9;
+      if (state.crownL > 0) state.crownL *= 25.4;
+      if (state.knuckleR > 0) state.knuckleR *= 25.4;
+    }
+    state.units = to;
+    localStorage.setItem('pvf_vessel_unit', to);
+    ($('dimVal') as HTMLInputElement).value = String(Math.round(state.dim * 100) / 100);
+    ($('ca') as HTMLInputElement).value = String(Math.round(state.ca * 100) / 100);
+    ($('pressure') as HTMLInputElement).value = String(Math.round(state.p * 1000) / 1000);
+    ($('temp') as HTMLInputElement).value = String(Math.round(state.temp * 10) / 10);
+    if (state.crownL > 0) ($('crownL') as HTMLInputElement).value = String(Math.round(state.crownL * 100) / 100);
+    if (state.knuckleR > 0) ($('knuckR') as HTMLInputElement).value = String(Math.round(state.knuckleR * 100) / 100);
+  }
+  $('unitMetric').addEventListener('click', () => { convertInputs('metric'); setUnitButtons(); render(); });
+  $('unitImperial').addEventListener('click', () => { convertInputs('imperial'); setUnitButtons(); render(); });
+
+  document.querySelectorAll<HTMLTableRowElement>('tr[data-mat]').forEach((tr) =>
+    tr.addEventListener('click', () => {
+      state.mat = tr.dataset.mat!;
+      ($('material') as HTMLSelectElement).value = state.mat;
+      render();
+      $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+  );
+
+  $('copyBtn').addEventListener('click', () => {
+    const t = ($('tValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('tUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const nominal = ($('outNominal') as HTMLElement).textContent ?? '–';
+    const mawp = ($('outMawp') as HTMLElement).textContent ?? '–';
+    const s = ($('outS') as HTMLElement).textContent ?? '–';
+    const text = `PVF Calculator — 压力容器壁厚（ASME VIII-1）\n${line}\n所需壁厚（含 CA）：${t} ${unit} · 名义壁厚：${nominal} · MAWP：${mawp}\nS = ${s}\nhttps://pvfcalculator.com/zh/pressure-vessel-thickness-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ 已复制!';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
+    });
+  });
+
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      comp: state.component, units: state.units, mode: state.dimMode,
+      dim: String(state.dim), p: String(state.p), temp: String(state.temp),
+      mat: state.mat, e: String(state.e), ca: String(state.ca),
+    });
+    if (state.crownL > 0) sp.set('crownl', String(state.crownL));
+    if (state.knuckleR > 0) sp.set('knuckler', String(state.knuckleR));
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ 链接已复制!';
+      setTimeout(() => { $('shareBtnLabel').textContent = '分享链接'; }, 2000);
+    });
+  });
+
+  {
+    const sp = new URLSearchParams(location.search);
+    const c = sp.get('comp') as VesselComponent;
+    if (c && COMPONENT_LIST.some((x) => x.id === c)) { state.component = c; }
+    const u = sp.get('units');
+    if (u === 'metric' || u === 'imperial') { state.units = u; }
+    const m = sp.get('mode');
+    if (m === 'id' || m === 'ir') { state.dimMode = m; }
+    const dim = Number(sp.get('dim')); if (dim > 0) { state.dim = dim; }
+    const p = Number(sp.get('p')); if (p > 0) { state.p = p; }
+    const t = Number(sp.get('temp')); if (t > -100 && t < 2000) { state.temp = t; }
+    const mat = sp.get('mat');
+    if (mat && VESSEL_MATERIALS.some((x) => x.id === mat)) { state.mat = mat; }
+    const e = Number(sp.get('e')); if (e > 0 && e <= 1) { state.e = e; }
+    const ca = Number(sp.get('ca')); if (ca >= 0) { state.ca = ca; }
+    const cl = Number(sp.get('crownl')); if (cl > 0) { state.crownL = cl; }
+    const kr = Number(sp.get('knuckler')); if (kr > 0) { state.knuckleR = kr; }
+    ($('dimVal') as HTMLInputElement).value = String(state.dim);
+    ($('pressure') as HTMLInputElement).value = String(state.p);
+    ($('temp') as HTMLInputElement).value = String(state.temp);
+    ($('ca') as HTMLInputElement).value = String(state.ca);
+  }
+
+  populateMaterials();
+  populateE();
+  setCompButtons();
+  setModeButtons();
+  setUnitButtons();
+  setTabButtons();
+  render();
+</script>

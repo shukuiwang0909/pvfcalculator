@@ -28,7 +28,7 @@
 - **要不要做**：做。钢管/管件/法兰 SERP 三层验证全部通过（产地词、工具词、标准词前排全是中国中小厂站/工程师内容站，零大平台）。
 - **一句话定位**：面向海外管道工程买家（EPC/经销商/采购工程师）的 PVF（Pipe + Fittings + Flanges）选型计算工具 + 沧州产业带源头工厂对接站。
 - **首版做什么**：3 个核心计算器 + 2 组规格表矩阵 + 产品页矩阵 + 沧州产地页 + 工厂目录 + 询盘表单。全静态站，Cloudflare Pages 托管。
-- **明确不做什么**：不做阀门（二期评估）、不做交易平台/在线下单、不爬企业信息、不做付费排名、不做纯机翻多语言（一期只 EN+ZH）。
+- **明确不做什么**：不做交易平台/在线下单、不爬企业信息、不做付费排名、不做纯机翻多语言（一期只 EN+ZH）。~~不做阀门（二期评估）~~ → 阀门已提前并入一期（2026-07 上线）：valve Cv calculator、valve weight calculator + 温州阀门产地页。
 
 ### 与丝网站（meshcalculator）的关系
 
@@ -191,7 +191,7 @@ PVFCalculator 由管道行业专业人员维护，工具公式公开、标准数
 ### P2（验证流量后）
 15. Verified Listing 收费（$100-300/年，含验厂报告展示位）
 16. ZH 全站版本
-17. 阀门品类评估（泊头铸铁阀 SERP 复扫）
+17. 阀门品类评估（泊头铸铁阀 SERP 复扫）——已由 2026-07 阀门组上线取代
 18. 西语/阿语版本（中东买家多）
 
 ### NOT-DO（明确不做）
@@ -199,7 +199,7 @@ PVFCalculator 由管道行业专业人员维护，工具公式公开、标准数
 - ❌ 不爬取企业信息入库（全部工厂自主填报，提供删除通道）
 - ❌ 不做付费搜索排名
 - ❌ 不做纯机翻多语言
-- ❌ 不做阀门（一期）
+- ✅ 阀门（一期已并入 2026-07）：valve Cv calculator、valve weight calculator + 温州阀门产地页
 - ❌ 不做会员系统/登录（二期再评估）
 - ❌ 不承诺交期、质量、资质（法定免责声明）
 
@@ -229,14 +229,22 @@ PVFCalculator 由管道行业专业人员维护，工具公式公开、标准数
 | /pipe-fittings-weight-calculator | pipe fittings weight calculator | P0 |
 | /sch-pipe-wall-thickness-chart | sch 40 pipe wall thickness chart | P0 |
 | /asme-b16-5-flange-dimensions | asme b16.5 flange dimensions | P0 |
-| /flange-bolt-chart | flange bolt size chart | P1 |
+| /flange-bolt-chart | flange bolt size chart | P1 ✅（2026-07 完成） |
 | /products/seamless-steel-pipe 等 13 个产品页 | 产品长尾词 | P0 |
 | /cangzhou-pipe-fittings | cangzhou pipe fittings factory | P0 |
-| /mengcun-pipe-fittings, /yanshan-flange | 产地长尾 | P1 |
+| /mengcun-pipe-fittings, /yanshan-flange | 产地长尾 | P1 ✅（2026-07 完成） |
 | /factory-directory/ + /factory-directory/submit | supplier directory 长尾 | P0 |
 | /standards/api-5l, /a106, /a234, /a105 等 | 标准词 | P1 |
 | /vs/ 对比页 ×5 | 对比词 | P1 |
 | /blog/ ×24 | 信息长尾 | P1 |
+| /flange-bolt-chart | flange bolt size chart | P1 ✅（已完成） |
+| /flange-bolt-torque-calculator | flange bolt torque calculator | P1 ✅（已完成） |
+| /valve-cv-calculator | valve cv calculator | P1 ✅（已完成） |
+| /valve-weight-calculator | valve weight calculator | P1 ✅（已完成） |
+| /pressure-vessel-thickness-calculator | pressure vessel thickness calculator | P1 ✅（已完成） |
+| /mengcun-pipe-fittings | mengcun pipe fittings | P1 ✅（已完成） |
+| /yanshan-flange | yanshan flange | P1 ✅（已完成） |
+| /wenzhou-valve-manufacturers | wenzhou valve manufacturers | P1 ✅（已完成） |
 
 ---
 

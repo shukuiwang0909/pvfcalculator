@@ -1,0 +1,286 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+import { VALVE_NPS_LIST, valveBaseKg, type ValveType } from "../../lib/valve-calculations";
+
+const title = "Valve Weight Chart by Class: Gate, Globe, Check & Ball (Class 150/300/600)";
+const description =
+  "Full cast-steel valve weight chart by pressure class — gate, globe, check and ball valves, NPS 1/2\" to 24\", calibrated against manufacturer catalogs. Includes face-to-face references and weight estimation method.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-08",
+  dateModified: "2026-09-08",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/valve-weight-chart-by-class/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Valve Weight Chart by Class", url: "/blog/valve-weight-chart-by-class/" },
+];
+const faqItems = [
+  {
+    question: "How much does a 6 inch gate valve weigh?",
+    answer: "A 6\" Class 150 cast steel (WCB) flanged gate valve weighs approximately 84 kg (185 lb); Class 300 approximately 144 kg (318 lb); Class 600 approximately 266 kg (586 lb). Values are catalog-calibrated estimates with a ±10–15% band.",
+  },
+  {
+    question: "Are valve weight charts accurate?",
+    answer: "Reasonably accurate for freight and quoting: compiled charts typically agree with any specific manufacturer's catalog within ±10–15%. They are not certified shipping weights — wall thickness selection (ASME B16.34 allows options), bonnet design and foundry practice all shift the number.",
+  },
+  {
+    question: "Why does Class 300 weigh so much more than Class 150?",
+    answer: "Pressure class drives wall thickness per ASME B16.34 minimums. Going from Class 150 to 300 roughly doubles the body wall mass, and to Class 600 roughly doubles it again — a 6\" gate valve goes from ~84 kg (150#) to ~144 kg (300#) to ~266 kg (600#).",
+  },
+  {
+    question: "Do wafer check valves follow this chart?",
+    answer: "No — this chart lists bolted-bonnet flanged swing checks. A dual-plate wafer check of the same NPS and class weighs roughly 45% of the swing check value and has no flanged face-to-face dimension.",
+  },
+  {
+    question: "Where do these numbers come from?",
+    answer: "The chart is generated at build time from our catalog-calibrated engine: base weights cross-checked against published gate/globe/check catalog compilations and a published API 6D full-bore ball valve chart, with per-size interpolation for sizes without a direct public reference. See the valve weight calculator for the full method.",
+  },
+];
+
+const CLASSES = [150, 300, 600] as const;
+const TYPES: { id: ValveType; name: string }[] = [
+  { id: "gate", name: "Gate" },
+  { id: "globe", name: "Globe" },
+  { id: "check", name: "Check (swing)" },
+  { id: "ball", name: "Ball" },
+];
+const fmt = (v: number) => v.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+// Build-time chart generation from the catalog-calibrated engine
+const charts = CLASSES.map((cls) => ({
+  cls,
+  rows: VALVE_NPS_LIST
+    .map((n) => ({ nps: n, weights: TYPES.map((t) => valveBaseKg(t.id, cls, n.nps)) }))
+    .filter((r) => r.weights.some((w) => w > 0)),
+}));
+---
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/valve-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Valve Weight Chart by Class</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Valve Weight Chart <span class="accent-text">by Class</span>: Gate, Globe, Check &amp; Ball
+      </h1>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: September 8, 2026</span>
+        <span>·</span>
+        <span>10 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick answer</h2>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          Cast-steel flanged valve weights scale with pressure class roughly as 1 : 1.7 : 3.1 going from
+          Class 150 to 300 to 600 (a 6" gate valve: ≈ 84 → 144 → 266 kg). At Class 150 and 300, NPS 1/2"–24"
+          are covered; Class 600 stops at NPS 12" in most catalogs. All values below are catalog-calibrated
+          estimates (WCB, RF ends, manual operation) with a typical ±10–15% band — for a specific
+          manufacturer's certified weight, use the <a href="/valve-weight-calculator/" class="underline accent-text">valve weight calculator</a>
+          and confirm with the supplier.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <nav class="glass rounded-xl p-6" aria-label="Table of contents">
+        <h2 class="text-sm font-bold text-theme-primary mb-3 uppercase tracking-wider">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#how-to-read" class="hover:accent-text">How to read this chart</a></li>
+          <li><a href="#class-150" class="hover:accent-text">Class 150 weight chart</a></li>
+          <li><a href="#class-300" class="hover:accent-text">Class 300 weight chart</a></li>
+          <li><a href="#class-600" class="hover:accent-text">Class 600 weight chart (NPS ≤ 12)</a></li>
+          <li><a href="#patterns" class="hover:accent-text">What the numbers tell you</a></li>
+          <li><a href="#method" class="hover:accent-text">Method &amp; calibration sources</a></li>
+          <li><a href="#faq" class="hover:accent-text">FAQ</a></li>
+        </ol>
+      </nav>
+
+      <!-- 1 -->
+      <div id="how-to-read">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. How to Read This Chart</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Every value below is the catalog-calibrated weight of a <strong class="text-theme-primary">cast steel
+          (ASTM A216 WCB)</strong> valve with <strong class="text-theme-primary">raised-face flanged ends</strong>,
+          handwheel or lever operated, bonnet included, pressure-tested and painted — i.e., the number that
+          shows up on a freight booking. Check valves are bolted-bonnet swing pattern; ball valves NPS ≤ 6"
+          are floating ball, NPS ≥ 8" trunnion mounted (most catalogs quote these with gear operators,
+          which the underlying engine factors in).
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Accuracy band: <strong class="text-theme-primary">±10–15%</strong> versus any specific
+          manufacturer's catalog. That is deliberate and honest — ASME B16.34 sets minimum wall
+          thickness, not exact mass, and two compliant valves of the same tag can legitimately differ
+          by 10%. Use these numbers for freight planning, load-out lists, and BOM weight roll-ups;
+          use certified weights for customs-critical declarations.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">Multiplier vs Class 150</th>
+                <th class="px-3 py-2.5">Gate 6"</th>
+                <th class="px-3 py-2.5">Globe 4"</th>
+                <th class="px-3 py-2.5">Check 8"</th>
+                <th class="px-3 py-2.5 rounded-r-lg">Ball 6"</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">Class 150</td><td class="px-3 py-2 text-theme-secondary">1.0×</td><td class="px-3 py-2 text-theme-secondary">1.0×</td><td class="px-3 py-2 text-theme-secondary">1.0×</td><td class="px-3 py-2 text-theme-secondary">1.0×</td></tr>
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">Class 300</td><td class="px-3 py-2 text-theme-secondary">1.7×</td><td class="px-3 py-2 text-theme-secondary">1.5×</td><td class="px-3 py-2 text-theme-secondary">1.7×</td><td class="px-3 py-2 text-theme-secondary">1.3×</td></tr>
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">Class 600</td><td class="px-3 py-2 text-theme-secondary">3.2×</td><td class="px-3 py-2 text-theme-secondary">2.4×</td><td class="px-3 py-2 text-theme-secondary">2.7×</td><td class="px-3 py-2 text-theme-secondary">2.0×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2-4: charts -->
+      {charts.map(({ cls, rows }) => (
+        <div id={`class-${cls}`}>
+          <h2 class="text-2xl font-bold mb-4 text-theme-primary">Class {cls} Weight Chart {cls === 600 && <span class="text-base font-semibold text-theme-muted">(NPS ≤ 12)</span>}</h2>
+          <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+            <table class="w-full min-w-[600px] text-sm">
+              <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <tr>
+                  <th class="px-3 py-2.5">NPS</th>
+                  {TYPES.map((t) => (
+                    <th class="px-3 py-2.5 text-right">{t.name} (kg)</th>
+                  ))}
+                  <th class="px-3 py-2.5 text-right">Heaviest (lb)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-theme">
+                {rows.map((r) => {
+                  const maxKg = Math.max(...r.weights.filter((w) => w > 0));
+                  return (
+                    <tr>
+                      <td class="px-3 py-2 font-semibold text-theme-primary">{r.nps.label}</td>
+                      {r.weights.map((w) => (
+                        <td class="px-3 py-2 text-right text-theme-secondary">{w > 0 ? fmt(w) : "—"}</td>
+                      ))}
+                      <td class="px-3 py-2 text-right text-theme-muted">{fmt(maxKg * 2.20462)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-2 text-xs text-theme-muted">
+            WCB, RF flanged ends, manual operation. Class {cls}.
+            {cls === 600 ? " Class 600 is rarely offered above NPS 12\" in standard catalogs." : " Full NPS 1/2\"–24\" coverage."}
+          </p>
+        </div>
+      ))}
+
+      <!-- 5 -->
+      <div id="patterns">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. What the Numbers Tell You</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Read down a column and three procurement facts jump out:
+        </p>
+        <ul class="space-y-3 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Weight grows faster than price.</strong> A 24" Class 150 gate valve weighs ~1,470 kg but costs perhaps 15× a 2" valve, not 70×. Large valves are disproportionately heavy relative to their cost — freight can rival the FOB price on big-bore orders.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">The class premium compounds with size.</strong> Moving 6" gate from 150# to 600# adds ~180 kg; moving 12" adds ~680 kg. High-class large valves drive both structural steel and rigging requirements.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Ball valves overtake gate valves in weight at large NPS.</strong> Below NPS 8" a ball valve is lighter than a gate valve; above it, trunnion construction and gear operators make it heavier — visible directly in the charts.</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          For material and configuration adjustments — butt-weld ends (−3%), gear operators (+18% at
+          NPS ≥ 14), stainless CF8/CF8M (+1.6–1.9%), lift or wafer checks — the
+          <a href="/valve-weight-calculator/" class="underline accent-text">valve weight calculator</a>
+          applies the factors to these same base tables and shows every multiplier.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Get the Interactive Chart</h2>
+        <p class="text-theme-secondary mb-6">
+          Filter by type, class, material, end connection and operation — then copy the result or share the configured link.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/valve-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Valve Weight Calculator →
+          </a>
+          <a href="/wenzhou-valve-manufacturers/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Wenzhou Valve Manufacturers
+          </a>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div id="method">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">6. Method &amp; Calibration Sources</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          This page is not a scanned PDF — the tables are generated at build time by the same engine that
+          powers the calculator. Base values were compiled from published cast-steel valve catalog weight
+          charts: gate, globe and check values cross-checked against a widely referenced public catalog
+          compilation; Class 150 ball values against a published API 6D full-bore ball valve dimension
+          and weight chart. Sizes without a direct public reference were interpolated along the type's
+          own weight curve.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Structural length (face-to-face) follows ASME B16.10 long patterns for gate/globe/check and
+          API 6D patterns for ball valves — the calculator shows the reference dimension per selection.
+          Standards context: ASME B16.34 for pressure-temperature ratings and wall thickness,
+          API 600/602/594/608/6D for the design types.
+        </p>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          If a supplier's quoted weight differs from this chart by more than 15–20%, ask why: it usually
+          means a different wall schedule, a gear operator you didn't expect, or a wafer body quoted
+          against a flanged chart line.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/how-to-calculate-valve-cv/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Calculate Valve Cv</a>
+          <a href="/blog/gate-vs-globe-vs-ball-vs-check-valve/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Gate vs Globe vs Ball vs Check</a>
+          <a href="/blog/why-flange-calculators-are-wrong/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Why Flange Calculators Are Wrong</a>
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Flange Manufacturers</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

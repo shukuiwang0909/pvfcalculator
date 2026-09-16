@@ -1,0 +1,513 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "阀门重量计算器（ASME B16.34）| 闸阀/截止阀/止回阀/球阀 | pvfcalculator.com";
+const description = "免费阀门重量计算器，覆盖铸钢闸阀、截止阀、止回阀与球阀，Class 150/300/600，NPS 1/2\"–24\"，基于制造商样本校准（典型误差 ±10–15%）。支持 WCB、LCB、CF8、CF8M、WC9 等材质，结果可选 kg 或 lb。";
+const canonical = "https://pvfcalculator.com/zh/valve-weight-calculator/";
+
+const faqs = [
+  {
+    q: "铸钢闸阀大概有多重？",
+    a: "以法兰端 WCB 碳钢手动阀为基准：2\" Class 150 闸阀约 21 kg；6\" Class 300 约 144 kg；8\" Class 150 旋启式止回阀约 130 kg。本工具表格基于公开制造商样本重量校准，与任意特定厂家样本的典型误差为 ±10–15%。"
+  },
+  {
+    q: "为什么大多数在线工具不提供阀门重量？",
+    a: "阀门重量无法像法兰或弯头那样用简单几何公式确定：它取决于壁厚选择（ASME B16.34 允许同一等级有多种壁厚方案）、阀盖结构、阀体形式和铸造工艺，因此多数计算器干脆不做阀门。本工具采用按阀门类型、等级、NPS 逐档校准的样本基准重量，再乘以端部、操作方式与材质系数，并如实标注 ±10–15% 的误差范围。"
+  },
+  {
+    q: "此阀门重量计算器的精度如何？",
+    a: "基准值整理自公开发表的铸钢阀样本重量表（闸阀/截止阀/止回阀与公开样本汇编交叉核对，Class 150 球阀与公开的 API 6D 全通径样本表核对）。与任一厂家样本的典型误差为 ±10–15%，大尺寸球阀个别情况下可能达 ±20%。结果定位为运费估算、报价与 BOM 核对的工程估计值，而非认证出货重量。"
+  },
+  {
+    q: "旋启式、升降式与对夹式止回阀的重量差异有多大？",
+    a: "螺栓阀盖的旋启式止回阀是本工具的基准（最重）。升降式止回阀阀体更紧凑，约为旋启式的 0.85 倍；对夹双板式止回阀直接夹在两片法兰之间，重量仅为同规格旋启式的约 45%，且不占用法兰间的结构长度。"
+  },
+  {
+    q: "是否支持伞齿轮操作的大口径阀门？",
+    a: "支持。选择“伞齿轮操作”后，对 NPS 14 及以上阀门施加 1.18 的质量系数，以体现伞齿轮箱、支架与加长阀杆的重量；NPS 14 以下不施加该系数。气动/电动执行器的质量不计入，仅计入安装连接件的余量。"
+  },
+  {
+    q: "覆盖哪些材质？",
+    a: "ASTM A216 WCB/WCC 碳钢（7,850 kg/m³，基准）、A352 LCB 低温碳钢、A217 WC6/WC9 铬钼合金钢，以及 A351 CF8（304）、CF8M（316）、CF3M（316L）不锈钢铸件（约 8,000 kg/m³）。重量按材质密度相对 WCB 的比值缩放。"
+  },
+  {
+    q: "覆盖哪些规格与压力等级？",
+    a: "闸阀、截止阀、止回阀、球阀四类，Class 150 与 Class 300 覆盖 NPS 1/2\"–24\"，Class 600 覆盖 NPS 1/2\"–12\"。结构长度参考值：闸/截止/止回按 ASME B16.10 长型，球阀按 API 6D 模式。"
+  },
+  {
+    q: "ASME B16.34 与 B16.10 与阀门重量有什么关系？",
+    a: "ASME B16.34 规定了压力-温度额定值与最小壁厚要求——更高等级的更厚阀壁正来源于其表格；ASME B16.10 规定结构长度（短型/常规型/长型）。两者限定了、但不能唯一确定阀门质量，这正是需要样本校准的原因。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "阀门重量计算器（ASME B16.34）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "阀门重量计算器", url: "/zh/valve-weight-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        阀门重量计算器 <span class="accent-text">（ASME B16.34）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        估算铸钢<strong>闸阀、截止阀、止回阀与球阀</strong>的重量——Class 150 / 300 / 600，NPS 1/2″–24″。
+        大多数在线工具完全不提供阀门重量；本工具的重量基于<strong>制造商样本校准</strong>（典型误差 ±10–15%）。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="阀门重量计算工具">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">阀门类型</label>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" id="typeButtons">
+          <button data-type="gate" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">闸阀</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 600 · 切断隔离</span>
+          </button>
+          <button data-type="globe" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">截止阀</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 602/623 · 节流调节</span>
+          </button>
+          <button data-type="check" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">止回阀</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 594 · 防止倒流</span>
+          </button>
+          <button data-type="ball" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">球阀</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 608/6D ·  quarter-turn</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">直通式切断，全通径，压降低</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">压力等级</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="150">Class 150</option>
+            <option value="300">Class 300</option>
+            <option value="600">Class 600（≤ NPS 12）</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">公称尺寸（NPS）</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">材质</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="end" class="mb-1 block text-sm font-semibold text-theme-secondary">端部连接</label>
+          <select id="end" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="operation" class="mb-1 block text-sm font-semibold text-theme-secondary">操作方式</label>
+          <select id="operation" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div id="checkStyleWrap" class="hidden">
+          <label for="checkStyle" class="mb-1 block text-sm font-semibold text-theme-secondary">止回阀结构</label>
+          <select id="checkStyle" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">数量</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="单位制">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单台阀重量</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary"><span id="resultLine">–</span></p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">数量</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">总重量</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">结构长度（参考）</span><span class="font-semibold" id="outF2F">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">施加系数</p>
+          <dl class="text-sm" id="factorList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">校准来源</summary>
+            <p class="mt-1">基准重量整理自公开发表的铸钢阀样本重量表（闸阀/截止阀/止回阀与公开样本汇编交叉核对；Class 150 球阀与公开的 API 6D 样本表核对）。与任一厂家样本的典型误差为 ±10–15%。</p>
+          </details>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">相关标准</p>
+          <dl class="text-sm" id="stdList"></dl>
+        </div>
+      </div>
+
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="阀门重量表">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary"><span id="tableTitle" class="accent-text">闸阀</span>重量表 — <span id="tableClass">Class 150</span> · WCB · RF · 手动</h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[560px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">管道外径 (mm)</th>
+              <th class="px-3 py-2.5">结构长度 (mm)</th>
+              <th class="px-3 py-2.5 text-right">重量 (kg)</th>
+              <th class="px-3 py-2.5 text-right">重量 (lb)</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">校准参考重量（WCB、RF、手动）。点击任意行可回填到计算器。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算原理">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">重量如何估算 <span class="accent-text">（样本校准法）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">公式链</p>
+          <div class="mono-block mt-3 rounded-lg p-4 text-sm">
+            W = W<sub>样本基准</sub>（类型、等级、NPS）<br />
+            &nbsp;&nbsp;× F<sub>端部</sub>（RF 1.0 · BW 0.97 · SW 0.82 · NPT 0.78）<br />
+            &nbsp;&nbsp;× F<sub>操作</sub>（手动 1.0 · 伞齿轮 ≥NPS14 为 1.18 · 执行机构 1.12）<br />
+            &nbsp;&nbsp;× F<sub>结构</sub>（止回阀：旋启 1.0 · 升降 0.85 · 对夹 0.45 · 轴流 0.7）<br />
+            &nbsp;&nbsp;× (ρ<sub>材质</sub> / ρ<sub>WCB</sub>)
+          </div>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">
+            与法兰（质量直接由 ASME B16.5 尺寸决定）不同，阀体是铸件或锻件，其壁厚由设计者在
+            ASME B16.34 最小壁厚要求范围内<strong>选取</strong>。两台同样合规的 Class 300 闸阀，
+            重量相差 10% 完全正常。这正是大多数在线工具不提供阀门重量的原因，也是本工具采用
+            样本校准并如实标注 ±10–15% 误差带的理由。
+          </p>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">数值背后的标准</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>ASME B16.34</strong> — 压力-温度额定值与最小壁厚要求；Class 150/300/600 的壁厚等级直接决定阀体质量。</li>
+            <li><strong>ASME B16.10</strong> — 结构长度（短型/常规型/长型）。闸阀/截止阀/止回阀采用长型，球阀通常采用 API 6D 模式。</li>
+            <li><strong>API 600 / 602 / 594 / 608 / 6D</strong> — 校准样本所依据的设计标准。</li>
+            <li><strong>ASTM A216/A352/A217/A351</strong> — 缩放系数所用材质密度。</li>
+          </ul>
+          <p class="mt-3">
+            基准值已与公开发表的样本重量表交叉核对（含公开闸/截止/止回样本汇编与 API 6D 全通径球阀样本表）。
+            结果适用于<strong>运费估算、报价与 BOM 核对</strong>；用于吊装方案或报关时，请向制造商索取认证重量。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/zh/valve-cv-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 阀门 Cv 计算器</a>
+        <a href="/zh/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/zh/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道重量计算器</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 法兰尺寸</a>
+        <a href="/zh/wenzhou-valve-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 温州阀门制造商</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 询价 Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>阀门重量为基于公开发表制造商样本整理的工程估计值，典型误差 ±10–15%
+      （大尺寸球阀个别情况可达 ±20%）。实际重量因厂家、壁厚选择、阀盖结构与内件不同而有差异。
+      用于吊装方案、运费结算或报关等关键用途时，请务必向阀门制造商索取认证重量。
+    </p>
+  </div>
+</Base>
+
+<script>
+  import {
+    CHECK_STYLE_FACTORS,
+    END_FACTORS,
+    KG_TO_LB,
+    OPERATION_FACTORS,
+    VALVE_MATERIALS,
+    VALVE_NPS_LIST,
+    VALVE_TYPES,
+    computeValveWeight,
+    validNpsFor,
+    valveBaseKg,
+    type ValveType,
+  } from '../../lib/valve-calculations';
+  import { VALVE_FACE_TO_FACE_MM } from '../../data/valve-dimensions';
+
+  const TYPE_ZH: Record<string, string> = { gate: '闸阀', globe: '截止阀', check: '止回阀', ball: '球阀' };
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    type: 'gate' as ValveType, cls: 150, nps: 2, material: 'WCB',
+    end: 'RF', operation: 'manual', checkStyle: 'swing',
+    qty: 1,
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateSelect(id: string, items: { id: string; name: string }[], keep?: string) {
+    const sel = $(id) as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = it.id;
+      opt.textContent = it.name;
+      sel.appendChild(opt);
+    }
+    if (keep) sel.value = keep;
+  }
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const valid = validNpsFor(state.cls);
+    sel.innerHTML = '';
+    for (const n of VALVE_NPS_LIST) {
+      if (!valid.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      sel.appendChild(opt);
+    }
+    if (!valid.includes(state.nps)) state.nps = valid.includes(2) ? 2 : valid[0];
+    sel.value = String(state.nps);
+  }
+
+  function setTypeButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) => {
+      const active = b.dataset.type === state.type;
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const t = VALVE_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? `${t.name} — ${t.std}。${t.desc}` : '';
+    $('checkStyleWrap').classList.toggle('hidden', state.type !== 'check');
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  function renderResult() {
+    const r = computeValveWeight(state.type, state.cls, state.nps, state.material, state.end, state.operation, state.checkStyle);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 1);
+    $('weightUnit').textContent = state.unit;
+    const matName = VALVE_MATERIALS.find((m) => m.id === state.material)?.name ?? state.material;
+    $('resultLine').textContent = `${TYPE_ZH[state.type]} ${r.npsLabel} Class ${r.cls} · ${matName}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 0 : 1)} ${state.unit}`;
+    $('outF2F').textContent = r.faceToFaceMm > 0 ? `≈ ${fmt(r.faceToFaceMm, 0)} mm` : '以订单确认为准';
+
+    const rows: [string, string][] = [
+      ['样本基准（WCB, RF）', `${fmt(r.baseKg, 1)} kg`],
+      ['端部系数', `× ${r.endFactor.toFixed(2)}`],
+      ['操作系数', `× ${r.operationFactor.toFixed(2)}`],
+      ['结构系数（止回）', `× ${r.styleFactor.toFixed(2)}`],
+      ['密度比（相对 WCB）', `× ${r.densityRatio.toFixed(3)}`],
+    ];
+    $('factorList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted font-bold">估算重量</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 1)} kg / ${fmt(r.weightLb, 1)} lb</dd></div>`;
+
+    const t = VALVE_TYPES.find((x) => x.id === state.type)!;
+    const stdRows: [string, string][] = [
+      ['设计标准', t.std],
+      ['额定标准', 'ASME B16.34'],
+      ['结构长度', state.type === 'ball' ? 'API 6D 模式' : 'ASME B16.10 长型'],
+      ['材质标准', VALVE_MATERIALS.find((m) => m.id === state.material)?.standard ?? '—'],
+    ];
+    $('stdList').innerHTML = stdRows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('');
+  }
+
+  function renderTable() {
+    $('tableTitle').textContent = TYPE_ZH[state.type];
+    $('tableClass').textContent = `Class ${state.cls}`;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const n of VALVE_NPS_LIST) {
+      const base = valveBaseKg(state.type, state.cls, n.nps);
+      if (base <= 0) continue;
+      const idx = VALVE_NPS_LIST.findIndex((x) => x.nps === n.nps);
+      const f2f = VALVE_FACE_TO_FACE_MM[state.type][state.cls as 150 | 300 | 600]?.[idx] ?? 0;
+      const kg = base * (VALVE_MATERIALS.find((m) => m.id === state.material)?.ratio ?? 1);
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(n.pipeOd, 1)}</td>` +
+        `<td class="px-3 py-2">${f2f > 0 ? fmt(f2f, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'accent-text' : ''}">${fmt(kg, 1)}</td>` +
+        `<td class="px-3 py-2 text-right">${fmt(kg * KG_TO_LB, 1)}</td>`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() { renderResult(); renderTable(); }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.type = b.dataset.type as ValveType; setTypeButtons(); render(); })
+  );
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => { state.material = (e.target as HTMLSelectElement).value; render(); });
+  $('end').addEventListener('change', (e) => { state.end = (e.target as HTMLSelectElement).value; render(); });
+  $('operation').addEventListener('change', (e) => { state.operation = (e.target as HTMLSelectElement).value; render(); });
+  $('checkStyle').addEventListener('change', (e) => { state.checkStyle = (e.target as HTMLSelectElement).value; render(); });
+  $('qty').addEventListener('input', (e) => {
+    state.qty = Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1));
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); renderResult(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); renderResult(); });
+
+  // Init
+  populateSelect('material', VALVE_MATERIALS.map((m) => ({ id: m.id, name: `${m.name} (${m.standard})` })));
+  populateSelect('end', END_FACTORS);
+  populateSelect('operation', OPERATION_FACTORS);
+  populateSelect('checkStyle', CHECK_STYLE_FACTORS);
+  populateNps();
+  setTypeButtons();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — 阀门重量\n${line}\n单台: ${w} ${unit}  ·  数量: ${qty}  ·  合计: ${total}\nhttps://pvfcalculator.com/zh/valve-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ 已复制！';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, cls: String(state.cls), nps: String(state.nps),
+      material: state.material, end: state.end, operation: state.operation,
+      checkStyle: state.checkStyle, qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ 链接已复制！';
+      setTimeout(() => { $('shareBtnLabel').textContent = '分享链接'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as ValveType;
+    if (t && (['gate','globe','check','ball'] as string[]).includes(t)) { state.type = t; setTypeButtons(); changed = true; }
+    const c = Number(sp.get('cls'));
+    if (c && [150, 300, 600].includes(c)) { state.cls = c; ($('cls') as HTMLSelectElement).value = String(c); populateNps(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0 && validNpsFor(state.cls).includes(n)) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const mat = sp.get('material');
+    if (mat && VALVE_MATERIALS.some((m) => m.id === mat)) { state.material = mat; ($('material') as HTMLSelectElement).value = mat; changed = true; }
+    const end = sp.get('end');
+    if (end && END_FACTORS.some((e) => e.id === end)) { state.end = end; ($('end') as HTMLSelectElement).value = end; changed = true; }
+    const op = sp.get('operation');
+    if (op && OPERATION_FACTORS.some((o) => o.id === op)) { state.operation = op; ($('operation') as HTMLSelectElement).value = op; changed = true; }
+    const cs = sp.get('checkStyle');
+    if (cs && CHECK_STYLE_FACTORS.some((x) => x.id === cs)) { state.checkStyle = cs; ($('checkStyle') as HTMLSelectElement).value = cs; changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

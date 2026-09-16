@@ -1,0 +1,270 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+import { CLASS_DATA, NPS_LIST } from "../../data/flange-dimensions";
+import { boltSpecForHole, wrenchSizeIn } from "../../data/bolt-dimensions";
+
+const title = "Flange Bolt Size Chart (ASME B16.5) | Studs, Nuts & Wrench Sizes";
+const description =
+  "Complete ASME B16.5 flange bolt size chart: bolt count, stud diameter, thread series, heavy-hex nut size and wrench/socket size for every NPS 1/2\"-24\" and Class 150-2500 combination.";
+const canonical = "https://pvfcalculator.com/flange-bolt-chart/";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: canonical,
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://pvfcalculator.com/" },
+      { "@type": "ListItem", position: 2, name: "Flange Bolt Size Chart", item: canonical },
+    ],
+  },
+};
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Flange Bolt Size Chart", url: "/flange-bolt-chart/" },
+];
+
+const faqs = [
+  {
+    question: "How do I determine the bolt size for a flange?",
+    answer: "Three pieces of information come from the flange itself: the bolt count, the bolt-hole diameter, and the bolt circle, all tabulated in ASME B16.5 for each NPS and class. The stud diameter is the standard size below the hole diameter minus the clearance (1/8 in clearance for studs up to 2-1/4 in, 1/4 in above). This chart does that mapping for you: find your NPS row in the table for your flange class and read off the stud size, thread series, nut across-flats and wrench size.",
+  },
+  {
+    question: "What is the difference between UNC and 8UN threads on flange studs?",
+    answer: "Studs of 1 inch diameter and smaller use Unified National Coarse (UNC) threads — 13 tpi for 1/2 in down to 8 tpi for 1 in. Studs larger than 1 inch use the 8UN constant-pitch series at 8 threads per inch. Both are covered by ASME B1.1, and the tensile stress area formula A_t = 0.7854(d - 0.9743/n)^2 applies to either series, so torque calculations work the same way.",
+  },
+  {
+    question: "Which nut and wrench size do flange studs use?",
+    answer: "Flange studs are normally supplied with heavy-hex nuts per ASME B18.2.2 (A194 2H for B7 studs, 2HM for B7M, 8/8M for B8/B8M, 7 for L7). Heavy-hex across-flats is 1.5 times the nominal stud diameter for larger sizes — for example a 3/4 in stud takes a 1-1/4 in (32 mm) heavy-hex nut and therefore a 1-1/4 in socket. The chart lists the across-flats for every standard stud size.",
+  },
+  {
+    question: "Does Class rating change the bolt size for the same NPS?",
+    answer: "Yes, significantly. A 6 in flange takes 8 bolts of 3/4 in in Class 150, 12 bolts of 1-1/4 in in Class 600, and 12 bolts of 1-7/8 in in Class 1500. Higher classes mean thicker flanges, larger bolt circles and more, larger bolts. Always read the table for the exact class — never reuse a bolt list across classes.",
+  },
+  {
+    question: "How long should flange stud bolts be?",
+    answer: "Stud length depends on the combined flange thicknesses plus nut height, washer allowance and 2-3 threads of protrusion. For a standard pair of weld-neck flanges it is roughly 2 x (flange thickness t) plus the nut. Because flange thickness varies by class and size, use the flange dimension tables for your exact combination rather than a generic rule, and add extra length if hydraulic tensioners will be used.",
+  },
+];
+
+interface Row {
+  nps: string;
+  bcd: number;
+  count: number;
+  hole: number;
+  label: string;
+  tpi: number;
+  at: number;
+  nutAf: number;
+}
+
+function rowsFor(cls: number): Row[] {
+  const cd = CLASS_DATA[cls];
+  const out: Row[] = [];
+  NPS_LIST.forEach((n, i) => {
+    const cell = cd.bolts[i];
+    if (!cell || cell === "—") return;
+    const m = cell.match(/^(\d+)\s*×\s*([\d.]+)/);
+    if (!m) return;
+    const spec = boltSpecForHole(Number(m[2]));
+    if (!spec) return;
+    out.push({
+      nps: n.label,
+      bcd: cd.bcd[i],
+      count: Number(m[1]),
+      hole: Number(m[2]),
+      label: spec.label,
+      tpi: spec.tpi,
+      at: spec.tensileAreaIn2,
+      nutAf: spec.nutAfIn,
+    });
+  });
+  return out;
+}
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={[jsonLd]} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-10 sm:py-14">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-3">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Flange Bolt Size Chart</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Flange <span class="accent-text">Bolt Size</span> Chart
+      </h1>
+      <p class="mt-3 text-theme-secondary max-w-2xl mx-auto">
+        Complete ASME B16.5 bolt chart: bolt count, stud diameter and thread series,
+        heavy-hex nut across-flats and wrench size — for every NPS 1/2" to 24" and Class 150 to 2500.
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick answer -->
+  <section class="pb-8">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="card card-accent">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick Answer</h2>
+        <p class="text-sm leading-relaxed text-theme-secondary">
+          The most common flange bolting in process plants: a <strong class="text-theme-primary">2" Class 150</strong> flange uses
+          <strong class="text-theme-primary">4 studs of 5/8"-11 UNC</strong> with 1-1/16" (27 mm) heavy-hex nuts;
+          a <strong class="text-theme-primary">4" Class 300</strong> flange uses <strong class="text-theme-primary">8 studs of 3/4"-10 UNC</strong>
+          with 1-1/4" (32 mm) nuts; a <strong class="text-theme-primary">6" Class 600</strong> flange uses
+          <strong class="text-theme-primary">12 studs of 1-1/8"-8 UN</strong> with 1-13/16" (46 mm) nuts.
+          Stud size = ASME B16.5 bolt-hole diameter minus 1/8" (studs ≤ 2-1/4") or 1/4" (larger studs).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Nav -->
+  <section class="pb-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-wrap gap-2 justify-center">
+      {[150, 300, 600, 900, 1500, 2500].map((c) => (
+        <a href={`#class-${c}`} class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">Class {c}</a>
+      ))}
+      <a href="#how-to-read" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">How to Read</a>
+      <a href="#faq" class="rounded-full border border-theme px-4 py-1.5 text-sm font-medium text-theme-primary hover:bg-theme-secondary transition">FAQ</a>
+    </div>
+  </section>
+
+  <!-- Tables -->
+  {[150, 300, 600, 900, 1500, 2500].map((c) => (
+    <section id={`class-${c}`} class="py-8">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="card card-accent overflow-hidden">
+          <div class="p-6 border-b border-theme">
+            <h2 class="text-xl font-bold text-theme-primary">Class {c} Flange Bolting</h2>
+            <p class="mt-1 text-sm text-theme-secondary">
+              {c === 2500 ? "Covers NPS 1/2\" - 12\" (B16.5 Class 2500 range)." : c === 900 || c === 1500 ? "Covers NPS 1/2\" - 24\" (no 3-1/2\" in Class " + c + ")." : "Covers NPS 1/2\" - 24\"."}
+              Stud sizes derived from B16.5 bolt-hole diameters.
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm min-w-[820px]">
+              <thead>
+                <tr class="border-b border-theme bg-theme-secondary">
+                  <th class="px-3 py-3 text-left font-semibold text-theme-primary">NPS</th>
+                  <th class="px-3 py-3 text-left font-semibold text-theme-primary">Bolt Circle (mm)</th>
+                  <th class="px-3 py-3 text-center font-semibold text-theme-primary">Bolts</th>
+                  <th class="px-3 py-3 text-left font-semibold text-theme-primary">Stud Size</th>
+                  <th class="px-3 py-3 text-center font-semibold text-theme-primary">TPI</th>
+                  <th class="px-3 py-3 text-right font-semibold text-theme-primary">A<sub>t</sub> (in²)</th>
+                  <th class="px-3 py-3 text-left font-semibold text-theme-primary">Nut (heavy hex)</th>
+                  <th class="px-3 py-3 text-left font-semibold text-theme-primary">Socket / Wrench</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rowsFor(c).map((r, i) => (
+                  <tr class={`border-b border-theme/50 ${i % 2 === 0 ? "bg-theme/30" : ""} hover:bg-theme-secondary/50 transition-colors`}>
+                    <td class="px-3 py-2 font-mono font-semibold text-theme-primary">{r.nps}</td>
+                    <td class="px-3 py-2 font-mono text-theme-secondary">{r.bcd.toFixed(1)}</td>
+                    <td class="px-3 py-2 text-center text-theme-secondary">{r.count} × Ø{r.hole}</td>
+                    <td class="px-3 py-2 font-mono font-semibold accent-text">{r.label}</td>
+                    <td class="px-3 py-2 text-center font-mono text-theme-secondary">{r.tpi}</td>
+                    <td class="px-3 py-2 text-right font-mono text-theme-secondary">{r.at.toFixed(3)}</td>
+                    <td class="px-3 py-2 font-mono text-theme-secondary">{r.nutAf}" ({Math.round(r.nutAf * 25.4)} mm)</td>
+                    <td class="px-3 py-2 font-mono text-theme-secondary">{r.nutAf}" ({Math.round(r.nutAf * 25.4)} mm)</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- How to read -->
+  <section id="how-to-read" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">How to Read This Chart</h2>
+      <div class="space-y-6">
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">From flange markings to a bolt list</h3>
+          <ol class="list-decimal list-inside space-y-2 text-sm text-theme-secondary">
+            <li>Identify the <strong class="text-theme-primary">NPS</strong> (nominal pipe size) and <strong class="text-theme-primary">class</strong> stamped on the flange face or callout.</li>
+            <li>Open the table for that class and find the NPS row.</li>
+            <li><strong class="text-theme-primary">Bolts</strong> column = count × bolt-hole diameter in mm (as tabulated in ASME B16.5).</li>
+            <li><strong class="text-theme-primary">Stud Size</strong> = standard stud for those holes; <strong class="text-theme-primary">Nut</strong> and <strong class="text-theme-primary">Socket / Wrench</strong> columns give the heavy-hex across-flats you need for socket selection.</li>
+            <li>Order studs with the correct thread series (UNC ≤ 1", 8UN above) and roughly 2 × flange thickness + nut height in length.</li>
+          </ol>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <h3 class="font-bold text-theme-primary mb-2">Bolt-hole to stud-size mapping</h3>
+          <p class="text-sm leading-relaxed text-theme-secondary">
+            ASME B16.5 tabulates bolt <em>holes</em>, not stud sizes. The clearance is 1/8" (3.2 mm) for studs up to
+            2-1/4" and 1/4" (6.4 mm) above: a 22.2 mm hole takes a 3/4" (19.1 mm) stud, a 50.8 mm hole takes a
+            1-7/8" (47.6 mm) stud, and a 66.7 mm hole takes a 2-1/2" (63.5 mm) stud. The tensile stress area
+            A<sub>t</sub> column uses the ASME B1.1 formula <code class="accent-text">A_t = 0.7854(d - 0.9743/n)^2</code>,
+            which feeds directly into torque calculation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator CTA -->
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary">Calculate Flange Bolt Torque</h2>
+        <p class="mt-3 text-theme-secondary max-w-xl mx-auto">
+          Know the stud size? Now get the tightening torque — PCC-1 style target stress,
+          lubrication-corrected K factor, three-pass tightening table and cross-pattern sequence.
+        </p>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/flange-bolt-torque-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Flange Bolt Torque Calculator
+          </a>
+          <a href="/asme-b16-5-flange-dimensions/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            ASME B16.5 Flange Dimensions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="glass rounded-xl px-5 py-4 group">
+            <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+              {f.question}
+              <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Links -->
+  <section class="py-8 border-t border-theme">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-lg font-bold text-theme-primary mb-4">Related Resources</h3>
+      <div class="flex flex-wrap gap-3">
+        <a href="/flange-bolt-torque-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Bolt Torque Calculator</a>
+        <a href="/flange-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Weight Calculator</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">ASME B16.5 Flange Dimensions</a>
+        <a href="/pipe-schedule-chart/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Schedule Chart</a>
+        <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Flange Manufacturers</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqs} />

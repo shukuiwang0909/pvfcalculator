@@ -1,0 +1,336 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "How to Calculate Valve Cv: Liquid, Gas & Steam Sizing Worked Examples";
+const description =
+  "Step-by-step valve Cv calculation: the liquid formula Cv = Q·√(SG/ΔP), the ISA-75.01 gas equation with the expansion factor Y, choked-flow detection, and a full steam example.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-08",
+  dateModified: "2026-09-08",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/how-to-calculate-valve-cv/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "How to Calculate Valve Cv", url: "/blog/how-to-calculate-valve-cv/" },
+];
+const faqItems = [
+  {
+    question: "What is the formula for valve Cv?",
+    answer: "For liquids: Cv = Q·√(SG/ΔP), with Q in gpm and ΔP in psi. For gases, the ISA-75.01 expansion-factor form: Cv = Q/(N8·P1·Y)·√(G_g·T1·Z/x), where x = ΔP/P1 and Y = 1 − x/(3·F_k·x_T). For steam, use the mass-flow form Cv = w/(N6·Y·√(ΔP·P1·ρ1)).",
+  },
+  {
+    question: "What is choked flow in a valve?",
+    answer: "Choked flow is the condition where increasing pressure drop no longer increases flow. For gases it begins when x = ΔP/P1 reaches F_k·x_T; for liquids the simplified screen is ΔP ≥ F_L²·P1. A valve operated choked is at its maximum capacity regardless of how much more ΔP is available.",
+  },
+  {
+    question: "What is a typical Cv for a 2 inch ball valve?",
+    answer: "A full-port 2\" ball valve typically has Cv ≈ 420 (published values range roughly 380–460). A 2\" gate valve is similar at ≈ 380, while a 2\" globe valve is only ≈ 100 — the contoured plug sacrifices 4–5× flow capacity.",
+  },
+  {
+    question: "What units does the Cv formula use?",
+    answer: "US customary: flow in gpm (liquid) or scfh at 14.696 psia/60 °F (gas), pressures in psia, temperature in °Rankine for gas, mass flow in lb/h for steam. Constants: N8 = 19.3, N6 = 2.09.",
+  },
+  {
+    question: "Should I pick a valve exactly at the calculated Cv?",
+    answer: "No. Control valves are typically selected so the operating opening sits around 60–80% of rated travel, with 10–20% headroom; shutoff valves (ball/gate/check) are usually line-size regardless of the calculated Cv, because their rated Cv far exceeds the duty.",
+  },
+];
+---
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/valve-cv-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">How to Calculate Valve Cv</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        How to Calculate <span class="accent-text">Valve Cv</span>: Liquid, Gas &amp; Steam Worked Examples
+      </h1>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: September 8, 2026</span>
+        <span>·</span>
+        <span>9 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick answer</h2>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          For a <strong class="text-theme-primary">liquid</strong>, the required valve Cv is
+          <strong class="text-theme-primary">Cv = Q·√(SG/ΔP)</strong> — flow in gpm, ΔP in psi. For a
+          <strong class="text-theme-primary">gas</strong>, use the ISA-75.01 expansion-factor equation
+          <strong class="text-theme-primary">Cv = Q/(N8·P1·Y)·√(G_g·T1·Z/x)</strong> with Y = 1 − x/(3·F_k·x_T).
+          For <strong class="text-theme-primary">steam</strong>, use the mass-flow form
+          Cv = w/(N6·Y·√(ΔP·P1·ρ1)). If the pressure ratio x = ΔP/P1 exceeds F_k·x_T (gas) or ΔP ≥ F_L²·P1
+          (liquid), the flow is <strong class="text-theme-primary">choked</strong> and more ΔP will not
+          pass more fluid. Worked examples for all three below — or skip the math and use the
+          <a href="/valve-cv-calculator/" class="underline accent-text">valve Cv calculator</a>.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <nav class="glass rounded-xl p-6" aria-label="Table of contents">
+        <h2 class="text-sm font-bold text-theme-primary mb-3 uppercase tracking-wider">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#what-is-cv" class="hover:accent-text">What Cv actually measures</a></li>
+          <li><a href="#liquid-example" class="hover:accent-text">Liquid sizing, step by step</a></li>
+          <li><a href="#gas-example" class="hover:accent-text">Gas sizing with the expansion factor Y</a></li>
+          <li><a href="#choked-flow" class="hover:accent-text">Choked flow: when more ΔP stops helping</a></li>
+          <li><a href="#steam-example" class="hover:accent-text">Steam sizing</a></li>
+          <li><a href="#reverse" class="hover:accent-text">Reverse problems: flow or ΔP from a known Cv</a></li>
+          <li><a href="#faq" class="hover:accent-text">FAQ</a></li>
+        </ol>
+      </nav>
+
+      <!-- 1 -->
+      <div id="what-is-cv">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. What Cv Actually Measures</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Cv is the valve flow coefficient: the number of US gallons per minute of 60 °F water that
+          passes through the fully open valve at a pressure drop of exactly 1 psi. It is the industry's
+          single most-used number for comparing flow capacity, because it folds the valve's internal
+          geometry — seat bore, plug shape, disc angle — into one experimentally measured figure.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Three practical consequences:
+        </p>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Cv scales with the square of size.</strong> A 4" full-port ball valve (Cv ≈ 1,900) carries about 4.5× the flow of a 2" valve (Cv ≈ 420), not 2×.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Cv is comparable across manufacturers</strong> only for the same valve style — a globe valve's Cv is inherently 4–5× below a ball valve of the same NPS.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Cv is not a rating.</strong> It says nothing about pressure class, shutoff class, or cavitation limits — those come from ASME B16.34 and the seat design.</span></li>
+        </ul>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">NPS</th>
+                <th class="px-3 py-2.5">Full-port ball Cv</th>
+                <th class="px-3 py-2.5">Full-port gate Cv</th>
+                <th class="px-3 py-2.5 rounded-r-lg">Globe Cv</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">2"</td><td class="px-3 py-2 text-theme-secondary">≈ 420</td><td class="px-3 py-2 text-theme-secondary">≈ 380</td><td class="px-3 py-2 text-theme-secondary">≈ 100</td></tr>
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">4"</td><td class="px-3 py-2 text-theme-secondary">≈ 1,900</td><td class="px-3 py-2 text-theme-secondary">≈ 1,700</td><td class="px-3 py-2 text-theme-secondary">≈ 420</td></tr>
+              <tr><td class="px-3 py-2 font-semibold text-theme-primary">6"</td><td class="px-3 py-2 text-theme-secondary">≈ 5,000</td><td class="px-3 py-2 text-theme-secondary">≈ 4,500</td><td class="px-3 py-2 text-theme-secondary">≈ 1,100</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-theme-muted mt-2">Typical published reference values; real catalog values vary ±25%.</p>
+      </div>
+
+      <!-- 2 -->
+      <div id="liquid-example">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">2. Liquid Sizing, Step by Step</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The turbulent, non-choked liquid equation is refreshingly short:
+        </p>
+        <div class="mono-block rounded-xl p-4 text-sm mb-4">
+          Cv = Q · √(SG / ΔP)
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">Worked example.</strong> A cooling-water branch must pass
+          150 gpm of treated water (SG = 1.0) across a control valve dropping from 85 psig to 70 psig.
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li>ΔP = 85 − 70 = 15 psi.</li>
+          <li>Cv = 150 · √(1.0 / 15) = 150 · 0.258 = <strong class="text-theme-primary">38.7</strong>.</li>
+          <li>Check choking: for a globe valve F_L ≈ 0.9, so F_L²·P1 = 0.81 × 99.7 psia ≈ 81 psi — our 15 psi ΔP is far below. Not choked. ✓</li>
+          <li>Select one size up: a 2" globe valve (Cv ≈ 100) or a 1.5" ball valve (Cv ≈ 230) depending on whether throttling or isolation is the duty.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          For anything but water, only the specific gravity changes: diesel (SG 0.85) at the same duty
+          needs Cv = 150·√(0.85/15) = 35.7. Viscous fluids above ~40 cSt need a viscosity correction
+          (the F_R factor in ISA-75.01), which the basic equation ignores.
+        </p>
+      </div>
+
+      <!-- CTA 1 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Skip the Spreadsheet</h2>
+        <p class="text-theme-secondary mb-6">
+          The calculator runs all three fluid equations with choked-flow detection and reverse solve modes.
+        </p>
+        <a href="/valve-cv-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Open the Valve Cv Calculator →
+        </a>
+      </div>
+
+      <!-- 3 -->
+      <div id="gas-example">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">3. Gas Sizing with the Expansion Factor Y</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Gases compress, so the liquid equation fails. The ISA-75.01 / Fisher handbook form adds the
+          pressure ratio x = ΔP/P1 and the expansion factor Y, which models the density collapse at the
+          vena contracta:
+        </p>
+        <div class="mono-block rounded-xl p-4 text-sm space-y-1 mb-4">
+          <p>Cv = Q / (N8 · P1 · Y) · √(G_g · T1 · Z / x)</p>
+          <p>Y = 1 − x / (3 · F_k · x_T),&nbsp;&nbsp; F_k = k / 1.4,&nbsp;&nbsp; N8 = 19.3</p>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">Worked example.</strong> A nitrogen header at 100 psia,
+          80 °F must vent 20,000 scfh through a full-port ball valve (x_T ≈ 0.25) to a 75 psia flare.
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li>x = (100 − 75)/100 = 0.25.</li>
+          <li>Nitrogen: k = 1.40 → F_k = 1.00; choking threshold F_k·x_T = 0.25 — we are exactly at the choking boundary (flag this).</li>
+          <li>Y = 1 − 0.25/(3 × 0.25) = 0.667 (the floor value).</li>
+          <li>T1 = 80 + 460 = 540 °R; G_g = 0.967; Z ≈ 1.</li>
+          <li>Cv = 20,000 / (19.3 × 100 × 0.667) · √(0.967 × 540 / 0.25) ≈ 15.5 × 45.7 ≈ <strong class="text-theme-primary">709</strong>.</li>
+          <li>A 3" full-port ball valve (Cv ≈ 1,100) covers it with margin; at the choking boundary, any increase in ΔP buys zero extra flow.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          Notice how strongly Y penalizes high pressure ratios: at x = 0.25, Y = 0.667, meaning the
+          valve passes only two-thirds of what the incompressible equation would predict. Ignoring Y
+          under-sizes gas valves by 10–30% in typical process duty.
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div id="choked-flow">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">4. Choked Flow: When More ΔP Stops Helping</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Choked flow is the single most-misunderstood concept in valve sizing. Past the choking point,
+          the velocity at the vena contracta reaches sonic; the valve passes its maximum flow, and any
+          additional pressure drop simply dissipates downstream as noise and vibration.
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">Fluid</th>
+                <th class="px-3 py-2.5">Choking criterion</th>
+                <th class="px-3 py-2.5 rounded-r-lg">What to do when choked</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Liquid</td>
+                <td class="px-3 py-2 text-theme-secondary">ΔP ≥ F_L²·(P1 − F_F·P_v); simplified screen ΔP ≥ F_L²·P1</td>
+                <td class="px-3 py-2 text-theme-secondary">Cap ΔP at the choking value; select a larger valve or multi-stage trim; check for cavitation damage and noise</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Gas / steam</td>
+                <td class="px-3 py-2 text-theme-secondary">x = ΔP/P1 ≥ F_k·x_T (Y floors at 2/3)</td>
+                <td class="px-3 py-2 text-theme-secondary">Flow is capped at the choking pressure ratio; increase Cv — more ΔP is wasted energy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-secondary leading-relaxed">
+          Valve style matters enormously: a globe valve (x_T ≈ 0.70) resists choking, while a full-port
+          ball valve (x_T ≈ 0.25) chokes at a quarter of the inlet pressure. That is one reason ball
+          valves make poor pressure-reducing devices despite their high Cv.
+        </p>
+      </div>
+
+      <!-- 5 -->
+      <div id="steam-example">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. Steam Sizing</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Steam is most conveniently sized by mass flow, since process steam is specified in kg/h or lb/h:
+        </p>
+        <div class="mono-block rounded-xl p-4 text-sm mb-4">
+          Cv = w / (N6 · Y · √(ΔP · P1 · ρ1))&nbsp;&nbsp;— w in lb/h, N6 = 2.09, ρ1 = inlet saturated-steam density (lb/ft³)
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">Worked example.</strong> A steam trap bypass must pass
+          4,000 lb/h of saturated steam at 150 psia through a globe valve into a 110 psia header.
+          From the steam table, ρ1 at 150 psia ≈ 0.332 lb/ft³.
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li>x = (150 − 110)/150 = 0.267.</li>
+          <li>Steam k ≈ 1.3 → F_k ≈ 0.93; choking threshold 0.93 × 0.70 ≈ 0.65. Not choked. ✓</li>
+          <li>Y = 1 − 0.267/(3 × 0.65) = 0.863.</li>
+          <li>Cv = 4,000 / (2.09 × 0.863 × √(40 × 150 × 0.332)) = 4,000 / (1.804 × 44.7) ≈ <strong class="text-theme-primary">49.6</strong>.</li>
+          <li>A 2" globe valve (Cv ≈ 100) provides healthy margin; verify noise level if the ΔP were higher.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          Superheat shifts ρ1 downward (hotter steam is less dense); sizing on saturated density at the
+          same pressure is slightly conservative, which is acceptable for preliminary sizing.
+        </p>
+      </div>
+
+      <!-- 6 -->
+      <div id="reverse">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">6. Reverse Problems: Flow or ΔP from a Known Cv</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Field engineers often face the inverse question: the valve is already installed, the tag says
+          Cv = 300 — what will it pass, or what ΔP will it develop at the required flow?
+        </p>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Liquid flow:</strong> Q = Cv·√(ΔP/SG) — direct substitution. Cv 300 at 25 psi water: Q = 300 × 5 = 1,500 gpm.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Gas ΔP:</strong> solve Y(x)·√x = Q·√(G_g·T1·Z)/(Cv·N8·P1) by bisection on x ∈ (0, F_k·x_T). If the target exceeds the choking capacity Y·√x at x = F_k·x_T, no ΔP exists — the valve is undersized.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Gas flow:</strong> Q = Cv·N8·P1·Y·√(x/(G_g·T1·Z)), using the choked value Y = 2/3 when x ≥ F_k·x_T.</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          The <a href="/valve-cv-calculator/" class="underline accent-text">valve Cv calculator</a>
+          implements both reverse modes with the bisection solver built in — including the
+          "undersized even at choking" diagnostic that spreadsheets miss.
+        </p>
+      </div>
+
+      <!-- CTA 2 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Size Your Valve Now</h2>
+        <p class="text-theme-secondary mb-6">
+          Liquid, gas and steam modes · choked-flow warnings · reverse solving — free, in your browser.
+        </p>
+        <a href="/valve-cv-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Valve Cv Calculator →
+        </a>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/gate-vs-globe-vs-ball-vs-check-valve/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Gate vs Globe vs Ball vs Check Valve</a>
+          <a href="/blog/valve-weight-chart-by-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Valve Weight Chart by Class</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/pipe-fitting-weight-calculator-comparison/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Fitting Calculator Comparison</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

@@ -1,0 +1,566 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "阀门 Cv 计算器（液体/气体/蒸汽）| ISA-75.01 选型 | pvfcalculator.com";
+const description = "免费阀门 Cv 计算器：液体 Cv = Q·√(SG/ΔP)；气体采用 ISA-75.01 / Fisher 膨胀系数 Y 公式并自动检测阻塞流；蒸汽简化质量流量算法。支持反向求解：已知 Cv 求最大流量或压差。";
+const canonical = "https://pvfcalculator.com/zh/valve-cv-calculator/";
+
+const faqs = [
+  {
+    q: "什么是阀门 Cv 值？",
+    a: "Cv 是阀门流量系数：阀门全开、压差恰好为 1 psi 时，60 °F 清水每分钟通过阀门的加仑数。Cv = 100 的阀门表示在 1 psi 压差下可通过 100 gpm 水，或在 4 psi 压差下通过 50 gpm。Cv 越大，流动阻力越小。"
+  },
+  {
+    q: "液体 Cv 如何计算？",
+    a: "对于湍流、非阻塞液体流：Cv = Q·√(SG/ΔP)，其中 Q 为流量（gpm），SG 为相对水的比重，ΔP 为压差（psi）。例如：150 gpm 柴油（SG 0.85）、压差 12 psi，所需 Cv = 150·√(0.85/12) ≈ 40。"
+  },
+  {
+    q: "气体 Cv 如何计算？",
+    a: "采用 ISA-75.01 / Fisher 膨胀系数形式：Cv = Q / (N8·P1·Y) · √(G_g·T1·Z/x)，其中 Q 单位 scfh（标准立方英尺/小时），P1 为入口绝压（psia），T1 为入口绝对温度（°R），x = ΔP/P1，膨胀系数 Y = 1 − x/(3·F_k·x_T)，F_k = k/1.4。非阻塞结果适用于 x < F_k·x_T。"
+  },
+  {
+    q: "什么是阻塞流（choked flow）？",
+    a: "当压差继续增大而流量不再增加时，即出现阻塞流。对气体，当 x = ΔP/P1 达到 F_k·x_T 时开始阻塞（全通径球阀 x_T ≈ 0.25，即 x ≈ 0.25 左右开始）；对液体，简化判据为 ΔP ≥ F_L²·P1。计算器会对阻塞结果发出警告，并给出阻塞压比下的最大流量。"
+  },
+  {
+    q: "膨胀系数 Y 是什么？",
+    a: "Y 用于修正气体从阀入口到缩流断面之间的密度膨胀。按 Fisher/ISA 约定 Y = 1 − x/(3·F_k·x_T)：压差很小时 Y 趋近于 1，阻塞时 Y 达到下限 2/3。忽略 Y 会在常见压比下高估 Cv 达 10–30%。"
+  },
+  {
+    q: "蒸汽的计算有何不同？",
+    a: "蒸汽采用质量流量形式：Cv = w / (N6·Y·√(ΔP·P1·ρ1))，其中 w 为质量流量（lb/h），ρ1 为入口饱和蒸汽密度（lb/ft³，由入口压力查表插值得到）。过热蒸汽可通过提高温度输入近似处理；精确设计请使用制造商选型软件。"
+  },
+  {
+    q: "不同类型、不同口径阀门的典型 Cv 是多少？",
+    a: "同口径全通径阀门差异巨大：2\" 全通径球阀 Cv ≈ 420，2\" 闸阀 ≈ 380，而 2\" 截止阀仅 ≈ 100；6\" 时差距更大：球阀 ≈ 5000，闸阀 ≈ 4500，截止阀 ≈ 1100。本页对照表为公开发表的典型参考值，选型时务必以制造商公布 Cv 为准。"
+  },
+  {
+    q: "可以反过来从已知 Cv 求解吗？",
+    a: "可以——使用反向模式。“已知 Cv 求最大流量”在给定压差下计算流量（含阻塞流量封顶）；“已知 Cv 求压差”通过迭代求解膨胀系数方程得到 ΔP，若阀门即使阻塞也无法通过目标流量，会提示阀门选小了。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "阀门 Cv 计算器（液体/气体/蒸汽）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "阀门 Cv 计算器", url: "/zh/valve-cv-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        阀门 Cv 计算器 <span class="accent-text">（液体 · 气体 · 蒸汽）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        采用 ISA-75.01 / IEC 60534-2-1 方程（Emerson/Fisher 手册形式）对切断阀与调节阀进行选型计算。
+        液体用 <strong>Cv = Q·√(SG/ΔP)</strong>，气体用膨胀系数 Y 公式，自动<strong>检测阻塞流</strong>，
+        并支持已知 Cv 的反向求解。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="阀门 Cv 计算工具">
+      <!-- Fluid + mode selectors -->
+      <div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-theme-secondary">介质类型</label>
+          <div class="grid grid-cols-3 gap-2" id="fluidButtons">
+            <button data-fluid="liquid" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">液体</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">水 · 油 · 化学品</span>
+            </button>
+            <button data-fluid="gas" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">气体</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">空气 · 氮气 · 天然气</span>
+            </button>
+            <button data-fluid="steam" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">蒸汽</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">饱和蒸汽（简化）</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-theme-secondary">求解模式</label>
+          <div class="grid grid-cols-3 gap-2" id="modeButtons">
+            <button data-mode="sizing" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">求 Cv</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">已知流量 + 压差</span>
+            </button>
+            <button data-mode="flow" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">最大流量</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">已知 Cv + 压差</span>
+            </button>
+            <button data-mode="dp" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">求压差</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">已知 Cv + 流量</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="vstyle" class="mb-1 block text-sm font-semibold text-theme-secondary">阀门类型（F_L, x_T）</label>
+          <select id="vstyle" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Liquid-only -->
+        <div id="liquidSgWrap">
+          <label for="sg" class="mb-1 block text-sm font-semibold text-theme-secondary">液体（比重 SG）</label>
+          <select id="sg" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Gas-only -->
+        <div id="gasGgWrap" class="hidden">
+          <label for="gg" class="mb-1 block text-sm font-semibold text-theme-secondary">气体（G_g）</label>
+          <select id="gg" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Steam-only hint -->
+        <div id="steamWrap" class="hidden">
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">蒸汽密度</label>
+          <p class="field w-full rounded-lg px-3 py-2 text-sm text-theme-muted" id="steamRho">ρ₁ = – lb/ft³（由 P₁ 查表）</p>
+        </div>
+        <div>
+          <label for="flow" class="mb-1 block text-sm font-semibold text-theme-secondary" id="flowLabel">流量 (gpm)</label>
+          <input id="flow" type="number" min="0" step="any" value="150" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="cvWrap" class="hidden">
+          <label for="cv" class="mb-1 block text-sm font-semibold text-theme-secondary">已知 Cv</label>
+          <input id="cv" type="number" min="0" step="any" value="100" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="p1" class="mb-1 block text-sm font-semibold text-theme-secondary">P₁ 入口绝压 (psia)</label>
+          <input id="p1" type="number" min="0" step="any" value="100" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="p2" class="mb-1 block text-sm font-semibold text-theme-secondary">P₂ 出口绝压 (psia)</label>
+          <input id="p2" type="number" min="0" step="any" value="88" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="gasTWrap" class="hidden">
+          <label for="t1" class="mb-1 block text-sm font-semibold text-theme-secondary">T₁ (°F)</label>
+          <input id="t1" type="number" step="any" value="60" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="gasZWrap" class="hidden">
+          <label for="z" class="mb-1 block text-sm font-semibold text-theme-secondary">Z（压缩因子）</label>
+          <input id="z" type="number" min="0.3" max="1.5" step="0.01" value="1" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted" id="resultLabel">所需 Cv</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums"><span id="cvValue">–</span></p>
+          <p class="mt-3 text-sm text-theme-secondary" id="cvSubLine">–</p>
+          <div id="chokeBanner" class="mt-4 hidden rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-theme-secondary">
+            <strong class="accent-text">⚠ 阻塞流。</strong> <span id="chokeText"></span>
+          </div>
+          <div class="mt-4 border-t border-theme pt-3 text-sm" id="detailList"></div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">同口径阀门 Cv 对照</p>
+          <label for="cmpNps" class="mb-1 block text-xs text-theme-muted">公称口径</label>
+          <select id="cmpNps" class="field mb-3 w-full rounded-lg px-3 py-2 text-sm"></select>
+          <dl class="text-sm" id="cmpList"></dl>
+          <p class="mt-2 text-xs text-theme-muted">全通径阀门公开发表的典型额定 Cv（仅供参考，以制造商数据为准）。</p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">当前使用的公式</p>
+          <div class="mono-block rounded-lg p-4 text-xs leading-relaxed" id="equationBox">–</div>
+          <dl class="mt-3 text-sm" id="paramList"></dl>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Rated Cv comparison table -->
+    <section class="mt-10" aria-label="额定 Cv 对照表">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">全通径阀门典型额定 Cv <span class="accent-text">（按口径）</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[520px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5 text-right">球阀 Cv</th>
+              <th class="px-3 py-2.5 text-right">闸阀 Cv</th>
+              <th class="px-3 py-2.5 text-right">截止阀 Cv</th>
+              <th class="px-3 py-2.5 text-right">球阀 ÷ 截止阀</th>
+            </tr>
+          </thead>
+          <tbody id="cvTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">全通径阀门公开发表的典型参考值（不同厂家约 ±25% 波动）。截止阀的调节型阀瓣牺牲了大流量能力，同口径下 Cv 通常比全通径球阀低约 4–5 倍。</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算原理">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算原理 <span class="accent-text">（ISA-75.01 / Fisher 手册）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">三组公式</p>
+          <div class="mono-block mt-3 rounded-lg p-4 text-xs leading-relaxed space-y-2">
+            <p><strong>液体：</strong>Cv = Q · √(SG/ΔP)</p>
+            <p><strong>气体：</strong>Cv = Q/(N8·P1·Y) · √(G_g·T1·Z/x)</p>
+            <p>&nbsp;&nbsp;Y = 1 − x/(3·F_k·x_T)，&nbsp; F_k = k/1.4，&nbsp; x = ΔP/P1</p>
+            <p><strong>蒸汽：</strong>Cv = w/(N6·Y·√(ΔP·P1·ρ1))</p>
+            <p>&nbsp;&nbsp;当 x ≥ F_k·x_T 时发生阻塞（Y 下限为 2/3）</p>
+          </div>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">
+            气体公式采用 ISA-75.01 / IEC 60534-2-1 的膨胀系数形式，与 Emerson/Fisher
+            《Control Valve Handbook》一致：膨胀系数 Y 描述气体在缩流断面的密度塌缩，
+            阻塞参数 x_T 标记流动进入声速、不再随压差增大的临界点。
+          </p>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">如何解读结果</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>阻塞警告</strong> — 液体判据 ΔP ≥ F_L²·P1；气体判据 x ≥ F_k·x_T。阻塞之后，加大压差不会再增加流量，应改用更大口径阀门。</li>
+            <li><strong>反向求解</strong> — “求压差”模式通过二分迭代求解 Y·√(x) = 常数；若目标流量超过阻塞流通能力，会提示阀门选小了。</li>
+            <li><strong>蒸汽</strong>采用质量流量形式，密度按入口压力查饱和蒸汽表插值；过热蒸汽通过 T₁ 输入近似处理。</li>
+            <li>F_L 与 x_T 为各阀型的参考值，最终选型请使用制造商实测数据。</li>
+          </ul>
+          <p class="mt-3">这些方程计算的是节流能力而非阀体口径：对球阀、闸阀、止回阀等常与管道同径的阀门，实际阀体通常比计算 Cv 所需的口径大 1–2 档。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/zh/valve-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 阀门重量计算器</a>
+        <a href="/zh/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/zh/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道重量计算器</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 法兰尺寸</a>
+        <a href="/zh/wenzhou-valve-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 温州阀门制造商</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 询价 Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>Cv 计算遵循 ISA-75.01 / IEC 60534-2-1 简化方程，仅用于初步选型。
+      F_L 与 x_T 为阀型参考值而非制造商数据；两相流、气蚀损伤、噪声与闪蒸不在评估范围内。
+      最终阀门选型——尤其是调节阀、安全相关工况或大压差气体工况——请使用制造商选型软件，
+      并以制造商公布的系数为准。
+    </p>
+  </div>
+</Base>
+
+<script>
+  import {
+    GASES,
+    LIQUIDS,
+    RATED_CV,
+    RATED_CV_NPS,
+    VALVE_STYLE,
+    computeCv,
+    steamDensity,
+    type CvFluidKind,
+    type CvSolveMode,
+  } from '../../lib/valve-cv-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    fluid: 'liquid' as CvFluidKind,
+    mode: 'sizing' as CvSolveMode,
+    vstyle: 'ball',
+    sg: 1, gg: 1, k: 1.4,
+    flow: 150, cv: 100, p1: 100, p2: 88, t1: 60, z: 1,
+  };
+
+  const fmt = (v: number, d = 1) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function setToggleButtons(sel: string, attr: string, active: string) {
+    document.querySelectorAll<HTMLButtonElement>(sel).forEach((b) => {
+      const on = b.dataset[attr] === active;
+      b.classList.toggle('accent-border', on);
+      b.classList.toggle('accent-light-bg', on);
+      b.classList.toggle('accent-text', on);
+      b.classList.toggle('border-theme', !on);
+      b.classList.toggle('text-theme-secondary', !on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+  }
+
+  function populateSelect(id: string, items: { id: string; name: string }[], keep?: string) {
+    const sel = $(id) as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = it.id;
+      opt.textContent = it.name;
+      sel.appendChild(opt);
+    }
+    if (keep) sel.value = keep;
+  }
+
+  function syncVisibility() {
+    $('liquidSgWrap').classList.toggle('hidden', state.fluid !== 'liquid');
+    $('gasGgWrap').classList.toggle('hidden', state.fluid !== 'gas');
+    $('steamWrap').classList.toggle('hidden', state.fluid !== 'steam');
+    $('gasTWrap').classList.toggle('hidden', state.fluid === 'liquid');
+    $('gasZWrap').classList.toggle('hidden', state.fluid !== 'gas');
+    $('cvWrap').classList.toggle('hidden', state.mode === 'sizing');
+    const fl = state.fluid;
+    $('flowLabel').textContent =
+      fl === 'liquid' ? '流量 (gpm)' : fl === 'gas' ? '流量 (scfh)' : '质量流量 (lb/h)';
+    $('resultLabel').textContent =
+      state.mode === 'sizing' ? '所需 Cv' : state.mode === 'flow'
+        ? (fl === 'liquid' ? '流量 (gpm)' : fl === 'gas' ? '流量 (scfh)' : '质量流量 (lb/h)')
+        : '压差 ΔP (psi)';
+    $('equationBox').textContent =
+      fl === 'liquid'
+        ? 'Cv = Q · √(SG / ΔP)\nQ [gpm] · SG [-] · ΔP [psi]'
+        : fl === 'gas'
+          ? 'Cv = Q / (N8·P1·Y) · √(Gg·T1·Z / x)\nY = 1 − x/(3·Fk·xT) · x = ΔP/P1\nQ [scfh] · P1 [psia] · T1 [°R] · N8 = 19.3'
+          : 'Cv = w / (N6·Y·√(ΔP·P1·ρ1))\nρ1 = P1 对应饱和蒸汽密度\nw [lb/h] · N6 = 2.09';
+  }
+
+  function num(id: string): number { return Number(($(id) as HTMLInputElement).value) || 0; }
+
+  function render() {
+    syncVisibility();
+    const dp = Math.max(0, state.p1 - state.p2);
+    const st = VALVE_STYLE.find((s) => s.id === state.vstyle)!;
+
+    if (state.fluid === 'steam') {
+      $('steamRho').textContent = `ρ₁ = ${fmt(steamDensity(state.p1), 4)} lb/ft³（饱和，由 P₁ 查表）`;
+    }
+
+    const result = computeCv({
+      fluid: state.fluid, mode: state.mode,
+      flow: state.flow, cv: state.cv,
+      p1: state.p1, p2: state.p2, dp,
+      sg: state.sg, gg: state.gg, k: state.k,
+      t1: state.fluid === 'gas' ? state.t1 + 459.67 : state.t1,
+      z: state.z, valveStyle: state.vstyle,
+    });
+
+    if (!result.valid) {
+      $('cvValue').textContent = '–';
+      $('cvSubLine').textContent = result.error ?? '请检查输入。';
+      $('chokeBanner').classList.add('hidden');
+      $('detailList').innerHTML = '';
+      return;
+    }
+
+    const main = state.mode === 'sizing' ? result.cv
+      : state.mode === 'flow'
+        ? (result.flowGpm ?? result.flowScfh ?? result.massLbPerHr ?? 0)
+        : result.dp;
+    $('cvValue').textContent = fmt(main, main >= 1000 ? 0 : main >= 10 ? 1 : 2);
+
+    const flName = state.fluid === 'liquid' ? '液体' : state.fluid === 'gas' ? '气体' : '蒸汽';
+    $('cvSubLine').textContent =
+      state.mode === 'sizing'
+        ? `${st.name} · ${flName} · ΔP = ${fmt(result.dp, 1)} psi，P1 = ${fmt(result.p1, 1)} psia`
+        : state.mode === 'flow'
+          ? `Cv ${fmt(result.cv, 0)} · ${flName} · ΔP = ${fmt(result.dp, 1)} psi`
+          : `Cv ${fmt(result.cv, 0)} · ${flName} · 流量 ${fmt(state.fluid === 'steam' ? result.massLbPerHr! : (result.flowGpm ?? result.flowScfh)!, 0)} ${state.fluid === 'liquid' ? 'gpm' : state.fluid === 'gas' ? 'scfh' : 'lb/h'}`;
+
+    if (result.choked) {
+      $('chokeBanner').classList.remove('hidden');
+      $('chokeText').textContent = result.note ?? '流动处于阻塞状态。';
+    } else {
+      $('chokeBanner').classList.add('hidden');
+    }
+
+    const rows: [string, string][] = [
+      ['P₁ (psia)', fmt(result.p1, 1)],
+      ['P₂ (psia)', fmt(result.p2, 1)],
+      ['ΔP (psi)', fmt(result.dp, 2)],
+      ['x = ΔP/P₁', result.x > 0 ? fmt(result.x, 3) : '—'],
+      ['Y（膨胀系数）', result.fluid === 'liquid' ? '—' : fmt(result.y, 3)],
+      ['F_L / x_T', `${st.fl.toFixed(2)} / ${st.xt.toFixed(2)}`],
+      ['是否阻塞', result.choked ? '是' : '否'],
+    ];
+    $('detailList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold ${v === '是' ? 'accent-text' : 'text-theme-secondary'}">${v}</dd></div>`)
+      .join('');
+
+    const prm: [string, string][] = [
+      ['阀门类型', st.name],
+      ['F_L（液体恢复）', st.fl.toFixed(2)],
+      ['x_T（气体阻塞）', st.xt.toFixed(2)],
+      ['k / F_k', state.fluid === 'liquid' ? '—' : `${state.k.toFixed(2)} / ${(state.k / 1.4).toFixed(3)}`],
+    ];
+    $('paramList').innerHTML = prm
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+
+    const nps = Number(($('cmpNps') as HTMLSelectElement).value) || 2;
+    const b = RATED_CV.ball[nps], g = RATED_CV.gate[nps], gl = RATED_CV.globe[nps];
+    const cmp: [string, string, boolean][] = [
+      ['全通径球阀', b ? String(b) : '—', b >= result.cv],
+      ['全通径闸阀', g ? String(g) : '—', g >= result.cv],
+      ['截止阀', gl ? String(gl) : '—', gl >= result.cv],
+    ];
+    $('cmpList').innerHTML = cmp
+      .map(([k, v, ok]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold ${ok ? 'accent-text' : 'text-theme-secondary'}">Cv ≈ ${v}${ok ? ' ✓ 满足' : ''}</dd></div>`)
+      .join('');
+
+    const tbody = $('cvTableBody');
+    tbody.innerHTML = '';
+    for (const n of RATED_CV_NPS) {
+      const bv = RATED_CV.ball[n], gv = RATED_CV.gate[n], glv = RATED_CV.globe[n];
+      const tr = document.createElement('tr');
+      tr.className = n === nps ? 'accent-light-bg' : '';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n >= 1 ? `${n}"` : `${Math.round(n * 16)}/16"`}</td>` +
+        `<td class="px-3 py-2 text-right">${bv ? fmt(bv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right">${gv ? fmt(gv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right">${glv ? fmt(glv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right text-theme-muted">${bv && glv ? fmt(bv / glv, 1) : '—'}</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.fluid-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.fluid = b.dataset.fluid as CvFluidKind; setToggleButtons('.fluid-btn', 'fluid', state.fluid); render(); })
+  );
+  document.querySelectorAll<HTMLButtonElement>('.mode-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.mode = b.dataset.mode as CvSolveMode; setToggleButtons('.mode-btn', 'mode', state.mode); render(); })
+  );
+  $('vstyle').addEventListener('change', (e) => { state.vstyle = (e.target as HTMLSelectElement).value; render(); });
+  $('sg').addEventListener('change', (e) => { state.sg = Number((e.target as HTMLSelectElement).value); render(); });
+  $('gg').addEventListener('change', (e) => {
+    const g = GASES.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.gg = g.gg; state.k = g.k; render();
+  });
+  $('flow').addEventListener('input', () => { state.flow = num('flow'); render(); });
+  $('cv').addEventListener('input', () => { state.cv = num('cv'); render(); });
+  $('p1').addEventListener('input', () => { state.p1 = num('p1'); render(); });
+  $('p2').addEventListener('input', () => { state.p2 = num('p2'); render(); });
+  $('t1').addEventListener('input', () => { state.t1 = num('t1'); render(); });
+  $('z').addEventListener('input', () => { state.z = num('z'); render(); });
+  $('cmpNps').addEventListener('change', () => render());
+
+  // Init
+  populateSelect('vstyle', VALVE_STYLE.map((s) => ({ id: s.id, name: `${s.name} (F_L ${s.fl}, x_T ${s.xt})` })));
+  populateSelect('sg', LIQUIDS.map((l) => ({ id: String(l.sg), name: `${l.name} — SG ${l.sg}${l.note ? ` (${l.note})` : ''}` })));
+  populateSelect('gg', GASES.map((g) => ({ id: g.id, name: `${g.name} — G_g ${g.gg}, k ${g.k}` })));
+  {
+    const sel = $('cmpNps') as HTMLSelectElement;
+    for (const n of RATED_CV_NPS) {
+      const opt = document.createElement('option');
+      opt.value = String(n);
+      opt.textContent = n >= 1 ? `${n}"` : `${Math.round(n * 16)}/16"`;
+      sel.appendChild(opt);
+    }
+    sel.value = '2';
+  }
+  setToggleButtons('.fluid-btn', 'fluid', state.fluid);
+  setToggleButtons('.mode-btn', 'mode', state.mode);
+  render();
+
+  // Copy
+  $('copyBtn').addEventListener('click', () => {
+    const v = ($('cvValue') as HTMLElement).textContent ?? '–';
+    const line = ($('cvSubLine') as HTMLElement).textContent ?? '';
+    const text = `PVF Calculator — 阀门 Cv\n${($('resultLabel') as HTMLElement).textContent}: ${v}\n${line}\nhttps://pvfcalculator.com/zh/valve-cv-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ 已复制！';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
+    });
+  });
+
+  // Share
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      fluid: state.fluid, mode: state.mode, vstyle: state.vstyle,
+      sg: String(state.sg), gg: String(state.gg), flow: String(state.flow),
+      cv: String(state.cv), p1: String(state.p1), p2: String(state.p2),
+      t1: String(state.t1), z: String(state.z),
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ 链接已复制！';
+      setTimeout(() => { $('shareBtnLabel').textContent = '分享链接'; }, 2000);
+    });
+  });
+
+  // Restore from URL
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const f = sp.get('fluid');
+    if (f && ['liquid','gas','steam'].includes(f)) { state.fluid = f as CvFluidKind; setToggleButtons('.fluid-btn', 'fluid', state.fluid); changed = true; }
+    const m = sp.get('mode');
+    if (m && ['sizing','flow','dp'].includes(m)) { state.mode = m as CvSolveMode; setToggleButtons('.mode-btn', 'mode', state.mode); changed = true; }
+    const vs = sp.get('vstyle');
+    if (vs && VALVE_STYLE.some((s) => s.id === vs)) { state.vstyle = vs; ($('vstyle') as HTMLSelectElement).value = vs; changed = true; }
+    const sgv = Number(sp.get('sg'));
+    if (sgv > 0) { state.sg = sgv; ($('sg') as HTMLSelectElement).value = String(sgv); changed = true; }
+    const g = sp.get('gg');
+    if (g && GASES.some((x) => x.id === g)) {
+      const gas = GASES.find((x) => x.id === g)!;
+      state.gg = gas.gg; state.k = gas.k; ($('gg') as HTMLSelectElement).value = g; changed = true;
+    }
+    const pairs: [string, (v: number) => void][] = [
+      ['flow', (v) => { state.flow = v; ($('flow') as HTMLInputElement).value = String(v); }],
+      ['cv', (v) => { state.cv = v; ($('cv') as HTMLInputElement).value = String(v); }],
+      ['p1', (v) => { state.p1 = v; ($('p1') as HTMLInputElement).value = String(v); }],
+      ['p2', (v) => { state.p2 = v; ($('p2') as HTMLInputElement).value = String(v); }],
+      ['t1', (v) => { state.t1 = v; ($('t1') as HTMLInputElement).value = String(v); }],
+      ['z', (v) => { state.z = v; ($('z') as HTMLInputElement).value = String(v); }],
+    ];
+    for (const [key, set] of pairs) {
+      const v = Number(sp.get(key));
+      if (v >= 0) { set(v); changed = true; }
+    }
+    if (changed) render();
+  }
+</script>

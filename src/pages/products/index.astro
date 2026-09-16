@@ -1,0 +1,117 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Pipe Fittings, Flanges & Valve Products | PVF Calculator";
+const description =
+  "Browse ASME B16.5 flanges, ASME B16.9 butt-weld pipe fittings (elbows, tees, reducers), valves, and pressure vessel fabrication — with free engineering calculators for every product line.";
+const canonical = "https://pvfcalculator.com/products/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Products", url: "/products/" },
+];
+
+const products = [
+  {
+    name: "Pipe Flanges (ASME B16.5)",
+    desc: "Weld neck, slip on, blind, socket weld, threaded, and lap joint flanges. NPS ½\"–24\", Class 150–2500, all standard materials.",
+    href: "/products/flange/",
+    tag: "Product",
+  },
+  {
+    name: "Pipe Elbows (ASME B16.9)",
+    desc: "45° & 90° long radius and short radius butt-weld elbows in carbon, stainless, and alloy steel. SCH 10–XXS.",
+    href: "/products/pipe-elbow/",
+    tag: "Product",
+  },
+  {
+    name: "Equal & Reducing Tees (ASME B16.9)",
+    desc: "Butt-weld equal and reducing tees with full size range, from standard schedules to high-yield WPHY grades.",
+    href: "/products/equal-tee/",
+    tag: "Product",
+  },
+  {
+    name: "Concentric & Eccentric Reducers (ASME B16.9)",
+    desc: "Concentric and eccentric butt-weld reducers for pipeline size transitions, NPS ½\"–24\" and beyond.",
+    href: "/products/concentric-reducer/",
+    tag: "Product",
+  },
+  {
+    name: "Valves",
+    desc: "Gate, globe, ball, and check valves sourced from the Wenzhou manufacturing cluster. Use our engineering tools to verify Cv and weight before ordering.",
+    href: "/valve-weight-calculator/",
+    tag: "Engineering Tools",
+  },
+  {
+    name: "Pressure Vessels & Custom Fabrication",
+    desc: "Custom pressure vessel and fabricated components. Size wall thickness with our ASME VIII UG-27 / UG-32 engineering tool before requesting a quote.",
+    href: "/pressure-vessel-thickness-calculator/",
+    tag: "Engineering Tools",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/request-a-quote/">
+  <section class="relative overflow-hidden py-14 sm:py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Products</span>
+      </nav>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-theme-primary mb-4">
+        Pipe Fittings, <span class="accent-text">Flanges & Valve</span> Products
+      </h1>
+      <p class="text-lg text-theme-secondary max-w-2xl leading-relaxed">
+        ASME B16.5 flanges, ASME B16.9 butt-weld fittings, valves, and custom pressure vessel fabrication —
+        every product line backed by a free engineering calculator for fast, verifiable specs.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Product Lines</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {products.map((p) => (
+            <a href={p.href} class="glass rounded-xl p-5 block group transition-colors hover:border-amber-500/50">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-bold text-theme-primary group-hover:underline">{p.name}</h3>
+                <span class="rounded-full border border-theme bg-theme-tertiary px-3 py-1 text-xs font-bold uppercase tracking-wider text-theme-muted">
+                  {p.tag}
+                </span>
+              </div>
+              <p class="text-sm text-theme-secondary">{p.desc}</p>
+              <div class="mt-4 flex items-center gap-1 text-sm font-semibold accent-text">
+                Learn more
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Need Factory Pricing?</h2>
+        <p class="text-theme-secondary mb-6">Send drawings or specs and receive competitive factory-direct quotes within 24 hours.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Request a Quote →
+          </a>
+          <a href="/cangzhou-flange-manufacturers/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Sourcing Clusters
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

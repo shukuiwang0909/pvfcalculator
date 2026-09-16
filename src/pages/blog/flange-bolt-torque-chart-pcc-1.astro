@@ -1,0 +1,369 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+import { computeBoltTorque } from "../../lib/bolt-calculations";
+import { LUBRICATIONS, TARGET_STRESSES, BOLT_MATERIALS } from "../../data/bolt-dimensions";
+
+const title = "Flange Bolt Torque Chart (PCC-1): Values, K Factor & Three-Pass Method";
+const description =
+  "A PCC-1 style flange bolt torque chart computed from traceable inputs — target bolt stress per ASME PCC-1 Appendix O framework, nut factor K by lubrication, and the three-pass star tightening method explained.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-16",
+  dateModified: "2026-09-16",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/flange-bolt-torque-chart-pcc-1/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Flange Bolt Torque Chart (PCC-1)", url: "/blog/flange-bolt-torque-chart-pcc-1/" },
+];
+
+// Build-time PCC-1 style reference table: A193 B7 studs, MoS2 paste (K=0.13),
+// spiral-wound gasket target (mid band), 20 deg C. Per-bolt torque.
+const chartCombos: { cls: number; nps: number }[] = [
+  { cls: 150, nps: 1 }, { cls: 150, nps: 2 }, { cls: 150, nps: 4 },
+  { cls: 150, nps: 6 }, { cls: 150, nps: 8 }, { cls: 150, nps: 12 },
+  { cls: 300, nps: 1 }, { cls: 300, nps: 2 }, { cls: 300, nps: 4 },
+  { cls: 300, nps: 6 }, { cls: 300, nps: 8 }, { cls: 300, nps: 12 },
+  { cls: 600, nps: 2 }, { cls: 600, nps: 4 }, { cls: 600, nps: 6 },
+  { cls: 600, nps: 8 }, { cls: 600, nps: 12 },
+];
+
+const chartRows = chartCombos
+  .map((c) => ({
+    cls: c.cls,
+    r: computeBoltTorque({ cls: c.cls, nps: c.nps, materialId: "b7", lubeId: "moly", tempC: 20, stressPosition: 0.5 }),
+  }))
+  .filter((x) => x.r.valid);
+
+const kBase = 0.13;
+const kRows = LUBRICATIONS.map((l) => ({
+  name: l.name,
+  K: l.K,
+  mult: l.K / kBase,
+  note: l.note,
+}));
+
+const stressRows = TARGET_STRESSES.map((t) => {
+  const m = BOLT_MATERIALS.find((b) => b.id === t.materialId)!;
+  return { material: `${m.spec}`, yield: m.yieldKsi, target: t.targetKsi, min: t.minKsi, max: t.maxKsi };
+});
+
+const faqItems = [
+  {
+    question: "Are these torque chart values safe to use directly?",
+    answer: "They are a sound starting basis — arguably better sourced than most published charts, because every input is disclosed (A193 B7 studs, MoS2 K = 0.13, mid-band target stress per the PCC-1 Appendix O framework, 20 deg C). But the gasket manufacturer's seating stress requirement always governs: a spiral wound gasket may need more, a soft rubber sheet less. For critical or leak-sensitive service, confirm the target with the full Appendix O calculation or the gasket vendor, and verify actual K on a sample joint.",
+  },
+  {
+    question: "Why does the same flange appear with different torque in different charts?",
+    answer: "Because T = K x D x F. Charts that publish a single number per flange are hiding their assumed K (0.12 to 0.35 depending on lubrication) and their assumed target bolt stress (30 to 73.5 ksi depending on material philosophy). Both appear multiplicatively in the result, so two 'reputable' charts can legitimately differ by 30-50% for the same joint. The fix is not averaging the charts — it is using a calculator that takes K, material and gasket as explicit inputs.",
+  },
+  {
+    question: "What is the three-pass tightening method in PCC-1?",
+    answer: "Tighten all bolts in a cross (star) pattern to about 30% of target torque to seat the gasket evenly, re-check flange alignment, then 60%, then 100% — still in star pattern. Finish with a circular pass at 100% until no nut rotates. The passes exist because of elastic interaction: each bolt you tighten relaxes the previous ones, and a single-pass assembly can leave early bolts at half their intended load.",
+  },
+  {
+    question: "Can I use this chart for stainless or low-temperature bolting?",
+    answer: "The chart itself is computed for A193 B7. For A193 B8/B8M stainless, the target stress drops to about 30 ksi (roughly -43% torque versus this chart at the same K) because strain-hardened stainless is limited by galling, not just yield. A320 L7 matches B7 at ambient. Use the calculator to switch materials, lubrication and temperature — the chart is the illustration, the calculator is the tool.",
+  },
+  {
+    question: "How do I convert these values for a hydraulic torque wrench?",
+    answer: "Hydraulic torque wrenches apply the same T = K x D x F relationship — the chart torque is the tool setpoint per bolt, per pass. Two practical notes: operate in the middle of the wrench's range (not below 20% of capacity, where calibration error grows), and convert precisely — 1 ft-lb = 1.3558 N-m. Apply the 30/60/100% passes as separate tool pressure settings.",
+  },
+  {
+    question: "Where do the stud sizes in the chart come from?",
+    answer: "From ASME B16.5 bolt-hole tables: the standard tabulates holes, and stud diameter follows with 1/8 in clearance up to 2-1/4 in studs and 1/4 in above. A 4 in Class 300 flange has 8 holes of 22.2 mm, mapping to 3/4 in-10 UNC studs. The full mapping for every class and size is on our flange bolt size chart, and the tensile stress area follows ASME B1.1.",
+  },
+];
+---
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/flange-bolt-torque-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Flange Bolt Torque Chart (PCC-1)</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Flange Bolt Torque <span class="accent-text">Chart</span>: PCC-1 Values, the K Factor, and the Three-Pass Method
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Most flange bolt torque charts on the internet are a single column of numbers with no stated
+        assumptions. This one is computed in the open: A193 B7 studs, MoS2 lubrication, mid-band target
+        stress per the ASME PCC-1 Appendix O framework — every input disclosed, every value reproducible.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: September 16, 2026</span>
+        <span>·</span>
+        <span>9 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent">
+        <h2 class="text-xl font-bold mb-3 text-theme-primary">Quick Answer</h2>
+        <p class="text-theme-secondary leading-relaxed">
+          A representative PCC-1 style torque value: <strong class="text-theme-primary">a 4" Class 300 flange
+          (8 × 3/4"-10 studs, A193 B7, MoS2 paste, K = 0.13) tightens to about 215 N·m (157 ft·lb) per bolt</strong>;
+          a 6" Class 600 flange (12 × 1-1/8"-8 studs) needs roughly 750 N·m (555 ft·lb) per bolt. The full table is
+          in Section 3. The value moves ±50% with lubrication alone, which is why the assumptions matter more than
+          the table. For your exact joint — different material, lube, gasket or temperature — use the
+          <a href="/flange-bolt-torque-calculator/" class="accent-text hover:underline">flange bolt torque calculator</a>.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="font-bold text-theme-primary mb-3">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#assumptions" class="hover:accent-text">What a torque chart actually assumes</a></li>
+          <li><a href="#table" class="hover:accent-text">PCC-1 style reference torque table</a></li>
+          <li><a href="#k-factor" class="hover:accent-text">How the K factor rescales the table</a></li>
+          <li><a href="#target-stress" class="hover:accent-text">Target bolt stress by material</a></li>
+          <li><a href="#three-pass" class="hover:accent-text">The three-pass star tightening method</a></li>
+          <li><a href="#verify" class="hover:accent-text">How to verify a torque value before trusting it</a></li>
+        </ol>
+      </div>
+
+      <div id="assumptions">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. What a Torque Chart Actually Assumes</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Every torque chart — printed or online — is the output of one short equation with three inputs:
+        </p>
+        <div class="glass rounded-xl p-4 font-mono text-sm text-theme-secondary mb-4">
+          T = K · D · F,&nbsp;&nbsp; where F = S_target · A_t
+        </div>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">A_t</strong> — tensile stress area from ASME B1.1 (0.1419 in² for 1/2-13, 0.606 in² for 1-8). Fixed by the stud size; no controversy.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">K</strong> — empirical nut factor set by lubrication: ~0.12 PTFE-coated to 0.35+ dry and rusty. Charts almost never state theirs.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">S_target</strong> — target bolt stress. ASME PCC-1 Appendix O frames it as a band: roughly 40–70% of the stud material's yield, positioned by gasket seating needs. Charts almost never state theirs either.</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          Two hidden multiplicative inputs mean two charts can differ by 50% while both look authoritative.
+          The table below removes the ambiguity: it states every assumption and shows how to rescale for yours.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mt-3">
+          Two more conventions hide inside "the chart" that rarely get stated. First, <strong class="text-theme-primary">unit
+          discipline</strong>: mixing inch-based diameters with metric torque produces garbage at the fourth significant
+          figure, so serious tools compute in SI and convert only for display (1 ft·lb = 1.3558 N·m exactly).
+          Second, <strong class="text-theme-primary">temperature</strong>: the table below is ambient. At 400 °C an A193 B7 stud
+          retains roughly 85% of its yield, so either derate the target stress or accept the loss deliberately.
+          Our calculator does this derating automatically; paper charts simply go stale above ambient.
+        </p>
+      </div>
+
+      <div id="table">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">2. PCC-1 Style Reference Torque Table</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Computed at build time with disclosed inputs: <strong class="text-theme-primary">A193 B7 studs · MoS2 paste
+          (K = 0.13) · spiral-wound gasket (mid-band target stress) · 20 °C · machine-oiled assembly values shown
+          for comparison</strong>. Per-bolt torque; tighten all bolts to this value in three passes (Section 5).
+        </p>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[640px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">NPS</th>
+                <th class="px-3 py-2.5">Class</th>
+                <th class="px-3 py-2.5">Bolts × Stud</th>
+                <th class="px-3 py-2.5 text-right">Torque N·m (K=0.13)</th>
+                <th class="px-3 py-2.5 text-right">ft·lb</th>
+                <th class="px-3 py-2.5 text-right">N·m @ K=0.15 (oil)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              {chartRows.map(({ cls, r }) => {
+                const oil = r.torqueNm * (0.15 / 0.13);
+                return (
+                  <tr class="hover-accent-light">
+                    <td class="px-3 py-2 font-semibold">{r.npsLabel}</td>
+                    <td class="px-3 py-2">{cls}</td>
+                    <td class="px-3 py-2 font-mono">{r.count} × {r.boltLabel}</td>
+                    <td class="px-3 py-2 text-right font-mono accent-text font-semibold">{r.torqueNm.toFixed(0)}</td>
+                    <td class="px-3 py-2 text-right font-mono">{r.torqueFtlb.toFixed(0)}</td>
+                    <td class="px-3 py-2 text-right font-mono">{oil.toFixed(0)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-theme-muted">
+          Stud sizes derive from ASME B16.5 bolt-hole data — see the
+          <a href="/flange-bolt-chart/" class="accent-text hover:underline">flange bolt size chart</a> for the full
+          Class 150–2500 matrix. Torque scales linearly with K and with target stress: values outside these
+          assumptions are a multiplication, not a mystery.
+        </p>
+      </div>
+
+      <div id="k-factor">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">3. How the K Factor Rescales the Table</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          K is empirical — it lumps thread friction and nut-face friction into one number. Only ~10–15% of applied
+          torque becomes preload; the rest is friction. Change the friction and the same setpoint produces a
+          different bolt load:
+        </p>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[520px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Lubrication</th>
+                <th class="px-3 py-2.5 text-right">K</th>
+                <th class="px-3 py-2.5 text-right">Torque multiplier vs MoS2</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              {kRows.map((k) => (
+                <tr class="hover-accent-light">
+                  <td class="px-3 py-2">{k.name}</td>
+                  <td class="px-3 py-2 text-right font-mono">{k.K.toFixed(2)}</td>
+                  <td class="px-3 py-2 text-right font-mono accent-text font-semibold">× {k.mult.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-theme-secondary leading-relaxed">
+          The dangerous direction is applying a <em>lubricated</em> table value to <em>dry</em> threads: at K = 0.30
+          (common for dry, as-received studs) the joint receives only 13/30 ≈ 43% of the intended preload. That is a
+          leak waiting for startup. Match the K in the table to the lubricant actually on the bolts.
+        </p>
+        <p class="mt-3 text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">Worked rescaling:</strong> the 4" Class 300 row reads 213 N·m. Your crew
+          applies machine oil (K = 0.15) instead of MoS2? Multiply by 0.15/0.13 → <strong class="text-theme-primary">246 N·m</strong>.
+          Your engineer also sets the target at the band top (73.5 ksi) for an RTJ gasket?
+          213 × (0.15/0.13) × (73.5/57.75) ≈ <strong class="text-theme-primary">312 N·m</strong>. Every chart value is just one
+          point on a surface you can move along — once the inputs are named.
+        </p>
+      </div>
+
+      <div id="target-stress">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">4. Target Bolt Stress by Material</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Within the PCC-1 Appendix O framework, target stress sits in a band between about 40% and 70% of yield,
+          positioned by gasket seating requirements. The table below lists the approximate bands and defaults used
+          by <a href="/flange-bolt-torque-calculator/" class="accent-text hover:underline">our calculator</a>:
+        </p>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[560px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Material</th>
+                <th class="px-3 py-2.5 text-right">Yield (ksi)</th>
+                <th class="px-3 py-2.5 text-right">Default target (ksi)</th>
+                <th class="px-3 py-2.5 text-right">Band (ksi)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              {stressRows.map((s) => (
+                <tr class="hover-accent-light">
+                  <td class="px-3 py-2 font-semibold">{s.material}</td>
+                  <td class="px-3 py-2 text-right font-mono">{s.yield}</td>
+                  <td class="px-3 py-2 text-right font-mono accent-text font-semibold">{s.target}</td>
+                  <td class="px-3 py-2 text-right font-mono">{s.min} – {s.max}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-xs text-theme-muted leading-relaxed">
+          Disclosure: no authoritative public reprint of the PCC-1 (2013) target-stress table (Table O-3) exists;
+          these are approximate engineering defaults consistent with the published 40–70% framework (the widely
+          cited 73.5 ksi B7 maximum equals 70% of 105 ksi yield). Confirm final targets against the gasket
+          manufacturer or a full Appendix O calculation.
+        </p>
+      </div>
+
+      <div id="three-pass">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. The Three-Pass Star Tightening Method</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Torque values assume an assembly procedure. PCC-1 specifies a cross (star) pattern in increments,
+          because of elastic interaction — every bolt you tighten relaxes the ones before it:
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li><strong class="text-theme-primary">Pass 1 — 30%:</strong> all bolts in star order; verify flange alignment and gasket position afterwards.</li>
+          <li><strong class="text-theme-primary">Pass 2 — 60%:</strong> same star order.</li>
+          <li><strong class="text-theme-primary">Pass 3 — 100%:</strong> full target torque, star order.</li>
+          <li><strong class="text-theme-primary">Final circular pass at 100%</strong> until no nut rotates — this recovers cross-talk losses.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          Skipping passes is how joints end up "torqued to spec" and still leak: documented cases show early bolts
+          losing over half their preload when the rest of the flange is tightened in a single pass.
+        </p>
+      </div>
+
+      <div id="verify">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">6. How to Verify a Torque Value Before Trusting It</h2>
+        <ul class="space-y-3 text-theme-secondary">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">1.</span><span><strong class="text-theme-primary">Reproduce it.</strong> T = K·D·F with F = S·A_t. If you can't tell what K and S the chart used, you can't trust the number. Ours are stated above and adjustable in the calculator.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">2.</span><span><strong class="text-theme-primary">Cross-check the magnitude.</strong> A 3/4" B7 stud lubricated should land in the 170–210 ft·lb region for mid-band targets. A chart saying 90 or 350 ft·lb for that joint has a hidden assumption problem.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">3.</span><span><strong class="text-theme-primary">Check the gasket.</strong> The manufacturer's seating stress can move the target up or down within the band — soft PTFE sheet down, RTJ metal up.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">4.</span><span><strong class="text-theme-primary">Measure on critical joints.</strong> A Skidmore-calibrated sample or ultrasonic bolt length measurement converts torque tables into verified preload — ±5% instead of ±30%.</span></li>
+        </ul>
+      </div>
+
+      <!-- Double CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Get the Torque for Your Exact Joint</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Material, lubrication, gasket type and temperature as explicit inputs — with a three-pass table
+          and copyable result for your work pack.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/flange-bolt-torque-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Open Bolt Torque Calculator →
+          </a>
+          <a href="/request-a-quote/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map((item) => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/why-bolt-torque-calculators-disagree/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Why Bolt Torque Calculators Disagree by 30%+</a>
+          <a href="/blog/why-flange-calculators-are-wrong/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Why Flange Weight Calculators Are Wrong</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/flange-facing-types/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Facing Types Explained</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

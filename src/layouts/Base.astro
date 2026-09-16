@@ -54,22 +54,86 @@ const canonical = canonicalProp ?? `${siteOrigin}${rawPath}`;
 const ogImage = `${siteOrigin}/og-image.png`;
 const currentPath = Astro.url.pathname;
 
-const nav = lang === "zh" ? [
-  { href: "/zh/flange-weight-calculator/", label: "法兰" },
-  { href: "/zh/elbow-weight-calculator/", label: "弯头" },
-  { href: "/zh/tee-weight-calculator/", label: "三通" },
-  { href: "/zh/reducer-weight-calculator/", label: "异径管" },
-  { href: "/zh/pipe-weight-calculator/", label: "管道" },
-  { href: "/zh/cangzhou-flange-manufacturers/", label: "沧州产地" },
+const navGroups = lang === "zh" ? [
+  {
+    label: "法兰工具",
+    items: [
+      { href: "/zh/flange-weight-calculator/", label: "法兰重量计算器" },
+      { href: "/flange-bolt-chart/", label: "法兰螺栓规格表" },
+      { href: "/zh/flange-bolt-torque-calculator/", label: "螺栓扭矩计算器" },
+    ],
+  },
+  {
+    label: "管件工具",
+    items: [
+      { href: "/zh/pipe-weight-calculator/", label: "管道重量计算器" },
+      { href: "/zh/elbow-weight-calculator/", label: "弯头重量计算器" },
+      { href: "/zh/tee-weight-calculator/", label: "三通重量计算器" },
+      { href: "/zh/reducer-weight-calculator/", label: "异径管重量计算器" },
+    ],
+  },
+  {
+    label: "阀门工具",
+    items: [
+      { href: "/zh/valve-cv-calculator/", label: "阀门 Cv 计算器" },
+      { href: "/zh/valve-weight-calculator/", label: "阀门重量计算器" },
+    ],
+  },
+  {
+    label: "工程工具",
+    items: [
+      { href: "/zh/pressure-vessel-thickness-calculator/", label: "压力容器壁厚计算器" },
+    ],
+  },
+  {
+    label: "资源",
+    items: [
+      { href: "/pipe-schedule-chart/", label: "管道壁厚表" },
+      { href: "/asme-b16-5-flange-dimensions/", label: "ASME B16.5 尺寸" },
+      { href: "/asme-b16-9-fitting-dimensions/", label: "ASME B16.9 尺寸" },
+      { href: "/blog/", label: "技术博客" },
+    ],
+  },
 ] : [
-  { href: "/flange-weight-calculator/", label: "Flange" },
-  { href: "/elbow-weight-calculator/", label: "Elbow" },
-  { href: "/tee-weight-calculator/", label: "Tee" },
-  { href: "/reducer-weight-calculator/", label: "Reducer" },
-  { href: "/pipe-weight-calculator/", label: "Pipe" },
-  { href: "/pipe-schedule-chart/", label: "Schedule Chart" },
-  { href: "/asme-b16-9-fitting-dimensions/", label: "B16.9 Dims" },
-  { href: "/blog/", label: "Blog" },
+  {
+    label: "Flange Tools",
+    items: [
+      { href: "/flange-weight-calculator/", label: "Flange Weight" },
+      { href: "/flange-bolt-chart/", label: "Flange Bolt Chart" },
+      { href: "/flange-bolt-torque-calculator/", label: "Bolt Torque" },
+    ],
+  },
+  {
+    label: "Pipe & Fitting Tools",
+    items: [
+      { href: "/pipe-weight-calculator/", label: "Pipe Weight" },
+      { href: "/elbow-weight-calculator/", label: "Elbow Weight" },
+      { href: "/tee-weight-calculator/", label: "Tee Weight" },
+      { href: "/reducer-weight-calculator/", label: "Reducer Weight" },
+    ],
+  },
+  {
+    label: "Valve Tools",
+    items: [
+      { href: "/valve-cv-calculator/", label: "Valve Cv" },
+      { href: "/valve-weight-calculator/", label: "Valve Weight" },
+    ],
+  },
+  {
+    label: "Engineering",
+    items: [
+      { href: "/pressure-vessel-thickness-calculator/", label: "Pressure Vessel Thickness" },
+    ],
+  },
+  {
+    label: "Resources",
+    items: [
+      { href: "/pipe-schedule-chart/", label: "Pipe Schedule Chart" },
+      { href: "/asme-b16-5-flange-dimensions/", label: "ASME B16.5 Dimensions" },
+      { href: "/asme-b16-9-fitting-dimensions/", label: "ASME B16.9 Dimensions" },
+      { href: "/blog/", label: "Blog" },
+    ],
+  },
 ];
 
 const siteJsonLd = [
@@ -162,14 +226,32 @@ const siteJsonLd = [
         <a href={isZh ? "/zh/" : "/"} class="font-bold text-lg tracking-tight text-theme-primary">
           PVF<span class="accent-text">Calculator</span>
         </a>
-        <nav class="hidden md:flex gap-5 text-sm">
-          {nav.map((n) => {
-            const isActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
+        <nav class="hidden md:flex gap-5 text-sm items-center">
+          {navGroups.map((g) => {
+            const isActive = g.items.some((n) => currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href)));
+            const linkCls = `transition-colors relative ${isActive ? "accent-text font-semibold" : "text-theme-secondary hover:text-theme-primary"}`;
             return (
-              <a href={n.href} class={`transition-colors relative ${isActive ? "accent-text font-semibold" : "text-theme-secondary hover:text-theme-primary"}`}>
-                {n.label}
-                {isActive && <span class="absolute -bottom-[13px] left-0 right-0 h-0.5 accent-bg"></span>}
-              </a>
+              <div class="nav-dropdown relative">
+                <button class={`${linkCls} flex items-center gap-1 py-4`} aria-haspopup="true">
+                  {g.label}
+                  <svg class="h-3 w-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                  {isActive && <span class="absolute -bottom-[1px] left-0 right-0 h-0.5 accent-bg"></span>}
+                </button>
+                <div class="nav-dropdown-menu absolute left-0 top-full pt-1 z-50">
+                  <div class="rounded-xl border border-theme bg-theme-primary shadow-xl py-2 min-w-52">
+                    {g.items.map((n) => {
+                      const isItemActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
+                      return (
+                        <a href={n.href} class={`block px-4 py-2 whitespace-nowrap transition-colors ${isItemActive ? "accent-text font-semibold bg-theme-tertiary" : "text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary"}`}>
+                          {n.label}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             );
           })}
         </nav>
@@ -202,12 +284,17 @@ const siteJsonLd = [
       <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
       <div class="absolute top-14 left-0 right-0 bg-theme-primary border-b border-theme shadow-xl">
         <nav class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
-          {nav.map((n) => {
-            const isActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
-            return (
-              <a href={n.href} class={`mobile-menu-link py-3 px-4 rounded-lg transition-colors text-base font-medium ${isActive ? "accent-text bg-theme-tertiary" : "text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary"}`}>{n.label}</a>
-            );
-          })}
+          {navGroups.map((g) => (
+            <div class="mb-1">
+              <p class="px-4 pt-2 pb-1 text-xs font-semibold uppercase tracking-widest text-theme-muted">{g.label}</p>
+              {g.items.map((n) => {
+                const isActive = currentPath === n.href || (n.href !== "/" && currentPath.startsWith(n.href));
+                return (
+                  <a href={n.href} class={`mobile-menu-link block py-2.5 pl-6 pr-4 rounded-lg transition-colors text-sm font-medium ${isActive ? "accent-text bg-theme-tertiary" : "text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary"}`}>{n.label}</a>
+                );
+              })}
+            </div>
+          ))}
           <a href={isZh ? "/zh/request-a-quote/" : "/request-a-quote/"} class="mobile-menu-link mt-2 py-3 px-4 rounded-lg accent-bg text-center font-semibold" style="color: #07090c;">
             {isZh ? "立即询价" : "Get a Quote"}
           </a>
@@ -223,19 +310,34 @@ const siteJsonLd = [
       <slot />
     </main>
     <footer class="bg-theme-secondary border-t border-theme text-theme-secondary text-sm mt-16 relative z-10">
-      <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
+      <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         <div>
           <p class="text-theme-primary font-semibold mb-2">PVFCalculator</p>
           <p>Free ASME B16.5 & B16.9 pipe fitting weight calculators for procurement, logistics, and project engineering.</p>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Calculators</p>
+          <p class="text-theme-primary font-semibold mb-2">Flange Tools</p>
           <ul class="space-y-1">
             <li><a href="/flange-weight-calculator/" class="hover:text-theme-primary transition-colors">Flange Weight Calculator</a></li>
+            <li><a href="/flange-bolt-chart/" class="hover:text-theme-primary transition-colors">Flange Bolt Chart</a></li>
+            <li><a href="/flange-bolt-torque-calculator/" class="hover:text-theme-primary transition-colors">Bolt Torque Calculator</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-theme-primary font-semibold mb-2">Pipe & Fitting Tools</p>
+          <ul class="space-y-1">
+            <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
             <li><a href="/elbow-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Elbow Weight Calculator</a></li>
             <li><a href="/tee-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Tee Weight Calculator</a></li>
             <li><a href="/reducer-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Reducer Weight Calculator</a></li>
-            <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-theme-primary font-semibold mb-2">Valve & Engineering Tools</p>
+          <ul class="space-y-1">
+            <li><a href="/valve-cv-calculator/" class="hover:text-theme-primary transition-colors">Valve Cv Calculator</a></li>
+            <li><a href="/valve-weight-calculator/" class="hover:text-theme-primary transition-colors">Valve Weight Calculator</a></li>
+            <li><a href="/pressure-vessel-thickness-calculator/" class="hover:text-theme-primary transition-colors">Pressure Vessel Thickness</a></li>
           </ul>
         </div>
         <div>
@@ -246,6 +348,13 @@ const siteJsonLd = [
             <li><a href="/asme-b16-9-fitting-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.9 Dimensions</a></li>
             <li><a href="/pipe-schedule-chart/" class="hover:text-theme-primary transition-colors">Pipe Schedule Chart</a></li>
             <li><a href="/request-a-quote/" class="hover:text-theme-primary transition-colors">Request a Quote</a></li>
+          </ul>
+          <p class="text-theme-primary font-semibold mb-2 mt-4">Sourcing Clusters</p>
+          <ul class="space-y-1">
+            <li><a href="/cangzhou-flange-manufacturers/" class="hover:text-theme-primary transition-colors">Cangzhou</a></li>
+            <li><a href="/mengcun-pipe-fittings/" class="hover:text-theme-primary transition-colors">Mengcun</a></li>
+            <li><a href="/yanshan-flange/" class="hover:text-theme-primary transition-colors">Yanshan</a></li>
+            <li><a href="/wenzhou-valve-manufacturers/" class="hover:text-theme-primary transition-colors">Wenzhou</a></li>
           </ul>
         </div>
         <div>
@@ -293,6 +402,15 @@ const siteJsonLd = [
       })();
     </script>
     <!-- GA4 custom events -->
+    <style>
+      .nav-dropdown-menu {
+        display: none;
+      }
+      .nav-dropdown:hover > .nav-dropdown-menu,
+      .nav-dropdown:focus-within > .nav-dropdown-menu {
+        display: block;
+      }
+    </style>
     <script is:inline>
       (function() {
         function gtagEvent(name, params) {

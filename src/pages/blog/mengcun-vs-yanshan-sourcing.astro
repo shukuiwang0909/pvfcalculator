@@ -1,0 +1,324 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "Mengcun vs Yanshan: Which Hebei Cluster Should You Source Pipe Fittings From?";
+const description =
+  "Two neighboring counties in Cangzhou, Hebei supply much of the world's pipe fittings — but they are not the same market. Product focus, price bands, MOQs and logistics compared, with a decision guide for buyers.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", "name": "PVF Calculator" },
+  publisher: { "@type": "Organization", "name": "PVF Calculator" },
+  datePublished: "2026-08-04",
+  dateModified: "2026-08-04",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/mengcun-vs-yanshan-sourcing/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Mengcun vs Yanshan Sourcing", url: "/blog/mengcun-vs-yanshan-sourcing/" },
+];
+const faqItems = [
+  {
+    question: "Are Mengcun and Yanshan the same supply base?",
+    answer: "They are adjacent counties in the same city (Cangzhou, Hebei) and their supplier networks overlap — many factories have sales offices in both. But their production DNA differs: Mengcun is a fittings-forming cluster built on hot push-forming of elbows, tees and reducers, while Yanshan is a full-chain pipe-equipment base spanning steel pipe, flanges, fittings and coating. For a mixed order, one consolidated shipment from either side is normal practice.",
+  },
+  {
+    question: "Which is cheaper for ASME B16.9 elbows?",
+    answer: "For standard carbon steel elbows in volume, Mengcun is usually the sharper market — forming capacity is deepest there and competition on standard geometry is intense. For small lots, alloy grades, or elbows bundled with pipe and flanges, the difference narrows or reverses: Yanshan factories packaging a full BOM often win on total landed cost even if the elbow line item costs slightly more.",
+  },
+  {
+    question: "Can I get ASME-compliant material certificates from both clusters?",
+    answer: "Yes — from the export-oriented tier in both. Expect EN 10204 3.1 mill certificates with heat-number traceability as standard at Tier 1 suppliers, and budget for third-party inspection (SGS, Bureau Veritas, Intertek) at roughly $400–800 per container on early orders. What you should not expect is reliable documentation from the bottom of either cluster's long tail of small workshops — that is where the cheap quotes live, and where certificate fraud is a real risk.",
+  },
+  {
+    question: "How do logistics differ between Mengcun and Yanshan?",
+    answer: "Both ship FOB Tianjin as the default. Yanshan sits roughly 80 km from Huanghua Port and has developed portside coating yards, so coated pipe packages can load closer to the factory. Mengcun is slightly further inland (180–220 km to Tianjin) but for containerized fitting shipments the difference is one trucking day at most. Rail and consolidated LCL options are equivalent.",
+  },
+  {
+    question: "I'm buying for the first time — where do I start?",
+    answer: "Start with the product, not the county. For a fittings-only BOM, shortlist three to five Mengcun exporters and ask for B16.9 dimensional data plus recent MTR samples before quoting. For pipe-plus-fitting packages or anything requiring coating, shortlist Yanshan. In both cases, verify one certificate against the issuer's database before the first PO — it is a five-minute check that filters out most of the tail.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical="https://pvfcalculator.com/blog/mengcun-vs-yanshan-sourcing/" jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ogType="article" ctaHref="/mengcun-pipe-fittings/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Mengcun vs Yanshan</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Mengcun vs Yanshan: Which Hebei Cluster Should You <span class="accent-text">Source From</span>?
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Forty kilometers apart in Cangzhou, Hebei, two counties supply a remarkable share of the world's
+        carbon steel pipe fittings. They look interchangeable on Alibaba — they are not. Here is how the
+        two clusters actually differ, and how to route your RFQ.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: August 4, 2026</span>
+        <span>·</span>
+        <span>7 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick Answer</h2>
+        <p class="text-theme-secondary leading-relaxed text-sm">
+          Buying <strong class="text-theme-primary">fittings only</strong> — elbows, tees, reducers to ASME B16.9 — start in
+          <strong class="text-theme-primary">Mengcun</strong>, the elbow-forming capital: deepest capacity, sharpest pricing on standard
+          geometry, and a mature export tier. Buying <strong class="text-theme-primary">pipe-plus-fitting packages, coated line pipe, or a
+          mixed BOM with flanges</strong>, start in <strong class="text-theme-primary">Yanshan</strong>, the full-chain pipeline-equipment base with
+          Huanghua Port 80 km away. Either way, one consolidated FOB Tianjin shipment is normal. See the
+          <a href="/mengcun-pipe-fittings/" class="underline accent-text">Mengcun pipe fittings guide</a> and
+          <a href="/yanshan-flange/" class="underline accent-text">Yanshan cluster guide</a> for factory-level detail.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-3">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#triangle" class="hover:underline accent-text">One belt, two specializations</a></li>
+          <li><a href="#products" class="hover:underline accent-text">Product focus compared</a></li>
+          <li><a href="#prices" class="hover:underline accent-text">Price bands and what drives them</a></li>
+          <li><a href="#moq" class="hover:underline accent-text">MOQs and order flexibility</a></li>
+          <li><a href="#logistics" class="hover:underline accent-text">Logistics and ports</a></li>
+          <li><a href="#decision" class="hover:underline accent-text">The decision table</a></li>
+        </ol>
+      </div>
+
+      <!-- 1 -->
+      <div id="triangle">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. One Belt, Two Specializations</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The Cangzhou industrial belt — Mengcun, Yanshan and the surrounding counties — is where a large fraction
+          of the world's ASME B16.5 flanges and B16.9 fittings are forged, formed, machined and shipped. Public
+          reporting puts Mengcun near 1,800 pipeline-equipment enterprises with roughly 30% of national elbow and
+          fitting output; industry media count roughly 3,000 related enterprises on the Yanshan side. Both figures
+          include long tails of small workshops, so treat them as scale indicators, not supplier counts.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The historical split is simple. Mengcun grew from elbow push-forming (推制) workshops in the late 1970s and
+          remains the deepest fittings-forming market anywhere. Yanshan grew as the pipe-and-coating base: steel pipe
+          mills first, then flanges and fittings to fill out the BOM, then 3PE/FBE coating yards near the port.
+          Forty years of co-evolution means their supplier lists overlap heavily — but their factory floors
+          still reflect those origins.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          The wider cluster context — including the flange-forging heartland between them — is covered in our
+          <a href="/cangzhou-flange-manufacturers/" class="underline accent-text">Cangzhou flange manufacturers</a> overview.
+        </p>
+      </div>
+
+      <!-- 2 -->
+      <div id="products">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">2. Product Focus Compared</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">Mengcun</strong> is the fittings specialist. Its core products are the ASME B16.9 catalog:
+          90°/45° LR and SR elbows, equal and reducing tees, concentric and eccentric reducers, caps and stub ends —
+          in A234 WPB, WPL6, the WP-series alloys, WPHY-42 through -70 for MSS SP-75 line pipe, and stainless
+          304/316L. Seamless fittings run to NPS 24; welded (seam) construction goes far beyond. Forming know-how —
+          mandrel design, temperature windows, intrados thickness control — is the cluster's moat, and it shows in
+          the wall-thickness consistency of its best export factories.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">Yanshan</strong> is the full-chain generalist. ERW/LSAW/spiral pipe to API 5L, seamless
+          pipe, the full B16.5 flange range plus B16.47 large-diameter, B16.9 fittings, and — critically — coating
+          and insulation: 3PE/FBE external anti-corrosion, polyurethane and steam-jacket insulation, applied
+          portside. If your package includes buried or subsea pipe, Yanshan's coating ecosystem is the deciding
+          factor. For fitting geometry references when writing your BOM, the
+          <a href="/asme-b16-9-fitting-dimensions/" class="underline accent-text">ASME B16.9 dimensions chart</a> and
+          <a href="/asme-b16-5-flange-dimensions/" class="underline accent-text">B16.5 flange dimensions chart</a> are the
+          fastest checks.
+        </p>
+      </div>
+
+      <!-- 3 -->
+      <div id="prices">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">3. Price Bands and What Drives Them</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          On identical standard WPB elbows, Mengcun's Tier 1 exporters typically quote at the reference level, with
+          the cluster's Tier 2 factories 5–15% below and small workshops up to 30% below. Yanshan fitting quotes tend
+          to sit within a few points of Mengcun Tier 1 for the same item — the forming capacity difference is real but
+          modest for standard geometry.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The spread inside each cluster is wider than the spread between them, and it is not mostly about material
+          substitution. It is about process control (intrados thickness, ovality), heat-treatment practice
+          (normalizing of WPB elbows is a real cost line), NDT coverage, and documentation. A quote 25% below the
+          Tier 1 level is not a bargain; it is a different product wearing the same part number. Weight-check the
+          quotation against the <a href="/elbow-weight-calculator/" class="underline accent-text">elbow weight calculator</a>,
+          <a href="/tee-weight-calculator/" class="underline accent-text">tee weight calculator</a> and
+          <a href="/reducer-weight-calculator/" class="underline accent-text">reducer weight calculator</a> — fittings sold by
+          the kilogram should reconcile with ASME B16.9 geometry within a few percent.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          For alloy and high-yield grades (WP11, WP22, WPHY-60+), both clusters converge on a smaller set of qualified
+          mills, and price differences shrink further. There, certificate verification matters more than geography:
+          PMI every heat, verify the MTR against the issuing mill, and reject any supplier who cannot map a heat
+          number to a melt shop within a day.
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div id="moq">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">4. MOQs and Order Flexibility</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Mengcun's trading layer is built for mixed fitting orders: 1–5 tonnes per size is a normal first order,
+          single-container consolidation across dozens of line items is routine, and samples of standard sizes
+          arrive by courier in days. Production slots for standard WPB elbows are short — two to four weeks
+          ex-works is typical.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          Yanshan's pipe mills have structurally higher MOQs — 20–50 tonnes per size for produced-to-order LSAW or
+          spiral — but its flange and fitting factories behave like Mengcun's. The practical difference: a first
+          order that is mostly fittings with some pipe fits Mengcun's ecosystem; a package anchored by a pipe
+          tonnage list fits Yanshan's. Alloy grades add four to eight weeks of lead time in both counties, and
+          large-diameter welded fittings are produced to order everywhere in the belt.
+        </p>
+      </div>
+
+      <!-- 5 -->
+      <div id="logistics">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. Logistics and Ports</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Both clusters default to FOB Tianjin, 150–220 km of trucking away, with European transit around 28–35
+          days and US transit 16–32 days depending on coast. Yanshan adds a second gate: Huanghua Port, roughly
+          80 km from its industrial core, increasingly used for bulk and container traffic — and home to the coating
+          yards that make pipe-to-port movement a same-day affair. Beijing–Shanghai expressway and railway cross
+          the whole belt, so consolidation warehouses in either county can receive from the other in hours.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          Packaging discipline matters more than port choice: bevel protectors and VCI packaging for carbon steel,
+          wooden cases for machined surfaces, and a loading plan for mixed containers. Neither county will volunteer
+          this; both will do it well if it is in the PO.
+        </p>
+      </div>
+
+      <!-- 6 decision table -->
+      <div id="decision">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">6. The Decision Table</h2>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[640px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Your order looks like…</th>
+                <th class="px-3 py-2.5">Start in</th>
+                <th class="px-3 py-2.5">Why</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 text-theme-secondary">B16.9 elbow/tee/reducer BOM, carbon steel, NPS ≤ 24</td>
+                <td class="px-3 py-2 font-semibold accent-text">Mengcun</td>
+                <td class="px-3 py-2 text-theme-secondary">Deepest forming capacity, best price discovery, fast samples</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-theme-secondary">Fittings + flanges mixed container, no pipe</td>
+                <td class="px-3 py-2 font-semibold accent-text">Either</td>
+                <td class="px-3 py-2 text-theme-secondary">Both ecosystems consolidate; quote both, compare Tier 1 exporters</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-theme-secondary">Line pipe + fittings + coating package</td>
+                <td class="px-3 py-2 font-semibold accent-text">Yanshan</td>
+                <td class="px-3 py-2 text-theme-secondary">Pipe mills + portside 3PE/FBE yards; one BOM, one invoice</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-theme-secondary">Alloy / high-yield grades (WP11/22, WPHY-60+)</td>
+                <td class="px-3 py-2 font-semibold accent-text">Qualified mills, both</td>
+                <td class="px-3 py-2 text-theme-secondary">Shortlist converges to a few qualified factories; certificates over geography</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-theme-secondary">Large-diameter welded fittings (NPS 26″+)</td>
+                <td class="px-3 py-2 font-semibold accent-text">Yanshan-leaning</td>
+                <td class="px-3 py-2 text-theme-secondary">Plate access and rolling/forming pairs are strongest there</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mt-4">
+          However the table lands, the verification discipline is identical: standard and edition in the PO, MTRs
+          per ASTM A961, third-party inspection on early orders, and weight reconciliation against the calculators.
+          That is what separates a good Cangzhou sourcing program from a cheap one.
+        </p>
+      </div>
+
+      <!-- CTA 1 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Build the BOM, Then the RFQ</h2>
+        <p class="text-theme-secondary mb-6">
+          Accurate weights and dimensions are what get serious quotes back fast. Run your fittings through the
+          weight calculators before sending anything to the belt.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/elbow-weight-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Elbow Weight Calculator →
+          </a>
+          <a href="/pipe-weight-calculator/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Pipe Weight Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA 2 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Get Quotes From Both Clusters</h2>
+        <p class="text-theme-secondary mb-6">
+          Send your BOM and we route it to screened suppliers on both sides of the belt — consolidated quotes,
+          consolidated shipment, one point of contact.
+        </p>
+        <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Request a Quote →
+        </a>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/mss-sp-75-vs-asme-b16-9/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">MSS SP-75 vs ASME B16.9</a>
+          <a href="/blog/pipe-fitting-weight-calculator-comparison/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Fitting Calculator Comparison</a>
+          <a href="/blog/304-vs-316-stainless-steel-flanges/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">304 vs 316 Stainless Flanges</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

@@ -1,0 +1,524 @@
+---
+import Base from '../layouts/Base.astro';
+const title = "Valve Weight Calculator (ASME B16.34) | Gate, Globe, Check, Ball";
+const description = "Free valve weight calculator for cast steel gate, globe, check and ball valves — Class 150/300/600, NPS 1/2\"-24\", calibrated against manufacturer catalogs (±10–15%). WCB, LCB, CF8, CF8M, WC9. Results in kg or lb.";
+const canonical = "https://pvfcalculator.com/valve-weight-calculator/";
+
+const faqs = [
+  {
+    q: "How much does a cast steel gate valve weigh?",
+    a: "A 2\" Class 150 WCB flanged gate valve weighs approximately 21 kg (46 lb); a 6\" Class 300 about 144 kg (318 lb); an 8\" Class 150 swing check about 130 kg (287 lb). Our tables are calibrated against published manufacturer catalog weight charts, with a typical deviation of ±10–15% from any specific manufacturer's figures."
+  },
+  {
+    q: "Why do most online tools not offer valve weights?",
+    a: "Valve weight is not defined by a simple geometric formula like a flange or elbow: it depends on wall thickness selection (ASME B16.34 permits multiple wall options per class), bonnet design, body style and foundry practice. Most calculators therefore skip valves entirely. Ours uses catalog-calibrated base weights per valve type, class and NPS, with engineering factors for end connection, operation and material — disclosed with an honest ±10–15% accuracy band."
+  },
+  {
+    q: "How accurate is this valve weight calculator?",
+    a: "The base weights are compiled from published manufacturer catalogs and cross-checked against public catalog weight charts (gate, globe and check values verified against widely referenced catalog compilations; Class 150 ball values against a published API 6D chart). Expect typical agreement of ±10–15% with any given manufacturer's catalog, and occasionally up to ±20% for ball valves in large sizes. Treat results as calibrated estimates for freight and quoting — not certified shipping weights."
+  },
+  {
+    q: "What is the difference between swing, lift and wafer check valve weights?",
+    a: "A bolted-bonnet swing check (the baseline) is the heaviest common style. A lift check has a more compact body (~15% lighter), while a dual-plate wafer check fits between flanges and weighs only about 45% of a swing check of the same NPS and class — wafer valves are excluded from flange-to-flange face-to-face dimensions entirely."
+  },
+  {
+    q: "Are gear-operated valves included?",
+    a: "Yes. Selecting \"gear operated\" applies a 1.18 mass factor for NPS 14 and larger valves, reflecting the bevel gearbox, mounting and taller stem extension. The factor is not applied below NPS 14, where gear operators are uncommon on manual multi-turn valves. Actuator masses (pneumatic/electric) are excluded — only the mounting hardware allowance is included."
+  },
+  {
+    q: "Which materials are covered?",
+    a: "ASTM A216 WCB/WCC carbon steel (7,850 kg/m³, baseline), A352 LCB low-temperature carbon steel, A217 WC6/WC9 Cr-Mo alloy steel, and A351 CF8 (304), CF8M (316) and CF3M (316L) stainless castings (~8,000 kg/m³). Weight scales with the material density ratio relative to WCB."
+  },
+  {
+    q: "What sizes and classes are covered?",
+    a: "Gate, globe, check and ball valves in Class 150 and Class 300 from NPS 1/2\" to 24\", and Class 600 from NPS 1/2\" to 12\". Face-to-face references follow ASME B16.10 long patterns for gate/globe/check and API 6D patterns for ball valves."
+  },
+  {
+    q: "What do ASME B16.34 and B16.10 mean for valve weight?",
+    a: "ASME B16.34 defines the pressure-temperature ratings and minimum wall thickness requirements from which a valve body is designed — heavier walls for higher classes come directly from its tables. ASME B16.10 defines face-to-face and end-to-end dimensions (short, regular and long patterns). Together they bound, but do not uniquely determine, a valve's mass — which is why catalog calibration is needed for usable weight estimates."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Valve Weight Calculator (ASME B16.34)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Valve Weight Calculator", url: "/valve-weight-calculator/" },
+];
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Valve Weight Calculator <span class="accent-text">(ASME B16.34)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        Estimate the weight of cast steel <strong>gate, globe, check and ball valves</strong> —
+        Class 150 / 300 / 600, NPS 1/2″–24″. Most online tools don't offer valve weights at all;
+        ours are <strong>calibrated against manufacturer catalogs</strong> (typical deviation ±10–15%).
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Valve weight calculator tool">
+      <!-- Type selector -->
+      <div class="mb-5">
+        <label class="mb-2 block text-sm font-semibold text-theme-secondary">Valve Type</label>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" id="typeButtons">
+          <button data-type="gate" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">Gate</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 600 · on/off isolation</span>
+          </button>
+          <button data-type="globe" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">Globe</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 602/623 · throttling</span>
+          </button>
+          <button data-type="check" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">Check</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 594 · back-flow protection</span>
+          </button>
+          <button data-type="ball" class="type-btn rounded-xl border-2 p-3 text-center transition">
+            <span class="block text-sm font-semibold">Ball</span>
+            <span class="mt-0.5 block text-[11px] text-theme-muted">API 608/6D · quarter-turn</span>
+          </button>
+        </div>
+        <p class="mt-1 text-xs text-theme-muted" id="typeDesc">Straight-through on/off isolation, full port, low pressure drop</p>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">Pressure Class</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="150">Class 150</option>
+            <option value="300">Class 300</option>
+            <option value="600">Class 600 (≤ NPS 12)</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">Nominal Size (NPS)</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">Material</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="end" class="mb-1 block text-sm font-semibold text-theme-secondary">End Connection</label>
+          <select id="end" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="operation" class="mb-1 block text-sm font-semibold text-theme-secondary">Operation</label>
+          <select id="operation" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div id="checkStyleWrap" class="hidden">
+          <label for="checkStyle" class="mb-1 block text-sm font-semibold text-theme-secondary">Check Valve Style</label>
+          <select id="checkStyle" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="qty" class="mb-1 block text-sm font-semibold text-theme-secondary">Quantity</label>
+          <input id="qty" type="number" min="1" max="99999" step="1" value="1"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Unit system">
+            <button id="unitKg" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">kg</button>
+            <button id="unitLb" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">lb</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Single Valve Weight</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="weightValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="weightUnit">kg</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary"><span id="resultLine">–</span></p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Quantity</span><span class="font-semibold" id="outQty">1</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Total weight</span><span class="font-semibold accent-text" id="totalWeight">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Face-to-face (ref.)</span><span class="font-semibold" id="outF2F">–</span></div>
+          </div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Applied Factors</p>
+          <dl class="text-sm" id="factorList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">Calibration source</summary>
+            <p class="mt-1">Base weights compiled from published cast-steel valve catalog weight charts (gate/globe/check cross-checked against public catalog compilations; Class 150 ball against a published API 6D chart). Typical deviation ±10–15% vs any specific manufacturer's catalog.</p>
+          </details>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Reference Standards</p>
+          <dl class="text-sm" id="stdList"></dl>
+        </div>
+      </div>
+
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">Copy Result</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">Share Link</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Full weight table -->
+    <section class="mt-10" aria-label="Valve weight table">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary"><span id="tableTitle" class="accent-text">Gate Valve</span> Weights — <span id="tableClass">Class 150</span> · WCB · RF · manual</h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[560px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5">Pipe OD (mm)</th>
+              <th class="px-3 py-2.5">Face-to-face (mm)</th>
+              <th class="px-3 py-2.5 text-right">Weight (kg)</th>
+              <th class="px-3 py-2.5 text-right">Weight (lb)</th>
+            </tr>
+          </thead>
+          <tbody id="weightTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">Calibrated reference weights (WCB, RF, manual). Tap any row to load it into the calculator.</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">How the weight is estimated <span class="accent-text">(catalog-calibrated)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">The formula chain</p>
+          <div class="mono-block mt-3 rounded-lg p-4 text-sm">
+            W = W<sub>catalog base</sub>(type, class, NPS)<br />
+            &nbsp;&nbsp;× F<sub>end</sub> (RF 1.0 · BW 0.97 · SW 0.82 · NPT 0.78)<br />
+            &nbsp;&nbsp;× F<sub>operation</sub> (manual 1.0 · gear 1.18 ≥ NPS 14 · actuated 1.12)<br />
+            &nbsp;&nbsp;× F<sub>style</sub> (check valves: swing 1.0 · lift 0.85 · wafer 0.45 · axial 0.7)<br />
+            &nbsp;&nbsp;× (ρ<sub>material</sub> / ρ<sub>WCB</sub>)
+          </div>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">
+            Unlike a flange — whose mass follows directly from ASME B16.5 dimensions — a valve body is a
+            casting or forging whose wall thickness is <em>selected</em> by the designer within ASME B16.34
+            minimums. Two compliant Class 300 gate valves of the same size can legitimately differ by 10%
+            in weight. That is exactly why most online tools don't offer valve weights at all, and why a
+            catalog-calibrated estimate with a disclosed ±10–15% band is the honest answer.
+          </p>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Standards behind the numbers</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>ASME B16.34</strong> — pressure-temperature ratings and minimum wall requirements; Class 150/300/600 wall class drives body mass.</li>
+            <li><strong>ASME B16.10</strong> — face-to-face / end-to-end dimensions (short, regular, long patterns). Gate/globe/check use long pattern; ball valves commonly API 6D short pattern.</li>
+            <li><strong>API 600 / 602 / 594 / 608 / 6D</strong> — the design standards the calibrated catalogs build to.</li>
+            <li><strong>ASTM A216/A352/A217/A351</strong> — material densities for the scaling factor.</li>
+          </ul>
+          <p class="mt-3">
+            Base values were cross-checked against published catalog weight charts — including a public
+            gate/globe/check compilation and a published API 6D full-bore ball valve chart. Results are
+            <strong>estimates for freight, quoting and BOM checks</strong>; for lifting plans or customs
+            declarations, confirm with the manufacturer's certified weight.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/valve-cv-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Valve Cv Calculator</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Weight Calculator</a>
+        <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Elbow Weight Calculator</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 Flange Dimensions</a>
+        <a href="/wenzhou-valve-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Wenzhou Valve Manufacturers</a>
+        <a href="/blog/valve-weight-chart-by-class/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Valve Weight Chart by Class</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>Disclaimer:</strong> Valve weights are calibrated engineering estimates compiled from
+      published manufacturer catalog charts, with a typical deviation of ±10–15% (occasionally up to
+      ±20% for large ball valves). Actual weights vary by manufacturer, wall thickness selection,
+      bonnet design and trim. For lifting plans, shipping cost guarantees or customs-critical
+      declarations, always obtain certified weights from the valve manufacturer.
+    </p>
+  </div>
+</Base>
+
+<script>
+  import {
+    CHECK_STYLE_FACTORS,
+    END_FACTORS,
+    KG_TO_LB,
+    OPERATION_FACTORS,
+    VALVE_CLASSES,
+    VALVE_MATERIALS,
+    VALVE_NPS_LIST,
+    VALVE_TYPES,
+    computeValveWeight,
+    validNpsFor,
+    valveBaseKg,
+    type ValveType,
+  } from '../lib/valve-calculations';
+  import { VALVE_FACE_TO_FACE_MM } from '../data/valve-dimensions';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    type: 'gate' as ValveType, cls: 150, nps: 2, material: 'WCB',
+    end: 'RF', operation: 'manual', checkStyle: 'swing',
+    qty: 1,
+    unit: (localStorage.getItem('pvf_unit_pref') === 'lb' ? 'lb' : 'kg') as 'kg' | 'lb',
+  };
+
+  const fmt = (v: number, d = 2) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateSelect(id: string, items: { id: string; name: string }[], keep?: string) {
+    const sel = $(id) as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = it.id;
+      opt.textContent = it.name;
+      sel.appendChild(opt);
+    }
+    if (keep) sel.value = keep;
+  }
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const valid = validNpsFor(state.cls);
+    sel.innerHTML = '';
+    for (const n of VALVE_NPS_LIST) {
+      if (!valid.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      sel.appendChild(opt);
+    }
+    if (!valid.includes(state.nps)) state.nps = valid.includes(2) ? 2 : valid[0];
+    sel.value = String(state.nps);
+  }
+
+  function setTypeButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) => {
+      const active = b.dataset.type === state.type;
+      b.classList.toggle('accent-border', active);
+      b.classList.toggle('accent-light-bg', active);
+      b.classList.toggle('accent-text', active);
+      b.classList.toggle('border-theme', !active);
+      b.classList.toggle('text-theme-secondary', !active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const t = VALVE_TYPES.find((x) => x.id === state.type);
+    $('typeDesc').textContent = t ? `${t.name} — ${t.std}. ${t.desc}` : '';
+    $('checkStyleWrap').classList.toggle('hidden', state.type !== 'check');
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitKg').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'kg' ? on : off);
+    $('unitLb').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'lb' ? on : off);
+  }
+
+  function renderResult() {
+    const r = computeValveWeight(state.type, state.cls, state.nps, state.material, state.end, state.operation, state.checkStyle);
+    if (!r.valid) return;
+    const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
+    $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 1);
+    $('weightUnit').textContent = state.unit;
+    const matName = VALVE_MATERIALS.find((m) => m.id === state.material)?.name ?? state.material;
+    const endName = END_FACTORS.find((e) => e.id === state.end)?.name ?? state.end;
+    const opName = OPERATION_FACTORS.find((o) => o.id === state.operation)?.name ?? state.operation;
+    $('resultLine').textContent = `${r.typeName} ${r.npsLabel} Class ${r.cls} · ${matName} · ${endName}`;
+    const total = w * state.qty;
+    $('outQty').textContent = String(state.qty);
+    $('totalWeight').textContent = `${fmt(total, total >= 100 ? 0 : 1)} ${state.unit}`;
+    $('outF2F').textContent = r.faceToFaceMm > 0 ? `≈ ${fmt(r.faceToFaceMm, 0)} mm` : 'confirm per order';
+
+    const rows: [string, string][] = [
+      ['Catalog base (WCB, RF)', `${fmt(r.baseKg, 1)} kg`],
+      ['End factor', `× ${r.endFactor.toFixed(2)}`],
+      ['Operation factor', `× ${r.operationFactor.toFixed(2)}`],
+      ['Style factor (check)', `× ${r.styleFactor.toFixed(2)}`],
+      ['Density ratio (vs WCB)', `× ${r.densityRatio.toFixed(3)}`],
+    ];
+    $('factorList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted font-bold">Estimated weight</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 1)} kg / ${fmt(r.weightLb, 1)} lb</dd></div>`;
+
+    const t = VALVE_TYPES.find((x) => x.id === state.type)!;
+    const stdRows: [string, string][] = [
+      ['Design standard', t.std],
+      ['Rating standard', 'ASME B16.34'],
+      ['Face-to-face standard', state.type === 'ball' ? 'API 6D pattern' : 'ASME B16.10 long pattern'],
+      ['Material spec', VALVE_MATERIALS.find((m) => m.id === state.material)?.standard ?? '—'],
+      ['Operation', opName],
+    ];
+    $('stdList').innerHTML = stdRows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
+      .join('');
+  }
+
+  function renderTable() {
+    const t = VALVE_TYPES.find((x) => x.id === state.type)!;
+    $('tableTitle').textContent = t.name;
+    $('tableClass').textContent = `Class ${state.cls}`;
+    const tbody = $('weightTableBody');
+    tbody.innerHTML = '';
+    for (const n of VALVE_NPS_LIST) {
+      const base = valveBaseKg(state.type, state.cls, n.nps);
+      if (base <= 0) continue;
+      const idx = VALVE_NPS_LIST.findIndex((x) => x.nps === n.nps);
+      const f2f = VALVE_FACE_TO_FACE_MM[state.type][state.cls as 150 | 300 | 600]?.[idx] ?? 0;
+      const kg = base * (VALVE_MATERIALS.find((m) => m.id === state.material)?.ratio ?? 1);
+      const tr = document.createElement('tr');
+      tr.className = 'cursor-pointer hover-accent-light';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n.label}</td>` +
+        `<td class="px-3 py-2">${fmt(n.pipeOd, 1)}</td>` +
+        `<td class="px-3 py-2">${f2f > 0 ? fmt(f2f, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right font-semibold ${n.nps === state.nps ? 'accent-text' : ''}">${fmt(kg, 1)}</td>` +
+        `<td class="px-3 py-2 text-right">${fmt(kg * KG_TO_LB, 1)}</td>`;
+      tr.addEventListener('click', () => {
+        state.nps = n.nps;
+        ($('nps') as HTMLSelectElement).value = String(n.nps);
+        render();
+        $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  function render() { renderResult(); renderTable(); }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.type-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.type = b.dataset.type as ValveType; setTypeButtons(); render(); })
+  );
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => { state.material = (e.target as HTMLSelectElement).value; render(); });
+  $('end').addEventListener('change', (e) => { state.end = (e.target as HTMLSelectElement).value; render(); });
+  $('operation').addEventListener('change', (e) => { state.operation = (e.target as HTMLSelectElement).value; render(); });
+  $('checkStyle').addEventListener('change', (e) => { state.checkStyle = (e.target as HTMLSelectElement).value; render(); });
+  $('qty').addEventListener('input', (e) => {
+    state.qty = Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1));
+    renderResult();
+  });
+  $('unitKg').addEventListener('click', () => { state.unit = 'kg'; localStorage.setItem('pvf_unit_pref', 'kg'); setUnitButtons(); renderResult(); });
+  $('unitLb').addEventListener('click', () => { state.unit = 'lb'; localStorage.setItem('pvf_unit_pref', 'lb'); setUnitButtons(); renderResult(); });
+
+  // Init
+  populateSelect('material', VALVE_MATERIALS.map((m) => ({ id: m.id, name: `${m.name} (${m.standard})` })));
+  populateSelect('end', END_FACTORS);
+  populateSelect('operation', OPERATION_FACTORS);
+  populateSelect('checkStyle', CHECK_STYLE_FACTORS);
+  populateNps();
+  setTypeButtons();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const w = ($('weightValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('weightUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
+    const qty = ($('outQty') as HTMLElement).textContent ?? '1';
+    const text = `PVF Calculator — Valve Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/valve-weight-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      type: state.type, cls: String(state.cls), nps: String(state.nps),
+      material: state.material, end: state.end, operation: state.operation,
+      checkStyle: state.checkStyle, qty: String(state.qty), unit: state.unit,
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const t = sp.get('type') as ValveType;
+    if (t && (['gate','globe','check','ball'] as string[]).includes(t)) { state.type = t; setTypeButtons(); changed = true; }
+    const c = Number(sp.get('cls'));
+    if (c && [150, 300, 600].includes(c)) { state.cls = c; ($('cls') as HTMLSelectElement).value = String(c); populateNps(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0 && validNpsFor(state.cls).includes(n)) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const mat = sp.get('material');
+    if (mat && VALVE_MATERIALS.some((m) => m.id === mat)) { state.material = mat; ($('material') as HTMLSelectElement).value = mat; changed = true; }
+    const end = sp.get('end');
+    if (end && END_FACTORS.some((e) => e.id === end)) { state.end = end; ($('end') as HTMLSelectElement).value = end; changed = true; }
+    const op = sp.get('operation');
+    if (op && OPERATION_FACTORS.some((o) => o.id === op)) { state.operation = op; ($('operation') as HTMLSelectElement).value = op; changed = true; }
+    const cs = sp.get('checkStyle');
+    if (cs && CHECK_STYLE_FACTORS.some((x) => x.id === cs)) { state.checkStyle = cs; ($('checkStyle') as HTMLSelectElement).value = cs; changed = true; }
+    const q = Number(sp.get('qty'));
+    if (q >= 1) { state.qty = Math.max(1, Math.floor(q)); ($('qty') as HTMLInputElement).value = String(state.qty); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'kg' || u === 'lb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (changed) render();
+  }
+</script>

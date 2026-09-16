@@ -1,0 +1,294 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "ASME VIII UG-27 & UG-32 Thickness, Explained With a Full Worked Example";
+const description =
+  "A line-by-line walkthrough of the ASME VIII Div.1 shell and head thickness formulas — where the 0.6P comes from, which seam governs, and a complete separator-vessel calculation from design pressure to MAWP.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", "name": "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-08-04",
+  dateModified: "2026-08-04",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/asme-viii-ug-27-thickness-explained/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "ASME VIII UG-27 Thickness Explained", url: "/blog/asme-viii-ug-27-thickness-explained/" },
+];
+const faqItems = [
+  {
+    question: "Is UG-27 a thin-wall approximation?",
+    answer: "No. The forms t = P·R/(S·E − 0.6P) and t = P·R/(2S·E + 0.4P) are the Lamé thick-wall solution restated, with the 0.6P and 0.4P terms being the exact inside-surface coefficients. The formulas remain valid up to t = R/2 or P = 0.385·S·E — well beyond where a simple PR/t hoop-stress formula would be unconservative.",
+  },
+  {
+    question: "Which seam controls shell thickness under UG-27?",
+    answer: "Usually the longitudinal seam. Hoop stress is twice the axial stress, so the circumferential-stress formula (which divides by the longitudinal-seam efficiency E) nearly always governs. Only when the longitudinal seam has a materially lower E than the circumferential seam can the axial formula govern — which is why the calculator reports both.",
+  },
+  {
+    question: "Why are 2:1 elliptical heads roughly the same thickness as the shell?",
+    answer: "A 2:1 semi-elliptical head has K = 1 in UG-32(d), giving t = P·D/(2SE − 0.2P). For the shell, t = P·R/(SE − 0.6P) = P·D/(2SE − 1.2P). With equal E, the two denominators are almost identical (2SE dominates both), so the head lands within a few percent of the shell — a useful design-rule cross-check.",
+  },
+  {
+    question: "Does the corrosion allowance get added before or after rounding?",
+    answer: "After the formula thickness, before rounding. The design code sequence is: compute t from UG-27/UG-32 with corroded dimensions, add CA, then round up to a purchasable plate. Rounding before adding CA would silently under-provide the allowance. MAWP is then back-calculated on the corroded thickness (nominal minus CA).",
+  },
+  {
+    question: "What is still missing after a UG-27/UG-32 calculation?",
+    answer: "A lot, all mandatory for a stamped vessel: nozzle reinforcement (UG-37), external pressure if applicable (UG-28), MDMT impact exemption (UCS-66), weld details and efficiencies from the actual joint design (UW-3/UW-12), wind/seismic loads (UG-22), and fatigue screening. Treat UG-27/UG-32 as the first line of the calculation, not the last.",
+  },
+];
+
+---
+
+<Base title={title} description={description} canonical="https://pvfcalculator.com/blog/asme-viii-ug-27-thickness-explained/" jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ogType="article" ctaHref="/pressure-vessel-thickness-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">UG-27 Thickness Explained</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        ASME VIII <span class="accent-text">UG-27 &amp; UG-32</span> Thickness, Explained With a Full Worked Example
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Every pressure-vessel wall-thickness calculation in the world eventually lands on two short paragraphs of
+        ASME Section VIII Division 1: UG-27 for cylinders and UG-32 for formed heads. This article takes the formulas
+        apart line by line, explains where the mysterious 0.6P actually comes from, and then runs a complete
+        separator-vessel calculation from design pressure to MAWP.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: August 4, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick Answer</h2>
+        <p class="text-theme-secondary leading-relaxed text-sm">
+          For a cylindrical shell, ASME VIII-1 UG-27 requires two thicknesses: <strong class="text-theme-primary">t = P·R/(S·E − 0.6P)</strong> for the
+          circumferential (hoop) stress acting on the longitudinal seam, and <strong class="text-theme-primary">t = P·R/(2S·E + 0.4P)</strong> for the
+          axial stress acting on the circumferential seam — you must satisfy both. For formed heads, UG-32 gives one
+          formula per head shape (ellipsoidal with factor K, torispherical with factor M, hemispherical as a sphere).
+          Add the corrosion allowance, round up to a standard plate, and back-calculate MAWP on the corroded
+          thickness. Worked numerically below — or jump straight to the
+          <a href="/pressure-vessel-thickness-calculator/" class="underline accent-text">pressure vessel thickness calculator</a>.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-3">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#stress-directions" class="hover:underline accent-text">Two stress directions in a cylinder</a></li>
+          <li><a href="#ug27" class="hover:underline accent-text">UG-27, line by line — and the origin of 0.6P</a></li>
+          <li><a href="#ug32" class="hover:underline accent-text">UG-32: the four head formulas</a></li>
+          <li><a href="#example" class="hover:underline accent-text">Worked example: 1,200 mm separator vessel</a></li>
+          <li><a href="#not-covered" class="hover:underline accent-text">What these formulas do not cover</a></li>
+        </ol>
+      </div>
+
+      <!-- 1 -->
+      <div id="stress-directions">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. Two Stress Directions in a Cylinder</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Internal pressure pushes the cylinder wall outward in two ways at once. Around the circumference, the
+          pressure tries to split the shell lengthwise — this <strong class="text-theme-primary">hoop stress</strong> is the larger of the two,
+          and on elementary theory it equals P·R/t. Along the axis, the pressure on the heads pushes the shell apart
+          like a piston — the <strong class="text-theme-primary">axial (longitudinal) stress</strong> is half the hoop value, P·R/(2t).
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Elementary theory, though, is a thin-wall approximation. It assumes stress is uniform through the wall,
+          which is only acceptable when the wall is thin relative to the radius. Real vessels — especially at higher
+          pressures — have a pronounced stress gradient: the inside surface carries more than the average. ASME's
+          answer is not a fudge factor but the exact thick-wall (Lamé) solution, rearranged so that the unknown
+          thickness sits alone in the numerator.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          The design allowable stress <strong class="text-theme-primary">S</strong> comes from ASME Section II Part D at the design
+          temperature, and <strong class="text-theme-primary">E</strong> is the weld joint efficiency from UW-12 — a quality factor for the
+          seam, not the material. Those two lookups, plus P and R, are the entire input set.
+        </p>
+      </div>
+
+      <!-- 2 -->
+      <div id="ug27">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">2. UG-27, Line by Line — and the Origin of 0.6P</h2>
+        <div class="glass rounded-xl p-4 font-mono text-sm text-theme-secondary mb-4 space-y-1">
+          <p>UG-27(c)(1)  t = P·R / (S·E − 0.6P)   — circumferential stress, longitudinal seam</p>
+          <p>UG-27(c)(2)  t = P·R / (2S·E + 0.4P)  — longitudinal stress, circumferential seam</p>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Take the Lamé hoop-stress equation at the <em>inside surface</em> of a cylinder and solve for thickness.
+          After collecting terms, the result is exactly t = P·R/(S·E − 0.6P). The 0.6 multiplying P is the
+          inside-surface Lamé coefficient — not a safety margin and not a thin-wall correction, but the precise
+          consequence of the stress concentration at the bore. The longitudinal formula gets +0.4P in the
+          denominator from the same derivation, one dimension down.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Two consequences follow. First, the formula stays accurate far beyond thin-wall territory: the code
+          sanctions it up to t = R/2, equivalently P = 0.385·S·E. Second, the denominator shrinking as P rises
+          means thickness grows faster than linearly with pressure — a behavior thin-wall intuition gets wrong,
+          and one reason quick spreadsheet formulas that ignore it under-thicken mid-pressure vessels.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          You must check both formulas because the efficiencies can differ. The circumferential formula divides by
+          the efficiency of the <em>longitudinal</em> seam (Category A), the axial formula by the <em>circumferential</em>
+          seam (Category B). With a fully radiographed longitudinal seam both usually point the same way; with spot
+          RT on one and full RT on the other, run the numbers — the
+          <a href="/pressure-vessel-thickness-calculator/" class="underline accent-text">calculator</a> reports both and names the governing one.
+        </p>
+      </div>
+
+      <!-- 3 -->
+      <div id="ug32">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">3. UG-32: The Four Head Formulas</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Formed heads each get their own closed form in UG-32, reflecting how curvature is distributed:
+        </p>
+        <ul class="space-y-3 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">2:1 semi-ellipsoidal (UG-32(d)):</strong> t = P·D·K/(2SE − 0.2P). For a 2:1 head the shape factor K = (1/6)[2 + (D/2h)²] equals 1, and the head may equivalently be treated as a hemisphere of radius L = 0.9D. This is the industry default head.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Torispherical / flanged-and-dished (UG-32(e)):</strong> t = 0.885·P·L·M/(SE − 0.1P), with M = ¼(3 + √(L/r)). The small standard knuckle (r ≈ 6% of L) drives M to about 1.77 — which is why F&amp;D heads run several times thicker than 2:1 ellipsoids for the same duty.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Hemispherical (UG-32(f)):</strong> t = P·R/(2SE − 0.2P) — the material-optimal shape, half the wall of the cylinder it closes, at the price of depth and forming cost.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Conical (UG-32(g)):</strong> t = P·D/(2cos α·(SE − 0.6P)) for transition sections; the knuckle region gets its own check.</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          A useful cross-check falls out of the ellipsoidal formula: with equal E, a 2:1 head thickness lands within a
+          few percent of the shell thickness it closes. If your head comes out wildly different from your shell, check
+          units before checking anything else.
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div id="example">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">4. Worked Example: 1,200 mm Separator Vessel</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A horizontal three-phase separator, carbon steel, non-lethal service:
+        </p>
+        <div class="glass rounded-xl p-4 text-sm text-theme-secondary mb-4 grid sm:grid-cols-2 gap-2">
+          <p>Design pressure P = 1.0 MPa (≈145 psi)</p>
+          <p>Inside diameter D = 1,200 mm → R = 600 mm</p>
+          <p>Design temperature = 100°C (212°F)</p>
+          <p>Material SA-516 Gr.70 → S = 138 MPa (20.0 ksi)</p>
+          <p>Longitudinal seam: spot RT → E = 0.85</p>
+          <p>Corrosion allowance CA = 2.0 mm</p>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">Shell, circumferential:</strong>
+          t = 1.0 × 600 / (138 × 0.85 − 0.6 × 1.0) = 600 / 116.7 = <strong class="text-theme-primary">5.14 mm</strong>.
+          <strong class="text-theme-primary">Shell, axial:</strong>
+          t = 600 / (2 × 117.3 + 0.4) = 600 / 235.0 = 2.55 mm. The longitudinal-seam formula governs, as expected.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Add CA: 5.14 + 2.0 = 7.14 mm, round up the standard plate series to <strong class="text-theme-primary">8 mm nominal</strong>.
+          The 2:1 ellipsoidal heads: t = 1.0 × 1200 / (2 × 117.3 − 0.2) = 1200 / 234.4 = 5.12 mm; + CA = 7.12 mm —
+          again an 8 mm head, matching the shell as the cross-check predicted.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          <strong class="text-theme-primary">MAWP back-calculation</strong> on the corroded wall (8 − 2 = 6 mm):
+          P = S·E·t / (R + 0.6t) = 117.3 × 6 / (600 + 3.6) = <strong class="text-theme-primary">1.17 MPa</strong>. The corroded vessel
+          at design temperature still carries 17% above design pressure — the margin your relief valve set point
+          and hydrotest pressure (1.3× MAWP for the standard case) will consume by design.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          UG-16(b) closes the loop: the 6 mm corroded wall far exceeds the 1.6 mm minimum formed thickness, so the
+          8 mm plate stands. That entire chain — both seam directions, head, CA rounding, MAWP, min-thickness check —
+          is exactly what the
+          <a href="/pressure-vessel-thickness-calculator/" class="underline accent-text">pressure vessel thickness calculator</a>
+          executes in real time, in either unit system, with the II-D stress look-up built in.
+        </p>
+      </div>
+
+      <!-- 5 -->
+      <div id="not-covered">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. What These Formulas Do Not Cover</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          UG-27/UG-32 size the basic geometry of the pressure boundary — nothing more. A complete VIII-1 design still
+          needs nozzle reinforcement (UG-37), external-pressure screening (UG-28) if vacuum or jacket pressure exists,
+          MDMT impact rules (UCS-66), the actual joint design and radiography plan (UW-3/UW-11/UW-12), wind and
+          seismic per UG-22, and — for cyclic service — a fatigue screening. Code-stamped work belongs with an
+          ASME-certified shop and an Authorized Inspector; the formulas here are how you check their work, scope a
+          budget, and write a smarter RFQ.
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          For pipe-rack and package work, pair this with the
+          <a href="/pipe-weight-calculator/" class="underline accent-text">pipe weight calculator</a> and the
+          <a href="/pipe-schedule-chart/" class="underline accent-text">pipe schedule chart</a>; flange weights for the
+          nozzle BOM come from the <a href="/flange-weight-calculator/" class="underline accent-text">flange weight calculator</a>.
+        </p>
+      </div>
+
+      <!-- CTA 1 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Run the Numbers Yourself</h2>
+        <p class="text-theme-secondary mb-6">
+          Shell (both seam directions), 2:1 ellipsoidal, torispherical and hemispherical heads — with II-D stress
+          look-up, CA, plate rounding and MAWP back-calculation. Free, in metric or imperial.
+        </p>
+        <a href="/pressure-vessel-thickness-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Open the Vessel Thickness Calculator →
+        </a>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA 2 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Sourcing a Vessel or Heat Exchanger?</h2>
+        <p class="text-theme-secondary mb-6">
+          Send the scoped spec to qualified ASME U-stamp shops in the Hebei manufacturing belt — SA-516-70 shells,
+          formed heads, and documented NDT/PWHT with the data report package.
+        </p>
+        <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Request a Quote →
+        </a>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/pipe-schedule-chart-explained/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Schedule Chart Explained</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/mss-sp-75-vs-asme-b16-9/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">MSS SP-75 vs ASME B16.9</a>
+          <a href="/blog/why-flange-calculators-are-wrong/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Why Flange Calculators Are Wrong</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

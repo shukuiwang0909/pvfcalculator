@@ -1,0 +1,356 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "Gate vs Globe vs Ball vs Check Valve: How to Choose (2026 Selection Guide)";
+const description =
+  "Gate, globe, ball or check? Structure, pressure drop, cost and application compared — with a selection flowchart, standards map (API 600/602/594/608/6D), and typical Cv and weight data for each type.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-08",
+  dateModified: "2026-09-08",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/gate-vs-globe-vs-ball-vs-check-valve/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Gate vs Globe vs Ball vs Check", url: "/blog/gate-vs-globe-vs-ball-vs-check-valve/" },
+];
+const faqItems = [
+  {
+    question: "Which valve type has the lowest pressure drop?",
+    answer: "Full-port gate and ball valves, both straight-through designs with bore equal to the pipe ID. A 6\" full-port ball valve has Cv ≈ 5,000 versus ≈ 1,100 for a globe valve of the same size. Butterfly valves sit in between depending on disc angle.",
+  },
+  {
+    question: "Can I use a gate valve for throttling?",
+    answer: "No. Gate valves throttle at the seat-ring perimeter, causing vibration, seat erosion and wire-drawing of the wedge. Throttling duty belongs to globe valves (or characterized control valves). A partially open gate valve will leak shut within months.",
+  },
+  {
+    question: "When should I choose a ball valve over a gate valve?",
+    answer: "Choose ball for frequent operation, tight shutoff (bubble-tight soft seats), quarter-turn actuation, and sizes up to NPS 12 where weight is acceptable. Choose gate for large-bore low-cycle isolation (NPS 14\"+), lower cost per Cv at big sizes, and wedge-gate tolerance of debris in the line.",
+  },
+  {
+    question: "Which check valve style should I use?",
+    answer: "Swing checks for low-pressure-drop horizontal lines NPS 2\"+; dual-plate wafer checks where space and weight matter (they're ~45% of a swing check's weight); lift or axial-nozzle checks for high-pressure, pulsating, or vertical-upflow service; foot valves with strainers at pump suctions.",
+  },
+  {
+    question: "How much do these valves weigh?",
+    answer: "At 6\" Class 300: gate ≈ 144 kg, globe ≈ 150 kg, swing check ≈ 136 kg, ball ≈ 125 kg. Weights converge at mid sizes and diverge at the extremes — ball valves become heaviest above NPS 8 due to trunnion construction. Use the valve weight calculator for calibrated values with end and material factors.",
+  },
+];
+---
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/valve-cv-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Gate vs Globe vs Ball vs Check</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Gate vs Globe vs Ball vs <span class="accent-text">Check Valve</span>: How to Choose
+      </h1>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: September 8, 2026</span>
+        <span>·</span>
+        <span>9 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Quick answer -->
+      <div class="card card-accent p-6">
+        <h2 class="text-lg font-bold text-theme-primary mb-2">Quick answer</h2>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">Gate valve</strong> = cheapest full-bore isolation for
+          large-bore, low-cycle duty. <strong class="text-theme-primary">Globe valve</strong> = the only
+          one of the four designed for throttling. <strong class="text-theme-primary">Ball valve</strong> =
+          tightest shutoff and fastest operation (quarter-turn), best up to NPS 12".{" "}
+          <strong class="text-theme-primary">Check valve</strong> = not a choice but a requirement
+          wherever reverse flow would damage a pump or compressor. Decision drivers: pressure drop
+          (gate/ball win), shutoff class (ball wins), throttling (globe wins), size/cost at NPS 14+
+          (gate wins). Verify the flow path with the <a href="/valve-cv-calculator/" class="underline accent-text">valve Cv calculator</a> and
+          the shipping weight with the <a href="/valve-weight-calculator/" class="underline accent-text">valve weight calculator</a>.
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <nav class="glass rounded-xl p-6" aria-label="Table of contents">
+        <h2 class="text-sm font-bold text-theme-primary mb-3 uppercase tracking-wider">Table of Contents</h2>
+        <ol class="list-decimal list-inside space-y-1.5 text-sm text-theme-secondary">
+          <li><a href="#side-by-side" class="hover:accent-text">Side-by-side comparison table</a></li>
+          <li><a href="#gate" class="hover:accent-text">Gate valves: the isolation workhorse</a></li>
+          <li><a href="#globe" class="hover:accent-text">Globe valves: built for throttling</a></li>
+          <li><a href="#ball" class="hover:accent-text">Ball valves: tight shutoff, quarter-turn</a></li>
+          <li><a href="#check" class="hover:accent-text">Check valves: reverse-flow protection</a></li>
+          <li><a href="#selection" class="hover:accent-text">Selection decision flow</a></li>
+          <li><a href="#faq" class="hover:accent-text">FAQ</a></li>
+        </ol>
+      </nav>
+
+      <!-- 1 -->
+      <div id="side-by-side">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">1. Side-by-Side Comparison</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">Attribute</th>
+                <th class="px-3 py-2.5">Gate</th>
+                <th class="px-3 py-2.5">Globe</th>
+                <th class="px-3 py-2.5">Ball</th>
+                <th class="px-3 py-2.5 rounded-r-lg">Check (swing)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Primary duty</td>
+                <td class="px-3 py-2 text-theme-secondary">On/off isolation</td>
+                <td class="px-3 py-2 text-theme-secondary">Throttling + isolation</td>
+                <td class="px-3 py-2 text-theme-secondary">On/off isolation</td>
+                <td class="px-3 py-2 text-theme-secondary">Prevent reverse flow</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Flow path</td>
+                <td class="px-3 py-2 text-theme-secondary">Straight-through</td>
+                <td class="px-3 py-2 text-theme-secondary">Z-pattern (changes direction)</td>
+                <td class="px-3 py-2 text-theme-secondary">Straight-through</td>
+                <td class="px-3 py-2 text-theme-secondary">Straight-through</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Pressure drop</td>
+                <td class="px-3 py-2 text-theme-secondary">Very low</td>
+                <td class="px-3 py-2 text-theme-secondary">High (3–5× gate)</td>
+                <td class="px-3 py-2 text-theme-secondary">Very low (full port)</td>
+                <td class="px-3 py-2 text-theme-secondary">Low–moderate</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Typical Cv (6")</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 4,500</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 1,100</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 5,000</td>
+                <td class="px-3 py-2 text-theme-secondary">sized by cracking ΔP</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Shutoff class</td>
+                <td class="px-3 py-2 text-theme-secondary">Metal seats — good</td>
+                <td class="px-3 py-2 text-theme-secondary">Metal seats — very good</td>
+                <td class="px-3 py-2 text-theme-secondary">Soft seats — bubble-tight</td>
+                <td class="px-3 py-2 text-theme-secondary">Back-flow sealing only</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Operation</td>
+                <td class="px-3 py-2 text-theme-secondary">Multi-turn (stem)</td>
+                <td class="px-3 py-2 text-theme-secondary">Multi-turn (stem)</td>
+                <td class="px-3 py-2 text-theme-secondary">Quarter-turn</td>
+                <td class="px-3 py-2 text-theme-secondary">Automatic (flow-driven)</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Cost (same NPS/class)</td>
+                <td class="px-3 py-2 text-theme-secondary">Low–moderate; cheapest at NPS 14"+</td>
+                <td class="px-3 py-2 text-theme-secondary">Highest per Cv</td>
+                <td class="px-3 py-2 text-theme-secondary">Moderate–high</td>
+                <td class="px-3 py-2 text-theme-secondary">Low (wafer style lowest)</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">Design standard</td>
+                <td class="px-3 py-2 text-theme-secondary">API 600</td>
+                <td class="px-3 py-2 text-theme-secondary">API 602/623</td>
+                <td class="px-3 py-2 text-theme-secondary">API 608 / API 6D</td>
+                <td class="px-3 py-2 text-theme-secondary">API 594 / API 6D</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold text-theme-primary">6" Class 300 weight</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 144 kg</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 150 kg</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 125 kg</td>
+                <td class="px-3 py-2 text-theme-secondary">≈ 136 kg</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-theme-muted mt-2">Weights: catalog-calibrated estimates, WCB RF manual — see the <a href="/valve-weight-calculator/" class="underline accent-text">valve weight calculator</a>.</p>
+      </div>
+
+      <!-- 2 -->
+      <div id="gate">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">2. Gate Valves: the Isolation Workhorse</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A gate valve lifts a flat or wedge-shaped disc fully out of the flow path, giving a
+          straight-through bore that approaches the Cv of an equal length of pipe. That makes it the
+          default block valve for pipelines, tank farms and anywhere fluid must pass with minimal
+          pumping loss. Because the sealing surfaces slide against each other only during the brief
+          open-close stroke, gate valves tolerate dirty service better than ball valves — a scratched
+          wedge still seats; a scratched soft seat does not.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The trade-offs: multi-turn operation is slow (dozens of handwheel turns at large NPS),
+          the cavity can trap fluid, and — critically — a gate valve is an <em>on/off</em> device.
+          Throttling at 10–30% open erodes the seat rings into grooves ("wire drawing") and the valve
+          will no longer seal. If your duty includes regulation, look at the globe valve in section 3.
+        </p>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          Spec reference: API 600 (bolted-bonnet cast steel), ratings per ASME B16.34, face-to-face
+          per ASME B16.10, tested to API 598.
+        </p>
+      </div>
+
+      <!-- CTA 1 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Check the Flow Path</h2>
+        <p class="text-theme-secondary mb-6">
+          A 6" gate valve and a 6" globe valve differ 4× in Cv — verify your pressure drop before you order.
+        </p>
+        <a href="/valve-cv-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+          Valve Cv Calculator →
+        </a>
+      </div>
+
+      <!-- 3 -->
+      <div id="globe">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">3. Globe Valves: Built for Throttling</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The globe valve forces flow through a Z-shaped path: in horizontally, up over the seat, out
+          horizontally. That geometry is the exact opposite of efficient — the contoured plug
+          deliberately spends pressure to create a stable, predictable relationship between stem travel
+          and flow. It is the difference between a valve you can <em>modulate</em> and one you can only
+          open or close.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Pay for it three ways: 3–5× the pressure drop of a gate valve (permanent pumping cost),
+          the highest cost per Cv of any common type, and directional installation (flow under the
+          plug for throttling duty). Globe valves also resist choked flow better than any other type
+          (x_T ≈ 0.70), which is why severe-service control-valve bodies are globe-pattern.
+        </p>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          Use globe valves for: bypass throttling, steam vents and drains, sampling points, and any
+          manual regulation duty. Spec reference: API 602 (forged steel) / API 623 (cast), ratings
+          per ASME B16.34.
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div id="ball">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">4. Ball Valves: Tight Shutoff, Quarter-Turn</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A drilled sphere rotating 90° against resilient seats gives the ball valve bubble-tight
+          shutoff, near-gate-valve Cv at full port, and operation in seconds — ideal for emergency
+          isolation, frequent cycling, and actuation. Below NPS 6" floating-ball designs dominate;
+          above, trunnion-mounted balls carry the line pressure on bearings so torque stays manageable
+          at Class 600 and beyond.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Limits: soft seats (PTFE, nylon) cap temperature around 200–260 °C and dislike dirty or
+          flashing service; metal-seated balls fix that at higher cost. And while a ball valve's Cv
+          looks generous, its low x_T (≈ 0.25) means it chokes early — never use one as a
+          pressure-reducing valve. At NPS 14"+ the trunnion body plus gear operator also makes it the
+          heaviest option on the chart.
+        </p>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          Spec reference: API 608 (flanged floating), API 6D / ISO 14313 (pipeline trunnion), fire-safe
+          per API 607 / ISO 10497 where required.
+        </p>
+      </div>
+
+      <!-- 5 -->
+      <div id="check">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">5. Check Valves: Reverse-Flow Protection</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The check valve is the only automatic valve in the group — no handwheel, no actuator, just
+          flow holding it open against gravity or a spring. Its job is singular: when the pump trips
+          or the compressor reverses, close before reverse flow destroys the machine. Water hammer,
+          slam, and excessive pressure drop are the design enemies.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Style selection matters more than brand:
+        </p>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Swing check</strong> — lowest pressure drop; needs horizontal installation and enough line velocity to keep it fully open, or it chatters.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Dual-plate wafer</strong> — ~45% of the swing check's weight and a fraction of its face-to-face; the default for space-constrained pipe racks.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Lift / axial-nozzle</strong> — for high-pressure, pulsating or vertical-upflow service where swing and wafer designs slam.</span></li>
+        </ul>
+        <p class="text-sm text-theme-secondary leading-relaxed">
+          Spec reference: API 594 (wafer/lug/swing), API 6D for pipeline checks, non-slam designs to
+          manufacturer standards.
+        </p>
+      </div>
+
+      <!-- 6 -->
+      <div id="selection">
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">6. Selection Decision Flow</h2>
+        <ol class="list-decimal list-inside space-y-2 text-theme-secondary mb-4">
+          <li><strong class="text-theme-primary">Is reverse flow the enemy?</strong> → check valve; pick swing (low ΔP), wafer (space/weight) or lift/axial (high pressure / pulsating).</li>
+          <li><strong class="text-theme-primary">Do you need to regulate flow?</strong> → globe (manual) or a characterized control valve (automatic). Nothing else on this list should throttle.</li>
+          <li><strong class="text-theme-primary">Isolation only:</strong> frequent cycling or bubble-tight shutoff, NPS ≤ 12" → ball; large-bore low-cycle economy, NPS ≥ 14" → gate.</li>
+          <li><strong class="text-theme-primary">Verify:</strong> Cv against the duty (<a href="/valve-cv-calculator/" class="underline accent-text">calculator</a>), weight for freight and rigging (<a href="/valve-weight-calculator/" class="underline accent-text">calculator</a>), and face-to-face per ASME B16.10 against the piping layout.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          Whatever the type, the body must meet the line class per ASME B16.34 — a Class 300 ball valve
+          on a Class 300 line is a rating match, not a safety upgrade. And for procurement, remember
+          that weight is a real cost driver: a container of 24" valves is a different freight
+          conversation than a container of 2" ones.
+        </p>
+      </div>
+
+      <!-- CTA 2 -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Price the Whole BOM</h2>
+        <p class="text-theme-secondary mb-6">
+          Calibrated valve weights (±10–15%) plus Cv sizing in one place — then send the spec to suppliers.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/valve-weight-calculator/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Valve Weight Calculator →
+          </a>
+          <a href="/valve-cv-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Valve Cv Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/how-to-calculate-valve-cv/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Calculate Valve Cv</a>
+          <a href="/blog/valve-weight-chart-by-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Valve Weight Chart by Class</a>
+          <a href="/blog/piping-class-chart/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Piping Class Chart Explained</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

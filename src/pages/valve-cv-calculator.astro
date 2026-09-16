@@ -1,0 +1,576 @@
+---
+import Base from '../layouts/Base.astro';
+const title = "Valve Cv Calculator (Liquid, Gas & Steam) | ISA-75.01 Sizing";
+const description = "Free valve Cv calculator for liquids, gases and steam — Cv = Q·√(SG/ΔP) for liquids, ISA-75.01 / Fisher expansion-factor form for gases with choked-flow detection. Reverse modes: max flow or ΔP from a known Cv.";
+const canonical = "https://pvfcalculator.com/valve-cv-calculator/";
+
+const faqs = [
+  {
+    q: "What is valve Cv?",
+    a: "Cv is the valve flow coefficient: the number of US gallons per minute of water at 60 °F that flows through a fully open valve with a pressure drop of exactly 1 psi. A valve with Cv = 100 passes 100 gpm of water at 1 psi ΔP, or 50 gpm at 4 psi ΔP. Higher Cv means lower flow resistance."
+  },
+  {
+    q: "How do you calculate Cv for a liquid?",
+    a: "For turbulent, non-choked liquid flow: Cv = Q·√(SG/ΔP), where Q is flow in gpm, SG is specific gravity relative to water, and ΔP is the pressure drop in psi. Example: 150 gpm of diesel (SG 0.85) at 12 psi ΔP needs Cv = 150·√(0.85/12) ≈ 40."
+  },
+  {
+    q: "How do you calculate Cv for a gas?",
+    a: "Using the ISA-75.01 / Fisher expansion-factor form implemented here: Cv = Q / (N8·P1·Y) · √(G_g·T1·Z/x), with Q in scfh, P1 in psia, T1 in °R, x = ΔP/P1 and expansion factor Y = 1 − x/(3·F_k·x_T), F_k = k/1.4. Non-choked results apply for x < F_k·x_T."
+  },
+  {
+    q: "What is choked flow and how is it detected?",
+    a: "Choked flow occurs when increasing the pressure drop no longer increases flow. For gases, choking begins when x = ΔP/P1 reaches F_k·x_T (for a full-port ball valve x_T ≈ 0.25, so choking starts near x ≈ 0.25). For liquids, the simplified screen is ΔP ≥ F_L²·P1. The calculator flags choked results and reports the maximum flow at the choking pressure ratio."
+  },
+  {
+    q: "What is the expansion factor Y?",
+    a: "Y corrects for the gas density change between the valve inlet and the vena contracta as the gas expands. In the Fisher/ISA convention Y = 1 − x/(3·F_k·x_T): it equals 1 at very small ΔP and floors at 2/3 when the flow chokes. Ignoring Y overstates Cv by 10–30% at typical pressure ratios."
+  },
+  {
+    q: "How is steam sized differently?",
+    a: "Steam is handled with the mass-flow form of the equation: Cv = w / (N6·Y·√(ΔP·P1·ρ1)), where w is mass flow in lb/h and ρ1 is the inlet saturated-steam density in lb/ft³ (interpolated from a steam table by inlet pressure). Superheat is approximated by raising the inlet temperature input; for precise design use manufacturer sizing software."
+  },
+  {
+    q: "What are typical Cv values by valve type and size?",
+    a: "Full-port valves of the same NPS differ enormously: a 2\" full-port ball valve has Cv ≈ 420, a 2\" gate valve ≈ 380, while a 2\" globe valve is only ≈ 100. At 6\" the gap widens: ball ≈ 5,000, gate ≈ 4,500, globe ≈ 1,100. The comparison table on this page shows published typical values — always confirm against the manufacturer's published Cv."
+  },
+  {
+    q: "Can I work backwards from a known Cv?",
+    a: "Yes — use the reverse modes. \"Max flow from known Cv\" computes the flow at a given pressure drop (with choked-flow capping), and \"Pressure drop from known Cv\" solves the expansion-factor equation iteratively for ΔP, warning you if the valve is undersized even at choking conditions."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Valve Cv Calculator (Liquid, Gas & Steam)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Valve Cv Calculator", url: "/valve-cv-calculator/" },
+];
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Valve Cv Calculator <span class="accent-text">(Liquid · Gas · Steam)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        Size shutoff and throttling valves with the ISA-75.01 / IEC 60534-2-1 equations
+        (Emerson/Fisher handbook form). Liquid sizing with <strong>Cv = Q·√(SG/ΔP)</strong>,
+        gas sizing with the expansion factor Y, automatic <strong>choked-flow detection</strong>,
+        and reverse solve modes for known-Cv valves.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Valve Cv calculator tool">
+      <!-- Fluid + mode selectors -->
+      <div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-theme-secondary">Fluid Type</label>
+          <div class="grid grid-cols-3 gap-2" id="fluidButtons">
+            <button data-fluid="liquid" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Liquid</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">water · oil · chemicals</span>
+            </button>
+            <button data-fluid="gas" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Gas</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">air · N₂ · natural gas</span>
+            </button>
+            <button data-fluid="steam" class="fluid-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Steam</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">saturated (simplified)</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-theme-secondary">Solve Mode</label>
+          <div class="grid grid-cols-3 gap-2" id="modeButtons">
+            <button data-mode="sizing" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Find Cv</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">known flow + ΔP</span>
+            </button>
+            <button data-mode="flow" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Max Flow</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">known Cv + ΔP</span>
+            </button>
+            <button data-mode="dp" class="mode-btn rounded-xl border-2 p-3 text-center transition">
+              <span class="block text-sm font-semibold">Find ΔP</span>
+              <span class="mt-0.5 block text-[11px] text-theme-muted">known Cv + flow</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="vstyle" class="mb-1 block text-sm font-semibold text-theme-secondary">Valve Style (F_L, x_T)</label>
+          <select id="vstyle" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Liquid-only -->
+        <div id="liquidSgWrap">
+          <label for="sg" class="mb-1 block text-sm font-semibold text-theme-secondary">Liquid (SG)</label>
+          <select id="sg" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Gas-only -->
+        <div id="gasGgWrap" class="hidden">
+          <label for="gg" class="mb-1 block text-sm font-semibold text-theme-secondary">Gas (G_g)</label>
+          <select id="gg" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <!-- Steam-only hint -->
+        <div id="steamWrap" class="hidden">
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Steam Density</label>
+          <p class="field w-full rounded-lg px-3 py-2 text-sm text-theme-muted" id="steamRho">ρ₁ = – lb/ft³ (from P₁)</p>
+        </div>
+        <div>
+          <label for="flow" class="mb-1 block text-sm font-semibold text-theme-secondary" id="flowLabel">Flow (gpm)</label>
+          <input id="flow" type="number" min="0" step="any" value="150" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="cvWrap" class="hidden">
+          <label for="cv" class="mb-1 block text-sm font-semibold text-theme-secondary">Known Cv</label>
+          <input id="cv" type="number" min="0" step="any" value="100" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="p1" class="mb-1 block text-sm font-semibold text-theme-secondary">P₁ inlet (psia)</label>
+          <input id="p1" type="number" min="0" step="any" value="100" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="p2" class="mb-1 block text-sm font-semibold text-theme-secondary">P₂ outlet (psia)</label>
+          <input id="p2" type="number" min="0" step="any" value="88" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="gasTWrap" class="hidden">
+          <label for="t1" class="mb-1 block text-sm font-semibold text-theme-secondary">T₁ (°F)</label>
+          <input id="t1" type="number" step="any" value="60" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div id="gasZWrap" class="hidden">
+          <label for="z" class="mb-1 block text-sm font-semibold text-theme-secondary">Z (compressibility)</label>
+          <input id="z" type="number" min="0.3" max="1.5" step="0.01" value="1" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted" id="resultLabel">Required Cv</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums"><span id="cvValue">–</span></p>
+          <p class="mt-3 text-sm text-theme-secondary" id="cvSubLine">–</p>
+          <div id="chokeBanner" class="mt-4 hidden rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-theme-secondary">
+            <strong class="accent-text">⚠ Choked flow.</strong> <span id="chokeText"></span>
+          </div>
+          <div class="mt-4 border-t border-theme pt-3 text-sm" id="detailList"></div>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Comparison at Selected NPS</p>
+          <label for="cmpNps" class="mb-1 block text-xs text-theme-muted">Nominal size</label>
+          <select id="cmpNps" class="field mb-3 w-full rounded-lg px-3 py-2 text-sm"></select>
+          <dl class="text-sm" id="cmpList"></dl>
+          <p class="mt-2 text-xs text-theme-muted">Typical published rated Cv of full-port valves (reference only — confirm with the manufacturer).</p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Equation in Use</p>
+          <div class="mono-block rounded-lg p-4 text-xs leading-relaxed" id="equationBox">–</div>
+          <dl class="mt-3 text-sm" id="paramList"></dl>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">Copy Result</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">Share Link</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Rated Cv comparison table -->
+    <section class="mt-10" aria-label="Rated Cv comparison table">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">Typical Rated Cv of Full-Port Valves <span class="accent-text">by NPS</span></h2>
+      <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+        <table class="w-full min-w-[520px] text-sm">
+          <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+            <tr>
+              <th class="px-3 py-2.5">NPS</th>
+              <th class="px-3 py-2.5 text-right">Ball valve Cv</th>
+              <th class="px-3 py-2.5 text-right">Gate valve Cv</th>
+              <th class="px-3 py-2.5 text-right">Globe valve Cv</th>
+              <th class="px-3 py-2.5 text-right">Ball ÷ Globe</th>
+            </tr>
+          </thead>
+          <tbody id="cvTableBody" class="divide-y divide-theme"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-theme-muted">Typical published reference values for full-port valves (±25% between manufacturers). A globe valve's contoured plug sacrifices roughly 4–5× flow capacity versus a full-port ball valve of the same size.</p>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">Methodology <span class="accent-text">(ISA-75.01 / Fisher handbook)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">The three equations</p>
+          <div class="mono-block mt-3 rounded-lg p-4 text-xs leading-relaxed space-y-2">
+            <p><strong>Liquid:</strong> Cv = Q · √(SG/ΔP)</p>
+            <p><strong>Gas:</strong> Cv = Q/(N8·P1·Y) · √(G_g·T1·Z/x)</p>
+            <p>&nbsp;&nbsp;Y = 1 − x/(3·F_k·x_T),&nbsp; F_k = k/1.4,&nbsp; x = ΔP/P1</p>
+            <p><strong>Steam:</strong> Cv = w/(N6·Y·√(ΔP·P1·ρ1))</p>
+            <p>&nbsp;&nbsp;choked when x ≥ F_k·x_T (Y floors at 2/3)</p>
+          </div>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">
+            The gas form is the expansion-factor formulation of ISA-75.01 / IEC 60534-2-1 as
+            presented in the Emerson/Fisher <em>Control Valve Handbook</em>: the expansion factor
+            Y models the density collapse at the vena contracta, and the choking parameter
+            x_T marks where flow becomes sonic and stops responding to additional ΔP.
+          </p>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Reading the results</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>Choked warning</strong> — for liquids when ΔP ≥ F_L²·P1; for gases when x ≥ F_k·x_T. Beyond choking, more ΔP buys no more flow — size up the valve instead.</li>
+            <li><strong>Reverse modes</strong> — ΔP-from-Cv solves Y·√(x) = constant by bisection; if the target exceeds the choking capacity, the calculator tells you the valve is undersized.</li>
+            <li><strong>Steam</strong> uses the mass-flow form with saturated-steam density interpolated from inlet pressure; superheat shifts density slightly and is approximated via T₁.</li>
+            <li>F_L and x_T are per-style reference values — use the manufacturer's data for final sizing.</li>
+          </ul>
+          <p class="mt-3">These equations size the orifice, not the valve body: for line-size valves (common for ball, gate, check) the body is chosen one or two sizes up from the calculated Cv.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/valve-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Valve Weight Calculator</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Weight Calculator</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 Flange Dimensions</a>
+        <a href="/blog/how-to-calculate-valve-cv/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ How to Calculate Valve Cv (guide)</a>
+        <a href="/blog/gate-vs-globe-vs-ball-vs-check-valve/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Gate vs Globe vs Ball vs Check</a>
+        <a href="/wenzhou-valve-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Wenzhou Valve Manufacturers</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>Disclaimer:</strong> Cv calculations follow the ISA-75.01 / IEC 60534-2-1 simplified
+      equations for preliminary sizing only. F_L and x_T are reference values per valve style, not
+      manufacturer data; two-phase flow, cavitation damage limits, noise, and flashing are not
+      evaluated. For final valve selection — especially control valves, safety-related service or
+      high-pressure-drop gas duty — use the manufacturer's sizing software and verify with the
+      manufacturer's published coefficients.
+    </p>
+  </div>
+</Base>
+
+<script>
+  import {
+    GASES,
+    LIQUIDS,
+    RATED_CV,
+    RATED_CV_NPS,
+    VALVE_STYLE,
+    computeCv,
+    steamDensity,
+    type CvFluidKind,
+    type CvSolveMode,
+  } from '../lib/valve-cv-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    fluid: 'liquid' as CvFluidKind,
+    mode: 'sizing' as CvSolveMode,
+    vstyle: 'ball',
+    sg: 1, gg: 1, k: 1.4,
+    flow: 150, cv: 100, p1: 100, p2: 88, t1: 60, z: 1,
+  };
+
+  const fmt = (v: number, d = 1) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function setToggleButtons(sel: string, attr: string, active: string) {
+    document.querySelectorAll<HTMLButtonElement>(sel).forEach((b) => {
+      const on = b.dataset[attr] === active;
+      b.classList.toggle('accent-border', on);
+      b.classList.toggle('accent-light-bg', on);
+      b.classList.toggle('accent-text', on);
+      b.classList.toggle('border-theme', !on);
+      b.classList.toggle('text-theme-secondary', !on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+  }
+
+  function populateSelect(id: string, items: { id: string; name: string }[], keep?: string) {
+    const sel = $(id) as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = it.id;
+      opt.textContent = it.name;
+      sel.appendChild(opt);
+    }
+    if (keep) sel.value = keep;
+  }
+
+  function syncVisibility() {
+    $('liquidSgWrap').classList.toggle('hidden', state.fluid !== 'liquid');
+    $('gasGgWrap').classList.toggle('hidden', state.fluid !== 'gas');
+    $('steamWrap').classList.toggle('hidden', state.fluid !== 'steam');
+    $('gasTWrap').classList.toggle('hidden', state.fluid === 'liquid');
+    $('gasZWrap').classList.toggle('hidden', state.fluid !== 'gas');
+    $('cvWrap').classList.toggle('hidden', state.mode === 'sizing');
+    const fl = state.fluid;
+    $('flowLabel').textContent =
+      fl === 'liquid' ? 'Flow (gpm)' : fl === 'gas' ? 'Flow (scfh)' : 'Mass flow (lb/h)';
+    $('resultLabel').textContent =
+      state.mode === 'sizing' ? 'Required Cv' : state.mode === 'flow'
+        ? (fl === 'liquid' ? 'Flow (gpm)' : fl === 'gas' ? 'Flow (scfh)' : 'Mass flow (lb/h)')
+        : 'Resulting ΔP (psi)';
+    $('equationBox').textContent =
+      fl === 'liquid'
+        ? 'Cv = Q · √(SG / ΔP)\nQ [gpm] · SG [-] · ΔP [psi]'
+        : fl === 'gas'
+          ? 'Cv = Q / (N8·P1·Y) · √(Gg·T1·Z / x)\nY = 1 − x/(3·Fk·xT) · x = ΔP/P1\nQ [scfh] · P1 [psia] · T1 [°R] · N8 = 19.3'
+          : 'Cv = w / (N6·Y·√(ΔP·P1·ρ1))\nρ1 = saturated steam density at P1\nw [lb/h] · N6 = 2.09';
+  }
+
+  function num(id: string): number { return Number(($(id) as HTMLInputElement).value) || 0; }
+
+  function render() {
+    syncVisibility();
+    const dp = Math.max(0, state.p1 - state.p2);
+    const st = VALVE_STYLE.find((s) => s.id === state.vstyle)!;
+
+    if (state.fluid === 'steam') {
+      $('steamRho').textContent = `ρ₁ = ${fmt(steamDensity(state.p1), 4)} lb/ft³ (saturated, from P₁)`;
+    }
+
+    const result = computeCv({
+      fluid: state.fluid, mode: state.mode,
+      flow: state.flow, cv: state.cv,
+      p1: state.p1, p2: state.p2, dp,
+      sg: state.sg, gg: state.gg, k: state.k,
+      t1: state.fluid === 'gas' ? state.t1 + 459.67 : state.t1,
+      z: state.z, valveStyle: state.vstyle,
+    });
+
+    if (!result.valid) {
+      $('cvValue').textContent = '–';
+      $('cvSubLine').textContent = result.error ?? 'Check inputs.';
+      $('chokeBanner').classList.add('hidden');
+      $('detailList').innerHTML = '';
+      return;
+    }
+
+    // Main value
+    const main = state.mode === 'sizing' ? result.cv
+      : state.mode === 'flow'
+        ? (result.flowGpm ?? result.flowScfh ?? result.massLbPerHr ?? 0)
+        : result.dp;
+    $('cvValue').textContent = fmt(main, main >= 1000 ? 0 : main >= 10 ? 1 : 2);
+
+    const flName = state.fluid === 'liquid' ? 'liquid' : state.fluid === 'gas' ? 'gas' : 'steam';
+    $('cvSubLine').textContent =
+      state.mode === 'sizing'
+        ? `${st.name} · ${flName} · ΔP = ${fmt(result.dp, 1)} psi at P1 = ${fmt(result.p1, 1)} psia`
+        : state.mode === 'flow'
+          ? `Cv ${fmt(result.cv, 0)} · ${flName} · ΔP = ${fmt(result.dp, 1)} psi`
+          : `Cv ${fmt(result.cv, 0)} · ${flName} · flow ${fmt(state.fluid === 'steam' ? result.massLbPerHr! : (result.flowGpm ?? result.flowScfh)!, 0)} ${state.fluid === 'liquid' ? 'gpm' : state.fluid === 'gas' ? 'scfh' : 'lb/h'}`;
+
+    // Choke banner
+    if (result.choked) {
+      $('chokeBanner').classList.remove('hidden');
+      $('chokeText').textContent = result.note ?? 'Flow is choked.';
+    } else {
+      $('chokeBanner').classList.add('hidden');
+    }
+
+    const rows: [string, string][] = [
+      ['P₁ (psia)', fmt(result.p1, 1)],
+      ['P₂ (psia)', fmt(result.p2, 1)],
+      ['ΔP (psi)', fmt(result.dp, 2)],
+      ['x = ΔP/P₁', result.x > 0 ? fmt(result.x, 3) : '—'],
+      ['Y (expansion)', result.fluid === 'liquid' ? '—' : fmt(result.y, 3)],
+      ['F_L / x_T', `${st.fl.toFixed(2)} / ${st.xt.toFixed(2)}`],
+      ['Choked?', result.choked ? 'YES' : 'no'],
+    ];
+    $('detailList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold ${v === 'YES' ? 'accent-text' : 'text-theme-secondary'}">${v}</dd></div>`)
+      .join('');
+
+    const prm: [string, string][] = [
+      ['Valve style', st.name],
+      ['F_L (liquid recovery)', st.fl.toFixed(2)],
+      ['x_T (gas choking)', st.xt.toFixed(2)],
+      ['k / F_k', state.fluid === 'liquid' ? '—' : `${state.k.toFixed(2)} / ${(state.k / 1.4).toFixed(3)}`],
+    ];
+    $('paramList').innerHTML = prm
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+
+    // Comparison at selected NPS
+    const nps = Number(($('cmpNps') as HTMLSelectElement).value) || 2;
+    const b = RATED_CV.ball[nps], g = RATED_CV.gate[nps], gl = RATED_CV.globe[nps];
+    const cmp: [string, string, boolean][] = [
+      ['Full-port ball', b ? String(b) : '—', b >= result.cv],
+      ['Full-port gate', g ? String(g) : '—', g >= result.cv],
+      ['Globe', gl ? String(gl) : '—', gl >= result.cv],
+    ];
+    $('cmpList').innerHTML = cmp
+      .map(([k, v, ok]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold ${ok ? 'accent-text' : 'text-theme-secondary'}">Cv ≈ ${v}${ok ? ' ✓ fits' : ''}</dd></div>`)
+      .join('');
+
+    // Full table
+    const tbody = $('cvTableBody');
+    tbody.innerHTML = '';
+    for (const n of RATED_CV_NPS) {
+      const bv = RATED_CV.ball[n], gv = RATED_CV.gate[n], glv = RATED_CV.globe[n];
+      const tr = document.createElement('tr');
+      tr.className = n === nps ? 'accent-light-bg' : '';
+      tr.innerHTML =
+        `<td class="px-3 py-2 font-semibold">${n >= 1 ? `${n}"` : `${Math.round(n * 16)}/16"`}</td>` +
+        `<td class="px-3 py-2 text-right">${bv ? fmt(bv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right">${gv ? fmt(gv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right">${glv ? fmt(glv, 0) : '—'}</td>` +
+        `<td class="px-3 py-2 text-right text-theme-muted">${bv && glv ? fmt(bv / glv, 1) : '—'}</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // Events
+  document.querySelectorAll<HTMLButtonElement>('.fluid-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.fluid = b.dataset.fluid as CvFluidKind; setToggleButtons('.fluid-btn', 'fluid', state.fluid); render(); })
+  );
+  document.querySelectorAll<HTMLButtonElement>('.mode-btn').forEach((b) =>
+    b.addEventListener('click', () => { state.mode = b.dataset.mode as CvSolveMode; setToggleButtons('.mode-btn', 'mode', state.mode); render(); })
+  );
+  $('vstyle').addEventListener('change', (e) => { state.vstyle = (e.target as HTMLSelectElement).value; render(); });
+  $('sg').addEventListener('change', (e) => { state.sg = Number((e.target as HTMLSelectElement).value); render(); });
+  $('gg').addEventListener('change', (e) => {
+    const g = GASES.find((x) => x.id === (e.target as HTMLSelectElement).value)!;
+    state.gg = g.gg; state.k = g.k; render();
+  });
+  $('flow').addEventListener('input', () => { state.flow = num('flow'); render(); });
+  $('cv').addEventListener('input', () => { state.cv = num('cv'); render(); });
+  $('p1').addEventListener('input', () => { state.p1 = num('p1'); render(); });
+  $('p2').addEventListener('input', () => { state.p2 = num('p2'); render(); });
+  $('t1').addEventListener('input', () => { state.t1 = num('t1'); render(); });
+  $('z').addEventListener('input', () => { state.z = num('z'); render(); });
+  $('cmpNps').addEventListener('change', () => render());
+
+  // Init
+  populateSelect('vstyle', VALVE_STYLE.map((s) => ({ id: s.id, name: `${s.name} (F_L ${s.fl}, x_T ${s.xt})` })));
+  populateSelect('sg', LIQUIDS.map((l) => ({ id: String(l.sg), name: `${l.name} — SG ${l.sg}${l.note ? ` (${l.note})` : ''}` })));
+  populateSelect('gg', GASES.map((g) => ({ id: g.id, name: `${g.name} — G_g ${g.gg}, k ${g.k}` })));
+  {
+    const sel = $('cmpNps') as HTMLSelectElement;
+    for (const n of RATED_CV_NPS) {
+      const opt = document.createElement('option');
+      opt.value = String(n);
+      opt.textContent = n >= 1 ? `${n}"` : `${Math.round(n * 16)}/16"`;
+      sel.appendChild(opt);
+    }
+    sel.value = '2';
+  }
+  setToggleButtons('.fluid-btn', 'fluid', state.fluid);
+  setToggleButtons('.mode-btn', 'mode', state.mode);
+  render();
+
+  // Copy
+  $('copyBtn').addEventListener('click', () => {
+    const v = ($('cvValue') as HTMLElement).textContent ?? '–';
+    const line = ($('cvSubLine') as HTMLElement).textContent ?? '';
+    const text = `PVF Calculator — Valve Cv\n${($('resultLabel') as HTMLElement).textContent}: ${v}\n${line}\nhttps://pvfcalculator.com/valve-cv-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      fluid: state.fluid, mode: state.mode, vstyle: state.vstyle,
+      sg: String(state.sg), gg: String(state.gg), flow: String(state.flow),
+      cv: String(state.cv), p1: String(state.p1), p2: String(state.p2),
+      t1: String(state.t1), z: String(state.z),
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const f = sp.get('fluid');
+    if (f && ['liquid','gas','steam'].includes(f)) { state.fluid = f as CvFluidKind; setToggleButtons('.fluid-btn', 'fluid', state.fluid); changed = true; }
+    const m = sp.get('mode');
+    if (m && ['sizing','flow','dp'].includes(m)) { state.mode = m as CvSolveMode; setToggleButtons('.mode-btn', 'mode', state.mode); changed = true; }
+    const vs = sp.get('vstyle');
+    if (vs && VALVE_STYLE.some((s) => s.id === vs)) { state.vstyle = vs; ($('vstyle') as HTMLSelectElement).value = vs; changed = true; }
+    const sgv = Number(sp.get('sg'));
+    if (sgv > 0) { state.sg = sgv; ($('sg') as HTMLSelectElement).value = String(sgv); changed = true; }
+    const g = sp.get('gg');
+    if (g && GASES.some((x) => x.id === g)) {
+      const gas = GASES.find((x) => x.id === g)!;
+      state.gg = gas.gg; state.k = gas.k; ($('gg') as HTMLSelectElement).value = g; changed = true;
+    }
+    const pairs: [string, (v: number) => void][] = [
+      ['flow', (v) => { state.flow = v; ($('flow') as HTMLInputElement).value = String(v); }],
+      ['cv', (v) => { state.cv = v; ($('cv') as HTMLInputElement).value = String(v); }],
+      ['p1', (v) => { state.p1 = v; ($('p1') as HTMLInputElement).value = String(v); }],
+      ['p2', (v) => { state.p2 = v; ($('p2') as HTMLInputElement).value = String(v); }],
+      ['t1', (v) => { state.t1 = v; ($('t1') as HTMLInputElement).value = String(v); }],
+      ['z', (v) => { state.z = v; ($('z') as HTMLInputElement).value = String(v); }],
+    ];
+    for (const [key, set] of pairs) {
+      const v = Number(sp.get(key));
+      if (v >= 0) { set(v); changed = true; }
+    }
+    if (changed) render();
+  }
+</script>

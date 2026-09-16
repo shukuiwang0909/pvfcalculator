@@ -1,0 +1,384 @@
+---
+import Base from "../layouts/Base.astro";
+import FaqJsonLd from "../components/FaqJsonLd.astro";
+import factoriesData from "../data/factories.json";
+
+const title = "Wenzhou Valve Manufacturers & Yongjia Pump-Valve Cluster | Zhejiang, China";
+const description =
+  "Wenzhou — Yongjia, Longwan, Ruian — is China's largest pump and valve manufacturing cluster. Estimated 3,900+ valve enterprises, ~80,000 workers, and a ¥60B+ industry. Cluster map, product standards, quality tiers, and sourcing advice.";
+const canonical = "https://pvfcalculator.com/wenzhou-valve-manufacturers/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Wenzhou Valve Manufacturers", url: "/wenzhou-valve-manufacturers/" },
+];
+const wenzhouFactories = factoriesData.filter((f) => ["Wenzhou", "Yongjia"].includes(f.city));
+const faqItems = [
+  {
+    question: "Why is Yongjia called the hometown of China's pumps and valves?",
+    answer: "Yongjia County, administered by Wenzhou, has produced industrial valves since the 1970s and was officially nicknamed \"China's Hometown of Pumps and Valves\" (中国泵阀之乡). Public reports put the county's pump-and-valve enterprises at over 3,700 — roughly a quarter of China's total — concentrated in Oubei town along the Ou River, with a vertically integrated casting–machining–assembly–testing supply chain.",
+  },
+  {
+    question: "What valve standards do Wenzhou manufacturers build to?",
+    answer: "Established Wenzhou factories produce to API 600 (gate), API 602 (forged steel), API 594 (check), API 608 and API 6D (ball), API 609 (butterfly), and the overarching design standard ASME B16.34 for pressure-temperature ratings, with EN, DIN, JIS and GB standards also common. Always cite the standard and edition in your purchase order.",
+  },
+  {
+    question: "How big is the Wenzhou valve industry?",
+    answer: "Estimates vary by source and year. Public reporting cites approximately 3,900 valve enterprises across greater Wenzhou with some 80,000 employees and a total output value around ¥60–68 billion (2022 figures). Yongjia County alone reported ~¥21 billion of above-designated-size output value in 2024, and a county-wide industry output of roughly ¥50 billion including smaller enterprises. Treat all figures as approximate.",
+  },
+  {
+    question: "How do I tell a workshop from an export-grade Wenzhou factory?",
+    answer: "Check three things: (1) certifications — ISO 9001 is the floor, API 6D / API 600 / API 609 product licences and CE/PED for Europe indicate audited quality systems; (2) test equipment — a serious valve plant owns pressure-test benches, wall-thickness and material spectrometers, and keeps MTR traceability; (3) references in your industry. A factory unwilling to host a video audit or third-party inspection (SGS, BV, Intertek) is a red flag regardless of certificates shown.",
+  },
+  {
+    question: "What is the typical lead time and MOQ for Wenzhou valves?",
+    answer: "Standard cast-steel gate/globe/check valves in Class 150–300, NPS 2\"–12\": 3–6 weeks ex-works for a mixed container, with MOQs often as low as 5–20 pieces per size from trading-savvy factories. API 6D trunnion ball valves, Class 600+, or exotic alloys: 6–12 weeks. Add ~25–35 days sea freight to European or US ports.",
+  },
+  {
+    question: "Which Wenzhou cluster should I source each valve type from?",
+    answer: "Yongjia (Oubei) is the deep, broad cluster for API gate/globe/check/ball valves and pipeline ball valves. Longwan district around Yongqiang is strong in general-purpose industrial valves and stainless products. Wenzhou's special-valve makers (safety valves, severe-service) are scattered across the city, and Ruian hosts pump specialists plus a machinery base. Match the cluster to the product before shortlisting suppliers.",
+  },
+];
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Wenzhou Valve Manufacturers</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        Wenzhou <span class="accent-text">Valve Manufacturers</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        Yongjia — "China's Hometown of Pumps and Valves" — anchors the Wenzhou cluster,
+        China's largest concentration of industrial valve production: API 600 gate valves,
+        API 6D ball valves, check valves and control valves for the world. Here's the sourcing map.
+      </p>
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">3,700+</div>
+          <div class="text-xs text-theme-secondary">Pump &amp; valve enterprises in Yongjia (≈25% of China's total)</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">~¥50B</div>
+          <div class="text-xs text-theme-secondary">Yongjia industry output value, estimated (2025 reporting)</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">~3,900</div>
+          <div class="text-xs text-theme-secondary">Valve enterprises across greater Wenzhou (~80k workers)</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-center">
+          <div class="text-2xl md:text-3xl font-bold accent-text mb-1">50+ yrs</div>
+          <div class="text-xs text-theme-secondary">Valve-making heritage since the 1970s</div>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-theme-muted">Figures compiled from public reporting (county &amp; city media, industry press) — approximate / estimated, for orientation only.</p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Cluster overview -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">The Wenzhou–Yongjia Valve Cluster</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          If Cangzhou is China's flange capital, Wenzhou is its valve capital. The cluster grew out of
+          township workshops in the 1970s and now spans the full chain — resin-bonded sand foundries
+          and precision casting, CNC machining, rubber/plastic seat production, actuators and gearboxes,
+          pressure testing, and export logistics — within one metropolitan area in southern Zhejiang.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Yongjia County's Oubei town is the historic core: a dense belt of several thousand enterprises
+          along the Ou River where a valve body casting can be poured, machined, assembled, tested and
+          container-loaded within days. Public reporting credits Yongjia with over 3,700 pump-and-valve
+          enterprises — roughly a quarter of the national total — and a reg-scale output value of about
+          ¥21 billion in 2024 (approximately ¥23+ billion in 2025), with the whole cluster including
+          small workshops estimated near ¥50 billion. Across greater Wenzhou the industry is reported at
+          roughly 3,900 enterprises and 80,000 employees.
+        </p>
+        <div class="overflow-x-auto mt-6">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">Sub-cluster</th>
+                <th class="px-3 py-2.5">Specialization</th>
+                <th class="px-3 py-2.5 rounded-r-lg">Typical Buyer Profile</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Yongjia (Oubei)</td>
+                <td class="px-3 py-2.5 text-theme-secondary">API gate / globe / check / ball valves, pipeline ball valves, casting-to-finish integration</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Oil &amp; gas, petrochemical, EPC contractors</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Longwan (Yongqiang)</td>
+                <td class="px-3 py-2.5 text-theme-secondary">General-purpose industrial valves, stainless products, OEM/ODM volume</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Water treatment, HVAC, general industry distributors</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Wenzhou city proper</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Special valves: safety/relief, severe-service, control valves, large hydropower valves</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Power, chemicals, specialized projects</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Ruian</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Pumps and pump-valve packages, machinery base</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Pump skids, water systems</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Product specialization -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Product Specialization &amp; Standards</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          One of the cluster's strengths is deep specialization — individual factories often master a
+          single valve family across its full size and class range. Match the product family to the
+          right specialist:
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Gate Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Wedge-gate isolation to API 600 / BS 1414, cast WCB–WC9, NPS 2&quot;–48&quot;, Class 150–2500. The cluster's highest-volume export product.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 600 · ASME B16.34 · B16.10 · B16.5</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Globe Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Throttling and isolation to API 602/623 (forged) and API 600-pattern cast designs; bellows-seal options for steam and emissions duty.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 602/623 · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Check Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Swing, lift, dual-plate wafer and axial-nozzle checks; large NPS wafer dual-plates are a local volume specialty.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 594 · API 6D · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Ball Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Floating ball to NPS 6&quot;, trunnion-mounted to NPS 48&quot;, soft- and metal-seated, pipeline and topside service.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 608 · API 6D/ISO 14313 · ASME B16.34</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Butterfly Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Resilient-seated waterworks types through triple-offset high-performance valves for process isolation.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">API 609 · AWWA C504</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Control &amp; Special Valves</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Globe-type control valves, safety and relief valves, hydraulic control valves for pump protection and hydropower.</p>
+            <p class="mt-2 text-xs accent-text font-semibold">IEC 60534 · ASME B16.34</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Quality Tiers in the Cluster</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Wenzhou factories span a wide quality spectrum — more so than most buyers expect. The tier
+          largely determines price, documentation quality and failure risk:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+                <th class="px-3 py-2.5 rounded-l-lg">Tier</th>
+                <th class="px-3 py-2.5">Typical Credentials</th>
+                <th class="px-3 py-2.5">What You Get</th>
+                <th class="px-3 py-2.5 rounded-r-lg">Suitable For</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Workshop</td>
+                <td class="px-3 py-2.5 text-theme-secondary">None / business licence only</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Low price, minimal testing, material risk</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Non-critical utility water; avoid for pressure classes</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Standard factory</td>
+                <td class="px-3 py-2.5 text-theme-secondary">ISO 9001</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Consistent machining, basic hydro tests, MTRs on request</td>
+                <td class="px-3 py-2.5 text-theme-secondary">General industrial service, distributors</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">Export-grade</td>
+                <td class="px-3 py-2.5 text-theme-secondary">ISO 9001 + CE/PED, API 600/609 audited</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Full traceability, third-party inspection accepted, EN 12266/API 598 testing</td>
+                <td class="px-3 py-2.5 text-theme-secondary">EU projects, oil &amp; gas brownfield, EPC vendors lists</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2.5 font-semibold text-theme-primary">API 6D licensee</td>
+                <td class="px-3 py-2.5 font-semibold accent-text">API 6D monogram licence (verify in API Q1 directory)</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Pipeline-grade ball/check/gate valves, fire-safe testing, fugitive-emission options</td>
+                <td class="px-3 py-2.5 text-theme-secondary">Transmission pipelines, terminals, critical isolation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Export markets -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Export Markets &amp; Logistics</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Wenzhou valves ship worldwide. Public reporting on Yongjia described export growth through
+          the mid-2020s (including a ~57% year-on-year export jump reported for 2022 and continuing
+          double-digit growth), with the main destinations:
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">Southeast Asia</div>
+            <p class="text-xs text-theme-secondary">Indonesia, Vietnam, Thailand, Malaysia — EPC and water projects; shortest sea lanes</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">Middle East</div>
+            <p class="text-xs text-theme-secondary">UAE, Saudi Arabia, Iran — oil &amp; gas and desalination procurement</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">Europe &amp; CIS</div>
+            <p class="text-xs text-theme-secondary">Russia, Central Asia, EU distributors — PED/CE documentation required for EU</p>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-lg font-bold accent-text mb-1">Americas &amp; Africa</div>
+            <p class="text-xs text-theme-secondary">Mining, water and fire-protection projects; growing share</p>
+          </div>
+        </div>
+        <p class="text-sm text-theme-secondary leading-relaxed mt-4">
+          Logistics: most Wenzhou valve exporters ship FOB Ningbo or FOB Shanghai (roughly 3–5 hours
+          by truck). Standard sea freight adds about 25–35 days to European or US west-coast ports.
+        </p>
+      </div>
+
+      <!-- Audit advice -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Factory Audit Checklist for Wenzhou Valve Suppliers</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">1. Verify certifications in the issuing database</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">ISO 9001 via the certifier's online registry (SGS, BV, TÜV, CQC). For API product licences (API 6D/600/609), check the licensee directory on api.org — the licence number on a brochure means nothing until it matches the directory entry and the legal entity name.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">2. Demand material traceability</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Specify MTRs (mill test reports) with heat numbers for every heat/lot, tied to the valve body castings. For WCB bodies, ask for the foundry's name — many Wenzhou plants buy castings externally, and casting quality is the cluster's biggest variable.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">3. Witness the pressure test — or have someone do it</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Every serious Wenzhou plant has hydrostatic shell and seat test benches per API 598 / EN 12266. Book third-party inspection (SGS, BV, Intertek, TÜV) for first orders — typically $400–800 per lot — including dimensional spot checks to ASME B16.10 and marking verification.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">4. Check the business licence scope</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">Ask for the Chinese business licence (营业执照) and confirm the registered scope covers 阀门制造 (valve manufacturing), not only 销售 (sales). Many Wenzhou \"manufacturers\" are trading companies — not necessarily bad, but price and accountability differ.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured suppliers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Established Wenzhou / Yongjia Valve Companies</h2>
+        <p class="text-theme-secondary mb-6">
+          Well-known names from the cluster, compiled from public sources. Inclusion here is informational,
+          not an endorsement — verify current certifications and capacity before ordering.
+          <a href="/request-a-quote/" class="underline accent-text">Request quotes →</a>
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {wenzhouFactories.map((f) => (
+            <div class="glass rounded-xl p-5">
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-bold text-theme-primary text-sm leading-snug">{f.name}</h3>
+                {f.tier === "verified" && (
+                  <span class="shrink-0 text-xs px-2 py-0.5 rounded-full accent-bg/10 accent-text border border-amber-500/30">Verified</span>
+                )}
+              </div>
+              <p class="text-xs text-theme-muted mb-3">{f.nameZh}</p>
+              <dl class="text-xs space-y-1 text-theme-secondary mb-4">
+                {f.founded && <div><span class="font-medium text-theme-primary">Est.</span> {f.founded}</div>}
+                {f.certifications && f.certifications.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">Cert.</span> {f.certifications.join(", ")}</div>
+                )}
+                {f.exportMarkets && f.exportMarkets.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">Markets:</span> {f.exportMarkets.join(" · ")}</div>
+                )}
+              </dl>
+              <div class="flex flex-wrap gap-3 text-xs">
+                {f.website && (
+                  <a href={f.website} target="_blank" rel="noopener noreferrer" class="underline text-theme-secondary hover:text-theme-primary transition-colors">Website →</a>
+                )}
+                {f.tier === "verified" && f.contact?.email && (
+                  <a href={`mailto:${f.contact.email}`} class="underline accent-text">{f.contact.email}</a>
+                )}
+              </div>
+              {f.note && <p class="mt-3 text-[11px] text-theme-muted italic">Listed from public information — {f.note}.</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Specify &amp; Quote Wenzhou Valves</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Build an accurate valve BOM with the weight calculator, size the flow path with the Cv
+          calculator, then submit one inquiry to Wenzhou-cluster suppliers.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Request a Quote →
+          </a>
+          <a href="/valve-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Valve Weight Calculator
+          </a>
+          <a href="/valve-cv-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Valve Cv Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Tools &amp; Resources</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/valve-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Valve Weight Calculator</a>
+          <a href="/valve-cv-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Valve Cv Calculator</a>
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Flange Manufacturers</a>
+          <a href="/blog/valve-weight-chart-by-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Valve Weight Chart by Class</a>
+          <a href="/blog/gate-vs-globe-vs-ball-vs-check-valve/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Gate vs Globe vs Ball vs Check</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

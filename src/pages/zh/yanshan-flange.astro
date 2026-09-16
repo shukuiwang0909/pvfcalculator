@@ -1,0 +1,312 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "盐山法兰制造商与管道装备基地 | 河北沧州 | pvfcalculator.com";
+const description =
+  "河北沧州盐山县是中国管道装备制造基地——估计有 3000 余家管道相关企业，覆盖法兰、钢管、管件、防腐保温全产业链。本页介绍产品地图、产业分区、黄骅港物流、质量分层与验厂建议。";
+const canonical = "https://pvfcalculator.com/zh/yanshan-flange/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "盐山法兰制造商", url: "/zh/yanshan-flange/" },
+];
+const faqItems = [
+  {
+    question: "盐山县以什么闻名？",
+    answer: "河北沧州盐山县在中国行业媒体中常被称为'中国管道装备制造基地'。与专做弯头成形的邻县孟村不同，盐山覆盖管道装备全链条：钢管（直缝、螺旋、无缝）、全类型法兰、对焊管件、防腐（3PE/FBE）、保温以及支吊架。行业文章估计全县相关企业约 3000 家——这一口径包含长尾小作坊和贸易商，尽调时应视为约数。",
+  },
+  {
+    question: "盐山工厂生产哪些法兰？",
+    answer: "覆盖 ASME B16.5 全类型——对焊颈、平焊、盲板、承插焊、螺纹和松套法兰，Class 150–2500，NPS ½″–24″；以及大口径 B16.47 A/B 系列（NPS 26″–60″）、EN 1092-1/DIN 法兰和孔板、异径、长高颈等特型。材质从 A105 碳钢到 F304/F316L 不锈钢、F11/F22/F91 合金及双相钢。由于盐山本身也生产法兰所焊接的钢管，'钢管+法兰'打包供货是其标志性服务。",
+  },
+  {
+    question: "盐山离出海口有多远？",
+    answer: "盐山地处沧州沿海走廊：产业核心区距黄骅港集装箱码头约 80 公里，天津港约 150–200 公里。京沪高速与京沪铁路穿境，G104/G205/G307 国道纵横。出口货物 FOB 天津港与 FOB 黄骅港都可行；黄骅港作为环渤海重要的散货+集装箱港，近年承接产业带货量持续上升。",
+  },
+  {
+    question: "盐山、孟村和沧州大产区——各买什么？",
+    answer: "可以把它看成一个三角：孟村是 B16.9 弯头、三通、异径管的规模化成形基地——管件专家；盐山是全链条管道装备基地——钢管、法兰、管件、防腐保温一站打包；更大的沧州产区（见本站沧州法兰制造商总览）是整合者——三个品类的头部供应商大多在同一产业带报价，可合并装柜。纯法兰包建议同时比较盐山与孟村-沧州法兰厂；防腐管线则从盐山找起。",
+  },
+  {
+    question: "如何考察盐山工厂？",
+    answer: "与该产业带其它地区同一套纪律，外加涂层专项要求。ISO 9001 证书与范围在发证机构官网核验；要求 EN 10204 3.1 材质单并炉批追溯；防腐管需写明涂层标准（DIN 30670 / ISO 21809）、电火花检漏电压、附着力与分层厚度，并索要涂层检验报告；钢管查水压记录，焊制管件查 NDT。首批订单委托 SGS/必维/Intertek 装船前检验（约 400–800 美元/柜）——3000 家量级的供应商长尾决定了第三方验证不可省略。",
+  },
+  {
+    question: "盐山的典型交期和起订量如何？",
+    answer: "现货碳钢管与标准 B16.5 法兰出厂约 1–3 周；按单生产的钢管（直缝/螺旋）3–6 周，涂层或合金材质 5–8 周，大口径或高压力等级法兰 6–12 周。起订量因厂而异：大型管厂通常每个规格 20–50 吨，法兰管件厂常接受单吨级混批。FOB 天津/黄骅合并装柜是通行做法。",
+  },
+];
+---
+
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/zh/" class="hover:text-theme-primary">首页</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">盐山法兰制造商</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        盐山 <span class="accent-text">法兰制造商</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        盐山县是沧州产业带的管道装备腹地——钢管、法兰、管件、防腐与保温同处一条供应链。
+        本页为买家梳理工厂格局、产业分区、港口物流与质量地图。
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Stats -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">集群数据一览 <span class="text-sm font-normal text-theme-muted">（行业媒体估计口径）</span></h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          盐山的管道装备业从乡镇铸造作坊起步，30 多年发展成中国行业媒体口中的全国最大管道装备集群。
+          公开数字因来源而异，均应视为估计值：
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">约 3000 家</div>
+            <div class="text-sm text-theme-secondary">集群管道装备相关企业（估计）</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">50 公里</div>
+            <div class="text-sm text-theme-secondary">覆盖全产业链配套的半径</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">约 80 公里</div>
+            <div class="text-sm text-theme-secondary">距黄骅港集装箱码头</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">80+</div>
+            <div class="text-sm text-theme-secondary">集群供应商宣称的出口市场数</div>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-theme-muted">
+          来源：中文行业及供应商公开资料（2024–2026）。企业数量含小作坊与贸易公司，尽调时请核实。
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">产品：管道装备全链条</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">法兰（全类型）</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>对焊颈 / 平焊 / 盲板 / 承插焊 / 螺纹</li>
+              <li>松套、孔板、异径、长高颈</li>
+              <li>Class 150–2500，NPS ½″–24″</li>
+              <li>B16.47 A/B 系列，NPS 26″–60″</li>
+              <li class="text-theme-muted">ASME B16.5 · EN 1092-1 · DIN · JIS</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">钢管</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>直缝电阻焊与埋弧焊管线管，外径可达 3220 mm</li>
+              <li>螺旋焊管（供水/打桩）</li>
+              <li>无缝钢管，热轧与冷拔</li>
+              <li>API 5L / ASTM A53 / A106 / GB/T 9711</li>
+              <li class="text-theme-muted">厂内配套防腐保温</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">管件与配套</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>弯头、三通、异径管、管帽（B16.9）</li>
+              <li>3PE / FBE / 环氧防腐</li>
+              <li>聚氨酯保温与钢套钢蒸汽保温</li>
+              <li>管托支吊架与补偿器</li>
+              <li class="text-theme-muted">一站式 BOM 打包能力</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">材质</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>碳钢：A105、A234 WPB、Q235、20#</li>
+              <li>不锈钢：304/304L、316/316L</li>
+              <li>合金钢：F11、F22、F91；P11/P22 管</li>
+              <li>双相钢与镍基（部分工厂）</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">主要分区</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>五里窑工业区</li>
+              <li>城南经济开发区</li>
+              <li>G205 沿线蒲洼-陈关走廊</li>
+              <li>黄骅港后方涂层配套堆场</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">终端市场</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>石油化工与炼化</li>
+              <li>长输管线（油、气、水）</li>
+              <li>电力与集中供热</li>
+              <li>建筑与打桩工程</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistics -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">物流：围绕黄骅港布局</h2>
+        <div class="glass rounded-xl p-5">
+          <p class="text-sm text-theme-secondary leading-relaxed mb-4">
+            区位是盐山的结构性优势：县域位于京沪走廊（高速+铁路），G104、G205、G307 国道穿境；
+            黄骅港作为环渤海重要的散货与集装箱港距产业核心区约 80 公里，天津港半日车程可达。
+            行业文章称原料与出运物流成本较内陆集群约低 15–20%——请将其视为方向性的供应商说法，
+            而非经审计的数据。
+          </p>
+          <div class="grid sm:grid-cols-3 gap-4 text-sm">
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">FOB 黄骅港</p>
+              <p class="text-theme-secondary">散货+集装箱业务增长快，紧邻涂层堆场。</p>
+            </div>
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">FOB 天津港</p>
+              <p class="text-theme-secondary">产业带默认选项，欧美/中东航线最密。</p>
+            </div>
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">铁路选项</p>
+              <p class="text-theme-secondary">沧州/石家庄始发中欧班列，适合急货补位。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">质量地图</h2>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[680px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">供应商类型</th>
+                <th class="px-3 py-2.5">优势</th>
+                <th class="px-3 py-2.5">注意事项</th>
+                <th class="px-3 py-2.5">适合场景</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold">大型一体化管厂</td>
+                <td class="px-3 py-2 text-theme-secondary">自有制管线、涂层场与实验室；API 5L+ISO 资质与出口记录</td>
+                <td class="px-3 py-2 text-theme-secondary">起订量较高（单规格 20–50 吨）；报价周期长</td>
+                <td class="px-3 py-2 text-theme-secondary">管线管、项目打包</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">法兰/管件工厂</td>
+                <td class="px-3 py-2 text-theme-secondary">B16.5/B16.9 全范围，起订量灵活，出样快</td>
+                <td class="px-3 py-2 text-theme-secondary">质量离散大——下单前必须验厂</td>
+                <td class="px-3 py-2 text-theme-secondary">法兰与管件 BOM</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">防腐/保温场站</td>
+                <td class="px-3 py-2 text-theme-secondary">港口周边 3PE/FBE 产线，钢管到涂层周转快</td>
+                <td class="px-3 py-2 text-theme-secondary">合同中写明检漏、附着力与分层厚度</td>
+                <td class="px-3 py-2 text-theme-secondary">埋地/水下管线包</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">贸易商/整合商</td>
+                <td class="px-3 py-2 text-theme-secondary">一站式报价、混装整柜</td>
+                <td class="px-3 py-2 text-theme-secondary">货源不透明——逐项要求厂名+MTR</td>
+                <td class="px-3 py-2 text-theme-secondary">小批量混单、首单试单</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Audit advice -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">验厂清单</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">文件</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>ISO 9001 证书与范围，发证机构官网核验</li>
+              <li>EN 10204 3.1 材质单，逐件炉批号追溯</li>
+              <li>管线管查 API 5L 许可；涂层查型式试验报告</li>
+              <li>每生产批次的水压与 NDT 记录</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">检验</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>首批订单委托 SGS/必维/Intertek 装船前检验，约 400–800 美元/柜</li>
+              <li>按 ASME B16.5/B16.9 表做尺寸核对；按 MSS SP-25/43 核对打标</li>
+              <li>涂层：电火花检漏、附着力拉开法、各层膜厚</li>
+              <li>合同写明管端保护与 VCI 包装要求</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">获取盐山供应商报价</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          钢管、法兰、管件或防腐打包 BOM——把规格书发给我们，转接合适的盐山工厂。
+          建议先用下面的计算器把 BOM 重量算准。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/zh/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            申请报价 →
+          </a>
+          <a href="/pipe-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            管道重量计算器
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">常见问题</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">相关资源</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/zh/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">沧州法兰制造商</a>
+          <a href="/zh/mengcun-pipe-fittings/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">孟村弯头管件</a>
+          <a href="/flange-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">法兰重量计算器</a>
+          <a href="/pipe-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">管道重量计算器</a>
+          <a href="/elbow-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">弯头重量计算器</a>
+          <a href="/tee-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">三通重量计算器</a>
+          <a href="/reducer-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">异径管重量计算器</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} inLanguage="zh" />

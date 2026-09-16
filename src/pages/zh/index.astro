@@ -59,6 +59,33 @@ const tools = [
     href: "/pipe-schedule-chart/",
     icon: "M9 17v-6m4 6V7m4 10v-3M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z",
   },
+  {
+    name: "阀门 Cv 计算器",
+    tag: "阀门选型",
+    short: "阀门Cv",
+    desc: "根据流量与压降快速核算阀门 Cv/Kv 值",
+    specs: "Cv / Kv · 液体 · 气体 · 蒸汽",
+    href: "/zh/valve-cv-calculator/",
+    icon: "M4 8l4 4-4 4m16-8l-4 4 4 4M8 12h8",
+  },
+  {
+    name: "阀门重量计算器",
+    tag: "阀门重量",
+    short: "阀门重量",
+    desc: "按阀门类型、压力等级与口径估算重量，便于运输与吊装规划",
+    specs: "闸阀 / 截止阀 / 球阀 / 止回阀 · Class 150–1500",
+    href: "/zh/valve-weight-calculator/",
+    icon: "M12 3v18m-7-9h14",
+  },
+  {
+    name: "压力容器壁厚计算器",
+    tag: "ASME VIII",
+    short: "压力容器",
+    desc: "按 UG-27 / UG-32 计算内压圆筒与封头最小壁厚",
+    specs: "UG-27 · UG-32 · 自定义材料",
+    href: "/zh/pressure-vessel-thickness-calculator/",
+    icon: "M5 4h14v16H5zM5 8h14M5 16h14",
+  },
 ];
 
 const faqs = [
@@ -67,6 +94,8 @@ const faqs = [
   ["支持哪些材质？", "支持碳钢（密度7850 kg/m³）、304不锈钢（7930）、316不锈钢（7980）、合金钢（7850）及自定义密度输入，满足特殊合金需求。"],
   ["如何获取出口报价？", "点击页面右上角「获取报价」，填写产品规格和数量，我们会将询盘转给沧州/孟村的匹配工厂，通常24小时内获得FOB报价。"],
   ["支持kg和lb两种单位吗？", "支持。所有计算器均可在kg和lb之间切换，并自动记住您的单位偏好。"],
+  ["可以通过本站采购阀门吗？", "可以。先用阀门 Cv / 阀门重量计算器核对规格，再浏览温州阀门制造商产业带页面寻找合适工厂，最后通过「获取报价」表单提交询盘。"],
+  ["网站覆盖压力容器设计吗？", "提供 ASME VIII UG-27 / UG-32 内压圆筒与封头壁厚计算工具，用于前期估算。计算结果不能替代授权检验师（Authorized Inspector）或有资质的压力容器工程师的审核。"],
 ];
 ---
 <Base title={title} description={description} lang="zh" ctaHref="/zh/request-a-quote/">
@@ -140,6 +169,30 @@ const faqs = [
           </div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- 产业带 -->
+  <section class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold text-theme-primary mb-2 text-center">产业带</h2>
+    <p class="text-sm text-theme-secondary mb-8 text-center">中国四大PVF制造基地，采购前先了解各产业集群。</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="/zh/cangzhou-flange-manufacturers/" class="rounded-xl border border-theme bg-theme-secondary p-5 hover:border-amber-500/50 transition-all hover:shadow-lg hover:shadow-amber-500/5">
+        <h3 class="font-bold text-theme-primary mb-1">沧州</h3>
+        <p class="text-sm text-theme-secondary">法兰管件之都——河北孟村、盐山两大基地。</p>
+      </a>
+      <a href="/zh/mengcun-pipe-fittings/" class="rounded-xl border border-theme bg-theme-secondary p-5 hover:border-amber-500/50 transition-all hover:shadow-lg hover:shadow-amber-500/5">
+        <h3 class="font-bold text-theme-primary mb-1">孟村</h3>
+        <p class="text-sm text-theme-secondary">中国管件生产基地——弯头、三通、异径管按 ASME B16.9 生产。</p>
+      </a>
+      <a href="/zh/yanshan-flange/" class="rounded-xl border border-theme bg-theme-secondary p-5 hover:border-amber-500/50 transition-all hover:shadow-lg hover:shadow-amber-500/5">
+        <h3 class="font-bold text-theme-primary mb-1">盐山</h3>
+        <p class="text-sm text-theme-secondary">对焊管件集群——高强钢与低温钢 grades。</p>
+      </a>
+      <a href="/zh/wenzhou-valve-manufacturers/" class="rounded-xl border border-theme bg-theme-secondary p-5 hover:border-amber-500/50 transition-all hover:shadow-lg hover:shadow-amber-500/5">
+        <h3 class="font-bold text-theme-primary mb-1">温州</h3>
+        <p class="text-sm text-theme-secondary">阀门制造中心——球阀、闸阀、截止阀与止回阀。</p>
+      </a>
     </div>
   </section>
 

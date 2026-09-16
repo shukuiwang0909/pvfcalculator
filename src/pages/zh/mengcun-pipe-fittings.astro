@@ -1,0 +1,316 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+
+const title = "孟村弯头管件：中国弯头管件之都 | B16.9 弯头、三通、异径管 | pvfcalculator.com";
+const description =
+  "河北沧州孟村回族自治县是中国弯头管件之都——公开资料显示约有 1800 家管道装备企业，弯头管件产量约占全国 30%。本页介绍产品范围、质量分层、验厂要点与物流建议，供采购决策参考。";
+const canonical = "https://pvfcalculator.com/zh/mengcun-pipe-fittings/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "孟村弯头管件", url: "/zh/mengcun-pipe-fittings/" },
+];
+const faqItems = [
+  {
+    question: "孟村为什么被称为中国弯头管件之都？",
+    answer: "孟村回族自治县隶属河北省沧州市，自上世纪 70 年代末出现第一批弯头作坊起逐步专业化。2006 年 8 月，中国五金制品协会正式授予孟村'中国弯头管件之都'称号。据新华社 2025 年报道，全县现有管道装备企业近 1800 家，年产值约 387 亿元，产品产量约占全国总产量 30%（中低压管件细分市场的历史占比一度达 80%），产品出口 120 多个国家和地区。",
+  },
+  {
+    question: "孟村管件厂按什么标准生产？",
+    answer: "有出口能力的工厂通常按 ASME B16.9 生产对焊弯头、三通、异径管、管帽和翻边，按 MSS SP-75 生产油气长输管线用高钢级管件，壁厚系列遵循 ASME B36.10M；面向其他市场也常见 EN 10253、DIN 2605、GOST 等标准。与任何产业集群一样，报价单上的标准名称和版本年份必须写进采购合同——只写'B16.9'并不是完整的规格描述。",
+  },
+  {
+    question: "孟村和盐山两个产区有什么区别？",
+    answer: "两县同属沧州市，相距约 40 公里，常被一起提及，但侧重点不同：孟村是弯头管件成形之都，以推制/压制工艺规模化生产 B16.9 管件；盐山（见本站盐山页面）是更宽的管道装备基地，覆盖钢管（直缝/螺旋/无缝）、防腐保温涂层以及管件法兰。纯 B16.9 管件包通常孟村更专业；钢管+管件打包或防腐管线则盐山的全产业链更有优势。附近的沧州法兰集群页面介绍这个三角的第三极。",
+  },
+  {
+    question: "从孟村采购如何控制质量？",
+    answer: "在合同中明确标准及版本（如 ASME B16.9-2018）、材料牌号，并按 ASTM A961 要求材质证明（MTR）与炉批号追溯；合金钢要求 100% 或按炉批做 PMI 光谱复核。首批订单建议委托第三方检验（SGS、必维、Intertek 或 TÜV），覆盖 B16.9 尺寸逐表核对、弯头内弧侧（最薄点）壁厚实测、无损检测及必要的理化复验。单次集装箱检验预算约 400–800 美元，相对产业集群较大的质量离散度，这笔钱是廉价的保险。",
+  },
+  {
+    question: "孟村管件的起订量和交期大概是多少？",
+    answer: "常规碳钢 B16.9 管件（A234 WPB、90° 长半径弯头、NPS 2–12）贸易层面的起订量通常为每个规格 1–5 吨，混装整柜是当地通行做法。现货规格出厂交期约 2–4 周，按单生产或合金材质约 4–8 周；从天津港出运（距孟村约 180–220 公里）至欧美港口通常再加 25–35 天海运。",
+  },
+  {
+    question: "孟村弯头是怎么做出来的？为什么这很重要？",
+    answer: "孟村碳钢弯头的主流工艺是热推制成形：钢管坯料感应加热后在模具芯棒上推制成形，外弧减薄、内弧增厚。芯棒设计与温度控制到位的产线，能产出型线光滑、椭圆度受控的弯头；调试不佳的产线则会出现外弧超差减薄和起皱。验厂时最值得索要的记录是内弧侧壁厚数据——它是工艺控制水平最诚实的指标。",
+  },
+];
+---
+
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/zh/" class="hover:text-theme-primary">首页</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">孟村弯头管件</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        孟村 <span class="accent-text">弯头管件</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        孟村回族自治县——"中国弯头管件之都"——全球相当大比例的 ASME B16.9 弯头、三通、
+        异径管就在这里成形。本页介绍集群格局、产品范围与采购实务。
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Stats -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">集群数据一览 <span class="text-sm font-normal text-theme-muted">（公开报道口径，数值为约数）</span></h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          孟村的管件产业从上世纪 70 年代末的几家作坊起步——一个没有铁矿、没有钢厂、
+          也没有本地需求的小县，仅凭商贸与手艺发展出全球性管件产业。历年公开报道记录了它的扩张轨迹：
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~1800 家</div>
+            <div class="text-sm text-theme-secondary">管道装备企业（新华社，2025）</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~30%</div>
+            <div class="text-sm text-theme-secondary">弯头管件产量占全国比重（估计）</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">约 387 亿元</div>
+            <div class="text-sm text-theme-secondary">集群年产值，估计值（2024）</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">120+</div>
+            <div class="text-sm text-theme-secondary">产品出口国家和地区</div>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-theme-muted">
+          来源：新华社（2025 年 9 月）、澎湃新闻（2024 年 12 月）、河北省特色产业集群资料。数值为估计口径，尽调时请核实最新数据。
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">孟村生产什么</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">弯头</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>90° / 45°，长半径 LR（1.5D）</li>
+              <li>短半径 SR（1.0D）</li>
+              <li>180° 回弯头</li>
+              <li>3D / 5D 感应弯管（周边配套）</li>
+              <li class="text-theme-muted">ASME B16.9 / B16.28</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">三通 / 四通</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>等径三通</li>
+              <li>异径三通</li>
+              <li>管线用清管三通（带挡条）</li>
+              <li>四通</li>
+              <li class="text-theme-muted">ASME B16.9 · MSS SP-75 WPHY 系列</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">异径管 / 管帽</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>同心异径管</li>
+              <li>偏心异径管（底平 / 顶平）</li>
+              <li>无缝 / 有缝焊接结构</li>
+              <li>管帽（封头类）</li>
+              <li class="text-theme-muted">ASME B16.9 · EN 10253</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">翻边 / 活接</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>翻边短节（A/B/C 型）</li>
+              <li>与松套法兰配对使用</li>
+              <li class="text-theme-muted">ASME B16.9 · MSS SP-43（不锈钢）</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">主流材质</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>碳钢：A234 WPB、A420 WPL6、Q235</li>
+              <li>合金钢：WP11 / WP22 / WP5 / WP91</li>
+              <li>不锈钢：304/304L、316/316L</li>
+              <li>高屈服：WPHY-42/52/60/65/70</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">规格范围</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>无缝：NPS ½″–24″（DN15–600）</li>
+              <li>焊制：NPS 26″–72″以上</li>
+              <li>Sch 10–160、XS/XXS 壁厚系列</li>
+              <li>壁厚按 ASME B36.10M</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster advantages -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">集群竞争力从何而来</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">推制工艺规模化</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              孟村的核心工艺是弯头中频热推制成形：管坯感应加热后过芯棒推制成形。全县数以百计的推制产线
+              意味着换模快、标准 B16.9 规格价格有竞争力，且能在交期紧张时承接大批量出口订单。
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">原材料近水楼台</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              无缝管坯和钢板从河北、山东钢厂当天可达。集群钢材年吞吐量历史报道约 200 万吨级，
+              输入成本和供货周期都被压到很低。
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">检测与服务生态</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              头部工厂配备水压试验台、UT/射线（焊制件）、PMI 光谱、拉伸与压扁实验室及 CNAS 资质报告；
+              SGS、必维、Intertek 等第三方机构在沧州长期驻点，检验成本低于多数产区。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">质量分层——集群不是同一个市场</h2>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[680px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">层级</th>
+                <th class="px-3 py-2.5">典型工厂</th>
+                <th class="px-3 py-2.5">文件能力</th>
+                <th class="px-3 py-2.5">适用场景</th>
+                <th class="px-3 py-2.5">价格带*</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 1<br /><span class="text-xs font-normal text-theme-muted">出口 ASME</span></td>
+                <td class="px-3 py-2 text-theme-secondary">直接出口商，自有成形+热处理+NDT 产线，有英语工程团队</td>
+                <td class="px-3 py-2 text-theme-secondary">EN 10204 3.1/3.2 MTR、第三方检验报告、PED/CRN 经验</td>
+                <td class="px-3 py-2 text-theme-secondary">EPC 项目、油气、电力、欧美监管市场</td>
+                <td class="px-3 py-2 text-theme-secondary">基准（100）</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 2<br /><span class="text-xs font-normal text-theme-muted">中等规模</span></td>
+                <td class="px-3 py-2 text-theme-secondary">通过 ISO 9001，有部分出口记录，部分 NDT 自检</td>
+                <td class="px-3 py-2 text-theme-secondary">按需出具 MTR、钢厂材质单 3.1</td>
+                <td class="px-3 py-2 text-theme-secondary">一般工业、非关键公用工程、经销商备货</td>
+                <td class="px-3 py-2 text-theme-secondary">约 85–95</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 3<br /><span class="text-xs font-normal text-theme-muted">小作坊</span></td>
+                <td class="px-3 py-2 text-theme-secondary">小作坊或贸易转单，货源不稳定</td>
+                <td class="px-3 py-2 text-theme-secondary">文件少，常无可追溯 MTR</td>
+                <td class="px-3 py-2 text-theme-secondary">国内低压、非危险介质、临时工程</td>
+                <td class="px-3 py-2 text-theme-secondary">约 70–85</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-theme-muted">
+          *同规格 B16.9 WPB 弯头的相对价格指数，基于市场观察——非报价。价差主要来自工艺控制、热处理
+          与文件能力，而非单纯材料造假与否。
+        </p>
+      </div>
+
+      <!-- Audit & logistics -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">验厂与物流清单</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">下单前</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>合同写明标准与版本（如 ASME B16.9-2018，含公差要求）</li>
+              <li>按 ASTM A961 要求 MTR，炉批号追溯到每件产品</li>
+              <li>合金钢要求 100% 或按炉批 PMI</li>
+              <li>约定 NDT 范围：焊制件 RT、壁厚 UT、必要时水压</li>
+              <li>按 MSS SP-25 打标：牌号、规格、壁厚系列、炉号</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">发运</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>惯例为 FOB 天津港（距孟村约 180–220 公里）</li>
+              <li>坡口端加木箱或托盘，管端保护盖为必选项</li>
+              <li>碳钢海运须 VCI 防锈+干燥剂</li>
+              <li>混装整柜是常态——索要装箱图</li>
+              <li>欧洲约 28–35 天；美西约 16–22 天，美东约 25–32 天</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">获取孟村管件报价</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          把您的物料清单（规格、壁厚系列、材质、执行标准）发给我们，转接合适的孟村出口工厂。
+          建议先用下面的重量计算器把 BOM 算准再询价。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/zh/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            申请报价 →
+          </a>
+          <a href="/elbow-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            弯头重量计算器
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">常见问题</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">相关资源</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/zh/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">沧州法兰制造商</a>
+          <a href="/zh/yanshan-flange/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">盐山管道装备集群</a>
+          <a href="/asme-b16-9-fitting-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">ASME B16.9 管件尺寸表</a>
+          <a href="/elbow-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">弯头重量计算器</a>
+          <a href="/tee-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">三通重量计算器</a>
+          <a href="/reducer-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">异径管重量计算器</a>
+          <a href="/pipe-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">管道重量计算器</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} inLanguage="zh" />

@@ -1,0 +1,303 @@
+---
+import Base from "../../layouts/Base.astro";
+import FaqJsonLd from "../../components/FaqJsonLd.astro";
+import { tensileStressArea, torqueNm, boltLoadN, FT_LB_PER_NM } from "../../lib/bolt-calculations";
+
+const title = "Why Bolt Torque Calculators Disagree by 30% (and How to Check Them)";
+const description =
+  "Two flange bolt torque calculators, two answers 30-50% apart. We unpack the three hidden assumptions — nut factor K, target bolt stress, gasket requirements — and give you a four-step method to verify any torque value.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-09-16",
+  dateModified: "2026-09-16",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/why-bolt-torque-calculators-disagree/",
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Why Bolt Torque Calculators Disagree", url: "/blog/why-bolt-torque-calculators-disagree/" },
+];
+
+// Illustration: 4" Class 300 flange, 8 x 3/4"-10 studs (A_t = 0.334 in2),
+// five plausible (K, target stress) combinations a generic tool might hide.
+const AT_34 = tensileStressArea(0.75, 10);
+const combos = [
+  { label: "Low stress (35 ksi) + dry K = 0.20", stress: 35, K: 0.20 },
+  { label: "Low stress (35 ksi) + PTFE K = 0.12", stress: 35, K: 0.12 },
+  { label: "Mid stress (52.5 ksi) + PTFE K = 0.12", stress: 52.5, K: 0.12 },
+  { label: "Mid stress (52.5 ksi) + dry K = 0.20", stress: 52.5, K: 0.20 },
+  { label: "Top stress (73.5 ksi) + dry K = 0.20", stress: 73.5, K: 0.20 },
+].map((c) => {
+  const tNm = torqueNm(c.K, 0.75, boltLoadN(c.stress, AT_34));
+  return { ...c, ftlb: tNm * FT_LB_PER_NM, nm: tNm };
+});
+const median = combos[3].ftlb;
+
+const faqItems = [
+  {
+    question: "Which torque calculator is 'right' when they disagree?",
+    answer: "The one that can tell you its K factor, its target bolt stress, and how both were chosen. Torque = K x D x F is exact arithmetic with two empirical inputs; a calculator that can't state them is publishing a guess. When in doubt, compute the value yourself from the gasket manufacturer's seating stress and your measured lubricant K — that's the only version you can defend in an audit.",
+  },
+  {
+    question: "Is a bigger safety margin solved by just adding 20% to the torque?",
+    answer: "No. Over-tightening causes failures as reliably as under-tightening: crushed gaskets, yielded studs, rotated flanges that leak forever after. The PCC-1 Appendix O framework exists precisely because the answer is a band, not a maximum. If you're tempted to add margin, do it by lowering K uncertainty (better lubrication control, calibrated tools, measurement) — not by cranking the number.",
+  },
+  {
+    question: "How much does lubrication really change the required torque?",
+    answer: "K ranges from about 0.12 for PTFE coatings to 0.35+ for dry rusty threads — a factor of three. Even between 'normal' conditions (machine oil 0.15 vs dry as-received 0.20) the torque for the same preload shifts 33%. This is the single biggest source of disagreement between published charts, and the reason the lubricant must be specified on the bolt-up procedure, not left to the crew.",
+  },
+  {
+    question: "Do hydraulic tensioners solve the calculator problem?",
+    answer: "They remove K from the equation — tensioners stretch the stud directly and achieve ±5-10% load accuracy versus ±30% for torque. But they introduce their own inputs: load loss when the tensioner releases (grip relaxation, typically a few percent you must compensate), and stud length requirements for the puller. Tensioning is the right answer for large or critical joints, not a magic wand.",
+  },
+  {
+    question: "What should a torque value in a work pack include to be trustworthy?",
+    answer: "Five things: stud material and size (count and diameter), the target bolt stress with its basis (gasket seating stress or Appendix O calculation), the K factor with the named lubricant, the number and percentages of passes with the pattern, and the tool calibration requirement. Our calculator outputs all of them in the copyable result — compare that against whatever chart you're currently using.",
+  },
+  {
+    question: "Where can I get the stud size and bolt count for my flange?",
+    answer: "From the ASME B16.5 tables: bolt-hole diameter and count per NPS and class, mapped to standard stud sizes. We publish the full matrix on our flange bolt size chart, and the torque calculator reads it automatically — overrides are there for non-standard joints.",
+  },
+];
+---
+<Base title={title} description={description} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems} ctaHref="/flange-bolt-torque-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Why Bolt Torque Calculators Disagree</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Why Bolt Torque Calculators <span class="accent-text">Disagree by 30%</span> — and How to Check Them
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Type one flange into five torque calculators and you can get five answers spanning a factor of two.
+        This isn't sloppiness — it's the predictable result of three assumptions every calculator must make
+        and almost none disclose. Here's how to read the hidden math, and how to verify any torque value in
+        four steps.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Published: September 16, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">The Problem: One Flange, Five Answers</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Take a 4" Class 300 weld-neck flange pair: 8 studs of 3/4"-10 UNC, A193 B7, spiral-wound gasket.
+          This is one of the most common joints in process plants. Now survey the torque charts and
+          calculators scattered across the internet for exactly this flange. We did — the answers cluster
+          between roughly 90 and 310 ft·lb per bolt.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The commercial stakes are real: under-torque a hydrocarbon joint and it leaks on startup —
+          a safety event, an emissions violation, a shutdown. Over-torque it and you've crushed the gasket
+          or stretched the studs into the yield zone, which leaks later and fails reassembly.
+          <strong class="text-theme-primary">A torque number you can't explain is a liability, not a specification.</strong>
+        </p>
+        <p class="text-theme-secondary leading-relaxed">
+          <strong class="text-theme-primary">Short answer:</strong> every torque value is T = K·D·F. D is fixed by
+          the stud size. K (friction) and F (target preload, from target stress × stress area) are empirical
+          choices. Hidden choices produce different answers — legitimately, mathematically, and dangerously.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #1: The Hidden K Factor</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Only about 10-15% of applied torque becomes bolt preload. The rest is friction — roughly half in
+          the threads, roughly half under the nut face. The nut factor K wraps all of that into one empirical
+          number:
+        </p>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">PTFE coating / anti-seize:</strong> K ≈ 0.12</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">MoS2 paste:</strong> K ≈ 0.13</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Machine oil:</strong> K ≈ 0.15</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Dry, as-received:</strong> K ≈ 0.20 — and 0.30+ for dry, rusty, or damaged threads</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          That's a 2.5x spread on the same bolt for the same preload. Generic calculators silently pick
+          one value (usually 0.20) because it's the middle of a table. If your actual assembly is PTFE-coated
+          studs, their number over-torques you by 66%. If your studs are dry and rusty, it under-torques
+          you by 30-50%. Nobody lied; K just wasn't stated.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mt-3">
+          Field practice that keeps K honest: lubricate both the threads <em>and</em> the nut bearing face with the
+          specified compound, keep fasteners free of rust and cutting fluid, and record the lubricant on the bolt-up
+          procedure — because changing lubricant changes the torque value, and a torque spec without a lubricant
+          spec is only half a specification. Note that K is a combined empirical factor, not a pure friction
+          coefficient: it folds in thread geometry, so "friction coefficient" tables do not transfer directly.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #2: The Guessed Target Stress</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Preload F is target stress × tensile stress area. The tensile stress area is standard
+          (ASME B1.1: A_t = 0.7854(d − 0.9743/n)²), but the stress target is a design decision:
+        </p>
+        <ul class="space-y-2 text-theme-secondary mb-4">
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Conservative tradition</strong> (30-40 ksi for B7) from an era when bolts were torque-monkeyed by feel.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">PCC-1 Appendix O framework:</strong> a band between ~40% and 70% of yield, positioned by the gasket's seating stress and the flange's limits. For B7 that band is 42-73.5 ksi.</span></li>
+          <li class="flex gap-3"><span class="accent-text font-bold shrink-0">→</span><span><strong class="text-theme-primary">Stainless caps:</strong> strain-hardened B8/B8M is held near 30 ksi — not for strength, but to control galling.</span></li>
+        </ul>
+        <p class="text-theme-secondary leading-relaxed">
+          A calculator that hardcodes 35 ksi and one that defaults to 52.5 ksi (50% yield) differ by 50%
+          before K even enters the picture. Both will happily print eight decimal places.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Root Cause #3: One Number Can't Serve Every Joint</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          A gasket is a spring with a minimum seating stress and a maximum crush limit. Soft rubber sheet
+          seats at a fraction of what an RTJ metal ring needs. Spiral wound sits between, and its seating
+          requirement depends on the winding density and filler.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Any chart that publishes a single torque "for a 4 inch 300 flange" has silently chosen a gasket for
+          you. Change the gasket and the correct torque changes — sometimes beyond the chart's entire
+          plausible range. Temperature adds another multiplier: B7 retains roughly 85% of ambient yield at
+          400 °C, and stainless-vs-carbon differential expansion steals preload in service.
+        </p>
+        <div class="glass rounded-xl p-4 space-y-1 text-sm text-theme-secondary font-mono mb-4">
+          <p>T_assembly = K · D · (S_gasket-or-band × A_t)</p>
+          <p>T_service ≈ T_assembly × f(T, differential expansion)</p>
+        </div>
+        <p class="text-theme-secondary leading-relaxed">
+          The spread this creates is wider than most crews expect. Seat a soft PTFE-sheet gasket at, say, 15 MPa
+          and the same 4" Class 300 joint is happy near the band floor; swap to a spiral wound needing 40+ MPa,
+          or an RTJ ring needing substantially more, and the correct torque climbs past the mid-band defaults.
+          Two bolt-ups of the <em>same flange</em> with <em>different gaskets</em> are different engineering problems —
+          which is why the gasket type is an explicit input in a correct calculator, not a footnote.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">What the Spread Looks Like on One Joint</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Five defensible combinations for the same 4" Class 300 flange (8 × 3/4"-10 B7 studs,
+          A_t = 0.334 in²), computed with the same equation:
+        </p>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[540px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Hidden assumptions</th>
+                <th class="px-3 py-2.5 text-right">N·m</th>
+                <th class="px-3 py-2.5 text-right">ft·lb</th>
+                <th class="px-3 py-2.5 text-right">vs 52.5 ksi + dry K</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              {combos.map((c) => {
+                const dev = ((c.ftlb - median) / median) * 100;
+                return (
+                  <tr class="hover-accent-light">
+                    <td class="px-3 py-2">{c.label}</td>
+                    <td class="px-3 py-2 text-right font-mono">{c.nm.toFixed(0)}</td>
+                    <td class="px-3 py-2 text-right font-mono">{c.ftlb.toFixed(0)}</td>
+                    <td class={`px-3 py-2 text-right font-mono ${Math.abs(dev) > 25 ? 'accent-text font-semibold' : ''}`}>
+                      {dev > 0 ? '+' : ''}{dev.toFixed(0)}%
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-theme-secondary leading-relaxed">
+          Every row is "correct arithmetic". The 88–307 ft·lb spread — a factor of 3.5 — comes entirely
+          from inputs nobody printed on the chart. This is the 30%+ disagreement, quantified.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">How to Verify Any Torque Value in Four Steps</h2>
+        <ol class="list-decimal list-inside space-y-3 text-theme-secondary mb-4">
+          <li><strong class="text-theme-primary">Demand the two inputs.</strong> Ask what K and what target stress produced the number. No answer = no trust. (For the record: our calculator's inputs are the ones in this article.)</li>
+          <li><strong class="text-theme-primary">Recompute in 30 seconds.</strong> T [ft·lb] = K × d [in] × S [ksi] × A_t [in²] ÷ 12. If your recomputation doesn't match the table, the table used different hidden inputs.</li>
+          <li><strong class="text-theme-primary">Sanity-check the magnitude.</strong> A lubricated 3/4" B7 stud lands in the 170-210 ft·lb region at mid-band targets. Values far outside the plausible envelope usually mean a unit error (N·m vs ft·lb swaps are common) or a wrong stud size.</li>
+          <li><strong class="text-theme-primary">Measure once on critical joints.</strong> A Skidmore tester or ultrasonic extensometer reading on 2-3 sample bolts tells you the real K for your hardware and lubricant. That single measurement converts every future table value from ±30% to ±5%.</li>
+        </ol>
+        <p class="text-theme-secondary leading-relaxed">
+          One more check hides in the toolbox rather than the calculator: torque wrenches drift.
+          A wrench reading 500 ft·lb that hasn't been calibrated since purchase can be off by 5-10% —
+          which is larger than the difference between two reputable torque tables. ISO 6789 calibration
+          at ±4% is the minimum for pressure-boundary work, and the certificate belongs in the same
+          work pack as the torque values.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mt-3">
+          For procurement and documentation, the same discipline applies to the rest of the flange package —
+          our <a href="/blog/why-flange-calculators-are-wrong/" class="accent-text hover:underline">flange weight audit</a>
+          found the same hidden-assumption pattern producing 10x weight errors.
+        </p>
+      </div>
+
+      <!-- Double CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Use a Calculator That Shows Its Work</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Every input visible and adjustable: stud material, lubrication K, gasket-driven target stress,
+          temperature — with the three-pass tightening table and a copyable, auditable result.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/flange-bolt-torque-calculator/" class="inline-flex items-center justify-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Open Bolt Torque Calculator →
+          </a>
+          <a href="/request-a-quote/" class="inline-flex items-center justify-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Request a Quote
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map((item) => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Articles</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/flange-bolt-torque-chart-pcc-1/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Bolt Torque Chart (PCC-1) Explained</a>
+          <a href="/blog/why-flange-calculators-are-wrong/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Why Flange Weight Calculators Are Wrong</a>
+          <a href="/blog/how-to-choose-flange-class/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">How to Choose Flange Class</a>
+          <a href="/blog/pipe-schedule-chart-explained/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Schedule Chart Explained</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

@@ -1,0 +1,323 @@
+---
+import Base from "../layouts/Base.astro";
+import FaqJsonLd from "../components/FaqJsonLd.astro";
+
+const title = "Mengcun Pipe Fittings: China's Elbow Capital | B16.9 Elbows, Tees, Reducers";
+const description =
+  "Mengcun Hui Autonomous County (Cangzhou, Hebei) is China's capital of elbows and pipe fittings — an estimated 1,800 enterprises producing roughly 30% of national output. Product range, quality tiers, factory audit and logistics guide for buyers.";
+const canonical = "https://pvfcalculator.com/mengcun-pipe-fittings/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Mengcun Pipe Fittings", url: "/mengcun-pipe-fittings/" },
+];
+const faqItems = [
+  {
+    question: "Why is Mengcun called the capital of elbows and pipe fittings?",
+    answer: "Mengcun Hui Autonomous County in Cangzhou, Hebei has specialized in carbon steel elbows since the first local workshops appeared in the late 1970s. The cluster was formally named 'China's Elbow and Pipe Fitting Capital' by the China National Hardware Association in 2006. Public reporting (Xinhua, 2025) puts the cluster at approximately 1,800 pipeline-equipment enterprises with a combined annual output value of around ¥38.7 billion, and its elbow/fitting output at roughly 30% of national production — with the low-pressure segment historically accounting for up to 80%.",
+  },
+  {
+    question: "What standards do Mengcun factories produce to?",
+    answer: "Established exporters produce buttweld fittings to ASME B16.9 (elbows, tees, reducers, caps, stub ends), high-yield line-pipe fittings to MSS SP-75, and wall thicknesses per ASME B36.10M. Many also work to EN 10253, DIN 2605 and GOST for other markets. As with any cluster, the standard on the quotation and the edition year must be written into the purchase order — 'B16.9' alone is not a complete specification.",
+  },
+  {
+    question: "What is the difference between Mengcun and Yanshan counties?",
+    answer: "They sit about 40 km apart in Cangzhou and are often quoted together, but their emphases differ. Mengcun is the elbow and fitting forming capital — push-forming (推制) and press-forming lines for B16.9 fittings at scale. Yanshan (see our Yanshan page) is the broader pipeline-equipment base: steel pipe (ERW/LSAW/spiral), anti-corrosion and insulation coating, plus fittings and flanges. For a pure B16.9 fitting package, Mengcun is usually the sharper market; for pipe-plus-fitting packages or coated line pipe, Yanshan's full chain often wins. The nearby Cangzhou flange cluster overview covers the third piece of the triangle.",
+  },
+  {
+    question: "How do I control quality when buying from Mengcun?",
+    answer: "Specify the standard and edition (e.g., ASME B16.9-2018), material grade with MTR requirement per ASTM A961, and heat-number traceability. For first orders, book third-party inspection (SGS, Bureau Veritas, Intertek or TÜV) covering dimensional check against B16.9 tables, wall-thickness verification at the intrados (the thinnest point of an elbow), PMI for alloy grades, and hydro or UT where specified. Budget roughly $400–800 per container inspection; it is cheap insurance against the cluster's wide quality spread.",
+  },
+  {
+    question: "What are typical MOQs and lead times from Mengcun?",
+    answer: "For standard carbon steel B16.9 fittings (A234 WPB, 90° LR elbows, NPS 2–12), MOQs are often 1–5 tonnes per size at the trading level, and container-mixed loads are normal practice. Lead times run approximately 2–4 weeks ex-works for stocked sizes and 4–8 weeks for produced-to-order or alloy grades. Sea freight from Tianjin port (roughly 180–220 km from Mengcun) adds 25–35 days to European or US ports.",
+  },
+  {
+    question: "How are Mengcun elbows made, and why does it matter?",
+    answer: "Most carbon steel elbows here are hot push-formed (推制): a heated steel billet is pushed over a mandrel with back-pressure from the elbow body, thinning the extrados and thickening the intrados. Well-set push-forming lines with proper mandrel design and temperature control produce elbows with smooth contour and controlled ovality; poorly set lines produce excessive thinning and wrinkling. When auditing, ask to see wall-thickness records at the intrados — it is the single best tell of process control.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Mengcun Pipe Fittings</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        Mengcun <span class="accent-text">Pipe Fittings</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        Mengcun Hui Autonomous County — "China's Elbow and Pipe Fitting Capital" — is where a large
+        share of the world's ASME B16.9 elbows, tees and reducers are actually formed. Here is what
+        buyers need to know about the cluster, its factories, and how to source well from it.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Stats -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">The Cluster in Numbers <span class="text-sm font-normal text-theme-muted">(public reporting; figures approximate)</span></h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Mengcun's pipeline-equipment industry began with a handful of workshops in the late 1970s — a county with
+          no iron ore, no steel mills and no local demand that built a global fittings industry from trade skills alone.
+          Public reporting over the years shows how it scaled:
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~1,800</div>
+            <div class="text-sm text-theme-secondary">Pipeline-equipment enterprises (Xinhua, 2025)</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~30%</div>
+            <div class="text-sm text-theme-secondary">Estimated share of national elbow &amp; fitting output</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">¥38.7 bn</div>
+            <div class="text-sm text-theme-secondary">Combined annual output value, estimated (2024)</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">120+</div>
+            <div class="text-sm text-theme-secondary">Export destination countries</div>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-theme-muted">
+          Sources: Xinhua (Sep 2025), The Paper (Dec 2024), Hebei industry cluster profiles. Figures are estimates —
+          verify current numbers in due diligence.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">What Mengcun Manufactures</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Elbows</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>90° &amp; 45°, Long Radius (LR 1.5D)</li>
+              <li>Short Radius (SR 1.0D)</li>
+              <li>180° returns</li>
+              <li>3D / 5D induction bends (nearby)</li>
+              <li class="text-theme-muted">ASME B16.9 / B16.28</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Tees &amp; Crosses</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Equal tees (straight)</li>
+              <li>Reducing tees</li>
+              <li>Barred / pigging tees for pipelines</li>
+              <li>Crosses (4-way)</li>
+              <li class="text-theme-muted">ASME B16.9 · MSS SP-75 WPHY grades</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Reducers &amp; Caps</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Concentric reducers</li>
+              <li>Eccentric reducers (bottom flat / top flat)</li>
+              <li>Seamless &amp; welded construction</li>
+              <li>Pipe caps (dished ends for fittings)</li>
+              <li class="text-theme-muted">ASME B16.9 · EN 10253</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Stub Ends &amp; Lap Joints</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Stub ends (Types A/B/C)</li>
+              <li>Lap-joint backing flanges pairing</li>
+              <li class="text-theme-muted">ASME B16.9 · MSS SP-43 (SS)</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Materials in Volume</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Carbon: A234 WPB, A420 WPL6, Q235</li>
+              <li>Alloy: WP11 / WP22 / WP5 / WP91</li>
+              <li>Stainless: 304/304L, 316/316L</li>
+              <li>High-yield: WPHY-42/52/60/65/70</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Size Range</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Seamless: NPS ½″–24″ (DN15–600)</li>
+              <li>Welded (seam): NPS 26″–72″+</li>
+              <li>Schedules 10–160, XS/XXS</li>
+              <li>Wall thickness per B36.10M</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster advantages -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Why the Cluster Is Competitive</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Push-forming (推制) at scale</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              Mengcun's core process is mandrel hot push-forming for elbows: billets of carbon or alloy steel are
+              induction-heated and pushed over a mandrel. Hundreds of forming lines across the county mean short
+              changeovers, competitive pricing on standard B16.9 geometry, and the ability to absorb large export
+              orders during tight windows.
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Raw material proximity</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              Seamless pipe billets and plate arrive from Hebei and Shandong mills within a day's trucking.
+              The cluster consumes steel pipe and billet on a massive scale (historically reported around
+              2+ million tonnes per year), keeping input costs and lead times low.
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Testing &amp; services ecosystem</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed">
+              Leading factories operate hydrostatic benches, UT/X-ray for welded fittings, PMI spectrometers,
+              tensile and flattening labs, and CNAS-accredited reporting; third-party agencies (SGS, BV, Intertek)
+              maintain permanent presence in Cangzhou, keeping inspection costs low.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Quality Tiers — The Cluster Is Not One Market</h2>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[680px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Tier</th>
+                <th class="px-3 py-2.5">Typical factory</th>
+                <th class="px-3 py-2.5">Documentation</th>
+                <th class="px-3 py-2.5">Fit for</th>
+                <th class="px-3 py-2.5">Price band*</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 1<br /><span class="text-xs font-normal text-theme-muted">Export ASME</span></td>
+                <td class="px-3 py-2 text-theme-secondary">Direct exporter, in-house forming + heat treatment + NDT, English engineering staff</td>
+                <td class="px-3 py-2 text-theme-secondary">EN 10204 3.1/3.2 MTR, TPI reports, PED/CRN experience</td>
+                <td class="px-3 py-2 text-theme-secondary">EPC projects, oil &amp; gas, power, EU/US regulatory markets</td>
+                <td class="px-3 py-2 text-theme-secondary">Reference (100)</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 2<br /><span class="text-xs font-normal text-theme-muted">Mid-scale</span></td>
+                <td class="px-3 py-2 text-theme-secondary">ISO 9001 factory, some export history, partial NDT in-house</td>
+                <td class="px-3 py-2 text-theme-secondary">MTR on request, mill TC 3.1</td>
+                <td class="px-3 py-2 text-theme-secondary">General industrial, non-critical utilities, distributor stock</td>
+                <td class="px-3 py-2 text-theme-secondary">~85–95</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Tier 3<br /><span class="text-xs font-normal text-theme-muted">Workshop</span></td>
+                <td class="px-3 py-2 text-theme-secondary">Small workshop or trading reseller, variable sourcing</td>
+                <td class="px-3 py-2 text-theme-secondary">Minimal; often no traceable MTR</td>
+                <td class="px-3 py-2 text-theme-secondary">Domestic low-pressure, non-hazardous, temporary works</td>
+                <td class="px-3 py-2 text-theme-secondary">~70–85</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-theme-muted">
+          *Indicative relative price index for identical B16.9 WPB elbows, based on market observations — not a quotation.
+          The spread exists because of process control, heat treatment practice and documentation, not material fraud alone.
+        </p>
+      </div>
+
+      <!-- Audit & logistics -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Factory Audit &amp; Logistics Checklist</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Before ordering</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>Write the standard + edition into the PO (e.g., ASME B16.9-2018, incl. tolerances)</li>
+              <li>Require MTRs per ASTM A961 with heat-number traceability to each fitting</li>
+              <li>For alloys, require PMI on 100% of pieces or per heat</li>
+              <li>Agree NDT scope: RT for welded fittings, UT wall thickness, hydro where specified</li>
+              <li>Define marking per MSS SP-25: grade, size, schedule, heat number</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Shipment</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>FOB Tianjin is the standard Incoterm (~180–220 km from Mengcun)</li>
+              <li>Wooden cases or pallets for machined/bevelled ends; end protectors mandatory</li>
+              <li>Anti-rust VCI + desiccant for carbon steel sea freight</li>
+              <li>Mixed-container consolidation is normal — ask for a loading plan</li>
+              <li>European transit ≈ 28–35 days; US West Coast ≈ 16–22 days, East Coast ≈ 25–32 days</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Get Quotes on Mengcun Pipe Fittings</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Send your bill of material (sizes, schedules, grades, standard) and we route it to suitable
+          Mengcun-area exporters. Use the weight calculators below to build an accurate BOM first.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Request a Quote →
+          </a>
+          <a href="/elbow-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Elbow Weight Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Resources</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Flange Manufacturers</a>
+          <a href="/yanshan-flange/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Yanshan Pipe Equipment Cluster</a>
+          <a href="/asme-b16-9-fitting-dimensions/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">ASME B16.9 Fitting Dimensions</a>
+          <a href="/elbow-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Elbow Weight Calculator</a>
+          <a href="/tee-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Tee Weight Calculator</a>
+          <a href="/reducer-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Reducer Weight Calculator</a>
+          <a href="/pipe-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Weight Calculator</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

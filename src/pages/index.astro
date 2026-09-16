@@ -78,6 +78,33 @@ const tools = [
     href: "/cangzhou-flange-manufacturers/",
     icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
   },
+  {
+    name: "Valve Cv Calculator",
+    tag: "Valve Sizing",
+    short: "Valve Cv",
+    desc: "Size control and isolation valves from flow rate and pressure drop",
+    specs: "Cv / Kv · Liquid · Gas · Steam",
+    href: "/valve-cv-calculator/",
+    icon: "M4 8l4 4-4 4m16-8l-4 4 4 4M8 12h8",
+  },
+  {
+    name: "Valve Weight Calculator",
+    tag: "Valve Weight",
+    short: "Valve Weight",
+    desc: "Estimate valve weights by type, class, and NPS for freight planning",
+    specs: "Gate / Globe / Ball / Check · Class 150–1500",
+    href: "/valve-weight-calculator/",
+    icon: "M12 3v18m-7-9h14",
+  },
+  {
+    name: "Pressure Vessel Thickness Calculator",
+    tag: "ASME VIII",
+    short: "Vessel",
+    desc: "Shell and head minimum thickness per UG-27 / UG-32 for internal pressure",
+    specs: "UG-27 · UG-32 · Custom materials",
+    href: "/pressure-vessel-thickness-calculator/",
+    icon: "M5 4h14v16H5zM5 8h14M5 16h14",
+  },
 ];
 
 const features = [
@@ -90,7 +117,7 @@ const features = [
 ];
 
 const stats = [
-  { value: "5", label: "Calculators" },
+  { value: "8", label: "Calculators" },
   { value: "50+", label: "Flange Types" },
   { value: "13", label: "Pipe Schedules" },
   { value: "100%", label: "Free" },
@@ -171,6 +198,16 @@ const jsonLd = [
         "@type": "Question",
         "name": "Do you ship worldwide?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. FOB Tianjin / CIF / DDP terms available. Sea freight to major ports, air freight for urgent orders. Full export documentation including MTC, packing list, and certificate of origin." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I source valves through this site?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Use our Valve Cv and Valve Weight calculators to verify specifications, browse the Wenzhou valve manufacturers page to find qualified factories, then submit your inquiry through the Request a Quote form." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you cover pressure vessel design?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We provide ASME VIII UG-27 / UG-32 wall thickness calculators for shells and heads under internal pressure. These tools assist preliminary sizing only and do not replace the review of an Authorized Inspector or a qualified pressure vessel engineer." }
       },
     ],
   },
@@ -416,6 +453,29 @@ const breadcrumbItems = [{ name: "Home", url: "/" }];
               <p class="mt-1 text-sm text-theme-secondary">Non-standard sizes, special materials, and OEM fabrication. From single prototypes to container loads.</p>
             </div>
           </div>
+
+          <div class="mt-10">
+            <h3 class="text-center text-lg font-bold text-theme-primary">Sourcing Clusters</h3>
+            <p class="mt-1 text-center text-sm text-theme-secondary">China's four major PVF manufacturing hubs — browse each cluster before you buy.</p>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <a href="/cangzhou-flange-manufacturers/" class="glass rounded-2xl p-5 transition-colors hover:border-amber-500/50 block">
+                <p class="font-bold text-theme-primary">Cangzhou</p>
+                <p class="mt-1 text-sm text-theme-secondary">Flange & fitting capital — Mengcun and Yanshan counties, Hebei.</p>
+              </a>
+              <a href="/mengcun-pipe-fittings/" class="glass rounded-2xl p-5 transition-colors hover:border-amber-500/50 block">
+                <p class="font-bold text-theme-primary">Mengcun</p>
+                <p class="mt-1 text-sm text-theme-secondary">China's pipe fitting hub — elbows, tees, reducers to ASME B16.9.</p>
+              </a>
+              <a href="/yanshan-flange/" class="glass rounded-2xl p-5 transition-colors hover:border-amber-500/50 block">
+                <p class="font-bold text-theme-primary">Yanshan</p>
+                <p class="mt-1 text-sm text-theme-secondary">Buttweld fittings cluster — high-yield and low-temperature grades.</p>
+              </a>
+              <a href="/wenzhou-valve-manufacturers/" class="glass rounded-2xl p-5 transition-colors hover:border-amber-500/50 block">
+                <p class="font-bold text-theme-primary">Wenzhou</p>
+                <p class="mt-1 text-sm text-theme-secondary">Valve manufacturing center — ball, gate, globe & check valves.</p>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -504,6 +564,22 @@ const breadcrumbItems = [{ name: "Home", url: "/" }];
             <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
           </summary>
           <p class="mt-3 text-sm leading-relaxed text-theme-secondary">Yes. FOB Tianjin / CIF / DDP terms available. Sea freight to major ports, air freight for urgent orders. Full export documentation including MTC, packing list, and certificate of origin.</p>
+        </details>
+
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            Can I source valves through this site?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">Yes. Use our <a href="/valve-cv-calculator/" class="accent-text hover:underline">Valve Cv</a> and <a href="/valve-weight-calculator/" class="accent-text hover:underline">Valve Weight</a> calculators to verify specifications, browse the <a href="/wenzhou-valve-manufacturers/" class="accent-text hover:underline">Wenzhou valve manufacturers</a> page to find qualified factories, then submit your inquiry via <a href="/request-a-quote/" class="accent-text hover:underline">Request a Quote</a>.</p>
+        </details>
+
+        <details class="glass rounded-xl px-5 py-4 group">
+          <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+            Do you cover pressure vessel design?
+            <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">We provide ASME VIII <a href="/pressure-vessel-thickness-calculator/" class="accent-text hover:underline">UG-27 / UG-32 wall thickness calculators</a> for shells and heads under internal pressure. These tools assist preliminary sizing only and do not replace the review of an Authorized Inspector or a qualified pressure vessel engineer.</p>
         </details>
       </div>
     </div>

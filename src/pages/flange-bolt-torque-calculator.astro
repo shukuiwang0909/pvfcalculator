@@ -1,0 +1,559 @@
+---
+import Base from '../layouts/Base.astro';
+const title = "Flange Bolt Torque Calculator (ASME B16.5 & PCC-1) | N·m / ft·lb";
+const description = "Free flange bolt torque calculator: PCC-1 style target bolt stress, lubrication-corrected nut factor K, ASME B1.1 tensile stress area, three-pass tightening table and cross-pattern sequence. Class 150–2500, NPS 1/2\"-24\".";
+const canonical = "https://pvfcalculator.com/flange-bolt-torque-calculator/";
+
+const faqs = [
+  {
+    q: "Why do different flange bolt torque calculators disagree by 30% or more?",
+    a: "Because torque = K × D × F, and generic calculators guess two of the three inputs. They typically assume a fixed K (often 0.20) regardless of actual lubrication — real K ranges from about 0.12 for PTFE coatings to 0.35+ for dry rusty threads — and they assume an arbitrary bolt stress (often 30-40 ksi) regardless of the stud material's actual yield. Since torque scales linearly with both K and stress, combining a dry-assembly K with a low guessed stress (or a lubricated K with a high one) easily moves the answer 30-50% in either direction. This calculator takes material yield (A193 B7/B7M/B8/B8M, A320 L7), lubrication state and gasket requirements as explicit inputs, so the result is traceable instead of guessed."
+  },
+  {
+    q: "What is the nut factor K and why does lubrication change the torque?",
+    a: "K is the empirical nut factor in T = K·D·F. Only about 10-15% of the torque you apply actually becomes bolt preload — the rest is consumed by friction in the threads and under the nut face. Lubrication changes that friction split: dry as-received steel runs K ≈ 0.20-0.35, machine oil ≈ 0.15, MoS2 paste ≈ 0.13, and PTFE/anti-seize coatings ≈ 0.12. The same target preload therefore needs very different torque values depending on lubrication. Applying a lubricated-table torque to dry threads leaves the joint badly under-loaded."
+  },
+  {
+    q: "What target bolt stress does this calculator use?",
+    a: "The default follows the ASME PCC-1 Appendix O framework: assembly bolt stress belongs in a band between roughly 40% and 70% of the bolting material's specified minimum yield at ambient, and the default sits at 50% of yield (for example 52.5 ksi for A193 B7 with 105 ksi yield). The gasket selector moves the target within the band — soft gaskets need less seating stress, RTJ metal gaskets need more. These are approximate engineering defaults, not code tabulations: no authoritative public reprint of the PCC-1 (2013) target-stress tables exists, so the actual target for a critical joint must be confirmed by the Appendix O calculation (gasket seating stress, flange limits) or the gasket manufacturer's data."
+  },
+  {
+    q: "Why tighten in three passes at 30%, 60% and 100%?",
+    a: "Because of elastic interaction (bolt cross-talk): tightening one bolt relaxes the bolts tightened before it. A single pass to full torque leaves the first bolts at a fraction of their intended load. ASME PCC-1 specifies a cross (star) pattern in increments — typically 30% to seat the gasket evenly and verify alignment, 60%, then 100% — followed by a final circular pass at 100% until no further nut rotation occurs. The pass table in the output gives the exact torque for each stage."
+  },
+  {
+    q: "Does working temperature affect bolt torque?",
+    a: "Yes, in two ways. First, bolt yield strength drops with temperature (A193 B7 retains roughly 85% of ambient yield at 400°C), so the calculator derates the target stress by an approximate retention curve. Second, thermal expansion changes preload in service — stainless flanges and carbon studs expand at different rates. Above each material's rating ceiling (about 454°C for B7, 343°C for B7M/L7, 538°C for B8/B8M) the calculator refuses to give a number and flags the joint for case-specific engineering."
+  },
+  {
+    q: "Can I use these torque values directly in the field?",
+    a: "They are a sound engineering basis for assembly, but three checks come first: (1) confirm the gasket manufacturer's seating stress and the project specification — they can move the target up or down within the band; (2) verify the actual K factor for your lubricant and hardware on a sample joint (Skidmore tester or ultrasonic measurement) if the joint is critical; (3) use a calibrated torque wrench (ISO 6789, ±4%). For critical or leak-sensitive service, follow the full PCC-1 procedure with documented check passes."
+  },
+  {
+    q: "Which bolt materials and lubrications are covered?",
+    a: "Stud materials: ASTM A193 B7 (standard Cr-Mo), A193 B7M (sour service), A193 B8 Cl.2 (304 stainless), A193 B8M Cl.2 (316 stainless) and A320 L7 (low temperature). Lubrication states: dry as-received (K = 0.20), machine oil (K = 0.15), MoS2 paste (K = 0.13) and PTFE/anti-seize coating (K = 0.12). Bolt count and stud size are read from the ASME B16.5 tables automatically but can be overridden for non-standard joints."
+  },
+  {
+    q: "How is the stud size and tensile stress area determined?",
+    a: "From the ASME B16.5 bolt-hole diameter: holes up to 2-1/4\" studs carry 1/8\" clearance and larger holes 1/4\", so an 8 × 22.2 mm hole pattern maps to 3/4\"-10 studs. The tensile stress area then follows the ASME B1.1 formula A_t = 0.7854·(d − 0.9743/n)² with n = threads per inch (UNC below 1\", 8UN at 1\" and above) — e.g. 0.1419 in² for 1/2-13 and 0.606 in² for 1-8."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Flange Bolt Torque Calculator (ASME B16.5 & PCC-1)",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Flange Bolt Torque Calculator", url: "/flange-bolt-torque-calculator/" },
+];
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Flange Bolt Torque Calculator <span class="accent-text">(ASME B16.5 &amp; PCC-1)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        Torque per bolt from traceable inputs — <strong>not</strong> a guessed constant.
+        Target bolt stress follows the ASME PCC-1 Appendix O framework (40–70% of yield),
+        the nut factor K matches your actual lubrication, and bolt data comes straight from
+        the ASME B16.5 tables. Covers Class 150–2500, NPS 1/2″–24″.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Flange bolt torque calculator tool">
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">Pressure Class</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="150">Class 150</option>
+            <option value="300" selected>Class 300</option>
+            <option value="600">Class 600</option>
+            <option value="900">Class 900</option>
+            <option value="1500">Class 1500</option>
+            <option value="2500">Class 2500</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">Nominal Size (NPS)</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">Stud Material</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="lube" class="mb-1 block text-sm font-semibold text-theme-secondary">Lubrication</label>
+          <select id="lube" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="gasket" class="mb-1 block text-sm font-semibold text-theme-secondary">Gasket Type (sets target stress)</label>
+          <select id="gasket" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="0">Soft (rubber / PTFE sheet) — band floor</option>
+            <option value="0.5" selected>Spiral wound / compressed fibre — mid band</option>
+            <option value="1">RTJ / metal (high seating stress) — band top</option>
+          </select>
+          <p class="mt-1 text-xs text-theme-muted" id="gasketNote">Target stress follows gasket seating requirements within the PCC-1 band.</p>
+        </div>
+        <div>
+          <label for="temp" class="mb-1 block text-sm font-semibold text-theme-secondary">Working Temp (°C)</label>
+          <input id="temp" type="number" min="-73" max="600" step="5" value="20"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Torque Units</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="Torque unit system">
+            <button id="unitNm" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">N·m</button>
+            <button id="unitFt" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">ft·lb</button>
+          </div>
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">Bolts (auto from B16.5)</label>
+          <p id="autoBolts" class="rounded-lg border border-theme bg-theme-tertiary px-3 py-2 text-sm font-mono text-theme-secondary">–</p>
+        </div>
+      </div>
+
+      <!-- Advanced overrides -->
+      <details class="mt-4 rounded-lg border border-theme">
+        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-theme-secondary hover:text-theme-primary">Advanced: override bolt count / stud size / target stress</summary>
+        <div class="grid grid-cols-1 gap-4 border-t border-theme p-4 sm:grid-cols-3">
+          <div>
+            <label for="countOv" class="mb-1 block text-sm font-semibold text-theme-secondary">Bolt count override</label>
+            <input id="countOv" type="number" min="0" max="64" step="1" value="0" placeholder="0 = auto"
+              class="field w-full rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label for="diaOv" class="mb-1 block text-sm font-semibold text-theme-secondary">Stud size override</label>
+            <select id="diaOv" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+          </div>
+          <div>
+            <label for="stressOv" class="mb-1 block text-sm font-semibold text-theme-secondary">Target stress override (ksi)</label>
+            <input id="stressOv" type="number" min="0" max="100" step="0.5" value="0" placeholder="0 = auto"
+              class="field w-full rounded-lg px-3 py-2 text-sm" />
+            <p class="mt-1 text-xs text-theme-muted" id="bandNote">Band: –</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Torque per Bolt</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="torqueValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="torqueUnit">N·m</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary" id="resultLine">–</p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">All bolts total</span><span class="font-semibold accent-text" id="totalTorque">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Preload per bolt</span><span class="font-semibold" id="outLoad">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Bolt count</span><span class="font-semibold" id="outCount">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">Target stress</span><span class="font-semibold" id="outStress">–</span></div>
+          </div>
+          <p class="mt-3 rounded-lg disclaimer p-2.5 text-xs leading-relaxed hidden" id="invalidNote"></p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Three-Pass Tightening (star pattern)</p>
+          <dl class="text-sm" id="passList"></dl>
+          <p class="mt-2 text-xs text-theme-muted">Follow with a final circular pass at 100% until no nut rotates (PCC-1).</p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Joint &amp; Bolt Data</p>
+          <dl class="text-sm" id="dimsList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">Material note</summary>
+            <p class="mt-1" id="matNote">–</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Tightening sequence SVG -->
+      <div class="card mt-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Cross (Star) Tightening Sequence — shown for 8 bolts</p>
+        <div class="grid grid-cols-1 items-center gap-4 lg:grid-cols-2">
+          <svg viewBox="0 0 360 200" class="w-full max-w-md" role="img" aria-label="Star tightening sequence for an 8-bolt flange">
+            <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-muted" />
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-muted" />
+            <circle cx="100" cy="100" r="20" fill="none" stroke="currentColor" stroke-width="1" class="text-theme-muted" opacity="0.5" />
+            <!-- 8 bolts: order 1 top, then star -->
+            <g font-size="11" font-weight="bold" text-anchor="middle">
+              <circle cx="100" cy="30" r="11" class="accent-bg" /><text x="100" y="34" fill="#07090c">1</text>
+              <circle cx="100" cy="170" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="100" y="174" class="text-theme-primary" fill="currentColor">5</text>
+              <circle cx="170" cy="100" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="170" y="104" class="text-theme-primary" fill="currentColor">3</text>
+              <circle cx="30" cy="100" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="30" y="104" class="text-theme-primary" fill="currentColor">7</text>
+              <circle cx="149.5" cy="50.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="149.5" y="54.5" class="text-theme-primary" fill="currentColor">2</text>
+              <circle cx="50.5" cy="149.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="50.5" y="153.5" class="text-theme-primary" fill="currentColor">6</text>
+              <circle cx="149.5" cy="149.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="149.5" y="153.5" class="text-theme-primary" fill="currentColor">4</text>
+              <circle cx="50.5" cy="50.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="50.5" y="54.5" class="text-theme-primary" fill="currentColor">8</text>
+            </g>
+            <!-- star path -->
+            <path d="M100 30 L100 170 L149.5 50.5 L50.5 149.5 L170 100 L30 100 L149.5 149.5 L50.5 50.5 Z"
+              fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" class="accent-text" opacity="0.6" transform="translate(0,0)" />
+            <text x="250" y="70" font-size="12" class="text-theme-secondary" fill="currentColor">1 → 5 (opposite)</text>
+            <text x="250" y="92" font-size="12" class="text-theme-secondary" fill="currentColor">then 2 → 6, 3 → 7, 4 → 8</text>
+            <text x="250" y="122" font-size="11" class="text-theme-muted" fill="currentColor">Each pass: all bolts at 30%,</text>
+            <text x="250" y="138" font-size="11" class="text-theme-muted" fill="currentColor">then 60%, then 100%.</text>
+          </svg>
+          <p class="text-sm leading-relaxed text-theme-secondary">
+            Tighten diametrically opposite bolts to keep the flange faces parallel while the gasket seats.
+            For flanges with more bolts, number them and follow the same opposite-first logic (PCC-1 provides
+            numbered sequences per bolt count). Re-check alignment after the first 30% pass.
+          </p>
+        </div>
+      </div>
+
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">Copy Result</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">Share Link</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">How the calculation works <span class="accent-text">(traceable inputs, not a magic constant)</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">The short-form torque equation</p>
+          <div class="mono-block mt-3 rounded-lg p-4 font-mono text-sm leading-relaxed">
+            T = K · D · F<br />
+            F = S_target · A_t<br />
+            A_t = 0.7854 · (d − 0.9743 / n)²<br />
+            <span class="text-theme-muted">// T torque · K nut factor · D nominal dia ·</span><br />
+            <span class="text-theme-muted">// F preload · S target stress · A_t stress area</span>
+          </div>
+          <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-theme-secondary">
+            <li><strong>Inputs you control:</strong> stud material (yield), lubrication (K), gasket type (target stress in band), temperature (derating).</li>
+            <li><strong>Inputs from standards:</strong> bolt count &amp; hole dia from ASME B16.5; A_t per ASME B1.1.</li>
+            <li><strong>Unit discipline:</strong> SI internally (N, m, MPa); ft·lb by exact conversion only.</li>
+          </ul>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Target stress — PCC-1 Appendix O framework (disclosed approximation)</p>
+          <p class="mt-2">
+            ASME PCC-1's Appendix O frames assembly bolt stress as a band: high enough to seat the gasket and
+            hold the seal, low enough to avoid crushing the gasket, yielding the studs or distorting the flange.
+            Public adoptions of the framework (e.g. API 660) cite a permissible band of <strong>40–70% of the
+            bolting material's yield</strong>, and the widely cited Appendix O default maximum for A193 B7
+            (73.5 ksi = 70% × 105 ksi) matches it. This calculator defaults to <strong>50% of yield</strong> and
+            moves within the band with the gasket selector.
+          </p>
+          <p class="mt-2">
+            <strong>No authoritative public reprint of the PCC-1 (2013) target-stress table (Table O-3) could be
+            located</strong>, so these defaults are engineering approximations, not code tabulations. For critical
+            joints, run the full Appendix O joint calculation or use the gasket manufacturer's recommended
+            seating stress as the override value.
+          </p>
+          <p class="mt-2">
+            <strong>Why this differs from generic "free" tools:</strong> most publish a single torque per flange
+            size with hidden assumptions — typically K = 0.20 regardless of lubrication and a fixed 30–40 ksi
+            stress regardless of material. Either assumption alone can shift the result ±30%, and both together
+            much more. Here every input is visible, adjustable, and tied to a named standard.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-bolt-chart/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Bolt Size Chart</a>
+        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/pipe-schedule-chart/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Schedule Chart</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 Flange Dimensions</a>
+        <a href="/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Weight Calculator</a>
+        <a href="/cangzhou-flange-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Cangzhou Flange Manufacturers</a>
+        <a href="/blog/flange-bolt-torque-chart-pcc-1/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Guide: PCC-1 Torque Chart Explained</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>Disclaimer:</strong> Torque values are engineering estimates based on the short-form method
+      (T = K·D·F) with target stresses derived from published summaries of the ASME PCC-1 Appendix O framework.
+      They are approximate and must be verified against the gasket manufacturer's recommendations, the project
+      specification and engineering judgement before use. Actual bolt load varies with friction conditions,
+      tool calibration and assembly procedure. pvfcalculator.com is not liable for joint failures, leaks or
+      damages resulting from use of these values.
+    </p>
+  </div>
+</Base>
+
+<script>
+  import { CLASS_DATA, NPS_LIST } from '../data/flange-dimensions';
+  import { BOLT_MATERIALS, BOLT_SPECS, LUBRICATIONS, targetStressFor } from '../data/bolt-dimensions';
+  import { computeBoltTorque, flangeBolts } from '../lib/bolt-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    cls: 300, nps: 2,
+    material: 'b7', lube: 'oil',
+    gasket: 0.5, temp: 20,
+    unit: (localStorage.getItem('pvf_torque_unit') === 'ftlb' ? 'ftlb' : 'nm') as 'nm' | 'ftlb',
+  };
+
+  const fmt = (v: number, d = 1) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const cd = CLASS_DATA[state.cls];
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!cd.validNps.includes(state.nps)) {
+      state.nps = cd.validNps[Math.min(5, cd.validNps.length - 1)];
+      sel.value = String(state.nps);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of BOLT_MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} — Sy ${m.yieldKsi} ksi`;
+      if (m.id === state.material) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateLubes() {
+    const sel = $('lube') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const l of LUBRICATIONS) {
+      const opt = document.createElement('option');
+      opt.value = l.id;
+      opt.textContent = `${l.name} — K = ${l.K}`;
+      if (l.id === state.lube) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateDiaOverride() {
+    const sel = $('diaOv') as HTMLSelectElement;
+    sel.innerHTML = '<option value="0">Auto (from B16.5)</option>';
+    for (const s of BOLT_SPECS) {
+      const opt = document.createElement('option');
+      opt.value = String(s.dIn);
+      opt.textContent = s.label;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitNm').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'nm' ? on : off);
+    $('unitFt').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'ftlb' ? on : off);
+  }
+
+  function currentInput() {
+    const stressOv = Number(($('stressOv') as HTMLInputElement).value) || 0;
+    const countOv = Number(($('countOv') as HTMLInputElement).value) || 0;
+    const diaOv = Number(($('diaOv') as HTMLSelectElement).value) || 0;
+    return {
+      cls: state.cls, nps: state.nps,
+      materialId: state.material, lubeId: state.lube,
+      tempC: state.temp,
+      stressPosition: state.gasket,
+      stressOverrideKsi: stressOv > 0 ? stressOv : undefined,
+      boltCountOverride: countOv > 0 ? countOv : undefined,
+      boltDiaOverrideIn: diaOv > 0 ? diaOv : undefined,
+    };
+  }
+
+  function render() {
+    const info = flangeBolts(state.cls, state.nps);
+    $('autoBolts').textContent = info.valid
+      ? `${info.count} × Ø${info.holeMm} mm → ${info.spec ? info.spec.label : '?'}`
+      : '—';
+
+    const ts = targetStressFor(state.material);
+    $('bandNote').textContent = `Band: ${ts.minKsi}–${ts.maxKsi} ksi (${ts.basis})`;
+
+    const r = computeBoltTorque(currentInput());
+    const invalidNote = $('invalidNote');
+    if (!r.valid) {
+      $('torqueValue').textContent = '–';
+      $('resultLine').textContent = 'No result';
+      $('totalTorque').textContent = '–';
+      $('outLoad').textContent = '–';
+      $('outCount').textContent = '–';
+      $('outStress').textContent = '–';
+      $('passList').innerHTML = '';
+      $('dimsList').innerHTML = '';
+      $('matNote').textContent = '–';
+      invalidNote.classList.remove('hidden');
+      invalidNote.textContent = r.reason ?? 'Invalid input.';
+      return;
+    }
+    invalidNote.classList.add('hidden');
+
+    const t = state.unit === 'nm' ? r.torqueNm : r.torqueFtlb;
+    const tot = state.unit === 'nm' ? r.totalNm : r.totalFtlb;
+    $('torqueValue').textContent = fmt(t, t >= 1000 ? 0 : 1);
+    $('torqueUnit').textContent = state.unit === 'nm' ? 'N·m' : 'ft·lb';
+    $('resultLine').textContent = `${r.npsLabel} Class ${state.cls} · ${r.count} × ${r.boltLabel} · ${r.materialSpec} · ${r.lubeName}`;
+    $('totalTorque').textContent = `${fmt(tot, tot >= 1000 ? 0 : 1)} ${state.unit === 'nm' ? 'N·m' : 'ft·lb'}`;
+    $('outLoad').textContent = `${fmt(r.loadKn, 1)} kN`;
+    $('outCount').textContent = String(r.count);
+    $('outStress').textContent = `${fmt(r.stressKsi, 1)} ksi (${fmt(r.stressMpa, 0)} MPa)`;
+
+    $('passList').innerHTML = r.passes
+      .map((p) => {
+        const v = state.unit === 'nm' ? p.nm : p.ftlb;
+        return `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">Pass ${Math.round(p.pct * 100)}%</dt><dd class="font-semibold text-theme-secondary">${fmt(v, v >= 1000 ? 0 : 1)} ${state.unit === 'nm' ? 'N·m' : 'ft·lb'}</dd></div>`;
+      })
+      .join('');
+
+    const rows: [string, string][] = [
+      ['Bolt circle (BCD)', `${fmt(r.bcdMm, 1)} mm`],
+      ['Stud size', r.boltLabel],
+      ['Tensile stress area A_t', `${r.areaIn2.toFixed(3)} in²`],
+      ['Nut across-flats', `${r.nutAfIn}" (${fmt(r.nutAfIn * 25.4, 0)} mm)`],
+      ['Nut factor K', String(r.K)],
+      ['Ambient target stress', `${fmt(r.stressAmbientKsi, 1)} ksi`],
+      ['Temp factor', `× ${r.tempFactor.toFixed(3)} @ ${r.tempC} °C`],
+      ['Joint preload total', `${fmt(r.totalLoadKn, 1)} kN`],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+    $('matNote').textContent = r.materialNote;
+  }
+
+  // Events
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => { state.material = (e.target as HTMLSelectElement).value; render(); });
+  $('lube').addEventListener('change', (e) => { state.lube = (e.target as HTMLSelectElement).value; render(); });
+  $('gasket').addEventListener('change', (e) => { state.gasket = Number((e.target as HTMLSelectElement).value); render(); });
+  $('temp').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (!Number.isNaN(v)) { state.temp = v; render(); }
+  });
+  ['countOv', 'stressOv'].forEach((id) =>
+    $(id).addEventListener('input', () => render())
+  );
+  $('diaOv').addEventListener('change', () => render());
+  $('unitNm').addEventListener('click', () => { state.unit = 'nm'; localStorage.setItem('pvf_torque_unit', 'nm'); setUnitButtons(); render(); });
+  $('unitFt').addEventListener('click', () => { state.unit = 'ftlb'; localStorage.setItem('pvf_torque_unit', 'ftlb'); setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  populateLubes();
+  populateDiaOverride();
+  populateNps();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const t = ($('torqueValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('torqueUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalTorque') as HTMLElement).textContent ?? '–';
+    const stress = ($('outStress') as HTMLElement).textContent ?? '–';
+    const text = `PVF Calculator — Flange Bolt Torque\n${line}\nPer bolt: ${t} ${unit} · Total: ${total} · Target stress: ${stress}\nhttps://pvfcalculator.com/flange-bolt-torque-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      cls: String(state.cls), nps: String(state.nps),
+      material: state.material, lube: state.lube,
+      gasket: String(state.gasket), temp: String(state.temp), unit: state.unit,
+      count: ($('countOv') as HTMLInputElement).value || '0',
+      dia: ($('diaOv') as HTMLSelectElement).value || '0',
+      stress: ($('stressOv') as HTMLInputElement).value || '0',
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const c = Number(sp.get('cls'));
+    if (c && [150, 300, 600, 900, 1500, 2500].includes(c)) { state.cls = c; ($('cls') as HTMLSelectElement).value = String(c); populateNps(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const mat = sp.get('material');
+    if (mat && BOLT_MATERIALS.some((m) => m.id === mat)) { state.material = mat; ($('material') as HTMLSelectElement).value = mat; changed = true; }
+    const lube = sp.get('lube');
+    if (lube && LUBRICATIONS.some((l) => l.id === lube)) { state.lube = lube; ($('lube') as HTMLSelectElement).value = lube; changed = true; }
+    const g = Number(sp.get('gasket'));
+    if (g === 0 || g === 0.5 || g === 1) { state.gasket = g; ($('gasket') as HTMLSelectElement).value = String(g); changed = true; }
+    const tp = Number(sp.get('temp'));
+    if (!Number.isNaN(tp) && sp.get('temp') !== null) { state.temp = tp; ($('temp') as HTMLInputElement).value = String(tp); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'nm' || u === 'ftlb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (sp.get('count')) { ($('countOv') as HTMLInputElement).value = sp.get('count')!; changed = true; }
+    if (sp.get('dia')) { ($('diaOv') as HTMLSelectElement).value = sp.get('dia')!; changed = true; }
+    if (sp.get('stress')) { ($('stressOv') as HTMLInputElement).value = sp.get('stress')!; changed = true; }
+    if (changed) render();
+  }
+</script>

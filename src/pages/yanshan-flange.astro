@@ -1,0 +1,317 @@
+---
+import Base from "../layouts/Base.astro";
+import FaqJsonLd from "../components/FaqJsonLd.astro";
+
+const title = "Yanshan Flange Manufacturers & Pipe Equipment Cluster | Hebei, China";
+const description =
+  "Yanshan County (Cangzhou, Hebei) is China's pipeline-equipment manufacturing base — an estimated 3,000+ enterprises covering flanges, steel pipe, fittings, anti-corrosion and insulation. Product map, districts, Huanghua Port logistics, quality tiers and audit guide.";
+const canonical = "https://pvfcalculator.com/yanshan-flange/";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+};
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Yanshan Flange Manufacturers", url: "/yanshan-flange/" },
+];
+const faqItems = [
+  {
+    question: "What is Yanshan County known for?",
+    answer: "Yanshan County in Cangzhou, Hebei is widely described in Chinese industry media as 'China's pipeline equipment manufacturing base' (中国管道装备制造基地). Unlike neighboring Mengcun, which is specialized in elbow and fitting forming, Yanshan covers the whole pipeline chain: steel pipe (ERW, LSAW, spiral welded, seamless), flanges of all types, buttweld fittings, anti-corrosion coating (3PE/FBE), insulation, and supports & hangers. Industry articles put the number of related enterprises at roughly 3,000 — an estimate that includes a long tail of small workshops and traders.",
+  },
+  {
+    question: "What flanges do Yanshan manufacturers produce?",
+    answer: "The full ASME B16.5 range — weld neck, slip on, blind, socket weld, threaded and lap joint — in Class 150–2500, NPS ½″–24″, plus large-diameter B16.47 Series A/B flanges, EN 1092-1/DIN flanges, and orifice, reducing and long weld neck specials. Materials run from A105 carbon steel through F304/F316L stainless to F11/F22/F91 alloy and duplex grades. Because Yanshan also produces the pipe the flanges weld to, combined pipe-plus-flange packages are its signature offer.",
+  },
+  {
+    question: "How close is Yanshan to a seaport?",
+    answer: "Yanshan sits in Cangzhou's coastal corridor: Huanghua Port is roughly 80 km east of the industrial core, and Tianjin Port is about 150–200 km north. Beijing–Shanghai expressway and railway pass through the county, with national highways G104/G205/G307 crossing the area. For export cargo, FOB Tianjin and FOB Huanghua are both practical; Huanghua is increasingly used for bulk and container traffic serving the Bohai rim.",
+  },
+  {
+    question: "Yanshan vs Mengcun vs Cangzhou — where should I buy what?",
+    answer: "Think of it as a triangle. Mengcun: formed B16.9 elbows, tees and reducers at scale — the fitting specialists. Yanshan: the full-chain pipe-equipment base — steel pipe, flanges, fittings, coating and insulation in one package. The wider Cangzhou area (see our Cangzhou flange manufacturers overview) is where you consolidate: most serious suppliers of all three categories quote from the same industrial belt and will consolidate containers. For a pure flange package, compare both Yanshan and Mengcun-Cangzhou flange mills; for coated line pipe, start in Yanshan.",
+  },
+  {
+    question: "How do I vet a Yanshan factory?",
+    answer: "Same discipline as the rest of the belt, with coating-specific extras. Verify ISO 9001 scope against the certificate database; require EN 10204 3.1 MTRs with heat traceability; for coated pipe, specify coating standard (DIN 30670 / ISO 21809), holiday test voltage, adhesion and thickness per layer, and require coating inspection reports. Check hydrotest records for pipe and NDT for welded fittings. For first orders, use SGS/BV/Intertek pre-shipment inspection (roughly $400–800 per container) — the cluster's 3,000-strong supplier tail makes third-party verification essential.",
+  },
+  {
+    question: "What are typical lead times and MOQs in Yanshan?",
+    answer: "Stocked carbon steel pipe and standard B16.5 flanges ship in 1–3 weeks ex-works. Produced-to-order pipe (LSAW/spiral) runs 3–6 weeks, coated or alloy products 5–8 weeks, and large-diameter or high-class flanges 6–12 weeks. MOQs are flexible by factory: major mills want 20–50 tonnes per pipe size, while flange and fitting factories routinely accept single-tonne mixed lots. Consolidated FOB Tianjin/Huanghua shipments are standard practice.",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-14 sm:py-20">
+    <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      <nav class="text-xs text-theme-muted mb-4">
+        <a href="/" class="hover:text-theme-primary">Home</a>
+        <span class="mx-1">/</span>
+        <span class="text-theme-primary">Yanshan Flange Manufacturers</span>
+      </nav>
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-5xl">
+        Yanshan <span class="accent-text">Flange Manufacturers</span>
+      </h1>
+      <p class="mt-4 text-lg text-theme-secondary max-w-2xl mx-auto leading-relaxed">
+        Yanshan County is the pipeline-equipment heartland of the Cangzhou belt — steel pipe, flanges,
+        fittings, coating and insulation within one supply chain. This page maps its factories, districts,
+        port logistics and quality landscape for buyers.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-14">
+
+      <!-- Stats -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">The Cluster in Numbers <span class="text-sm font-normal text-theme-muted">(industry-media estimates)</span></h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Yanshan's pipeline-equipment sector has grown for over 30 years from county foundries into what Chinese
+          industry media call the country's largest pipeline-equipment cluster. Public figures vary by source and
+          should be treated as estimates:
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~3,000</div>
+            <div class="text-sm text-theme-secondary">Related enterprises across the cluster (estimated)</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">50 km</div>
+            <div class="text-sm text-theme-secondary">Radius covering the full pipe-equipment supply chain</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">~80 km</div>
+            <div class="text-sm text-theme-secondary">Distance to Huanghua Port container terminals</div>
+          </div>
+          <div class="glass rounded-xl p-5 text-center">
+            <div class="text-3xl font-bold accent-text mb-1">80+</div>
+            <div class="text-sm text-theme-secondary">Export markets claimed by cluster suppliers</div>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-theme-muted">
+          Sources: Chinese industry and supplier publications (2024–2026). Enterprise counts include small workshops
+          and trading companies; verify any figure during due diligence.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Products: The Full Pipeline Chain</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Flanges (all types)</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Weld neck / slip on / blind / SW / threaded</li>
+              <li>Lap joint, orifice, reducing, LWN</li>
+              <li>Class 150–2500, NPS ½″–24″</li>
+              <li>B16.47 Series A/B, NPS 26″–60″</li>
+              <li class="text-theme-muted">ASME B16.5 · EN 1092-1 · DIN · JIS</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Steel Pipe</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>ERW &amp; LSAW line pipe, to 3,220 mm OD</li>
+              <li>Spiral welded (SSAW) water/piling pipe</li>
+              <li>Seamless pipe, hot-rolled &amp; cold-drawn</li>
+              <li>API 5L / ASTM A53 / A106 / GB/T 9711</li>
+              <li class="text-theme-muted">Coating &amp; insulation on-site</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Fittings &amp; Extras</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Elbows, tees, reducers, caps (B16.9)</li>
+              <li>3PE / FBE / epoxy anti-corrosion</li>
+              <li>Polyurethane &amp; steam-jacket insulation</li>
+              <li>Pipe supports, hangers &amp; expansion joints</li>
+              <li class="text-theme-muted">One-package BOM capability</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Materials</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Carbon: A105, A234 WPB, Q235, 20#</li>
+              <li>Stainless: 304/304L, 316/316L</li>
+              <li>Alloy: F11, F22, F91; P11/P22 pipe</li>
+              <li>Duplex &amp; Ni-alloy (selected mills)</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Key Districts</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Wuliyao (五里窑) industrial zone</li>
+              <li>Chengnan development zone (城南开发区)</li>
+              <li>Puwang/Chenguan corridor along G205</li>
+              <li>Pipe coating yards near Huanghua Port</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">End Markets</h3>
+            <ul class="text-sm text-theme-secondary space-y-1">
+              <li>Petrochemical &amp; refining</li>
+              <li>Long-distance pipelines (oil, gas, water)</li>
+              <li>Power &amp; district heating</li>
+              <li>Construction &amp; piling</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistics -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Logistics: Built Around Huanghua Port</h2>
+        <div class="glass rounded-xl p-5">
+          <p class="text-sm text-theme-secondary leading-relaxed mb-4">
+            Yanshan's location is its structural advantage. The county sits on the Beijing–Shanghai corridor
+            (expressway + railway), with national highways G104, G205 and G307 crossing the area. Huanghua Port —
+            one of the Bohai Sea's major bulk-and-container gateways — is approximately 80 km from the industrial
+            core, and Tianjin Port is within half a day's trucking. Industry articles cite raw-material and
+            outbound-freight cost advantages of roughly 15–20% versus inland clusters; treat that as a directional
+            supplier claim rather than an audited figure.
+          </p>
+          <div class="grid sm:grid-cols-3 gap-4 text-sm">
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">FOB Huanghua</p>
+              <p class="text-theme-secondary">Growing option for bulk &amp; containers; closest to coating yards.</p>
+            </div>
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">FOB Tianjin</p>
+              <p class="text-theme-secondary">The belt's default term; deepest sailings to EU/US/Gulf.</p>
+            </div>
+            <div class="rounded-lg bg-theme-tertiary p-4">
+              <p class="font-semibold text-theme-primary mb-1">Rail options</p>
+              <p class="text-theme-secondary">China–Europe rail from Cangzhou/Shijiazhuang for urgent cargo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality tiers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Quality Landscape</h2>
+        <div class="overflow-x-auto rounded-xl bg-theme-card shadow-md">
+          <table class="w-full min-w-[680px] text-sm">
+            <thead class="bg-ink-900 text-left text-xs uppercase tracking-wider text-theme-secondary">
+              <tr>
+                <th class="px-3 py-2.5">Supplier type</th>
+                <th class="px-3 py-2.5">Strengths</th>
+                <th class="px-3 py-2.5">Watch-outs</th>
+                <th class="px-3 py-2.5">Best for</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              <tr>
+                <td class="px-3 py-2 font-semibold">Large integrated mills</td>
+                <td class="px-3 py-2 text-theme-secondary">Own pipe lines, coating yards, labs; API 5L + ISO + export track record</td>
+                <td class="px-3 py-2 text-theme-secondary">Higher MOQs (20–50 t per size); longer quotes</td>
+                <td class="px-3 py-2 text-theme-secondary">Line pipe, project packages</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Flange / fitting factories</td>
+                <td class="px-3 py-2 text-theme-secondary">Full B16.5/B16.9 range, flexible MOQs, fast samples</td>
+                <td class="px-3 py-2 text-theme-secondary">Wide quality spread — audit before PO</td>
+                <td class="px-3 py-2 text-theme-secondary">Flange &amp; fitting BOMs</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Coating &amp; insulation yards</td>
+                <td class="px-3 py-2 text-theme-secondary">3PE/FBE lines at portside; fast pipe-to-coating turnover</td>
+                <td class="px-3 py-2 text-theme-secondary">Specify holiday test, adhesion, layer thickness in PO</td>
+                <td class="px-3 py-2 text-theme-secondary">Buried/subsea pipe packages</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">Traders / consolidators</td>
+                <td class="px-3 py-2 text-theme-secondary">One-stop quotes, mixed-container consolidation</td>
+                <td class="px-3 py-2 text-theme-secondary">Opaque sourcing — demand mill name + MTR on every item</td>
+                <td class="px-3 py-2 text-theme-secondary">Small mixed orders, first trials</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Audit advice -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-4">Factory Audit Checklist</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Documents</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>ISO 9001 certificate + scope, verified with the issuing body</li>
+              <li>EN 10204 3.1 MTRs, heat-number traceable per item</li>
+              <li>API 5L license for line pipe; type test reports for coating</li>
+              <li>Hydrostatic &amp; NDT records per production batch</li>
+            </ul>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-bold text-theme-primary mb-2">Inspection</h3>
+            <ul class="text-sm text-theme-secondary space-y-1.5 list-disc pl-5">
+              <li>Third-party PSI (SGS/BV/Intertek) on first orders, ~$400–800/container</li>
+              <li>Dimensional check vs ASME B16.5/B16.9 tables; marking per MSS SP-25/SP-43</li>
+              <li>Coating: holiday test, adhesion pull-off, DFT per layer</li>
+              <li>End protection + VCI packing spec in the PO</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card card-accent p-8 text-center">
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Request a Quote from Yanshan Suppliers</h2>
+        <p class="text-theme-secondary mb-6 max-w-xl mx-auto">
+          Pipe, flanges, fittings or a coated full-package BOM — send the specification and we route it to
+          suitable Yanshan-area factories. Weigh your BOM first with the calculators below.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/request-a-quote/" class="inline-flex items-center gap-2 accent-bg hover:opacity-90 rounded-xl px-8 py-3.5 text-sm font-bold shadow-lg transition" style="color: #07090c;">
+            Request a Quote →
+          </a>
+          <a href="/pipe-weight-calculator/" class="inline-flex items-center gap-2 rounded-xl border border-theme px-8 py-3.5 text-sm font-bold text-theme-primary hover:bg-theme-secondary transition">
+            Pipe Weight Calculator
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq">
+        <h2 class="text-2xl font-bold text-theme-primary mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          {faqItems.map(item => (
+            <details class="glass rounded-xl px-5 py-4 group">
+              <summary class="flex items-center justify-between cursor-pointer font-semibold text-theme-primary">
+                {item.question}
+                <svg class="h-5 w-5 accent-text transition-transform group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-theme-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="border-t border-theme pt-8">
+        <h3 class="font-bold text-theme-primary mb-3">Related Resources</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/cangzhou-flange-manufacturers/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Cangzhou Flange Manufacturers</a>
+          <a href="/mengcun-pipe-fittings/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Mengcun Pipe Fittings</a>
+          <a href="/flange-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Flange Weight Calculator</a>
+          <a href="/pipe-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Pipe Weight Calculator</a>
+          <a href="/elbow-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Elbow Weight Calculator</a>
+          <a href="/tee-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Tee Weight Calculator</a>
+          <a href="/reducer-weight-calculator/" class="rounded-full border border-theme px-4 py-1.5 text-sm text-theme-primary hover:bg-theme-secondary transition">Reducer Weight Calculator</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
+
+<FaqJsonLd items={faqItems} />

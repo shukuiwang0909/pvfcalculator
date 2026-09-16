@@ -1,0 +1,552 @@
+---
+import Base from '../../layouts/Base.astro';
+const title = "法兰螺栓扭矩计算器（ASME B16.5 与 PCC-1）| N·m / ft·lb | pvfcalculator.com";
+const description = "免费法兰螺栓扭矩计算器：基于 ASME PCC-1 Appendix O 框架的目标螺栓应力、按润滑状态修正的螺母系数 K、ASME B1.1 拉伸应力面积、三遍拧紧（30%/60%/100%）扭矩表与十字交叉拧紧顺序。覆盖 Class 150–2500、NPS 1/2\"–24\"。";
+const canonical = "https://pvfcalculator.com/zh/flange-bolt-torque-calculator/";
+
+const faqs = [
+  {
+    q: "为什么不同的法兰螺栓扭矩计算器结果相差 30% 以上？",
+    a: "因为扭矩 = K × D × F，而通用计算器对三个输入量中的两个都在“猜”。它们通常不论实际润滑状态一律取固定 K 值（常见为 0.20）——而实际 K 值范围大致从 PTFE 涂层的 0.12 到干燥锈蚀螺纹的 0.35 以上；同时不论螺栓材料实际屈服强度一律假设一个任意应力（常见为 30–40 ksi）。由于扭矩与 K、应力均成正比，把干摩擦的 K 配上偏低的猜测应力（或润滑 K 配高应力）很容易让结果偏差 30–50%。本计算器把材料屈服（A193 B7/B7M/B8/B8M、A320 L7）、润滑状态和垫片要求作为显式输入，每个数字都可以追溯，而不是猜测值。"
+  },
+  {
+    q: "什么是螺母系数 K？为什么润滑会改变扭矩？",
+    a: "K 是短公式 T = K·D·F 中的经验螺母系数。施加的扭矩只有约 10–15% 真正转化为螺栓预紧力，其余都消耗在螺纹摩擦和螺母支承面摩擦上。润滑改变的是摩擦分配：干燥原状态钢件 K ≈ 0.20–0.35，机油 ≈ 0.15，二硫化钼膏 ≈ 0.13，PTFE/防卡涂层 ≈ 0.12。因此要达到同一目标预紧力，不同润滑状态下的所需扭矩差异很大。把按润滑工况查得的扭矩施加在干燥螺栓上，会导致接头严重欠载。"
+  },
+  {
+    q: "本计算器采用什么目标螺栓应力？",
+    a: "默认值遵循 ASME PCC-1 Appendix O 框架：装配螺栓应力应处于螺栓材料常温规定屈服强度的约 40%–70% 区间内，默认取屈服的 50%（例如 A193 B7 屈服 105 ksi，对应 52.5 ksi）。垫片选择器在区间内移动目标应力——软质垫片所需压紧应力较低，RTJ 金属垫片较高。这些是工程近似默认值，并非规范条文：目前找不到 PCC-1（2013）目标应力表（Table O-3）的权威公开转载，因此关键接头的实际目标应力必须通过完整 Appendix O 计算（垫片压紧应力、法兰限制）或垫片制造商数据确认。"
+  },
+  {
+    q: "为什么要按 30%、60%、100% 三遍拧紧？",
+    a: "因为弹性相互作用（螺栓交叉影响）：拧紧一个螺栓会使之前已拧紧的螺栓发生松弛。一次性拧到满扭矩会使最先拧紧的螺栓只保留一部分设计载荷。ASME PCC-1 规定采用十字（星形）顺序分步拧紧——通常先 30% 使垫片均匀就位并检查对中，再 60%，最后 100%——随后以 100% 做最终顺时针巡检，直至螺母不再转动为止。输出面板中的三遍表给出了每个阶段的确切扭矩。"
+  },
+  {
+    q: "工作温度会影响螺栓扭矩吗？",
+    a: "会，通过两个途径。其一，螺栓屈服强度随温度下降（A193 B7 在 400°C 时约保留常温屈服的 85%），计算器按近似保留曲线折减目标应力；其二，热膨胀会在服役中改变预紧力——不锈钢法兰与碳钢螺栓的膨胀速率不同。超过各材料温度上限时（B7 约 454°C、B7M/L7 约 343°C、B8/B8M 约 538°C），计算器不会给出数值，而是提示该接头需要专项工程评估。"
+  },
+  {
+    q: "这些扭矩值可以直接在现场使用吗？",
+    a: "它们是合理的装配工程依据，但使用前需完成三项确认：（1）核对垫片制造商的压紧应力要求与项目规范——它们可能使目标应力在区间内上移或下移；（2）关键接头应抽样实测实际 K 值（Skidmore 标定仪或超声测长）；（3）使用经校准的扭矩扳手（ISO 6789，±4%）。对于关键或泄漏敏感工况，请执行完整的 PCC-1 程序并留存检查记录。"
+  },
+  {
+    q: "覆盖哪些螺栓材料和润滑状态？",
+    a: "螺栓材料：ASTM A193 B7（常规 Cr-Mo）、A193 B7M（抗硫工况）、A193 B8 Cl.2（304 不锈钢）、A193 B8M Cl.2（316 不锈钢）、A320 L7（低温）。润滑状态：干燥原状态（K = 0.20）、机油（K = 0.15）、二硫化钼膏（K = 0.13）、PTFE/防卡涂层（K = 0.12）。螺栓数量与规格由 ASME B16.5 表自动带出，也可手动覆盖以适配非标准接头。"
+  },
+  {
+    q: "螺栓规格与拉伸应力面积如何确定？",
+    a: "由 ASME B16.5 螺栓孔径推导：不超过 2-1/4\" 的规格孔径间隙为 1/8\"，更大规格为 1/4\"，因此 8 × 22.2 mm 的孔型对应 3/4\"-10 双头螺栓。拉伸应力面积按 ASME B1.1 公式 A_t = 0.7854·(d − 0.9743/n)² 计算，n 为每英寸牙数（1\" 以下为 UNC，1\" 及以上为 8UN）——例如 1/2-13 为 0.1419 in²，1-8 为 0.606 in²。"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "法兰螺栓扭矩计算器（ASME B16.5 与 PCC-1）",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "法兰螺栓扭矩计算器", url: "/zh/flange-bolt-torque-calculator/" },
+];
+---
+<Base lang="zh" title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        法兰螺栓扭矩计算器 <span class="accent-text">（ASME B16.5 与 PCC-1）</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        每个输入量可追溯的单栓扭矩计算——<strong>不是</strong>拍脑袋的固定值。
+        目标螺栓应力遵循 ASME PCC-1 Appendix O 框架（屈服的 40–70%），
+        螺母系数 K 匹配实际润滑状态，螺栓数据直接取自 ASME B16.5 表格。
+        覆盖 Class 150–2500、NPS 1/2″–24″。
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="法兰螺栓扭矩计算工具">
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label for="cls" class="mb-1 block text-sm font-semibold text-theme-secondary">压力等级</label>
+          <select id="cls" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="150">Class 150</option>
+            <option value="300" selected>Class 300</option>
+            <option value="600">Class 600</option>
+            <option value="900">Class 900</option>
+            <option value="1500">Class 1500</option>
+            <option value="2500">Class 2500</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps" class="mb-1 block text-sm font-semibold text-theme-secondary">公称管径（NPS）</label>
+          <select id="nps" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="material" class="mb-1 block text-sm font-semibold text-theme-secondary">螺栓材料</label>
+          <select id="material" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="lube" class="mb-1 block text-sm font-semibold text-theme-secondary">润滑状态</label>
+          <select id="lube" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label for="gasket" class="mb-1 block text-sm font-semibold text-theme-secondary">垫片类型（决定目标应力）</label>
+          <select id="gasket" class="field w-full rounded-lg px-3 py-2 text-sm">
+            <option value="0">软质（橡胶 / PTFE 板）— 区间下限</option>
+            <option value="0.5" selected>缠绕垫 / 压缩纤维 — 区间中部</option>
+            <option value="1">RTJ / 金属（高压紧应力）— 区间上限</option>
+          </select>
+          <p class="mt-1 text-xs text-theme-muted" id="gasketNote">目标应力按垫片压紧要求在 PCC-1 区间内取值。</p>
+        </div>
+        <div>
+          <label for="temp" class="mb-1 block text-sm font-semibold text-theme-secondary">工作温度（°C）</label>
+          <input id="temp" type="number" min="-73" max="600" step="5" value="20"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">扭矩单位</label>
+          <div class="flex overflow-hidden rounded-lg border border-theme" role="group" aria-label="扭矩单位">
+            <button id="unitNm" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">N·m</button>
+            <button id="unitFt" class="unit-btn flex-1 px-3 py-2 text-sm font-semibold transition">ft·lb</button>
+          </div>
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold text-theme-secondary">螺栓（按 B16.5 自动带出）</label>
+          <p id="autoBolts" class="rounded-lg border border-theme bg-theme-tertiary px-3 py-2 text-sm font-mono text-theme-secondary">–</p>
+        </div>
+      </div>
+
+      <!-- Advanced overrides -->
+      <details class="mt-4 rounded-lg border border-theme">
+        <summary class="cursor-pointer px-4 py-2.5 text-sm font-semibold text-theme-secondary hover:text-theme-primary">高级选项：覆盖螺栓数量 / 螺栓规格 / 目标应力</summary>
+        <div class="grid grid-cols-1 gap-4 border-t border-theme p-4 sm:grid-cols-3">
+          <div>
+            <label for="countOv" class="mb-1 block text-sm font-semibold text-theme-secondary">螺栓数量覆盖</label>
+            <input id="countOv" type="number" min="0" max="64" step="1" value="0" placeholder="0 = 自动"
+              class="field w-full rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label for="diaOv" class="mb-1 block text-sm font-semibold text-theme-secondary">螺栓规格覆盖</label>
+            <select id="diaOv" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+          </div>
+          <div>
+            <label for="stressOv" class="mb-1 block text-sm font-semibold text-theme-secondary">目标应力覆盖（ksi）</label>
+            <input id="stressOv" type="number" min="0" max="100" step="0.5" value="0" placeholder="0 = 自动"
+              class="field w-full rounded-lg px-3 py-2 text-sm" />
+            <p class="mt-1 text-xs text-theme-muted" id="bandNote">区间：–</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="result-panel rounded-xl p-5 lg:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">单栓拧紧扭矩</p>
+          <p class="mt-2 text-4xl font-extrabold tabular-nums">
+            <span id="torqueValue">–</span>
+            <span class="ml-1 text-xl font-semibold accent-text" id="torqueUnit">N·m</span>
+          </p>
+          <p class="mt-3 text-sm text-theme-secondary" id="resultLine">–</p>
+          <div class="mt-4 border-t border-theme pt-3 text-sm">
+            <div class="flex justify-between py-1"><span class="text-theme-muted">全部螺栓合计</span><span class="font-semibold accent-text" id="totalTorque">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">单栓预紧力</span><span class="font-semibold" id="outLoad">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">螺栓数量</span><span class="font-semibold" id="outCount">–</span></div>
+            <div class="flex justify-between py-1"><span class="text-theme-muted">目标应力</span><span class="font-semibold" id="outStress">–</span></div>
+          </div>
+          <p class="mt-3 rounded-lg disclaimer p-2.5 text-xs leading-relaxed hidden" id="invalidNote"></p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">三遍拧紧（星形顺序）</p>
+          <dl class="text-sm" id="passList"></dl>
+          <p class="mt-2 text-xs text-theme-muted">随后以 100% 做最终顺时针巡检，直至螺母不再转动（PCC-1）。</p>
+        </div>
+
+        <div class="card lg:col-span-1">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">接头与螺栓数据</p>
+          <dl class="text-sm" id="dimsList"></dl>
+          <details class="mt-3 text-xs text-theme-muted">
+            <summary class="cursor-pointer font-medium accent-text hover:underline">材料说明</summary>
+            <p class="mt-1" id="matNote">–</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Tightening sequence SVG -->
+      <div class="card mt-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">十字（星形）拧紧顺序——以 8 栓法兰为例</p>
+        <div class="grid grid-cols-1 items-center gap-4 lg:grid-cols-2">
+          <svg viewBox="0 0 360 200" class="w-full max-w-md" role="img" aria-label="8 栓法兰星形拧紧顺序">
+            <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-muted" />
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-muted" />
+            <circle cx="100" cy="100" r="20" fill="none" stroke="currentColor" stroke-width="1" class="text-theme-muted" opacity="0.5" />
+            <g font-size="11" font-weight="bold" text-anchor="middle">
+              <circle cx="100" cy="30" r="11" class="accent-bg" /><text x="100" y="34" fill="#07090c">1</text>
+              <circle cx="100" cy="170" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="100" y="174" class="text-theme-primary" fill="currentColor">5</text>
+              <circle cx="170" cy="100" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="170" y="104" class="text-theme-primary" fill="currentColor">3</text>
+              <circle cx="30" cy="100" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="30" y="104" class="text-theme-primary" fill="currentColor">7</text>
+              <circle cx="149.5" cy="50.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="149.5" y="54.5" class="text-theme-primary" fill="currentColor">2</text>
+              <circle cx="50.5" cy="149.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="50.5" y="153.5" class="text-theme-primary" fill="currentColor">6</text>
+              <circle cx="149.5" cy="149.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="149.5" y="153.5" class="text-theme-primary" fill="currentColor">4</text>
+              <circle cx="50.5" cy="50.5" r="11" fill="none" stroke="currentColor" stroke-width="1.5" class="text-theme-secondary" /><text x="50.5" y="54.5" class="text-theme-primary" fill="currentColor">8</text>
+            </g>
+            <path d="M100 30 L100 170 L149.5 50.5 L50.5 149.5 L170 100 L30 100 L149.5 149.5 L50.5 50.5 Z"
+              fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" class="accent-text" opacity="0.6" />
+            <text x="250" y="70" font-size="12" class="text-theme-secondary" fill="currentColor">1 → 5（正对面）</text>
+            <text x="250" y="92" font-size="12" class="text-theme-secondary" fill="currentColor">然后 2 → 6，3 → 7，4 → 8</text>
+            <text x="250" y="122" font-size="11" class="text-theme-muted" fill="currentColor">每遍：全部螺栓 30%，</text>
+            <text x="250" y="138" font-size="11" class="text-theme-muted" fill="currentColor">然后 60%，最后 100%。</text>
+          </svg>
+          <p class="text-sm leading-relaxed text-theme-secondary">
+            始终先拧紧正对面的螺栓，使法兰面在垫片就位过程中保持平行。
+            螺栓更多的法兰请先编号，并遵循同样的“先对侧”原则（PCC-1 给出了不同栓数的编号顺序表）。
+            第一遍 30% 完成后务必重新检查对中。
+          </p>
+        </div>
+      </div>
+
+      <!-- Copy & Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span id="copyBtnLabel">复制结果</span>
+        </button>
+        <button id="shareBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          <span id="shareBtnLabel">分享链接</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="计算方法说明">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">计算方法 <span class="accent-text">（输入可追溯，而非固定常数）</span></h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">短公式扭矩方程</p>
+          <div class="mono-block mt-3 rounded-lg p-4 font-mono text-sm leading-relaxed">
+            T = K · D · F<br />
+            F = S_目标 · A_t<br />
+            A_t = 0.7854 · (d − 0.9743 / n)²<br />
+            <span class="text-theme-muted">// T 扭矩 · K 螺母系数 · D 公称直径 ·</span><br />
+            <span class="text-theme-muted">// F 预紧力 · S 目标应力 · A_t 应力面积</span>
+          </div>
+          <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-theme-secondary">
+            <li><strong>您控制的输入：</strong>螺栓材料（屈服强度）、润滑状态（K）、垫片类型（区间内目标应力）、工作温度（折减）。</li>
+            <li><strong>来自标准的输入：</strong>螺栓数量与孔径取自 ASME B16.5；A_t 按 ASME B1.1。</li>
+            <li><strong>单位纪律：</strong>内部统一使用 SI（N、m、MPa）；ft·lb 仅在显示层换算。</li>
+          </ul>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">目标应力——PCC-1 Appendix O 框架（近似性质披露）</p>
+          <p class="mt-2">
+            ASME PCC-1 Appendix O 将装配螺栓应力定义为一个区间：既要足以压紧垫片并维持密封，
+            又不能压溃垫片、使螺栓屈服或使法兰产生永久变形。该框架的公开采用版本（如 API 660）
+            给出的允许区间为<strong>螺栓材料屈服强度的 40–70%</strong>；广泛引用的 A193 B7
+            Appendix O 默认上限（73.5 ksi = 70% × 105 ksi）与此一致。本计算器默认取<strong>屈服的 50%</strong>，
+            并通过垫片选择器在区间内移动。
+          </p>
+          <p class="mt-2">
+            <strong>目前无法找到 PCC-1（2013）目标应力表（Table O-3）的权威公开转载</strong>，
+            因此上述默认值属于工程近似而非规范条文。关键接头请执行完整 Appendix O 计算，
+            或以垫片制造商推荐压紧应力作为覆盖值输入。
+          </p>
+          <p class="mt-2">
+            <strong>与通用“免费”工具的差异：</strong>大多数工具对每个法兰尺寸只公布一个扭矩，
+            隐藏了全部假设——通常不论润滑一律取 K = 0.20，不论材料一律取固定 30–40 ksi 应力。
+            任一项假设就能使结果偏移 ±30%，两项叠加偏差更大。本工具中每个输入可见、可调，且对应具名标准。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="常见问题">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">常见问题</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Internal links -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
+      <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/flange-bolt-chart/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰螺栓规格表</a>
+        <a href="/zh/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/pipe-schedule-chart/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道 Schedule 表</a>
+        <a href="/asme-b16-5-flange-dimensions/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ ASME B16.5 法兰尺寸</a>
+        <a href="/zh/pipe-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 管道重量计算器</a>
+        <a href="/zh/cangzhou-flange-manufacturers/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 沧州法兰产业带</a>
+        <a href="/blog/flange-bolt-torque-chart-pcc-1/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 指南：PCC-1 扭矩表解读</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 获取报价</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>免责声明：</strong>扭矩值基于短公式法（T = K·D·F）计算，目标应力推导自 ASME PCC-1
+      Appendix O 框架的公开综述，属于工程近似值。使用前必须依据垫片制造商建议、项目规范与工程判断进行复核。
+      实际螺栓载荷受摩擦条件、工具精度与装配工艺影响。pvfcalculator.com 不对因使用上述数值导致的
+      接头失效、泄漏或任何损失承担责任。
+    </p>
+  </div>
+</Base>
+
+<script>
+  import { CLASS_DATA, NPS_LIST } from '../../data/flange-dimensions';
+  import { BOLT_MATERIALS, BOLT_SPECS, LUBRICATIONS, targetStressFor } from '../../data/bolt-dimensions';
+  import { computeBoltTorque, flangeBolts } from '../../lib/bolt-calculations';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const state = {
+    cls: 300, nps: 2,
+    material: 'b7', lube: 'oil',
+    gasket: 0.5, temp: 20,
+    unit: (localStorage.getItem('pvf_torque_unit') === 'ftlb' ? 'ftlb' : 'nm') as 'nm' | 'ftlb',
+  };
+
+  const fmt = (v: number, d = 1) =>
+    v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function populateNps() {
+    const sel = $('nps') as HTMLSelectElement;
+    const cd = CLASS_DATA[state.cls];
+    sel.innerHTML = '';
+    for (const n of NPS_LIST) {
+      if (!cd.validNps.includes(n.nps)) continue;
+      const opt = document.createElement('option');
+      opt.value = String(n.nps);
+      opt.textContent = n.label;
+      if (n.nps === state.nps) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    if (!cd.validNps.includes(state.nps)) {
+      state.nps = cd.validNps[Math.min(5, cd.validNps.length - 1)];
+      sel.value = String(state.nps);
+    }
+  }
+
+  function populateMaterials() {
+    const sel = $('material') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const m of BOLT_MATERIALS) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} — Sy ${m.yieldKsi} ksi`;
+      if (m.id === state.material) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateLubes() {
+    const sel = $('lube') as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const l of LUBRICATIONS) {
+      const opt = document.createElement('option');
+      opt.value = l.id;
+      opt.textContent = `${l.name} — K = ${l.K}`;
+      if (l.id === state.lube) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+
+  function populateDiaOverride() {
+    const sel = $('diaOv') as HTMLSelectElement;
+    sel.innerHTML = '<option value="0">自动（按 B16.5）</option>';
+    for (const s of BOLT_SPECS) {
+      const opt = document.createElement('option');
+      opt.value = String(s.dIn);
+      opt.textContent = s.label;
+      sel.appendChild(opt);
+    }
+  }
+
+  function setUnitButtons() {
+    const on = 'bg-ink-900 text-theme-primary';
+    const off = 'bg-theme-card text-theme-secondary hover:bg-theme-tertiary';
+    $('unitNm').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'nm' ? on : off);
+    $('unitFt').className = 'unit-btn flex-1 px-3 py-2 text-sm font-semibold transition ' + (state.unit === 'ftlb' ? on : off);
+  }
+
+  function currentInput() {
+    const stressOv = Number(($('stressOv') as HTMLInputElement).value) || 0;
+    const countOv = Number(($('countOv') as HTMLInputElement).value) || 0;
+    const diaOv = Number(($('diaOv') as HTMLSelectElement).value) || 0;
+    return {
+      cls: state.cls, nps: state.nps,
+      materialId: state.material, lubeId: state.lube,
+      tempC: state.temp,
+      stressPosition: state.gasket,
+      stressOverrideKsi: stressOv > 0 ? stressOv : undefined,
+      boltCountOverride: countOv > 0 ? countOv : undefined,
+      boltDiaOverrideIn: diaOv > 0 ? diaOv : undefined,
+    };
+  }
+
+  function render() {
+    const info = flangeBolts(state.cls, state.nps);
+    $('autoBolts').textContent = info.valid
+      ? `${info.count} × Ø${info.holeMm} mm → ${info.spec ? info.spec.label : '?'}`
+      : '—';
+
+    const ts = targetStressFor(state.material);
+    $('bandNote').textContent = `区间：${ts.minKsi}–${ts.maxKsi} ksi（${ts.basis}）`;
+
+    const r = computeBoltTorque(currentInput());
+    const invalidNote = $('invalidNote');
+    if (!r.valid) {
+      $('torqueValue').textContent = '–';
+      $('resultLine').textContent = '无结果';
+      $('totalTorque').textContent = '–';
+      $('outLoad').textContent = '–';
+      $('outCount').textContent = '–';
+      $('outStress').textContent = '–';
+      $('passList').innerHTML = '';
+      $('dimsList').innerHTML = '';
+      $('matNote').textContent = '–';
+      invalidNote.classList.remove('hidden');
+      invalidNote.textContent = r.reason ?? '输入无效。';
+      return;
+    }
+    invalidNote.classList.add('hidden');
+
+    const t = state.unit === 'nm' ? r.torqueNm : r.torqueFtlb;
+    const tot = state.unit === 'nm' ? r.totalNm : r.totalFtlb;
+    $('torqueValue').textContent = fmt(t, t >= 1000 ? 0 : 1);
+    $('torqueUnit').textContent = state.unit === 'nm' ? 'N·m' : 'ft·lb';
+    $('resultLine').textContent = `${r.npsLabel} Class ${state.cls} · ${r.count} × ${r.boltLabel} · ${r.materialSpec} · ${r.lubeName}`;
+    $('totalTorque').textContent = `${fmt(tot, tot >= 1000 ? 0 : 1)} ${state.unit === 'nm' ? 'N·m' : 'ft·lb'}`;
+    $('outLoad').textContent = `${fmt(r.loadKn, 1)} kN`;
+    $('outCount').textContent = String(r.count);
+    $('outStress').textContent = `${fmt(r.stressKsi, 1)} ksi（${fmt(r.stressMpa, 0)} MPa）`;
+
+    $('passList').innerHTML = r.passes
+      .map((p) => {
+        const v = state.unit === 'nm' ? p.nm : p.ftlb;
+        return `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">第 ${Math.round(p.pct * 100)}% 遍</dt><dd class="font-semibold text-theme-secondary">${fmt(v, v >= 1000 ? 0 : 1)} ${state.unit === 'nm' ? 'N·m' : 'ft·lb'}</dd></div>`;
+      })
+      .join('');
+
+    const rows: [string, string][] = [
+      ['螺栓节圆（BCD）', `${fmt(r.bcdMm, 1)} mm`],
+      ['螺栓规格', r.boltLabel],
+      ['拉伸应力面积 A_t', `${r.areaIn2.toFixed(3)} in²`],
+      ['螺母对边宽度', `${r.nutAfIn}"（${fmt(r.nutAfIn * 25.4, 0)} mm）`],
+      ['螺母系数 K', String(r.K)],
+      ['常温目标应力', `${fmt(r.stressAmbientKsi, 1)} ksi`],
+      ['温度折减系数', `× ${r.tempFactor.toFixed(3)} @ ${r.tempC} °C`],
+      ['接头总预紧力', `${fmt(r.totalLoadKn, 1)} kN`],
+    ];
+    $('dimsList').innerHTML = rows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+    $('matNote').textContent = r.materialNote;
+  }
+
+  // Events
+  $('cls').addEventListener('change', (e) => { state.cls = Number((e.target as HTMLSelectElement).value); populateNps(); render(); });
+  $('nps').addEventListener('change', (e) => { state.nps = Number((e.target as HTMLSelectElement).value); render(); });
+  $('material').addEventListener('change', (e) => { state.material = (e.target as HTMLSelectElement).value; render(); });
+  $('lube').addEventListener('change', (e) => { state.lube = (e.target as HTMLSelectElement).value; render(); });
+  $('gasket').addEventListener('change', (e) => { state.gasket = Number((e.target as HTMLSelectElement).value); render(); });
+  $('temp').addEventListener('input', (e) => {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (!Number.isNaN(v)) { state.temp = v; render(); }
+  });
+  ['countOv', 'stressOv'].forEach((id) =>
+    $(id).addEventListener('input', () => render())
+  );
+  $('diaOv').addEventListener('change', () => render());
+  $('unitNm').addEventListener('click', () => { state.unit = 'nm'; localStorage.setItem('pvf_torque_unit', 'nm'); setUnitButtons(); render(); });
+  $('unitFt').addEventListener('click', () => { state.unit = 'ftlb'; localStorage.setItem('pvf_torque_unit', 'ftlb'); setUnitButtons(); render(); });
+
+  // Init
+  populateMaterials();
+  populateLubes();
+  populateDiaOverride();
+  populateNps();
+  setUnitButtons();
+  render();
+
+  // Copy Result
+  $('copyBtn').addEventListener('click', () => {
+    const t = ($('torqueValue') as HTMLElement).textContent ?? '–';
+    const unit = ($('torqueUnit') as HTMLElement).textContent ?? '';
+    const line = ($('resultLine') as HTMLElement).textContent ?? '';
+    const total = ($('totalTorque') as HTMLElement).textContent ?? '–';
+    const stress = ($('outStress') as HTMLElement).textContent ?? '–';
+    const text = `PVF Calculator — 法兰螺栓扭矩\n${line}\n单栓：${t} ${unit} · 合计：${total} · 目标应力：${stress}\nhttps://pvfcalculator.com/zh/flange-bolt-torque-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ 已复制！';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
+    });
+  });
+
+  // Share Link
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      cls: String(state.cls), nps: String(state.nps),
+      material: state.material, lube: state.lube,
+      gasket: String(state.gasket), temp: String(state.temp), unit: state.unit,
+      count: ($('countOv') as HTMLInputElement).value || '0',
+      dia: ($('diaOv') as HTMLSelectElement).value || '0',
+      stress: ($('stressOv') as HTMLInputElement).value || '0',
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ 链接已复制！';
+      setTimeout(() => { $('shareBtnLabel').textContent = '分享链接'; }, 2000);
+    });
+  });
+
+  // Restore from URL params on load
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+    const c = Number(sp.get('cls'));
+    if (c && [150, 300, 600, 900, 1500, 2500].includes(c)) { state.cls = c; ($('cls') as HTMLSelectElement).value = String(c); populateNps(); changed = true; }
+    const n = Number(sp.get('nps'));
+    if (n > 0) { state.nps = n; ($('nps') as HTMLSelectElement).value = String(n); changed = true; }
+    const mat = sp.get('material');
+    if (mat && BOLT_MATERIALS.some((m) => m.id === mat)) { state.material = mat; ($('material') as HTMLSelectElement).value = mat; changed = true; }
+    const lube = sp.get('lube');
+    if (lube && LUBRICATIONS.some((l) => l.id === lube)) { state.lube = lube; ($('lube') as HTMLSelectElement).value = lube; changed = true; }
+    const g = Number(sp.get('gasket'));
+    if (g === 0 || g === 0.5 || g === 1) { state.gasket = g; ($('gasket') as HTMLSelectElement).value = String(g); changed = true; }
+    const tp = Number(sp.get('temp'));
+    if (!Number.isNaN(tp) && sp.get('temp') !== null) { state.temp = tp; ($('temp') as HTMLInputElement).value = String(tp); changed = true; }
+    const u = sp.get('unit');
+    if (u === 'nm' || u === 'ftlb') { state.unit = u; setUnitButtons(); changed = true; }
+    if (sp.get('count')) { ($('countOv') as HTMLInputElement).value = sp.get('count')!; changed = true; }
+    if (sp.get('dia')) { ($('diaOv') as HTMLSelectElement).value = sp.get('dia')!; changed = true; }
+    if (sp.get('stress')) { ($('stressOv') as HTMLInputElement).value = sp.get('stress')!; changed = true; }
+    if (changed) render();
+  }
+</script>
