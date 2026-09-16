@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import factoriesData from "../../data/factories.json";
 
 const title = "沧州/孟村法兰管件产业带 — 中国PVF制造中心 | pvfcalculator.com";
 const description = "沧州市孟村回族自治县是全球最大的法兰、管件出口集散地。了解产业优势、产品覆盖、主要标准及出口流程，帮助您对接可靠的中国PVF工厂。";
@@ -135,6 +136,45 @@ const breadcrumbItems = [
         <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">大额订单安排第三方检验：</strong>SGS、Bureau Veritas、TÜV等机构可在出厂前进行尺寸、硬度、MT/PT检测，费用通常由买方承担（约USD 300–800/批）。</span></li>
         <li class="flex gap-2"><span class="accent-text font-bold">·</span><span><strong class="text-theme-primary">确认工厂资质：</strong>索要营业执照、生产许可证（TS证书用于压力管道）及近期出口记录，可通过视频验厂或第三方工厂审核降低风险。</span></li>
       </ul>
+    </section>
+
+    <!-- 推荐孟村工厂 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-theme-primary mb-3">推荐孟村出口工厂</h2>
+      <p class="text-theme-secondary mb-6">
+        以下工厂按出口综合实力排名筛选，涵盖法兰与管件主要品类。
+        <a href="/zh/request-a-quote/" class="underline accent-text">向全部工厂发起询盘 →</a>
+      </p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {factoriesData.map((f) => (
+          <div class="rounded-xl border border-theme bg-theme-secondary p-5">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <h3 class="font-bold text-theme-primary text-sm leading-snug">{f.nameZh}</h3>
+              {f.tier === "verified" && (
+                <span class="shrink-0 text-xs px-2 py-0.5 rounded-full accent-bg/10 accent-text border border-amber-500/30">已验证</span>
+              )}
+            </div>
+            <p class="text-xs text-theme-muted mb-3">{f.name}</p>
+            <dl class="text-xs space-y-1 text-theme-secondary mb-4">
+              {f.founded && <div><span class="font-medium text-theme-primary">成立：</span>{f.founded}年</div>}
+              {f.certifications && f.certifications.length > 0 && (
+                <div><span class="font-medium text-theme-primary">认证：</span>{f.certifications.join("、")}</div>
+              )}
+              {f.exportMarkets && f.exportMarkets.length > 0 && (
+                <div><span class="font-medium text-theme-primary">销售区域：</span>{f.exportMarkets.join(" · ")}</div>
+              )}
+            </dl>
+            <div class="flex flex-wrap gap-3 text-xs">
+              {f.website && (
+                <a href={f.website} target="_blank" rel="noopener noreferrer" class="underline text-theme-secondary hover:text-theme-primary transition-colors">官网 →</a>
+              )}
+              {f.tier === "verified" && f.contact?.email && (
+                <a href={`mailto:${f.contact.email}`} class="underline accent-text">{f.contact.email}</a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
 
     <!-- CTA -->

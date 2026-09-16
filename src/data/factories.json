@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "jiuyuan-pipeline",
+    "name": "Hebei Jiuyuan Pipeline Mfg Co., Ltd.",
+    "nameZh": "河北玖源管道制造有限公司",
+    "tier": "verified",
+    "categories": ["flanges", "pipe-fittings"],
+    "city": "Mengcun",
+    "province": "Hebei",
+    "website": "https://www.hbjypipeline.com",
+    "description": "ASME B16.5 flanges and B16.9 fittings manufacturer since 2010. Covers carbon steel, stainless, and alloy grades for ASME, DIN, and JIS standards. ISO 9001 certified.",
+    "descriptionZh": "成立于2010年，专业生产ASME B16.5法兰和B16.9管件，覆盖碳钢、不锈钢及合金钢，支持ASME、DIN、JIS标准，ISO 9001认证，产品出口全球。",
+    "founded": 2010,
+    "certifications": ["ISO 9001"],
+    "exportMarkets": ["Global"],
+    "contact": {
+      "email": "sales@jypipeline.com",
+      "phone": "+86 317 220 9363"
+    }
+  },
+  {
+    "slug": "beifang-yizao-pipeline",
+    "name": "Hebei Beifang Yizao Pipeline Co., Ltd.",
+    "nameZh": "河北北方一造管道有限公司",
+    "tier": "verified",
+    "categories": ["pipe-fittings", "flanges"],
+    "city": "Mengcun",
+    "province": "Hebei",
+    "website": "https://www.czco.cn",
+    "description": "Established 2017. Specialises in stainless steel and carbon steel fittings to ASME, ASTM, DIN, and JIS standards. Active exporter to Europe and Russia.",
+    "descriptionZh": "成立于2017年，专注不锈钢与碳钢管件制造，支持ASME、ASTM、DIN、JIS标准，ISO 9001认证，主要出口欧洲及俄罗斯市场。",
+    "founded": 2017,
+    "certifications": ["ISO 9001"],
+    "exportMarkets": ["Europe", "Russia", "Worldwide"],
+    "contact": {
+      "email": "Elias@czco.cn",
+      "phone": "+86 188 9498 0000"
+    }
+  },
+  {
+    "slug": "xinguangde-pipe-fitting",
+    "name": "Cangzhou Xinguangde Pipe Fitting Mfg Co., Ltd.",
+    "nameZh": "沧州鑫广德管件制造有限公司",
+    "tier": "listed",
+    "categories": ["pipe-fittings"],
+    "city": "Cangzhou",
+    "province": "Hebei",
+    "website": "https://www.xgdpipe.com",
+    "description": "Pipe fitting specialist — elbows, tees, and reducers. Exports to Europe, Middle East, Russia, and Southeast Asia.",
+    "descriptionZh": "专业弯头、三通、异径管制造商，产品销往欧洲、中东、俄罗斯及东南亚市场。"
+  },
+  {
+    "slug": "shengtian-pipe-fitting-group",
+    "name": "Hebei Shengtian Pipe Fitting Group Co., Ltd.",
+    "nameZh": "河北圣天管件集团有限公司",
+    "tier": "listed",
+    "categories": ["pipe-fittings", "flanges"],
+    "city": "Mengcun",
+    "province": "Hebei",
+    "website": "https://www.shengtiangj.cn",
+    "description": "Group-level manufacturer with 25+ years in pipe fittings and flanges. Broad ASME and DIN product range for industrial and oil & gas customers.",
+    "descriptionZh": "集团型管件法兰制造商，成立于1998年，拥有25年以上出口经验，覆盖ASME、DIN全系列产品，服务工业及油气客户。",
+    "founded": 1998
+  },
+  {
+    "slug": "huayang-steel-pipe",
+    "name": "Hebei Huayang Steel Pipe Co., Ltd.",
+    "nameZh": "河北华洋钢管有限公司",
+    "tier": "listed",
+    "categories": ["pipe-fittings"],
+    "city": "Mengcun",
+    "province": "Hebei",
+    "website": "https://www.hbhuayang.cn",
+    "description": "Steel pipe and fitting manufacturer since 2005. BV-certified. Serves export markets with seamless and welded pipe products.",
+    "descriptionZh": "成立于2005年，BV认证，生产无缝管及焊管，兼做管件，面向出口市场供货。",
+    "founded": 2005,
+    "certifications": ["BV"]
+  }
+]

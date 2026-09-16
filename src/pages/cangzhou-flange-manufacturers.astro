@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import FaqJsonLd from "../components/FaqJsonLd.astro";
+import factoriesData from "../data/factories.json";
 
 const title = "Cangzhou Flange Manufacturers & Pipe Fitting Suppliers | Hebei, China";
 const description =
@@ -160,6 +161,45 @@ const faqItems = [
             <h3 class="font-bold text-theme-primary mb-2">4. Correct Incoterms and Packaging</h3>
             <p class="text-sm text-theme-secondary leading-relaxed">FOB Tianjin or FOB Qingdao are the standard terms from Cangzhou-area factories. Ensure pipe end protection caps and anti-rust treatment are included in the packing spec — carbon steel flanges can corrode significantly during 30-day sea transit without proper protection.</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Featured Mengcun Suppliers -->
+      <div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3">Featured Mengcun Suppliers</h2>
+        <p class="text-theme-secondary mb-6">
+          Selected exporters from the Mengcun–Cangzhou industrial belt, ranked by export track record.
+          <a href="/request-a-quote/" class="underline accent-text">Request quotes from all →</a>
+        </p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {factoriesData.map((f) => (
+            <div class="glass rounded-xl p-5">
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-bold text-theme-primary text-sm leading-snug">{f.name}</h3>
+                {f.tier === "verified" && (
+                  <span class="shrink-0 text-xs px-2 py-0.5 rounded-full accent-bg/10 accent-text border border-amber-500/30">Verified</span>
+                )}
+              </div>
+              <p class="text-xs text-theme-muted mb-3">{f.nameZh}</p>
+              <dl class="text-xs space-y-1 text-theme-secondary mb-4">
+                {f.founded && <div><span class="font-medium text-theme-primary">Est.</span> {f.founded}</div>}
+                {f.certifications && f.certifications.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">Cert.</span> {f.certifications.join(", ")}</div>
+                )}
+                {f.exportMarkets && f.exportMarkets.length > 0 && (
+                  <div><span class="font-medium text-theme-primary">Markets:</span> {f.exportMarkets.join(" · ")}</div>
+                )}
+              </dl>
+              <div class="flex flex-wrap gap-3 text-xs">
+                {f.website && (
+                  <a href={f.website} target="_blank" rel="noopener noreferrer" class="underline text-theme-secondary hover:text-theme-primary transition-colors">Website →</a>
+                )}
+                {f.tier === "verified" && f.contact?.email && (
+                  <a href={`mailto:${f.contact.email}`} class="underline accent-text">{f.contact.email}</a>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
