@@ -114,8 +114,10 @@ const siteJsonLd = [
     {robots && <meta name="robots" content={robots} />}
     {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" hreflang="x-default" href={canonical} />
-    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={isZh ? `${siteOrigin}${enPath}` : canonical} />
+    <link rel="alternate" hreflang="en" href={isZh ? `${siteOrigin}${enPath}` : canonical} />
+    {!isZh && hasZhPage && <link rel="alternate" hreflang="zh" href={`${siteOrigin}${zhPath}`} />}
+    {isZh && <link rel="alternate" hreflang="zh" href={canonical} />}
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="PVF Calculator" />

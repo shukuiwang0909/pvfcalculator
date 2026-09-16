@@ -169,9 +169,13 @@ const breadcrumbItems = [
             <!-- Total Weight -->
             <div class="rounded-xl bg-theme p-4 border border-theme sm:col-span-2">
               <div class="text-sm text-theme-secondary mb-1">总重量</div>
+              <div class="flex gap-2 mb-3">
+                <button id="unitKg" type="button" class="px-3 py-1 rounded-lg text-sm font-semibold border border-theme accent-bg transition" style="color:#07090c">kg</button>
+                <button id="unitLb" type="button" class="px-3 py-1 rounded-lg text-sm font-semibold border border-theme hover:bg-theme-secondary transition text-theme-primary">lb</button>
+              </div>
               <div class="flex items-baseline gap-4">
                 <div class="text-3xl font-bold accent-text" id="resultTotalKg">-</div>
-                <div class="text-xl text-theme-secondary" id="resultTotalLb">-</div>
+                <div class="text-3xl font-bold accent-text hidden" id="resultTotalLb">-</div>
               </div>
             </div>
 
@@ -410,11 +414,12 @@ const breadcrumbItems = [
       document.getElementById('resultTotalKg').textContent =
         `${totalWeight.toFixed(1)} kg`;
       document.getElementById('resultTotalLb').textContent =
-        `(${totalWeightLb.toFixed(1)} lb)`;
+        `${totalWeightLb.toFixed(1)} lb`;
       document.getElementById('resultVolume').textContent =
         `${volumeM3.toFixed(4)} m³`;
 
       resultsDiv.classList.remove('hidden');
+      applyUnit(currentUnit);
       resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
       // Update share link URL when result is shown
@@ -430,16 +435,49 @@ const breadcrumbItems = [
     materialSelect.addEventListener('change', handleMaterialChange);
     form.addEventListener('submit', calculate);
 
+    // kg/lb unit toggle with localStorage persistence
+    const unitKgBtn = document.getElementById('unitKg');
+    const unitLbBtn = document.getElementById('unitLb');
+    let currentUnit = localStorage.getItem('pvf_unit_pref') || 'kg';
+
+    function applyUnit(unit) {
+      currentUnit = unit;
+      localStorage.setItem('pvf_unit_pref', unit);
+      const isLb = unit === 'lb';
+      document.getElementById('resultTotalKg').classList.toggle('hidden', isLb);
+      document.getElementById('resultTotalLb').classList.toggle('hidden', !isLb);
+      if (isLb) {
+        unitLbBtn.classList.add('accent-bg');
+        unitLbBtn.style.color = '#07090c';
+        unitLbBtn.classList.remove('text-theme-primary', 'hover:bg-theme-secondary');
+        unitKgBtn.classList.remove('accent-bg');
+        unitKgBtn.removeAttribute('style');
+        unitKgBtn.classList.add('text-theme-primary', 'hover:bg-theme-secondary');
+      } else {
+        unitKgBtn.classList.add('accent-bg');
+        unitKgBtn.style.color = '#07090c';
+        unitKgBtn.classList.remove('text-theme-primary', 'hover:bg-theme-secondary');
+        unitLbBtn.classList.remove('accent-bg');
+        unitLbBtn.removeAttribute('style');
+        unitLbBtn.classList.add('text-theme-primary', 'hover:bg-theme-secondary');
+      }
+    }
+
+    applyUnit(currentUnit);
+    unitKgBtn.addEventListener('click', () => applyUnit('kg'));
+    unitLbBtn.addEventListener('click', () => applyUnit('lb'));
+
     // Copy Result
     document.getElementById('copyBtn').addEventListener('click', () => {
       const specs = document.getElementById('resultSpecs').textContent ?? '';
       const wpm = document.getElementById('resultWeightPerM').textContent ?? '';
-      const totalKg = document.getElementById('resultTotalKg').textContent ?? '';
-      const totalLb = document.getElementById('resultTotalLb').textContent ?? '';
-      const text = `PVF Calculator — Pipe Weight\n${specs}\nWeight per meter: ${wpm} kg/m\nTotal: ${totalKg} ${totalLb}\nhttps://pvfcalculator.com/pipe-weight-calculator/`;
+      const weightDisplay = currentUnit === 'lb'
+        ? (document.getElementById('resultTotalLb').textContent ?? '')
+        : (document.getElementById('resultTotalKg').textContent ?? '');
+      const text = `PVF Calculator — Pipe Weight\n${specs}\nWeight per meter: ${wpm} kg/m\nTotal: ${weightDisplay}\nhttps://pvfcalculator.com/zh/pipe-weight-calculator/`;
       navigator.clipboard.writeText(text).then(() => {
         document.getElementById('copyBtnLabel').textContent = '✓ Copied!';
-        setTimeout(() => { document.getElementById('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+        setTimeout(() => { document.getElementById('copyBtnLabel').textContent = '复制结果'; }, 2000);
       });
     });
 
