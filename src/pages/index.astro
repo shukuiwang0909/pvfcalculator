@@ -90,7 +90,7 @@ const features = [
 ];
 
 const stats = [
-  { value: "4", label: "Calculators" },
+  { value: "5", label: "Calculators" },
   { value: "50+", label: "Flange Types" },
   { value: "13", label: "Pipe Schedules" },
   { value: "100%", label: "Free" },
@@ -141,6 +141,37 @@ const jsonLd = [
       { "@type": "WebPage", "name": "Reducer Weight Calculator", "url": "https://pvfcalculator.com/reducer-weight-calculator/" },
       { "@type": "WebPage", "name": "Pipe Schedule Chart", "url": "https://pvfcalculator.com/pipe-schedule-chart/" },
       { "@type": "WebPage", "name": "ASME B16.9 Fitting Dimensions", "url": "https://pvfcalculator.com/asme-b16-9-fitting-dimensions/" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are these calculations accurate enough for procurement?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. All calculators use official ASME B16.5 / B16.9 dimensional data and material densities. Results match manufacturer weight tables within ±2%. For final procurement, always confirm with factory MTC." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I get a factory quote?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Use the Request a Quote form or email quotes@pvfcalculator.com with your specs (standard, material, size, quantity). We respond within 24 hours with factory-direct pricing." }
+      },
+      {
+        "@type": "Question",
+        "name": "What standards do your calculators support?",
+        "acceptedAnswer": { "@type": "Answer", "text": "ASME B16.5 (flanges), ASME B16.9 (butt-weld fittings), ASME B36.10M (pipe weights), and MSS SP-75 (high-strength fittings). We also support EN 1092-1 and JIS standards on request." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you manufacture non-standard sizes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Our partner factories in Cangzhou specialize in custom and OEM fabrication — non-standard wall thicknesses, special alloys, and prototype quantities. Send drawings for evaluation." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you ship worldwide?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. FOB Tianjin / CIF / DDP terms available. Sea freight to major ports, air freight for urgent orders. Full export documentation including MTC, packing list, and certificate of origin." }
+      },
     ],
   },
 ];
@@ -311,21 +342,21 @@ const breadcrumbItems = [{ name: "Home", url: "/" }];
         <a href="/blog/" class="text-sm font-semibold accent-text hover:underline">View all →</a>
       </div>
       <div class="grid gap-5 md:grid-cols-2">
-        <a href="/blog/pipe-schedule-chart-explained/" class="card card-accent group block">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="rounded-full accent-bg px-3 py-1 text-xs font-bold" style="color: #07090c;">Pipe Basics</span>
-            <span class="text-xs text-theme-muted">8 min read</span>
-          </div>
-          <h3 class="text-lg font-bold text-theme-primary group-hover:underline">Pipe Schedule Chart Explained</h3>
-          <p class="mt-2 text-sm leading-relaxed text-theme-secondary">What pipe schedule numbers mean, how to read the chart, and when to use SCH 10/40/80/160/XXS.</p>
-        </a>
-        <a href="/blog/how-to-choose-flange-class/" class="card card-accent group block">
+        <a href="/blog/weld-neck-vs-slip-on-flange/" class="card card-accent group block">
           <div class="flex items-center gap-3 mb-3">
             <span class="rounded-full accent-bg px-3 py-1 text-xs font-bold" style="color: #07090c;">Flange Selection</span>
-            <span class="text-xs text-theme-muted">9 min read</span>
+            <span class="text-xs text-theme-muted">10 min read</span>
           </div>
-          <h3 class="text-lg font-bold text-theme-primary group-hover:underline">How to Choose the Right Flange Class</h3>
-          <p class="mt-2 text-sm leading-relaxed text-theme-secondary">Compare Class 150–2500 pressure ratings with temperature tables and selection guidelines.</p>
+          <h3 class="text-lg font-bold text-theme-primary group-hover:underline">Weld Neck vs Slip-On vs Socket Weld vs Threaded</h3>
+          <p class="mt-2 text-sm leading-relaxed text-theme-secondary">Compare flange types for high pressure, high temperature, corrosive media, and cost-sensitive applications.</p>
+        </a>
+        <a href="/blog/pipe-fitting-weight-chart/" class="card card-accent group block">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="rounded-full accent-bg px-3 py-1 text-xs font-bold" style="color: #07090c;">Reference</span>
+            <span class="text-xs text-theme-muted">6 min read</span>
+          </div>
+          <h3 class="text-lg font-bold text-theme-primary group-hover:underline">Pipe Fitting Weight Chart</h3>
+          <p class="mt-2 text-sm leading-relaxed text-theme-secondary">Complete weight chart for elbows, tees, reducers, and caps — NPS ½" to 24", SCH 40 and SCH 80.</p>
         </a>
       </div>
     </div>

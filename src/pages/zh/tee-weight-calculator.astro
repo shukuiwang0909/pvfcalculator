@@ -346,7 +346,7 @@ const breadcrumbItems = [
     if (state.type === 'EQ') {
       const opt = document.createElement('option');
       opt.value = String(state.runNps);
-      opt.textContent = 'Same as run (equal tee)';
+      opt.textContent = '与主管相同（等径三通）';
       sel.appendChild(opt);
       sel.disabled = true;
       $('branchNote').classList.add('hidden');
@@ -357,9 +357,9 @@ const breadcrumbItems = [
     if (smaller.length === 0) {
       const opt = document.createElement('option');
       opt.value = '';
-      opt.textContent = '— no smaller size —';
+      opt.textContent = '— 无更小规格 —';
       sel.appendChild(opt);
-      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').textContent = '支管尺寸须小于主管尺寸';
       $('branchNote').classList.remove('hidden');
       return;
     }
@@ -407,14 +407,14 @@ const breadcrumbItems = [
     if (!r.valid) {
       $('weightValue').textContent = '–';
       $('weightUnit').textContent = state.unit;
-      $('resultLine').textContent = 'Select a branch size smaller than the run size.';
+      $('resultLine').textContent = '请选择小于主管的支管尺寸';
       $('outQty').textContent = String(state.qty);
       $('totalWeight').textContent = '–';
       $('outRunOd').textContent = '–';
       $('outBranchOd').textContent = '–';
       $('dimsList').innerHTML = '';
       $('basisList').innerHTML = '';
-      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').textContent = '支管尺寸须小于主管尺寸';
       $('branchNote').classList.remove('hidden');
       return;
     }
@@ -422,7 +422,7 @@ const breadcrumbItems = [
     const w = state.unit === 'kg' ? r.weightKg : r.weightLb;
     $('weightValue').textContent = fmt(w, w >= 100 ? 1 : 2);
     $('weightUnit').textContent = state.unit;
-    const typeName = r.type === 'EQ' ? 'Equal Tee' : `Reducing Tee ${r.runLabel} × ${r.branchLabel}`;
+    const typeName = r.type === 'EQ' ? '等径三通' : `异径三通 ${r.runLabel} × ${r.branchLabel}`;
     $('resultLine').textContent =
       `${typeName} ${r.runLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
     const total = w * state.qty;
@@ -432,31 +432,31 @@ const breadcrumbItems = [
     $('outBranchOd').textContent = `${fmt(r.branchPipeOdMm, 1)} mm`;
 
     const rows: [string, string][] = [
-      ['Tee type', r.type === 'EQ' ? 'Equal (ASME B16.9)' : 'Reducing (ASME B16.9)'],
-      ['Run size', `${r.runLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
-      ['Branch size', r.type === 'EQ' ? `${r.runLabel} (same as run)` : `${r.branchLabel} · OD ${fmt(r.branchPipeOdMm, 1)} mm`],
-      ['Schedule', scheduleName(r.schedule)],
-      ['Center-to-end C (run)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
-      ['Center-to-end C1 (branch)', r.type === 'EQ' ? `${fmt(r.centerToEndIn, 3)} in (same as C)` : `${fmt(r.branchCenterToEndIn, 3)} in (${fmt(r.branchCenterToEndMm, 1)} mm)`],
+      ['三通类型', r.type === 'EQ' ? '等径（ASME B16.9）' : '异径（ASME B16.9）'],
+      ['主管尺寸', `${r.runLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
+      ['支管尺寸', r.type === 'EQ' ? `${r.runLabel}（与主管相同）` : `${r.branchLabel} · OD ${fmt(r.branchPipeOdMm, 1)} mm`],
+      ['壁厚等级', scheduleName(r.schedule)],
+      ['主管中心到端面 C', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
+      ['支管中心到端面 C1', r.type === 'EQ' ? `${fmt(r.centerToEndIn, 3)} in（同 C）` : `${fmt(r.branchCenterToEndIn, 3)} in (${fmt(r.branchCenterToEndMm, 1)} mm)`],
     ];
     $('dimsList').innerHTML = rows
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('');
 
     const basis: [string, string][] = [
-      ['SCH 40 equal-tee reference (CS)', `${fmt(r.referenceKg, 2)} kg`],
-      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
-      ['Tee-type factor', `× ${fmt(r.typeFactor, 3)} (${r.type === 'EQ' ? 'equal' : 'reducing'})`],
-      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+      ['SCH 40 等径三通参考（碳钢）', `${fmt(r.referenceKg, 2)} kg`],
+      ['壁厚系数', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
+      ['类型系数', `× ${fmt(r.typeFactor, 3)} (${r.type === 'EQ' ? '等径' : '异径'})`],
+      ['密度系数', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
     ];
     $('basisList').innerHTML = basis
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('') +
-      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">计算结果</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
   }
 
   function renderTable() {
-    const typeName = state.type === 'EQ' ? 'Equal Tee' : `Reducing Tee (run × ${state.branchNps}" branch)`;
+    const typeName = state.type === 'EQ' ? '等径三通' : `异径三通（主管 × ${state.branchNps}" 支管）`;
     $('tableTitle').textContent = typeName;
     $('tableSchedule').textContent = scheduleName(state.schedule);
     $('tableCaption').textContent = state.type === 'EQ' ? 'equal tee' : `reducing tee ${state.runNps}" × ${state.branchNps}"`;
@@ -520,7 +520,7 @@ const breadcrumbItems = [
   $('branchNps').addEventListener('change', (e) => {
     const v = Number((e.target as HTMLSelectElement).value);
     if (state.type === 'RED' && v >= state.runNps) {
-      $('branchNote').textContent = 'Branch size must be smaller than the run size.';
+      $('branchNote').textContent = '支管尺寸须小于主管尺寸';
       $('branchNote').classList.remove('hidden');
       return;
     }
@@ -564,10 +564,10 @@ const breadcrumbItems = [
     const line = ($('resultLine') as HTMLElement).textContent ?? '';
     const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
     const qty = ($('outQty') as HTMLElement).textContent ?? '1';
-    const text = `PVF Calculator — Tee Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/tee-weight-calculator/`;
+    const text = `PVF Calculator — Tee Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/zh/tee-weight-calculator/`;
     navigator.clipboard.writeText(text).then(() => {
-      $('copyBtnLabel').textContent = '✓ Copied!';
-      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+      $('copyBtnLabel').textContent = '✓ 已复制!';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
     });
   });
 

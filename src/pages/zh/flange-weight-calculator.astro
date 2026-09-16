@@ -384,24 +384,24 @@ const breadcrumbItems = [
 
     const d = r.dims;
     const rows: [string, string][] = state.type === 'BL'
-      ? [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Blind thickness t', `${fmt(d.t, 1)} mm`],
-         ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`], ['Bolt circle', `${fmt(d.bcd, 1)} mm`],
-         ['Bolts', d.bolts]]
-      : [['Outside diameter O', `${fmt(d.od, 1)} mm`], ['Bore (STD wall)', `${fmt(d.bore, 1)} mm`],
-         ['Ring thickness t', `${fmt(d.t, 1)} mm`], ['Hub diameter X', `${fmt(d.x, 1)} mm`],
-         ['Hub length Y', `${fmt(d.y, 1)} mm`], ['Raised face Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`],
-         ['Bolt circle', `${fmt(d.bcd, 1)} mm`], ['Bolts', d.bolts]];
+      ? [['外径 O', `${fmt(d.od, 1)} mm`], ['法兰盖厚度 t', `${fmt(d.t, 1)} mm`],
+         ['凸台 Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`], ['螺栓圆', `${fmt(d.bcd, 1)} mm`],
+         ['螺栓数', d.bolts]]
+      : [['外径 O', `${fmt(d.od, 1)} mm`], ['内径（标准壁）', `${fmt(d.bore, 1)} mm`],
+         ['环形厚度 t', `${fmt(d.t, 1)} mm`], ['轮毂直径 X', `${fmt(d.x, 1)} mm`],
+         ['轮毂高度 Y', `${fmt(d.y, 1)} mm`], ['凸台 Ø × h', `${fmt(d.rfDia, 1)} × ${d.rfHeight} mm`],
+         ['螺栓圆', `${fmt(d.bcd, 1)} mm`], ['螺栓数', d.bolts]];
     $('dimsList').innerHTML = rows
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${v}</dd></div>`)
       .join('');
 
     const v = r.volumes;
     const seg = state.type === 'BL'
-      ? [['Flange disc', v.ringMm3], ['Raised face', v.faceMm3]]
-      : [['Flange ring', v.ringMm3], [state.type === 'WN' ? 'Tapered hub (net)' : 'Straight hub (net)', v.hubMm3], ['Raised face', v.faceMm3]];
+      ? [['法兰盘', v.ringMm3], ['凸台', v.faceMm3]]
+      : [['法兰环', v.ringMm3], [state.type === 'WN' ? '锥形轮毂（净）' : '直轮毂（净）', v.hubMm3], ['凸台', v.faceMm3]];
     $('volList').innerHTML = seg
       .map(([k, mm3]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary">${fmt((mm3 as number) / 1000, 1)} cm³</dd></div>`)
-      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Total</dt><dd class="font-bold accent-text">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
+      .join('') + `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">合计</dt><dd class="font-bold accent-text">${fmt(v.totalMm3 / 1000, 1)} cm³</dd></div>`;
   }
 
   function renderTable() {
@@ -483,10 +483,10 @@ const breadcrumbItems = [
     const line = ($('resultLine') as HTMLElement).textContent ?? '';
     const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
     const qty = ($('outQty') as HTMLElement).textContent ?? '1';
-    const text = `PVF Calculator — Flange Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/flange-weight-calculator/`;
+    const text = `PVF Calculator — Flange Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/zh/flange-weight-calculator/`;
     navigator.clipboard.writeText(text).then(() => {
-      $('copyBtnLabel').textContent = '✓ Copied!';
-      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+      $('copyBtnLabel').textContent = '✓ 已复制!';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
     });
   });
 

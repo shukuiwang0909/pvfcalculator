@@ -418,7 +418,7 @@ const breadcrumbItems = [
     const angleName = r.angle === 90 ? '90°' : '45°';
     const radiusName = r.radius === 'LR' ? 'LR' : 'SR';
     $('resultLine').textContent =
-      `${angleName} ${radiusName} Elbow ${r.npsLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
+      `${angleName} ${radiusName} 弯头 ${r.npsLabel} ${scheduleName(r.schedule)} · ${MATERIALS.find((m) => m.id === ($('material') as HTMLSelectElement).value)?.name ?? ''}`;
     const total = w * state.qty;
     $('outQty').textContent = String(state.qty);
     $('totalWeight').textContent = `${fmt(total, total >= 100 ? 1 : 2)} ${state.unit}`;
@@ -426,21 +426,21 @@ const breadcrumbItems = [
     $('outPipeOd').textContent = `${fmt(r.pipeOdMm, 1)} mm`;
 
     const rows: [string, string][] = [
-      ['Elbow type', `${angleName} ${radiusName} (ASME B16.9)`],
-      ['Nominal size', `${r.npsLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
-      ['Schedule', scheduleName(r.schedule)],
-      ['Center-to-end (A)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
-      ['Bend radius', r.radius === 'LR' ? `1.5 × NPS = ${fmt(1.5 * r.nps, 2)} in` : `1.0 × NPS = ${fmt(r.nps, 2)} in`],
+      ['弯头类型', `${angleName} ${radiusName} (ASME B16.9)`],
+      ['公称尺寸', `${r.npsLabel} · OD ${fmt(r.pipeOdMm, 1)} mm`],
+      ['壁厚等级', scheduleName(r.schedule)],
+      ['中心到端面 (A)', `${fmt(r.centerToEndIn, 3)} in (${fmt(r.centerToEndMm, 1)} mm)`],
+      ['弯曲半径', r.radius === 'LR' ? `1.5 × NPS = ${fmt(1.5 * r.nps, 2)} in` : `1.0 × NPS = ${fmt(r.nps, 2)} in`],
     ];
     $('dimsList').innerHTML = rows
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('');
 
     const basis: [string, string][] = [
-      ['LR 90° reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
-      ['Geometry factor', `× ${fmt(r.geometryFactor, 2)}`],
-      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
-      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+      ['LR 90° 参考重量', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['几何系数', `× ${fmt(r.geometryFactor, 2)}`],
+      ['壁厚系数', `× ${fmt(r.scheduleFactor, 2)} vs SCH 40`],
+      ['密度系数', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
     ];
     $('basisList').innerHTML = basis
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
@@ -451,7 +451,7 @@ const breadcrumbItems = [
   function renderTable() {
     const angleName = state.angle === 90 ? '90°' : '45°';
     const radiusName = state.angle === 45 ? 'LR' : state.radius;
-    $('tableTitle').textContent = `${angleName} ${radiusName === 'LR' ? 'Long Radius' : 'Short Radius'}`;
+    $('tableTitle').textContent = `${angleName} ${radiusName === 'LR' ? '长半径' : '短半径'}`;
     $('tableCaption').textContent = `${angleName} ${radiusName}`;
     const tbody = $('weightTableBody');
     tbody.innerHTML = '';
@@ -547,10 +547,10 @@ const breadcrumbItems = [
     const line = ($('resultLine') as HTMLElement).textContent ?? '';
     const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
     const qty = ($('outQty') as HTMLElement).textContent ?? '1';
-    const text = `PVF Calculator — Elbow Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/elbow-weight-calculator/`;
+    const text = `PVF Calculator — Elbow Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/zh/elbow-weight-calculator/`;
     navigator.clipboard.writeText(text).then(() => {
-      $('copyBtnLabel').textContent = '✓ Copied!';
-      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+      $('copyBtnLabel').textContent = '✓ 已复制!';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
     });
   });
 

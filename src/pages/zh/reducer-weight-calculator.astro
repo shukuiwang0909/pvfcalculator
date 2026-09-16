@@ -294,10 +294,10 @@ const breadcrumbItems = [
     <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="相关工具">
       <h2 class="mb-3 text-lg font-bold">相关工程工具</h2>
       <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-        <a href="/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
-        <a href="/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 弯头重量计算器</a>
-        <a href="/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 三通重量计算器</a>
-        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 请求报价</a>
+        <a href="/zh/flange-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 法兰重量计算器</a>
+        <a href="/zh/elbow-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 弯头重量计算器</a>
+        <a href="/zh/tee-weight-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ 三通重量计算器</a>
+        <a href="/zh/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ 请求报价</a>
       </div>
     </section>
 
@@ -389,7 +389,7 @@ const breadcrumbItems = [
   }
 
   const scheduleName = (id: string) => SCHEDULES.find((s) => s.id === id)?.name ?? id;
-  const typeName = (id: ReducerType) => (id === 'ECC' ? 'Eccentric' : 'Concentric');
+  const typeName = (id: ReducerType) => (id === 'ECC' ? '偏心' : '同心');
 
   function renderResult() {
     const r = computeReducerWeight(state.type, state.large, state.small, state.schedule, state.density);
@@ -398,7 +398,7 @@ const breadcrumbItems = [
     ($('smallNps') as HTMLSelectElement).classList.toggle('accent-border', invalid);
     if (invalid) {
       $('weightValue').textContent = '–';
-      $('resultLine').textContent = 'Select a small end smaller than the large end.';
+      $('resultLine').textContent = '请选择小于大口端的小口端尺寸';
       $('totalWeight').textContent = '–';
       return;
     }
@@ -414,28 +414,28 @@ const breadcrumbItems = [
     $('outLargeOd').textContent = `${fmt(r.largeOdMm, 1)} mm`;
 
     const rows: [string, string][] = [
-      ['Reducer type', `${typeName(r.type)} (ASME B16.9)`],
-      ['Combination', `${r.largeLabel} × ${r.smallLabel}`],
-      ['Schedule', scheduleName(r.schedule)],
-      ['Large-end OD × wall', `${fmt(r.largeOdMm, 1)} mm`],
-      ['Small-end OD', `${fmt(r.smallOdMm, 1)} mm`],
-      ['End-to-end (H, typ.)', `${fmt(r.lengthMm, 1)} mm`],
-      ['Size ratio d/D', fmt(r.smallOdMm / r.largeOdMm, 3)],
+      ['异径管类型', `${typeName(r.type)} (ASME B16.9)`],
+      ['规格组合', `${r.largeLabel} × ${r.smallLabel}`],
+      ['壁厚等级', scheduleName(r.schedule)],
+      ['大端外径 × 壁厚', `${fmt(r.largeOdMm, 1)} mm`],
+      ['小端外径', `${fmt(r.smallOdMm, 1)} mm`],
+      ['端到端长度 H', `${fmt(r.lengthMm, 1)} mm`],
+      ['尺寸比 d/D', fmt(r.smallOdMm / r.largeOdMm, 3)],
     ];
     $('dimsList').innerHTML = rows
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('');
 
     const basis: [string, string][] = [
-      ['SCH 40 CON reference', `${fmt(r.referenceKg, 2)} kg (CS)`],
-      ['Schedule factor', `× ${fmt(r.scheduleFactor, 2)}`],
-      ['Reducer-type factor', `× ${fmt(r.typeFactor, 2)}`],
-      ['Density factor', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
+      ['SCH 40 同心参考重量', `${fmt(r.referenceKg, 2)} kg (CS)`],
+      ['壁厚系数', `× ${fmt(r.scheduleFactor, 2)}`],
+      ['类型系数', `× ${fmt(r.typeFactor, 2)}`],
+      ['密度系数', `× ${fmt(state.density / 7850, 3)} (${fmt(state.density, 0)} kg/m³)`],
     ];
     $('basisList').innerHTML = basis
       .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-theme-muted">${k}</dt><dd class="font-semibold text-theme-secondary text-right">${v}</dd></div>`)
       .join('') +
-      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">Result</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
+      `<div class="flex justify-between py-1.5"><dt class="text-theme-muted">计算结果</dt><dd class="font-bold accent-text">${fmt(r.weightKg, 2)} kg</dd></div>`;
   }
 
   function renderTable() {
@@ -528,10 +528,10 @@ const breadcrumbItems = [
     const line = ($('resultLine') as HTMLElement).textContent ?? '';
     const total = ($('totalWeight') as HTMLElement).textContent ?? '–';
     const qty = ($('outQty') as HTMLElement).textContent ?? '1';
-    const text = `PVF Calculator — Reducer Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/reducer-weight-calculator/`;
+    const text = `PVF Calculator — Reducer Weight\n${line}\nSingle: ${w} ${unit}  ·  Qty: ${qty}  ·  Total: ${total}\nhttps://pvfcalculator.com/zh/reducer-weight-calculator/`;
     navigator.clipboard.writeText(text).then(() => {
-      $('copyBtnLabel').textContent = '✓ Copied!';
-      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+      $('copyBtnLabel').textContent = '✓ 已复制!';
+      setTimeout(() => { $('copyBtnLabel').textContent = '复制结果'; }, 2000);
     });
   });
 

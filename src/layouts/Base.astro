@@ -104,7 +104,7 @@ const siteJsonLd = [
 ];
 ---
 <!doctype html>
-<html lang="en" class="dark">
+<html lang={lang === "zh" ? "zh-CN" : "en"} class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -127,16 +127,12 @@ const siteJsonLd = [
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={isZh ? "zh_CN" : "en_US"} />
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <!-- GA4 -->
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
     <script is:inline define:vars={{ GA4_ID }}>
@@ -212,9 +208,14 @@ const siteJsonLd = [
               <a href={n.href} class={`mobile-menu-link py-3 px-4 rounded-lg transition-colors text-base font-medium ${isActive ? "accent-text bg-theme-tertiary" : "text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary"}`}>{n.label}</a>
             );
           })}
-          <a href="/request-a-quote/" class="mobile-menu-link mt-2 py-3 px-4 rounded-lg accent-bg text-center font-semibold" style="color: #07090c;">
-            Get a Quote
+          <a href={isZh ? "/zh/request-a-quote/" : "/request-a-quote/"} class="mobile-menu-link mt-2 py-3 px-4 rounded-lg accent-bg text-center font-semibold" style="color: #07090c;">
+            {isZh ? "立即询价" : "Get a Quote"}
           </a>
+          {langSwitchHref && (
+            <a href={langSwitchHref} class="mobile-menu-link mt-1 py-2 px-4 rounded-lg border border-theme text-center text-sm font-semibold text-theme-secondary hover:text-theme-primary hover:bg-theme-tertiary transition-colors">
+              {langSwitchLabel}
+            </a>
+          )}
         </nav>
       </div>
     </div>
