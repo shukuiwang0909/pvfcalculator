@@ -61,6 +61,7 @@
   --accent: #f59e0b;
   --accent-hover: #d97706;
   --accent-light: rgba(245, 158, 11, 0.1);
+  color-scheme: light;
 }
 
 .dark {
@@ -75,6 +76,7 @@
   --accent: #fbbf24;
   --accent-hover: #f59e0b;
   --accent-light: rgba(251, 191, 36, 0.1);
+  color-scheme: dark;
 }
 
 html {
@@ -224,7 +226,7 @@ body::before {
   color: var(--text-muted);
   cursor: not-allowed;
 }
-select.field option {
+select option {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
