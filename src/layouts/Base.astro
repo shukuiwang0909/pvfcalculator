@@ -47,7 +47,7 @@ function toRoute(key: string): string {
 const zhRoutes = new Set(Object.keys(zhModules).map(toRoute));
 const hasZhPage = zhRoutes.has(zhPath);
 const hasEnPage = !isZh || zhRoutes.has(zhPath);
-const langSwitchHref = isZh ? enPath : (hasZhPage ? zhPath : null);
+const langSwitchHref = isZh ? enPath : (hasZhPage ? zhPath : "/zh/");
 const langSwitchLabel = isZh ? "EN" : "中文";
 
 const canonical = canonicalProp ?? `${siteOrigin}${rawPath}`;
