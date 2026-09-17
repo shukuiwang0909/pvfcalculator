@@ -1,0 +1,59 @@
+# PVF Calculator
+
+> Free ASME B16.5/B16.9 pipe fitting weight calculators for procurement engineers, freight forwarders, and project managers. Accuracy: ±2% versus manufacturer catalog values.
+
+PVF Calculator provides accurate, browser-based calculators for computing theoretical weights of flanges, pipe fittings, and pipe. All dimensional data comes from official ASME standards. The site is operated by a Cangzhou/Mengcun-based PVF manufacturer offering factory-direct FOB quotes.
+
+## Calculators
+
+- [Flange Weight Calculator](https://pvfcalculator.com/flange-weight-calculator/): Weld neck, slip-on, blind, socket weld, threaded — ASME B16.5, Class 150–2500, NPS ½"–24". Uses 3D geometric modeling, not flat-plate approximation.
+- [Pipe Weight Calculator](https://pvfcalculator.com/pipe-weight-calculator/): ASME B36.10M pipe weight per meter and total length. NPS ½"–24", SCH 10–XXS. Carbon steel, stainless, alloy.
+- [Elbow Weight Calculator](https://pvfcalculator.com/elbow-weight-calculator/): ASME B16.9 45° and 90° butt-weld elbows, long radius (1.5D) and short radius (1D).
+- [Tee Weight Calculator](https://pvfcalculator.com/tee-weight-calculator/): ASME B16.9 equal and reducing tees with automatic branch/run size validation.
+- [Reducer Weight Calculator](https://pvfcalculator.com/reducer-weight-calculator/): ASME B16.9 concentric and eccentric reducers, all standard combinations.
+- [Valve Cv Calculator](https://pvfcalculator.com/valve-cv-calculator/): Size control and isolation valves from flow rate and pressure drop. Liquid, gas, steam.
+- [Valve Weight Calculator](https://pvfcalculator.com/valve-weight-calculator/): Gate, globe, ball, check valves — Class 150–1500, NPS ½"–24".
+- [Pressure Vessel Thickness Calculator](https://pvfcalculator.com/pressure-vessel-thickness-calculator/): ASME Section VIII UG-27/UG-32 minimum shell and head thickness for internal pressure.
+
+## Reference Tools
+
+- [Pipe Schedule Chart](https://pvfcalculator.com/pipe-schedule-chart/): Complete ASME B36.10M wall thickness chart, NPS ½"–24", SCH 10–XXS.
+- [ASME B16.5 Flange Dimensions](https://pvfcalculator.com/asme-b16-5-flange-dimensions/): All pressure classes, all flange types.
+- [ASME B16.9 Fitting Dimensions](https://pvfcalculator.com/asme-b16-9-fitting-dimensions/): Elbows, tees, reducers.
+- [Flange Bolt Chart](https://pvfcalculator.com/flange-bolt-chart/): Bolt count, diameter, and minimum length by flange class and NPS.
+
+## Chinese Language Version
+
+All calculators and reference tools are available in Simplified Chinese at https://pvfcalculator.com/zh/
+
+## Technical Blog
+
+Technical guides on pipe fittings, flanges, materials, and ASME standards:
+https://pvfcalculator.com/blog/
+
+Notable articles:
+- [Why Most Online Flange Weight Calculators Give Wrong Results](https://pvfcalculator.com/blog/why-flange-calculators-are-wrong/)
+- [Weld Neck vs Slip-On vs Socket Weld vs Threaded: Flange Selection Guide](https://pvfcalculator.com/blog/weld-neck-vs-slip-on-flange/)
+- [ASME B16.5 vs B16.47: Flange Standard Comparison](https://pvfcalculator.com/blog/asme-b16-5-vs-b16-47/)
+- [Pipe Schedule Chart Explained: SCH 10–XXS Guide](https://pvfcalculator.com/blog/pipe-schedule-chart-explained/)
+
+## Key Technical Facts
+
+- Flange calculation method: 3D geometric modeling per ASME B16.5 (not flat-plate approximation)
+- Accuracy: results match manufacturer weight tables within ±2%
+- Supported materials: A105 (carbon steel, 7850 kg/m³), F304 (SS 304, 8000 kg/m³), F316 (SS 316, 8000 kg/m³), F11 (Cr-Mo alloy, 7750 kg/m³), plus custom density input
+- Supported standards: ASME B16.5, ASME B16.9, ASME B36.10M, MSS SP-75, ASME Section VIII UG-27/UG-32
+- Unit conversion: all calculators support kg and lb output with instant switching
+- Languages: English (default), Simplified Chinese (/zh/)
+- Free to use, no registration required
+
+## Manufacturer / Quote Requests
+
+Factory-direct PVF supplier based in Cangzhou/Mengcun, Hebei, China — China's largest flange and pipe fitting export manufacturing base. Offers FOB Tianjin / CIF / DDP pricing. All materials come with ASME-certified Material Test Certificates (MTC).
+
+Quote requests: https://pvfcalculator.com/request-a-quote/
+Chinese: https://pvfcalculator.com/zh/request-a-quote/
+
+## Optional
+
+Full sitemap: https://pvfcalculator.com/sitemap-index.xml

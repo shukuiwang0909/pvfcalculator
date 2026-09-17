@@ -211,6 +211,32 @@ const jsonLd = [
       },
     ],
   },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Pipe Fitting Weight Using ASME Standards",
+    "description": "Calculate theoretical pipe fitting weight using ASME B16.5/B16.9 dimensional data.",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Select the fitting",
+        "text": "Choose flange, pipe elbow, tee, reducer, or pipe and open the matching ASME calculator.",
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Enter your specs",
+        "text": "Input NPS, pressure class or schedule, fitting type, and material density.",
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Copy the result",
+        "text": "Read the theoretical weight in kg or lb — copy it for quotations, packing lists, or shipping plans.",
+      },
+    ],
+  },
 ];
 
 const breadcrumbItems = [{ name: "Home", url: "/" }];
@@ -234,6 +260,13 @@ const breadcrumbItems = [{ name: "Home", url: "/" }];
       <p class="mx-auto mt-5 max-w-2xl text-lg text-theme-secondary">
         Professional ASME B16.5 & B16.9 calculators for procurement engineers,
         freight forwarders, and project managers. Trusted by industry professionals worldwide.
+      </p>
+      <p class="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-theme-muted" id="about-pvf">
+        PVF Calculator provides free, browser-based weight calculators for ASME B16.5 flanges and
+        ASME B16.9 pipe fittings. All dimensional data comes directly from official ASME standards.
+        Results match manufacturer catalog values within <strong class="text-theme-secondary">±2%</strong>, making them suitable
+        for procurement specifications, freight weight calculations, and project cost estimation.
+        No registration required.
       </p>
 
       <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
