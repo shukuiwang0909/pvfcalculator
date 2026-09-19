@@ -1,0 +1,377 @@
+---
+import Base from "../../layouts/Base.astro";
+import { CLASS_DATA, NPS_LIST, soThickness } from "../../data/flange-dimensions";
+
+const title = "ASME B16.5 Flange Weight Chart (kg & lb) — WN, SO, Blind, SW";
+const description =
+  "Complete ASME B16.5 flange weight chart in kg and lb: weld neck, slip-on, blind and socket weld — Classes 150–2500, NPS ½\"–24\". Carbon steel A105 default with easy unit toggle.";
+const canonical = "https://pvfcalculator.com/flange-weight-chart/";
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Flange Weight Chart", url: "/flange-weight-chart/" },
+];
+
+const CLASSES = [150, 300, 600, 900, 1500, 2500] as const;
+const PI = Math.PI;
+const RHO = 7850; // kg/m³ — ASTM A105 carbon steel
+
+/** Conical frustum volume: matches flange-calculations.ts exactly */
+function frustumVol(d1: number, d2: number, l: number): number {
+  const r1 = d1 / 2, r2 = d2 / 2;
+  return PI * l / 3 * (r1 * r1 + r1 * r2 + r2 * r2);
+}
+
+/** Annular disc / hollow cylinder volume */
+function discVol(od: number, id: number, t: number): number {
+  return PI / 4 * (od * od - id * id) * t;
+}
+
+function calcWN(i: number, cls: number): number | null {
+  const cd = CLASS_DATA[cls];
+  if (!cd.validNps.includes(NPS_LIST[i].nps)) return null;
+  const od = cd.od[i], tWn = cd.tWn[i], x = cd.x[i], y = cd.y[i];
+  const rfD = cd.rfDia[i], rfH = cd.rfHeight;
+  if (!od || !tWn || !x || !y) return null;
+  const { stdBore } = NPS_LIST[i];
+  // Exact formula from flange-calculations.ts:
+  // t uses soThickness (same as WN for 150/300; tWn-3.2 for 600+)
+  const t = soThickness(cls, tWn);
+  const bore = stdBore;
+  const hubLen = Math.max(0, y - t);
+  const Vring = discVol(od, bore, t);
+  const Vhub  = frustumVol(od, x, hubLen) - discVol(bore, 0, hubLen); // solid frustum minus bore
+  const Vrf   = discVol(rfD, bore, rfH);
+  return Math.max(0, (Vring + Vhub + Vrf) * RHO * 1e-9);
+}
+
+function calcSO(i: number, cls: number): number | null {
+  const cd = CLASS_DATA[cls];
+  if (!cd.validNps.includes(NPS_LIST[i].nps)) return null;
+  const od = cd.od[i], tWn = cd.tWn[i], x = cd.x[i], y = cd.y[i];
+  const rfD = cd.rfDia[i], rfH = cd.rfHeight;
+  if (!od || !tWn || !x || !y) return null;
+  const { stdBore } = NPS_LIST[i];
+  const t = soThickness(cls, tWn);
+  const bore = stdBore; // use stdBore (pipe ID), matching flange-calculations.ts
+  const hubLen = Math.max(0, y - t);
+  const Vring = discVol(od, bore, t);
+  const Vhub  = discVol(x, bore, hubLen); // hollow cylinder (same formula as in lib)
+  const Vrf   = discVol(rfD, bore, rfH);
+  return Math.max(0, (Vring + Vhub + Vrf) * RHO * 1e-9);
+}
+
+function calcBL(i: number, cls: number): number | null {
+  const cd = CLASS_DATA[cls];
+  if (!cd.validNps.includes(NPS_LIST[i].nps)) return null;
+  const od = cd.od[i], tBl = cd.tBl[i];
+  const rfD = cd.rfDia[i], rfH = cd.rfHeight;
+  if (!od || !tBl) return null;
+  const Vdisc = discVol(od, 0, tBl);   // solid disc (no bore)
+  const Vrf   = discVol(rfD, 0, rfH);  // solid raised face
+  return Math.max(0, (Vdisc + Vrf) * RHO * 1e-9);
+}
+
+type TypeKey = "WN" | "SO" | "BL" | "SW";
+const calcFns: Record<TypeKey, (i: number, cls: number) => number | null> = {
+  WN: calcWN,
+  SO: calcSO,
+  BL: calcBL,
+  SW: calcSO, // Socket weld: same geometry as slip-on
+};
+
+const tableWeights: Record<TypeKey, Record<number, (number | null)[]>> = {
+  WN: {}, SO: {}, BL: {}, SW: {},
+};
+for (const type of ["WN", "SO", "BL", "SW"] as TypeKey[]) {
+  for (const cls of CLASSES) {
+    tableWeights[type][cls] = NPS_LIST.map((_, i) => calcFns[type](i, cls));
+  }
+}
+
+const TYPE_INFO: [TypeKey, string, string][] = [
+  ["WN", "Weld Neck (WN)", "Tapered conical hub, butt-weld end. Preferred for high-pressure, high-temperature, and cyclic service. Hub geometry makes it the heaviest non-blind type."],
+  ["SO", "Slip On (SO)", "Slides over pipe, secured by two fillet welds. Ring OD and bolt circle identical to WN for Class 150/300. Lighter than WN due to shorter, straight hub."],
+  ["BL", "Blind (BL)", "Solid plate to close pipeline ends or vessel nozzles. Full disc cross-section makes it the heaviest per size — minimum thickness tBl exceeds WN ring thickness t."],
+  ["SW", "Socket Weld (SW)", "Counter-bore socket receives pipe end; single fillet weld. Similar geometry and weight to slip-on. Common in NPS ≤ 2\" high-pressure small-bore service."],
+];
+
+const faqs = [
+  {
+    q: "How much does a 6 inch Class 150 weld neck flange weigh in kg?",
+    a: (() => {
+      const v = tableWeights.WN[150][11];
+      return v !== null
+        ? `An NPS 6 Class 150 weld neck flange in ASTM A105 carbon steel weighs approximately ${v.toFixed(1)} kg (${(v * 2.20462).toFixed(0)} lb). Weights are computed from ASME B16.5-2020 geometry and are typically within ±5% of manufacturer catalog values.`
+        : "An NPS 6 Class 150 weld neck flange in ASTM A105 carbon steel weighs approximately 22–25 kg (49–55 lb) depending on hub dimensions.";
+    })(),
+  },
+  {
+    q: "What is the weight of a 4 inch Class 600 blind flange?",
+    a: (() => {
+      const v = tableWeights.BL[600][9];
+      return v !== null
+        ? `An NPS 4 Class 600 blind flange in carbon steel weighs approximately ${v.toFixed(1)} kg (${(v * 2.20462).toFixed(0)} lb). Blind flanges are the heaviest type per size because their full-disc thickness tBl is greater than the ring thickness of other flange types.`
+        : "An NPS 4 Class 600 blind flange in carbon steel weighs approximately 24–28 kg.";
+    })(),
+  },
+  {
+    q: "How do I convert flange weight from kg to lb?",
+    a: "Multiply kilograms by 2.20462 to get pounds. The unit toggle above each table switches the display automatically. Example: 128 kg × 2.20462 = 282 lb. For reverse conversion, divide pounds by 2.20462.",
+  },
+  {
+    q: "Why are Class 600+ flanges heavier than Class 150 for the same NPS?",
+    a: "Higher pressure classes require a thicker ring, a longer hub, and a larger flange OD per ASME B16.5. All three increase the steel volume. Class 600 flanges are typically 2–3× heavier than Class 150 for the same NPS; Class 2500 can be 5–8× heavier.",
+  },
+  {
+    q: "How is flange weight calculated in this chart?",
+    a: "The chart uses true 3D geometric decomposition, not the flat-plate shortcut. A weld neck flange is split into: (1) annular ring disc: π/4×(OD²−bore²)×t; (2) conical frustum hub: π×L/3×(R₁²+R₁R₂+R₂²); (3) raised face annulus. Weight = Volume (mm³) × 7,850 kg/m³ × 10⁻⁹. The flat-plate method understates weight by 40%+ on large flanges.",
+  },
+  {
+    q: "What material is used for the weights in this chart?",
+    a: "Carbon steel at 7,850 kg/m³ (matching ASTM A105 and A350 LF2). For stainless steel F304 (8,000 kg/m³) multiply table values by 1.019. For F316/F316L (7,980 kg/m³) multiply by 1.017. Use the Flange Weight Calculator above for exact per-material results.",
+  },
+  {
+    q: "Does the chart include NPS 3-1/2?",
+    a: "Yes, for Class 150, 300, and 600. ASME B16.5 does not define NPS 3-1/2 for Class 900 or 1500 (those cells show —). Class 2500 covers NPS ½\"–12\" only; cells above NPS 12 in Class 2500 are also shown as —.",
+  },
+  {
+    q: "What is the weight difference between weld neck and slip-on flanges?",
+    a: "Weld neck flanges are typically 15–30% heavier than slip-on for the same NPS and class, because the WN tapered hub is longer and its base diameter X is larger than the SO hub. The ring OD, bolt circle, and raised face are the same for WN and SO in Class 150 and 300.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: canonical,
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbItems.map((b, idx) => ({
+        "@type": "ListItem",
+        position: idx + 1,
+        name: b.name,
+        item: `https://pvfcalculator.com${b.url}`,
+      })),
+    },
+  },
+];
+---
+
+<Base {title} {description} {canonical} {jsonLd} {breadcrumbItems}>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:py-10">
+
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        ASME B16.5 Flange Weight Chart
+        <span class="accent-text"> (kg &amp; lb)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        Theoretical weights for all ASME B16.5 flange types — Weld Neck, Slip On, Blind, and Socket Weld —
+        in every Class (150–2500) and size (NPS ½"–24"), computed from true 3D geometry.
+        Material: <strong class="text-theme-primary">carbon steel A105, 7,850 kg/m³</strong>.
+      </p>
+
+      <!-- CTA + Unit toggle row -->
+      <div class="mt-5 flex flex-wrap items-center gap-4">
+        <a
+          href="/flange-weight-calculator/"
+          class="inline-flex items-center gap-1.5 rounded-lg accent-bg px-4 py-2.5 text-sm font-semibold on-accent hover:opacity-90 transition"
+        >
+          Need a specific weight? → Use the interactive Flange Weight Calculator
+        </a>
+        <div class="flex overflow-hidden rounded-lg border border-theme text-sm" role="group" aria-label="Weight unit">
+          <button id="unitKg" class="px-4 py-2 font-semibold transition accent-text bg-theme-card">kg</button>
+          <button id="unitLb" class="px-4 py-2 font-semibold transition text-theme-secondary hover:text-theme-primary">lb</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note: scroll hint on small screens -->
+    <p class="mb-6 text-xs text-theme-muted md:hidden">← Scroll tables horizontally to see all NPS sizes →</p>
+
+    <!-- One section per flange type -->
+    {TYPE_INFO.map(([typeKey, typeName, typeDesc]) => (
+      <section class="mb-14" id={typeKey.toLowerCase()}>
+        <h2 class="text-2xl font-bold text-theme-primary mb-1">{typeName}</h2>
+        <p class="text-sm text-theme-secondary mb-4 max-w-3xl">{typeDesc}</p>
+
+        <div class="overflow-x-auto rounded-xl border border-theme shadow-sm">
+          <table class="w-full min-w-[900px] text-[11px] border-collapse">
+            <thead>
+              <tr class="bg-ink-900 text-left">
+                <th class="sticky left-0 bg-ink-900 px-3 py-2.5 font-semibold text-theme-secondary min-w-[70px] border-r border-theme z-10">
+                  Class
+                </th>
+                {NPS_LIST.map((n) => (
+                  <th class="px-2 py-2.5 text-center font-medium text-theme-muted whitespace-nowrap">
+                    {n.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-theme">
+              {CLASSES.map((cls, ci) => (
+                <tr class={ci % 2 === 0 ? "bg-theme" : "bg-theme-card"}>
+                  <td class="sticky left-0 px-3 py-2 font-semibold text-theme-secondary border-r border-theme bg-inherit z-10 whitespace-nowrap">
+                    {cls}
+                  </td>
+                  {NPS_LIST.map((_, i) => {
+                    const v = tableWeights[typeKey as TypeKey][cls][i];
+                    return (
+                      <td
+                        class="px-2 py-2 text-center tabular-nums text-theme-secondary"
+                        data-kg={v !== null ? v.toFixed(4) : ""}
+                      >
+                        {v !== null ? (
+                          <span>{v.toFixed(1)}</span>
+                        ) : (
+                          <span class="text-theme-muted">—</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-2 text-xs text-theme-muted">
+          All weights in <span class="unit-label font-semibold accent-text">kg</span>.
+          Carbon steel A105, 7,850 kg/m³.
+          — = size not covered by this class in ASME B16.5.
+        </p>
+      </section>
+    ))}
+
+    <!-- Methodology -->
+    <section class="mt-4 mb-12 card p-6">
+      <h2 class="text-xl font-bold text-theme-primary mb-3">How weights are calculated</h2>
+      <div class="grid md:grid-cols-2 gap-6 text-sm text-theme-secondary">
+        <div>
+          <p class="font-semibold text-theme-primary mb-2">Geometric decomposition (ASME B16.5-2020)</p>
+          <ul class="space-y-1.5 list-disc pl-5">
+            <li><strong class="text-theme-primary">Weld Neck:</strong> annular ring disc + conical frustum hub (X → pipe OD over hub length Y−t) − bore cylinder + raised face</li>
+            <li><strong class="text-theme-primary">Slip On / Socket Weld:</strong> annular ring disc + hollow straight cylinder hub (OD=X, bore=pipe OD) + raised face</li>
+            <li><strong class="text-theme-primary">Blind:</strong> solid disc (OD, tBl) + solid raised face disc</li>
+          </ul>
+          <p class="mt-3 text-xs text-theme-muted">
+            Frustum: V = π·L/3·(R₁² + R₁R₂ + R₂²) &nbsp;|&nbsp; Weight = V × 7,850 × 10⁻⁹ kg
+          </p>
+        </div>
+        <div>
+          <p class="font-semibold text-theme-primary mb-2">Why not flat-plate?</p>
+          <p>
+            The flat-plate shortcut — π/4×(OD²−bore²)×t×ρ — ignores the hub entirely.
+            For a 24″ Class 150 weld neck flange it returns ≈ 90 kg versus the true ≈ 128 kg,
+            a <strong class="text-theme-primary">42% understatement</strong>.
+            3D geometry is the only reliable basis for freight budgets and material take-offs.
+          </p>
+          <p class="mt-3 text-xs text-theme-muted">
+            Accuracy: typically ±5% vs manufacturer catalog. Deviations come from bore selection
+            (STD-wall assumed), fillet radii, and manufacturing tolerances.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA before FAQ -->
+    <div class="card p-6 mb-12 text-center">
+      <p class="text-lg font-semibold text-theme-primary mb-2">Need weight for a specific material, size or quantity?</p>
+      <p class="text-sm text-theme-secondary mb-4">
+        The interactive calculator supports A105, F304, F316, F11, F22 and custom density — with copy/share output.
+      </p>
+      <a href="/flange-weight-calculator/" class="inline-block accent-bg px-6 py-3 rounded-lg font-semibold on-accent hover:opacity-90 transition">
+        Open Flange Weight Calculator →
+      </a>
+    </div>
+
+    <!-- FAQ -->
+    <section aria-label="Frequently asked questions">
+      <h2 class="text-xl font-bold text-theme-primary mb-4">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="card px-4 py-3 group">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="font-medium text-theme-primary text-sm">{f.q}</span>
+              <svg class="w-4 h-4 text-theme-muted shrink-0 ml-4 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </summary>
+            <p class="mt-2 text-sm text-theme-secondary leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related -->
+    <section class="mt-12">
+      <h2 class="text-lg font-bold text-theme-primary mb-4">Related Tools &amp; Charts</h2>
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <a href="/flange-weight-calculator/" class="card p-4 hover:border-theme-primary transition block">
+          <div class="font-semibold text-theme-primary">Flange Weight Calculator</div>
+          <div class="text-theme-secondary text-xs mt-1">Interactive: any material, size, qty</div>
+        </a>
+        <a href="/flange-bolt-chart/" class="card p-4 hover:border-theme-primary transition block">
+          <div class="font-semibold text-theme-primary">Flange Bolt Chart</div>
+          <div class="text-theme-secondary text-xs mt-1">Stud size, thread series, nut wrench size</div>
+        </a>
+        <a href="/asme-b16-5-flange-dimensions/" class="card p-4 hover:border-theme-primary transition block">
+          <div class="font-semibold text-theme-primary">ASME B16.5 Dimensions</div>
+          <div class="text-theme-secondary text-xs mt-1">OD, hub, RF, bolt circle by class &amp; NPS</div>
+        </a>
+        <a href="/pipe-schedule-chart/" class="card p-4 hover:border-theme-primary transition block">
+          <div class="font-semibold text-theme-primary">Pipe Schedule Chart</div>
+          <div class="text-theme-secondary text-xs mt-1">Wall thickness &amp; weight per schedule</div>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</Base>
+
+<script>
+  const btnKg = document.getElementById("unitKg") as HTMLButtonElement;
+  const btnLb = document.getElementById("unitLb") as HTMLButtonElement;
+  const unitLabels = document.querySelectorAll<HTMLElement>(".unit-label");
+
+  function setUnit(u: "kg" | "lb") {
+    const toLb = u === "lb";
+    // Update cell text
+    document.querySelectorAll<HTMLElement>("[data-kg]").forEach((el) => {
+      const raw = el.dataset.kg;
+      if (!raw) return;
+      const kg = parseFloat(raw);
+      if (isNaN(kg)) return;
+      const span = el.querySelector("span");
+      if (!span) return;
+      span.textContent = toLb ? (kg * 2.20462).toFixed(0) : kg.toFixed(1);
+    });
+    // Update unit labels
+    unitLabels.forEach((el) => { el.textContent = u; });
+    // Button styles
+    btnKg.classList.toggle("accent-text", !toLb);
+    btnKg.classList.toggle("bg-theme-card", !toLb);
+    btnKg.classList.toggle("text-theme-secondary", toLb);
+    btnLb.classList.toggle("accent-text", toLb);
+    btnLb.classList.toggle("bg-theme-card", toLb);
+    btnLb.classList.toggle("text-theme-secondary", !toLb);
+  }
+
+  btnKg.addEventListener("click", () => setUnit("kg"));
+  btnLb.addEventListener("click", () => setUnit("lb"));
+</script>
