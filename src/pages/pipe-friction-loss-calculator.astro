@@ -1,0 +1,646 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = "Pipe Friction Loss Calculator | Darcy-Weisbach + Swamee-Jain | Free";
+const description = "Free pipe pressure drop calculator using Darcy-Weisbach and Swamee-Jain explicit friction factor. Enter flow rate, pipe size, fluid, and length — get ΔP in Pa, bar, or psi, head loss in m or ft, velocity, Reynolds number, and flow regime. Water, glycol, oil, or custom fluid.";
+const canonical = "https://pvfcalculator.com/pipe-friction-loss-calculator/";
+
+const faqs = [
+  {
+    q: "What equation does this calculator use?",
+    a: "The Darcy-Weisbach equation: ΔP = f × (L/D) × (ρ × v²/2), where f is the Darcy friction factor, L is pipe length, D is internal diameter, ρ is fluid density, and v is mean flow velocity. For the friction factor, laminar flow (Re < 2300) uses f = 64/Re exactly. Turbulent flow uses the Swamee-Jain (1976) explicit approximation: f = 0.25 / [log₁₀(ε/(3.7D) + 5.74/Re⁰·⁹)]². This avoids the iteration required by Colebrook-White."
+  },
+  {
+    q: "What is the Swamee-Jain equation and is it accurate?",
+    a: "Swamee-Jain (1976) is an explicit approximation of the implicit Colebrook-White equation. It is accurate to within ±3% for Re between 5×10³ and 10⁸ and relative roughness ε/D between 10⁻⁶ and 0.05 — which covers virtually all industrial piping. It is widely used in process engineering and is accepted by CRANE Technical Paper 410 as a reliable explicit alternative to Colebrook-White."
+  },
+  {
+    q: "What is the difference between head loss and pressure drop?",
+    a: "They express the same energy loss in different units. Head loss (hf, in metres or feet of fluid) is independent of fluid density: hf = ΔP / (ρ × g). Pressure drop (ΔP, in Pa, bar, or psi) depends on fluid density. For water at 20°C, 1 m head = 9,789 Pa ≈ 1.42 psi. For oil at SG 0.85, the same 1 m head = 8,321 Pa ≈ 1.21 psi. Use head loss when sizing pumps; use pressure drop when sizing control valves."
+  },
+  {
+    q: "What pipe roughness should I use?",
+    a: "Absolute roughness (ε) depends on pipe material and condition: new commercial steel ≈ 0.046 mm; used/corroded steel ≈ 0.26 mm; galvanized steel ≈ 0.15 mm; stainless steel ≈ 0.046 mm; PVC / HDPE ≈ 0.0015 mm; cast iron ≈ 0.26 mm. These are reference values from CRANE TP-410 and Moody (1944). For aged process pipe, use the corroded steel value unless you have cleaning or pigging records."
+  },
+  {
+    q: "Does this calculator include minor losses (fittings, valves)?",
+    a: "No — this calculator covers major (friction) losses in straight pipe only. For minor losses, use the equivalent-length method: add each fitting's equivalent length (Le) to the pipe length L before calculating, or use the K method: ΔP_minor = K × ρv²/2. A 2″ 90° standard elbow has Le ≈ 1.5 m; a 2″ fully-open ball valve Le ≈ 0.15 m. For systems with many fittings, minor losses can exceed 20% of total ΔP."
+  },
+  {
+    q: "What Reynolds number defines turbulent flow?",
+    a: "Re < 2300: laminar (f = 64/Re applies exactly). Re 2300–4000: transition zone — flow alternates between laminar and turbulent, and the Swamee-Jain friction factor is unreliable. Re > 4000: turbulent, Swamee-Jain applies. In practice, most industrial pipe flow at normal velocities (>0.3 m/s) is turbulent unless the fluid is highly viscous."
+  },
+  {
+    q: "How do I convert between flow units?",
+    a: "1 m³/h = 16.667 L/min = 4.403 gpm. 1 gpm = 0.2271 m³/h = 3.785 L/min. For velocity: v = Q / A where A = π D²/4. Example: Q = 10 m³/h in a 2\" Sch 40 pipe (ID = 52.5 mm) → v = (10/3600) / (π × 0.0525² / 4) ≈ 1.28 m/s."
+  },
+  {
+    q: "Why does the calculator warn about the transition zone?",
+    a: "Between Re = 2300 and Re = 4000, flow is unstable — it can be laminar or turbulent depending on pipe entry conditions and disturbances. The friction factor is unpredictable. CRANE TP-410 recommends conservatively treating transition-zone flow as turbulent when designing for pressure drop. The calculator shows this warning so you can recognise that the result has higher uncertainty in this range."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Pipe Friction Loss Calculator",
+  "url": canonical,
+  "applicationCategory": "EngineeringApplication",
+  "operatingSystem": "Any (web browser)",
+  "description": description,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "pvfcalculator.com", "url": "https://pvfcalculator.com/" }
+};
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Pipe Friction Loss Calculator", url: "/pipe-friction-loss-calculator/" },
+];
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={[faqJsonLd, appJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="#tool">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+
+    <!-- Hero -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold tracking-tight text-theme-primary sm:text-4xl">
+        Pipe Friction Loss Calculator <span class="accent-text">(Darcy-Weisbach)</span>
+      </h1>
+      <p class="mt-3 max-w-3xl text-theme-secondary">
+        Pressure drop for straight pipe runs using the <strong>Darcy-Weisbach equation</strong> with the
+        <strong>Swamee-Jain</strong> explicit friction factor (±3% vs Colebrook-White, no iteration).
+        Get ΔP in Pa / bar / psi, head loss in m or ft, velocity, Reynolds number, and flow regime.
+        Formulas shown — CRANE Technical Paper 410 method.
+      </p>
+    </div>
+
+    <!-- Tool -->
+    <section id="tool" class="card p-4 sm:p-6" aria-label="Pipe friction loss calculator">
+
+      <!-- Unit system -->
+      <div class="mb-5 flex flex-wrap items-center gap-3">
+        <span class="text-sm font-semibold text-theme-secondary">Unit system:</span>
+        <div class="flex gap-2" id="unitButtons">
+          <button data-unit="metric" class="unit-btn rounded-lg border-2 px-4 py-1.5 text-sm font-semibold transition">Metric (m · kg · Pa)</button>
+          <button data-unit="imperial" class="unit-btn rounded-lg border-2 px-4 py-1.5 text-sm font-semibold transition">Imperial (ft · lb · psi)</button>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- Flow rate -->
+        <div>
+          <label for="flow" class="mb-1 block text-sm font-semibold text-theme-secondary">Flow rate</label>
+          <div class="flex gap-2">
+            <input id="flow" type="number" min="0" step="any" value="10"
+              class="field flex-1 rounded-lg px-3 py-2 text-sm" />
+            <select id="flowUnit" class="field rounded-lg px-2 py-2 text-sm">
+              <option value="m3h">m³/h</option>
+              <option value="lmin">L/min</option>
+              <option value="gpm">gpm</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pipe size -->
+        <div>
+          <label for="pipeSize" class="mb-1 block text-sm font-semibold text-theme-secondary">Pipe size (NPS Sch 40)</label>
+          <select id="pipeSize" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+
+        <!-- Custom ID -->
+        <div id="customIdWrap" class="hidden">
+          <label for="customId" class="mb-1 block text-sm font-semibold text-theme-secondary">Custom internal diameter (mm)</label>
+          <input id="customId" type="number" min="1" step="0.1" value="52.5"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+
+        <!-- Roughness -->
+        <div>
+          <label for="roughness" class="mb-1 block text-sm font-semibold text-theme-secondary">Pipe material / roughness ε</label>
+          <select id="roughness" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+
+        <!-- Fluid -->
+        <div>
+          <label for="fluid" class="mb-1 block text-sm font-semibold text-theme-secondary">Fluid</label>
+          <select id="fluid" class="field w-full rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+
+        <!-- Custom fluid -->
+        <div id="customFluidWrap" class="hidden sm:col-span-2 lg:col-span-1">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="customRho" class="mb-1 block text-sm font-semibold text-theme-secondary">Density ρ (kg/m³)</label>
+              <input id="customRho" type="number" min="1" step="1" value="1000"
+                class="field w-full rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label for="customMu" class="mb-1 block text-sm font-semibold text-theme-secondary">Viscosity μ (mPa·s)</label>
+              <input id="customMu" type="number" min="0.001" step="any" value="1.0"
+                class="field w-full rounded-lg px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipe length -->
+        <div>
+          <label for="pipeLen" class="mb-1 block text-sm font-semibold text-theme-secondary" id="pipeLenLabel">Pipe length (m)</label>
+          <input id="pipeLen" type="number" min="0" step="any" value="100"
+            class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+
+      </div>
+
+      <!-- Results -->
+      <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+
+        <!-- Main result -->
+        <div class="result-panel rounded-xl p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-theme-muted">Pressure Drop</p>
+          <p class="mt-1 text-4xl font-extrabold tabular-nums"><span id="dpValue">–</span></p>
+          <p class="mt-1 text-sm text-theme-muted" id="dpAlt">–</p>
+          <div class="mt-4 border-t border-theme pt-3 space-y-1" id="resultList"></div>
+        </div>
+
+        <!-- Flow details -->
+        <div class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Flow Details</p>
+          <dl id="flowDetails" class="text-sm"></dl>
+        </div>
+
+        <!-- Formula box -->
+        <div class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">Formula in Use</p>
+          <div class="mono-block rounded-lg p-4 text-xs leading-relaxed whitespace-pre" id="formulaBox">–</div>
+        </div>
+
+      </div>
+
+      <!-- Transition warning -->
+      <div id="transitionBanner" class="mt-4 hidden rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-theme-secondary">
+        <strong class="accent-text">⚠ Transition zone (Re 2300–4000).</strong>
+        Flow may be laminar or turbulent depending on conditions. Swamee-Jain friction factor applied conservatively (per CRANE TP-410). Treat result as an estimate; design to avoid this regime where possible.
+      </div>
+
+      <!-- Copy / Share -->
+      <div class="mt-4 flex gap-3 justify-end">
+        <button id="copyBtn" type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <span id="copyBtnLabel">Copy Result</span>
+        </button>
+        <button id="shareBtn" type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg border border-theme bg-theme px-4 py-2 text-sm font-semibold text-theme-primary transition hover:bg-theme-secondary">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          <span id="shareBtnLabel">Share Link</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12" aria-label="Calculation methodology">
+      <h2 class="mb-3 text-xl font-bold text-theme-primary">
+        Methodology <span class="accent-text">(Darcy-Weisbach + Swamee-Jain)</span>
+      </h2>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="card">
+          <p class="font-semibold text-theme-primary">The equations</p>
+          <div class="mono-block mt-3 rounded-lg p-4 text-xs leading-relaxed space-y-1.5">
+            <p><strong>Flow velocity:</strong>  v = Q / (π D² / 4)</p>
+            <p><strong>Reynolds number:</strong> Re = ρ · v · D / μ</p>
+            <p><strong>Friction factor f:</strong></p>
+            <p>&nbsp;&nbsp;Re &lt; 2300 (laminar): f = 64 / Re</p>
+            <p>&nbsp;&nbsp;Re &gt; 4000 (turbulent, Swamee-Jain 1976):</p>
+            <p>&nbsp;&nbsp;f = 0.25 / [log₁₀(ε/(3.7D) + 5.74/Re⁰·⁹)]²</p>
+            <p><strong>Pressure drop:</strong> ΔP = f · (L/D) · (ρ v²/2)</p>
+            <p><strong>Head loss:</strong>     h_f = ΔP / (ρ · g)</p>
+          </div>
+          <p class="mt-3 text-sm leading-relaxed text-theme-secondary">
+            Swamee-Jain is accurate to ±3% vs Colebrook-White for Re 5×10³–10⁸ and ε/D 10⁻⁶–0.05,
+            covering virtually all industrial piping. The method follows
+            <strong>CRANE Technical Paper 410</strong>.
+          </p>
+        </div>
+        <div class="card text-sm leading-relaxed text-theme-secondary">
+          <p class="font-semibold text-theme-primary">Scope and limitations</p>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5">
+            <li><strong>Straight pipe only</strong> — fittings, valves, and bends are not included. Add equivalent lengths (Le) for fittings to the pipe length before calculating.</li>
+            <li><strong>Incompressible flow</strong> — valid for liquids and gases where ΔP &lt; 10% of P₁. Not for high-pressure gas transport or compressible flow.</li>
+            <li><strong>Newtonian fluids</strong> — water, oils, glycol. Non-Newtonian fluids (slurries, polymer solutions) require a modified Reynolds number.</li>
+            <li><strong>Transition zone (Re 2300–4000)</strong> — Swamee-Jain applied conservatively; treat results as estimates and design to avoid this regime.</li>
+            <li>Pipe IDs shown are Schedule 40 (ASME B36.10M). Use <a href="/pipe-schedule-chart/" class="accent-text hover:opacity-80">Pipe Schedule Chart</a> for other schedules.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12" aria-label="Frequently asked questions">
+      <h2 class="mb-4 text-xl font-bold text-theme-primary">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group card open:shadow-md">
+            <summary class="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-theme-secondary marker:hidden group-open:accent-text">
+              {f.q}
+              <span class="float-right text-theme-muted transition group-open:rotate-45 group-open:accent-text">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-theme-secondary">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related tools -->
+    <section class="mt-12 rounded-xl bg-ink-900 border border-theme p-6 text-theme-primary" aria-label="Related tools">
+      <h2 class="mb-3 text-lg font-bold">Related Engineering Tools</h2>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <a href="/pipe-weight-calculator/"               class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Weight Calculator</a>
+        <a href="/valve-cv-calculator/"                  class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Valve Cv Calculator</a>
+        <a href="/pipe-schedule-chart/"                  class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Schedule Chart (ID table)</a>
+        <a href="/flange-weight-calculator/"             class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Flange Weight Calculator</a>
+        <a href="/pressure-vessel-thickness-calculator/" class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pressure Vessel Thickness</a>
+        <a href="/blog/pipe-schedule-chart-explained/"   class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ Pipe Schedule Explained</a>
+        <a href="/blog/how-to-calculate-valve-cv/"       class="rounded-lg bg-ink-800 p-3 transition hover:bg-ink-700">→ How to Calculate Valve Cv</a>
+        <a href="/request-a-quote/" class="rounded-lg accent-bg p-3 font-semibold transition hover:opacity-90 text-ink-950">→ Request a Quote</a>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <p class="mt-8 disclaimer rounded-lg p-4 text-xs leading-relaxed">
+      <strong>Disclaimer:</strong> Results cover straight-pipe major friction losses only (Darcy-Weisbach +
+      Swamee-Jain 1976). Minor losses (fittings, valves, contractions, expansions), compressibility, two-phase
+      flow, non-Newtonian rheology, and transient conditions are not modelled. Roughness values are reference
+      figures from CRANE TP-410; actual pipe condition significantly affects friction factor. For piping system
+      design — especially high-pressure, cryogenic, or safety-critical service — verify with a licensed piping
+      engineer and project-specific fluid properties.
+    </p>
+
+  </div>
+</Base>
+
+<script>
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const num = (id: string) => parseFloat(($(id) as HTMLInputElement).value) || 0;
+
+  // ── Data ──────────────────────────────────────────────────────────────
+  const PIPE_SIZES: { label: string; id: number }[] = [
+    { label: '1/2"  Sch 40  ID 15.80 mm',  id: 15.80  },
+    { label: '3/4"  Sch 40  ID 20.93 mm',  id: 20.93  },
+    { label: '1"    Sch 40  ID 26.64 mm',  id: 26.64  },
+    { label: '1¼"   Sch 40  ID 35.05 mm',  id: 35.05  },
+    { label: '1½"   Sch 40  ID 40.89 mm',  id: 40.89  },
+    { label: '2"    Sch 40  ID 52.50 mm',  id: 52.50  },
+    { label: '2½"   Sch 40  ID 62.71 mm',  id: 62.71  },
+    { label: '3"    Sch 40  ID 77.93 mm',  id: 77.93  },
+    { label: '4"    Sch 40  ID 102.26 mm', id: 102.26 },
+    { label: '6"    Sch 40  ID 154.05 mm', id: 154.05 },
+    { label: '8"    Sch 40  ID 202.72 mm', id: 202.72 },
+    { label: '10"   Sch 40  ID 254.51 mm', id: 254.51 },
+    { label: '12"   Sch 40  ID 303.23 mm', id: 303.23 },
+    { label: 'Custom ID…',                  id: -1     },
+  ];
+
+  const ROUGHNESS_DATA: { id: string; name: string; eps: number }[] = [
+    { id: 'carbon_new',  name: 'Carbon steel — new (ε = 0.046 mm)',      eps: 0.046  },
+    { id: 'carbon_used', name: 'Carbon steel — corroded (ε = 0.26 mm)',  eps: 0.26   },
+    { id: 'galv',        name: 'Galvanized steel (ε = 0.15 mm)',         eps: 0.15   },
+    { id: 'ss',          name: 'Stainless steel (ε = 0.046 mm)',         eps: 0.046  },
+    { id: 'ci',          name: 'Cast iron (ε = 0.26 mm)',                eps: 0.26   },
+    { id: 'pvc',         name: 'PVC / HDPE — smooth (ε = 0.0015 mm)',   eps: 0.0015 },
+  ];
+
+  const FLUID_DATA: { id: string; name: string; rho: number; mu: number }[] = [
+    { id: 'water_20',    name: 'Water 20 °C',               rho: 998.2, mu: 1.002  },
+    { id: 'water_60',    name: 'Water 60 °C',               rho: 983.2, mu: 0.467  },
+    { id: 'water_80',    name: 'Water 80 °C',               rho: 971.8, mu: 0.355  },
+    { id: 'glycol50_20', name: '50% Ethylene Glycol 20 °C', rho: 1063,  mu: 6.0    },
+    { id: 'glycol50_0',  name: '50% Ethylene Glycol 0 °C',  rho: 1070,  mu: 16.5   },
+    { id: 'diesel',      name: 'Diesel (15 °C)',             rho: 840,   mu: 3.5    },
+    { id: 'light_oil',   name: 'Light fuel oil (20 °C)',     rho: 850,   mu: 8.0    },
+    { id: 'heavy_oil',   name: 'Heavy oil (40 °C)',          rho: 900,   mu: 100    },
+    { id: 'custom',      name: 'Custom fluid…',              rho: 1000,  mu: 1.0    },
+  ];
+
+  // ── State ─────────────────────────────────────────────────────────────
+  const state = {
+    unit:     'metric' as 'metric' | 'imperial',
+    flowVal:  10,
+    flowUnit: 'm3h' as 'm3h' | 'lmin' | 'gpm',
+    pipeId:   52.50,
+    customId: 52.5,
+    eps:      0.046,
+    rho:      998.2,
+    mu:       1.002,
+    fluidId:  'water_20',
+    len:      100,
+  };
+
+  // ── Helpers ───────────────────────────────────────────────────────────
+  const fmt = (v: number, d = 2) =>
+    isFinite(v) && !isNaN(v)
+      ? v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
+      : '–';
+
+  function flowToM3s(val: number, unit: string): number {
+    if (unit === 'm3h')  return val / 3600;
+    if (unit === 'lmin') return val / 60000;
+    if (unit === 'gpm')  return val * 6.30902e-5;
+    return val / 3600;
+  }
+
+  function swameeJain(Re: number, eps_m: number, D_m: number): number {
+    const term = eps_m / (3.7 * D_m) + 5.74 / Math.pow(Re, 0.9);
+    if (term <= 0) return 0.02;
+    const lg = Math.log10(term);
+    return 0.25 / (lg * lg);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────
+  function render() {
+    const D_mm = state.pipeId < 0 ? state.customId : state.pipeId;
+    if (!D_mm || D_mm <= 0 || !state.flowVal || state.flowVal <= 0 || !state.len || state.len <= 0) {
+      $('dpValue').textContent = '–';
+      $('dpAlt').textContent = 'Enter valid inputs.';
+      $('transitionBanner').classList.add('hidden');
+      return;
+    }
+
+    const D   = D_mm / 1000;                                    // m
+    const L   = state.unit === 'imperial' ? state.len * 0.3048 : state.len; // m
+    const Q   = flowToM3s(state.flowVal, state.flowUnit);       // m³/s
+    const A   = Math.PI * D * D / 4;                            // m²
+    const v   = Q / A;                                          // m/s
+    const mu_pas = state.mu * 1e-3;                              // Pa·s
+    const Re  = (state.rho * v * D) / mu_pas;
+
+    // Flow regime
+    const isLaminar     = Re < 2300;
+    const isTransition  = Re >= 2300 && Re < 4000;
+    let f: number;
+    let fMethod: string;
+    if (isLaminar) {
+      f = 64 / Re;
+      fMethod = `f = 64/Re = 64/${Re.toLocaleString('en-US',{maximumFractionDigits:0})} = ${fmt(f,5)}`;
+    } else {
+      f = swameeJain(Re, state.eps / 1000, D);
+      fMethod = `f = 0.25/[log₁₀(ε/3.7D + 5.74/Re⁰·⁹)]² = ${fmt(f,5)}`;
+    }
+
+    const dP_Pa  = f * (L / D) * (state.rho * v * v / 2);
+    const hf_m   = dP_Pa / (state.rho * 9.807);
+
+    // ΔP per 100 m reference
+    const dP_per100m_kPa = (dP_Pa / L) * 100 / 1000;
+
+    // Display main value
+    let dpDisplay: string, dpAlt: string;
+    if (state.unit === 'metric') {
+      const dP_kPa = dP_Pa / 1000;
+      const dP_bar = dP_Pa / 1e5;
+      if (dP_bar >= 1) {
+        dpDisplay = `${fmt(dP_bar, 3)} bar`;
+        dpAlt = `= ${fmt(dP_kPa, 1)} kPa  =  ${fmt(dP_Pa / 6894.76, 3)} psi`;
+      } else {
+        dpDisplay = `${fmt(dP_kPa, 2)} kPa`;
+        dpAlt = `= ${fmt(dP_Pa, 0)} Pa  =  ${fmt(dP_Pa / 6894.76, 4)} psi`;
+      }
+    } else {
+      const dP_psi = dP_Pa / 6894.76;
+      dpDisplay = `${fmt(dP_psi, 3)} psi`;
+      dpAlt = `= ${fmt(dP_Pa / 1000, 2)} kPa  =  ${fmt(hf_m * 3.28084, 2)} ft H₂O`;
+    }
+
+    $('dpValue').textContent = dpDisplay;
+    $('dpAlt').textContent   = dpAlt;
+
+    // Result rows
+    const resultRows: [string, string][] = [
+      ['Head loss',      state.unit === 'metric' ? `${fmt(hf_m, 3)} m H₂O` : `${fmt(hf_m * 3.28084, 3)} ft H₂O`],
+      ['ΔP per 100 m',   `${fmt(dP_per100m_kPa, 2)} kPa/100 m`],
+    ];
+    $('resultList').innerHTML = resultRows
+      .map(([k, v]) => `<div class="flex justify-between border-b border-theme py-1"><dt class="text-sm text-theme-muted">${k}</dt><dd class="text-sm font-semibold text-theme-secondary">${v}</dd></div>`)
+      .join('');
+
+    // Flow details
+    const regime = isLaminar ? 'Laminar (Re < 2300)' : isTransition ? 'Transitional ⚠ (Re 2300–4000)' : 'Turbulent (Re > 4000)';
+    const velStr = state.unit === 'metric' ? `${fmt(v, 3)} m/s` : `${fmt(v * 3.28084, 3)} ft/s`;
+    const detailRows: [string, string, boolean][] = [
+      ['Velocity',       velStr,                                       v > 3.5],
+      ['Reynolds number', Re.toLocaleString('en-US', {maximumFractionDigits: 0}), false],
+      ['Friction factor f', fmt(f, 5),                                 false],
+      ['Flow regime',    regime,                                       isTransition],
+      ['Pipe ID',        `${fmt(D_mm, 2)} mm`,                        false],
+      ['ε/D ratio',      fmt(state.eps / D_mm, 6),                    false],
+    ];
+    $('flowDetails').innerHTML = detailRows
+      .map(([k, v, warn]) =>
+        `<div class="flex justify-between border-b border-theme py-1.5"><dt class="text-sm text-theme-muted">${k}</dt><dd class="text-sm font-semibold ${warn ? 'accent-text' : 'text-theme-secondary'}">${v}</dd></div>`)
+      .join('');
+
+    // Formula box
+    $('formulaBox').textContent =
+      `v = ${fmt(Q * 3600, 2)} m³/h ÷ (π×${fmt(D_mm,1)}²/4 mm²)\n` +
+      `  = ${fmt(v, 3)} m/s\n` +
+      `Re = ${state.rho}×${fmt(v,3)}×${fmt(D,4)} / ${state.mu}e-3\n` +
+      `   = ${Re.toLocaleString('en-US',{maximumFractionDigits:0})}\n` +
+      `${fMethod}\n` +
+      `ΔP = ${fmt(f,5)}×(${fmt(L,1)}/${fmt(D,4)})×(${state.rho}×${fmt(v,3)}²/2)\n` +
+      `   = ${fmt(dP_Pa, 1)} Pa = ${fmt(dP_Pa/1000, 3)} kPa`;
+
+    // Transition banner
+    $('transitionBanner').classList.toggle('hidden', !isTransition);
+  }
+
+  // ── Populate selects ──────────────────────────────────────────────────
+  function populateSelect(id: string, items: { label: string; value: string | number }[]) {
+    const sel = $(id) as HTMLSelectElement;
+    sel.innerHTML = '';
+    for (const it of items) {
+      const opt = document.createElement('option');
+      opt.value = String(it.value);
+      opt.textContent = it.label;
+      sel.appendChild(opt);
+    }
+  }
+
+  populateSelect('pipeSize', PIPE_SIZES.map((p) => ({ label: p.label, value: p.id })));
+  ($('pipeSize') as HTMLSelectElement).value = '52.5';
+
+  populateSelect('roughness', ROUGHNESS_DATA.map((r) => ({ label: r.name, value: r.id })));
+
+  populateSelect('fluid', FLUID_DATA.map((f) => ({ label: f.name, value: f.id })));
+
+  // ── Unit toggle ───────────────────────────────────────────────────────
+  function setUnitButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.unit-btn').forEach((b) => {
+      const on = b.dataset.unit === state.unit;
+      b.classList.toggle('accent-border', on);
+      b.classList.toggle('accent-light-bg', on);
+      b.classList.toggle('accent-text', on);
+      b.classList.toggle('border-theme', !on);
+      b.classList.toggle('text-theme-secondary', !on);
+    });
+    $('pipeLenLabel').textContent = state.unit === 'imperial' ? 'Pipe length (ft)' : 'Pipe length (m)';
+  }
+
+  // ── Events ────────────────────────────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>('.unit-btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.unit = b.dataset.unit as 'metric' | 'imperial';
+      setUnitButtons();
+      render();
+    })
+  );
+
+  $('flow').addEventListener('input', () => { state.flowVal = num('flow'); render(); });
+  ($('flowUnit') as HTMLSelectElement).addEventListener('change', () => {
+    state.flowUnit = ($('flowUnit') as HTMLSelectElement).value as 'm3h' | 'lmin' | 'gpm';
+    render();
+  });
+
+  ($('pipeSize') as HTMLSelectElement).addEventListener('change', () => {
+    const v = Number(($('pipeSize') as HTMLSelectElement).value);
+    state.pipeId = v;
+    $('customIdWrap').classList.toggle('hidden', v >= 0);
+    render();
+  });
+
+  $('customId').addEventListener('input', () => { state.customId = num('customId'); render(); });
+
+  ($('roughness') as HTMLSelectElement).addEventListener('change', () => {
+    const id = ($('roughness') as HTMLSelectElement).value;
+    const r = ROUGHNESS_DATA.find((x) => x.id === id);
+    if (r) { state.eps = r.eps; render(); }
+  });
+
+  ($('fluid') as HTMLSelectElement).addEventListener('change', () => {
+    const id = ($('fluid') as HTMLSelectElement).value;
+    const fl = FLUID_DATA.find((x) => x.id === id);
+    if (fl) {
+      state.fluidId = id;
+      state.rho = fl.rho;
+      state.mu  = fl.mu;
+      $('customFluidWrap').classList.toggle('hidden', id !== 'custom');
+      if (id !== 'custom') render();
+    }
+  });
+
+  $('customRho').addEventListener('input', () => { state.rho = num('customRho'); render(); });
+  $('customMu').addEventListener('input',  () => { state.mu  = num('customMu');  render(); });
+  $('pipeLen').addEventListener('input',   () => { state.len = num('pipeLen');   render(); });
+
+  // ── Copy / Share ──────────────────────────────────────────────────────
+  $('copyBtn').addEventListener('click', () => {
+    const dp   = ($('dpValue') as HTMLElement).textContent ?? '–';
+    const alt  = ($('dpAlt')   as HTMLElement).textContent ?? '';
+    const text = `PVF Calculator — Pipe Friction Loss\nΔP: ${dp}\n${alt}\nhttps://pvfcalculator.com/pipe-friction-loss-calculator/`;
+    navigator.clipboard.writeText(text).then(() => {
+      $('copyBtnLabel').textContent = '✓ Copied!';
+      setTimeout(() => { $('copyBtnLabel').textContent = 'Copy Result'; }, 2000);
+    });
+  });
+
+  $('shareBtn').addEventListener('click', () => {
+    const sp = new URLSearchParams({
+      unit:  state.unit,
+      flow:  String(state.flowVal),
+      fu:    state.flowUnit,
+      pipe:  String(state.pipeId),
+      cid:   String(state.customId),
+      eps:   String(state.eps),
+      fluid: state.fluidId,
+      rho:   String(state.rho),
+      mu:    String(state.mu),
+      len:   String(state.len),
+    });
+    history.replaceState(null, '', '?' + sp.toString());
+    navigator.clipboard.writeText(location.href).then(() => {
+      $('shareBtnLabel').textContent = '✓ Link copied!';
+      setTimeout(() => { $('shareBtnLabel').textContent = 'Share Link'; }, 2000);
+    });
+  });
+
+  // ── Restore from URL params ───────────────────────────────────────────
+  {
+    const sp = new URLSearchParams(location.search);
+    let changed = false;
+
+    const u = sp.get('unit');
+    if (u === 'metric' || u === 'imperial') { state.unit = u; changed = true; }
+
+    const flow = Number(sp.get('flow'));
+    if (flow > 0) { state.flowVal = flow; ($('flow') as HTMLInputElement).value = String(flow); changed = true; }
+
+    const fu = sp.get('fu');
+    if (fu && ['m3h', 'lmin', 'gpm'].includes(fu)) {
+      state.flowUnit = fu as 'm3h' | 'lmin' | 'gpm';
+      ($('flowUnit') as HTMLSelectElement).value = fu;
+      changed = true;
+    }
+
+    const pipe = Number(sp.get('pipe'));
+    if (pipe) {
+      state.pipeId = pipe;
+      ($('pipeSize') as HTMLSelectElement).value = String(pipe);
+      $('customIdWrap').classList.toggle('hidden', pipe >= 0);
+      changed = true;
+    }
+
+    const cid = Number(sp.get('cid'));
+    if (cid > 0) { state.customId = cid; ($('customId') as HTMLInputElement).value = String(cid); changed = true; }
+
+    const eps = Number(sp.get('eps'));
+    if (eps > 0) {
+      state.eps = eps;
+      const match = ROUGHNESS_DATA.find((r) => r.eps === eps);
+      if (match) ($('roughness') as HTMLSelectElement).value = match.id;
+      changed = true;
+    }
+
+    const fid = sp.get('fluid');
+    if (fid) {
+      const fl = FLUID_DATA.find((x) => x.id === fid);
+      if (fl) {
+        state.fluidId = fid;
+        state.rho = fl.rho;
+        state.mu  = fl.mu;
+        ($('fluid') as HTMLSelectElement).value = fid;
+        $('customFluidWrap').classList.toggle('hidden', fid !== 'custom');
+        changed = true;
+      }
+    }
+
+    const rho = Number(sp.get('rho'));
+    if (rho > 0) { state.rho = rho; ($('customRho') as HTMLInputElement).value = String(rho); }
+
+    const mu = Number(sp.get('mu'));
+    if (mu > 0) { state.mu = mu; ($('customMu') as HTMLInputElement).value = String(mu); }
+
+    const len = Number(sp.get('len'));
+    if (len > 0) { state.len = len; ($('pipeLen') as HTMLInputElement).value = String(len); changed = true; }
+
+    if (changed) { setUnitButtons(); render(); }
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────
+  setUnitButtons();
+  render();
+</script>
