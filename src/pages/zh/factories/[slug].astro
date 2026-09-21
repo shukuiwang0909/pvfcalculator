@@ -6,6 +6,7 @@ interface Factory {
   slug: string;
   name: string;
   nameZh?: string;
+  descriptionZh?: string;
   tier: "listed" | "verified";
   products: string[];
   standards: string[];
@@ -99,7 +100,7 @@ const breadcrumbItems = [
       {factory.nameZh && <p class="text-gray-400 text-lg">{factory.name}</p>}
     </div>
 
-    <p class="text-gray-300 text-lg leading-relaxed mb-8">{factory.description}</p>
+    <p class="text-gray-300 text-lg leading-relaxed mb-8">{factory.descriptionZh || factory.description}</p>
 
     <!-- Product tags -->
     {factory.products?.length > 0 && (
