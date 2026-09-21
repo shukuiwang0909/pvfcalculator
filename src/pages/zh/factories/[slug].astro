@@ -1,0 +1,204 @@
+---
+import Base from "../../../layouts/Base.astro";
+import factoriesJson from "../../../data/factories.json";
+
+interface Factory {
+  slug: string;
+  name: string;
+  nameZh?: string;
+  tier: "listed" | "verified";
+  products: string[];
+  standards: string[];
+  materials: string[];
+  city: string;
+  province: string;
+  website?: string;
+  description: string;
+  founded?: number;
+  certifications?: string[];
+  exportMarkets?: string[];
+  contact?: { email?: string; phone?: string; whatsapp?: string };
+  verifiedNote?: string;
+}
+
+export function getStaticPaths() {
+  const data = factoriesJson as unknown as Factory[];
+  return data.map((factory) => ({
+    params: { slug: factory.slug },
+    props: { factory },
+  }));
+}
+
+const { factory } = Astro.props as { factory: Factory };
+const origin = "https://pvfcalculator.com";
+const canonical = `${origin}/zh/factories/${factory.slug}/`;
+
+const infoRows: [string, string][] = [
+  ["所在地", `${factory.city}，${factory.province}，中国`],
+  ...(factory.founded ? [["成立年份", `${factory.founded} 年`] as [string, string]] : []),
+  ...(factory.standards?.length ? [["执行标准", factory.standards.join("、")] as [string, string]] : []),
+  ...(factory.materials?.length ? [["材质", factory.materials.join("、")] as [string, string]] : []),
+  ...(factory.exportMarkets?.length ? [["出口市场", factory.exportMarkets.join("、")] as [string, string]] : []),
+  ...(factory.certifications?.length ? [["认证", factory.certifications.join("、")] as [string, string]] : []),
+];
+
+const orgJson = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: factory.nameZh || factory.name,
+  alternateName: factory.name,
+  url: canonical,
+  ...(factory.website ? { sameAs: factory.website } : {}),
+  description: factory.description,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: factory.city,
+    addressRegion: factory.province,
+    addressCountry: "CN",
+  },
+  ...(factory.founded ? { foundingDate: String(factory.founded) } : {}),
+};
+
+const breadcrumbItems = [
+  { name: "首页", url: "/zh/" },
+  { name: "工厂目录", url: "/zh/factories/" },
+  { name: factory.nameZh || factory.name, url: canonical },
+];
+---
+
+<Base
+  title={`${factory.nameZh || factory.name} — 孟村管件制造商`}
+  description={factory.description}
+  canonical={canonical}
+  breadcrumbItems={breadcrumbItems}
+  jsonLd={orgJson}
+  lang="zh"
+>
+  <div class="max-w-4xl mx-auto px-4 py-10 sm:py-16">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-8 flex flex-wrap items-center gap-1">
+      <a href="/zh/" class="hover:text-amber-400 transition-colors">首页</a>
+      <span class="mx-1">›</span>
+      <a href="/zh/factories/" class="hover:text-amber-400 transition-colors">工厂目录</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-300 truncate">{factory.nameZh || factory.name}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-6">
+      <div class="flex flex-wrap items-center gap-3 mb-2">
+        <h1 class="text-3xl md:text-4xl font-bold text-white">{factory.nameZh || factory.name}</h1>
+        {factory.tier === "verified" && (
+          <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-400 text-black">已认证 ✓</span>
+        )}
+        {factory.tier === "listed" && (
+          <span class="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full border border-gray-600 text-gray-400">免费收录</span>
+        )}
+      </div>
+      {factory.nameZh && <p class="text-gray-400 text-lg">{factory.name}</p>}
+    </div>
+
+    <p class="text-gray-300 text-lg leading-relaxed mb-8">{factory.description}</p>
+
+    <!-- Product tags -->
+    {factory.products?.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-8">
+        {factory.products.map((p) => (
+          <span class="text-xs px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">{p}</span>
+        ))}
+      </div>
+    )}
+
+    <!-- Info table -->
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+      <dl class="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+        {infoRows.map(([k, v]) => (
+          <div class="flex justify-between gap-4 border-b border-gray-800 pb-2">
+            <dt class="text-gray-500 shrink-0">{k}</dt>
+            <dd class="text-gray-200 text-right">{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <!-- Contact block (verified only) -->
+    {factory.tier === "verified" && factory.contact && (
+      <div class="bg-gray-900 border border-amber-400/40 rounded-xl p-6 mb-6">
+        <p class="font-semibold text-white mb-1">已认证联系方式 <span class="text-amber-400">✓</span></p>
+        {factory.verifiedNote && <p class="text-xs text-gray-500 mb-4">{factory.verifiedNote}</p>}
+        <ul class="space-y-2 text-sm">
+          {factory.contact.email && (
+            <li class="flex justify-between gap-4">
+              <span class="text-gray-500">邮箱</span>
+              <a href={`mailto:${factory.contact.email}`} class="text-amber-400 underline hover:text-amber-300">{factory.contact.email}</a>
+            </li>
+          )}
+          {factory.contact.phone && (
+            <li class="flex justify-between gap-4">
+              <span class="text-gray-500">电话</span>
+              <a href={`tel:${factory.contact.phone.replace(/\s/g, "")}`} class="text-gray-200">{factory.contact.phone}</a>
+            </li>
+          )}
+          {factory.contact.whatsapp && (
+            <li class="flex justify-between gap-4">
+              <span class="text-gray-500">WhatsApp</span>
+              <a href={`https://wa.me/${factory.contact.whatsapp.replace(/[^\d]/g, "")}`} class="text-amber-400 underline">{factory.contact.whatsapp}</a>
+            </li>
+          )}
+        </ul>
+      </div>
+    )}
+
+    <!-- Listed notice -->
+    {factory.tier === "listed" && (
+      <p class="text-sm text-gray-500 bg-gray-900 border border-gray-800 rounded-lg p-4 mb-6">
+        此为<strong class="text-gray-300">免费收录</strong>页面，联系方式不对外公开。
+        可通过下方询盘表单联系该工厂。
+      </p>
+    )}
+
+    <!-- CTA -->
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-8 text-center mb-8">
+      <p class="text-2xl font-bold text-white mb-3">联系 {factory.nameZh || factory.name}</p>
+      <p class="text-gray-400 mb-6 max-w-xl mx-auto">
+        发送一次规格需求——管道等级、管件类型、数量及目的港——24 小时内收到 FOB 报价。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={`/zh/request-a-quote/?factory=${factory.slug}`}
+          class="inline-block px-8 py-3 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-lg transition-colors"
+        >
+          发起询盘
+        </a>
+        {factory.website && (
+          <a
+            href={factory.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block px-8 py-3 bg-transparent border border-gray-700 text-gray-200 font-semibold rounded-lg hover:border-gray-500 transition-colors"
+          >
+            访问官方网站 ↗
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Calculator cross-link -->
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-5 mb-8">
+      <p class="text-sm text-gray-400 mb-3">下单前用计算器核验重量：</p>
+      <div class="flex flex-wrap gap-3 text-sm">
+        <a href="/zh/flange-weight-calculator/" class="text-amber-400 hover:text-amber-300 transition-colors">法兰重量计算器 →</a>
+        <a href="/zh/elbow-weight-calculator/" class="text-amber-400 hover:text-amber-300 transition-colors">弯头重量计算器 →</a>
+        <a href="/zh/tee-weight-calculator/" class="text-amber-400 hover:text-amber-300 transition-colors">三通重量计算器 →</a>
+        <a href="/zh/reducer-weight-calculator/" class="text-amber-400 hover:text-amber-300 transition-colors">大小头重量计算器 →</a>
+      </div>
+    </div>
+
+    <p class="text-xs text-gray-600">
+      PVFCalculator 收录制造商信息仅供参考，不对产品或交易做任何担保。
+      付款前请独立核实供应商资质——索取材质证明、核查认证、必要时委托第三方检验。
+    </p>
+
+  </div>
+</Base>
