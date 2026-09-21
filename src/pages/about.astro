@@ -1,0 +1,146 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "About | PVF Calculator";
+const description =
+  "Kevin Wang, a pipe fittings sourcing specialist based in Cangzhou, Hebei, China, built PVF Calculator to provide engineers free, accurate ASME B16.5 and B16.9 weight calculators and spec tools.";
+const canonical = "https://pvfcalculator.com/about/";
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "About", url: "/about/" },
+];
+
+const siteOrigin = "https://pvfcalculator.com";
+
+const jsonLd = [
+  {
+    "@type": "AboutPage",
+    name: "About PVF Calculator",
+    url: `${siteOrigin}/about/`,
+    description:
+      "Kevin Wang built PVF Calculator to give engineers free, accurate ASME B16.5 flange and ASME B16.9 buttweld fitting weight calculators — based on direct sourcing experience in the Mengcun/Cangzhou pipe fittings cluster, Hebei, China.",
+    author: {
+      "@type": "Person",
+      name: "Kevin Wang",
+      jobTitle: "Pipe Fittings Sourcing Specialist",
+      worksFor: {
+        "@type": "Organization",
+        name: "PVF Calculator",
+        url: `${siteOrigin}/`,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Cangzhou",
+        addressRegion: "Hebei",
+        addressCountry: "CN",
+      },
+    },
+  },
+  {
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Who built PVF Calculator?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "The site was built by Kevin Wang, a sourcing specialist based in Cangzhou/Mengcun, Hebei — China's largest pipe fittings and flange manufacturing cluster. Kevin has spent over a decade working with local ASME-compliant manufacturers and answering technical specification questions from overseas engineers and procurement teams.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Why is PVF Calculator free?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "The calculators grew from internal tools Kevin used to verify supplier quotations and check shipping weights for flanges and buttweld fittings. Making them publicly accessible helps engineers and buyers worldwide work faster. There is no paywall, no registration required, and no commercial motive attached to the tools.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How accurate are the weight calculations?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Calculations are based on ASME B16.5 (flanges), ASME B16.9 (buttweld fittings), and ASME B36.10M/B36.19M (pipe schedules) dimensional data. Typical accuracy is within ±3–5% of actual manufactured weights, consistent with normal manufacturing tolerances. Always confirm final weights with your supplier before using them for freight, logistics, or procurement documentation.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do I contact Kevin?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Use the inquiry form at pvfcalculator.com/inquiry/. Kevin reads every message and typically responds within one business day, accounting for China Standard Time.",
+        },
+      },
+    ],
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={canonical}
+  breadcrumbItems={breadcrumbItems}
+  jsonLd={jsonLd}
+>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">About</span>
+      </nav>
+
+      <h1 class="text-3xl font-bold text-theme-primary mb-2">About PVF Calculator</h1>
+      <p class="text-sm text-theme-muted mb-10">Built by Kevin Wang — Cangzhou, Hebei, China</p>
+
+      <div class="space-y-8 text-theme-secondary leading-relaxed">
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">Why This Site Exists</h2>
+          <p class="mb-3">The Mengcun-Cangzhou area in Hebei, China is the world's single largest concentration of pipe fittings and flange manufacturing. Hundreds of mills produce ASME B16.9 buttweld fittings — elbows, tees, reducers, caps — alongside ASME B16.5 flanges in carbon steel, stainless, and alloy grades. Working directly with these manufacturers over many years, I encountered the same problem repeatedly: overseas project engineers and procurement teams needed quick, reliable weight estimates for flanges and fittings, but the tools available were either paywalled, buried in distributor catalogues, or based on incomplete standard data.</p>
+          <p>PVF Calculator was built to solve that. The calculators draw on the actual dimensional tables from ASME B16.5, B16.9, B36.10M, and B36.19M. They are free, require no account, and are designed to give engineers and buyers a solid baseline for weight estimates, freight calculations, and quotation cross-checks.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">About Kevin Wang</h2>
+          <p class="mb-3">I am Kevin Wang, a sourcing and technical consultant based in Cangzhou, Hebei. My work focuses on evaluating pipe fittings and flange manufacturers in the Mengcun cluster, reviewing material test reports and dimensional inspection data, and helping overseas clients source ASME-compliant products from Chinese mills.</p>
+          <p>My specific areas of competence include ASME B16.9 buttweld fittings in schedules from standard wall through heavy wall, ASME B16.5 flanges from Class 150 to Class 2500 in raised face (RF) and ring-type joint (RTJ) configurations, pressure-temperature ratings for common material grades, and pipe schedule systems per ASME B36.10M and B36.19M. Material grades I work with regularly include A234 WPB carbon steel, A403 WP304/316L austenitic stainless, and A420 WPL6 low-temperature carbon steel. I am not a licensed pressure equipment engineer — the tools here are reference calculators, not substitutes for certified manufacturer data or professional PE sign-off on pressure-containing systems.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">What This Site Does Not Do</h2>
+          <p>PVF Calculator is not a reseller, distributor, or broker. It is not affiliated with any specific factory or trading company in Cangzhou or Mengcun. Calculator results are theoretical estimates based on published ASME dimensional data. If you submit an inquiry through this site, I may help connect you with manufacturers whose production scope matches your specification, but I am not a party to any resulting transaction.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">Frequently Asked Questions</h2>
+          <div class="space-y-5">
+            <div>
+              <p class="font-semibold text-theme-primary">Who built PVF Calculator?</p>
+              <p class="mt-1">Kevin Wang, a sourcing specialist based in Cangzhou/Mengcun, Hebei — China's largest pipe fittings manufacturing cluster. Kevin has spent over a decade working with local ASME-compliant manufacturers and answering technical questions from overseas engineers.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-theme-primary">Why is it free?</p>
+              <p class="mt-1">The calculators grew from internal tools used to verify supplier quotations and check shipping weights for flanges and fittings. There is no paywall, no registration required, and no commercial motive attached to the tools.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-theme-primary">How accurate are the calculations?</p>
+              <p class="mt-1">Calculations are based on ASME B16.5, B16.9, and B36.10M/B36.19M dimensional data. Typical accuracy is within ±3–5% of actual manufactured weights. Always confirm final weights with your supplier before using them for freight or procurement documentation.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-theme-primary">How do I contact you?</p>
+              <p class="mt-1">Use the <a href="/inquiry/" class="text-theme-accent hover:underline">inquiry form</a>. Kevin reads every message and responds within one business day, China time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-theme-primary mb-3">Get in Touch</h2>
+          <p>For specification questions, sourcing inquiries, or feedback on the calculators, use the <a href="/inquiry/" class="text-theme-accent hover:underline">inquiry form</a>. Kevin responds within one business day, China Standard Time.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Base>
