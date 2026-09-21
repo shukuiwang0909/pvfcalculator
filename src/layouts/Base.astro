@@ -333,62 +333,63 @@ const siteJsonLd = [
       <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         <div>
           <p class="text-theme-primary font-semibold mb-2">PVFCalculator</p>
-          <p>Free ASME B16.5 & B16.9 pipe fitting weight calculators for procurement, logistics, and project engineering.</p>
+          <p>{isZh ? '免费 ASME B16.5 & B16.9 管件重量计算器，用于采购、物流与项目工程。' : 'Free ASME B16.5 & B16.9 pipe fitting weight calculators for procurement, logistics, and project engineering.'}</p>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Flange Tools</p>
+          <p class="text-theme-primary font-semibold mb-2">{isZh ? '法兰工具' : 'Flange Tools'}</p>
           <ul class="space-y-1">
-            <li><a href="/flange-weight-calculator/" class="hover:text-theme-primary transition-colors">Flange Weight Calculator</a></li>
-            <li><a href="/flange-bolt-chart/" class="hover:text-theme-primary transition-colors">Flange Bolt Chart</a></li>
-            <li><a href="/flange-bolt-torque-calculator/" class="hover:text-theme-primary transition-colors">Bolt Torque Calculator</a></li>
+            <li><a href={isZh ? '/zh/flange-weight-calculator/' : '/flange-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '法兰重量计算器' : 'Flange Weight Calculator'}</a></li>
+            <li><a href="/flange-bolt-chart/" class="hover:text-theme-primary transition-colors">{isZh ? '法兰螺栓规格表' : 'Flange Bolt Chart'}</a></li>
+            <li><a href={isZh ? '/zh/flange-bolt-torque-calculator/' : '/flange-bolt-torque-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '螺栓扭矩计算器' : 'Bolt Torque Calculator'}</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Pipe & Fitting Tools</p>
+          <p class="text-theme-primary font-semibold mb-2">{isZh ? '管件工具' : 'Pipe & Fitting Tools'}</p>
           <ul class="space-y-1">
-            <li><a href="/pipe-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Weight Calculator</a></li>
-            <li><a href="/elbow-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Elbow Weight Calculator</a></li>
-            <li><a href="/tee-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Tee Weight Calculator</a></li>
-            <li><a href="/reducer-weight-calculator/" class="hover:text-theme-primary transition-colors">Pipe Reducer Weight Calculator</a></li>
+            <li><a href={isZh ? '/zh/pipe-weight-calculator/' : '/pipe-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '管道重量计算器' : 'Pipe Weight Calculator'}</a></li>
+            <li><a href={isZh ? '/zh/elbow-weight-calculator/' : '/elbow-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '弯头重量计算器' : 'Pipe Elbow Weight Calculator'}</a></li>
+            <li><a href={isZh ? '/zh/tee-weight-calculator/' : '/tee-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '三通重量计算器' : 'Pipe Tee Weight Calculator'}</a></li>
+            <li><a href={isZh ? '/zh/reducer-weight-calculator/' : '/reducer-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '异径管重量计算器' : 'Pipe Reducer Weight Calculator'}</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Valve & Engineering Tools</p>
+          <p class="text-theme-primary font-semibold mb-2">{isZh ? '阀门与工程工具' : 'Valve & Engineering Tools'}</p>
           <ul class="space-y-1">
-            <li><a href="/valve-cv-calculator/" class="hover:text-theme-primary transition-colors">Valve Cv Calculator</a></li>
-            <li><a href="/valve-weight-calculator/" class="hover:text-theme-primary transition-colors">Valve Weight Calculator</a></li>
-            <li><a href="/pressure-vessel-thickness-calculator/" class="hover:text-theme-primary transition-colors">Pressure Vessel Thickness</a></li>
+            <li><a href={isZh ? '/zh/valve-cv-calculator/' : '/valve-cv-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '阀门 Cv 计算器' : 'Valve Cv Calculator'}</a></li>
+            <li><a href={isZh ? '/zh/valve-weight-calculator/' : '/valve-weight-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '阀门重量计算器' : 'Valve Weight Calculator'}</a></li>
+            <li><a href={isZh ? '/zh/pressure-vessel-thickness-calculator/' : '/pressure-vessel-thickness-calculator/'} class="hover:text-theme-primary transition-colors">{isZh ? '压力容器壁厚计算器' : 'Pressure Vessel Thickness'}</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Resources</p>
+          <p class="text-theme-primary font-semibold mb-2">{isZh ? '资源' : 'Resources'}</p>
           <ul class="space-y-1">
-            <li><a href="/blog/" class="hover:text-theme-primary transition-colors">Blog & Guides</a></li>
-            <li><a href="/asme-b16-5-flange-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.5 Dimensions</a></li>
-            <li><a href="/asme-b16-9-fitting-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.9 Dimensions</a></li>
-            <li><a href="/pipe-schedule-chart/" class="hover:text-theme-primary transition-colors">Pipe Schedule Chart</a></li>
-            <li><a href="/request-a-quote/" class="hover:text-theme-primary transition-colors">Request a Quote</a></li>
+            <li><a href="/blog/" class="hover:text-theme-primary transition-colors">{isZh ? '技术博客' : 'Blog & Guides'}</a></li>
+            <li><a href="/asme-b16-5-flange-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.5 {isZh ? '尺寸' : 'Dimensions'}</a></li>
+            <li><a href="/asme-b16-9-fitting-dimensions/" class="hover:text-theme-primary transition-colors">ASME B16.9 {isZh ? '尺寸' : 'Dimensions'}</a></li>
+            <li><a href="/pipe-schedule-chart/" class="hover:text-theme-primary transition-colors">{isZh ? '管道壁厚表' : 'Pipe Schedule Chart'}</a></li>
+            <li><a href={isZh ? '/zh/request-a-quote/' : '/request-a-quote/'} class="hover:text-theme-primary transition-colors">{isZh ? '提交询盘' : 'Request a Quote'}</a></li>
+            <li><a href="/factories/" class="hover:text-theme-primary transition-colors">{isZh ? '工厂目录' : 'Factory Directory'}</a></li>
           </ul>
-          <p class="text-theme-primary font-semibold mb-2 mt-4">Sourcing Clusters</p>
+          <p class="text-theme-primary font-semibold mb-2 mt-4">{isZh ? '产业基地' : 'Sourcing Clusters'}</p>
           <ul class="space-y-1">
-            <li><a href="/cangzhou-flange-manufacturers/" class="hover:text-theme-primary transition-colors">Cangzhou</a></li>
-            <li><a href="/mengcun-pipe-fittings/" class="hover:text-theme-primary transition-colors">Mengcun</a></li>
-            <li><a href="/yanshan-flange/" class="hover:text-theme-primary transition-colors">Yanshan</a></li>
-            <li><a href="/wenzhou-valve-manufacturers/" class="hover:text-theme-primary transition-colors">Wenzhou</a></li>
+            <li><a href={isZh ? '/zh/cangzhou-flange-manufacturers/' : '/cangzhou-flange-manufacturers/'} class="hover:text-theme-primary transition-colors">{isZh ? '沧州' : 'Cangzhou'}</a></li>
+            <li><a href={isZh ? '/zh/mengcun-pipe-fittings/' : '/mengcun-pipe-fittings/'} class="hover:text-theme-primary transition-colors">{isZh ? '孟村' : 'Mengcun'}</a></li>
+            <li><a href={isZh ? '/zh/yanshan-flange/' : '/yanshan-flange/'} class="hover:text-theme-primary transition-colors">{isZh ? '盐山' : 'Yanshan'}</a></li>
+            <li><a href={isZh ? '/zh/wenzhou-valve-manufacturers/' : '/wenzhou-valve-manufacturers/'} class="hover:text-theme-primary transition-colors">{isZh ? '温州' : 'Wenzhou'}</a></li>
           </ul>
         </div>
         <div>
-          <p class="text-theme-primary font-semibold mb-2">Legal</p>
+          <p class="text-theme-primary font-semibold mb-2">{isZh ? '法律' : 'Legal'}</p>
           <ul class="space-y-1 mb-3">
-            <li><a href="/privacy/" class="hover:text-theme-primary transition-colors">Privacy Policy</a></li>
-            <li><a href="/terms/" class="hover:text-theme-primary transition-colors">Terms of Use</a></li>
-            <li><a href="/disclaimer/" class="hover:text-theme-primary transition-colors">Disclaimer</a></li>
+            <li><a href="/privacy/" class="hover:text-theme-primary transition-colors">{isZh ? '隐私政策' : 'Privacy Policy'}</a></li>
+            <li><a href="/terms/" class="hover:text-theme-primary transition-colors">{isZh ? '使用条款' : 'Terms of Use'}</a></li>
+            <li><a href="/disclaimer/" class="hover:text-theme-primary transition-colors">{isZh ? '免责声明' : 'Disclaimer'}</a></li>
           </ul>
-          <p class="text-xs text-theme-muted">Calculations are theoretical estimates based on ASME B16.5 and ASME B16.9 dimensional data. Verify critical weights with manufacturers before procurement or load planning.</p>
+          <p class="text-xs text-theme-muted">{isZh ? '计算结果基于 ASME B16.5 / B16.9 尺寸数据的理论估算，采购或载荷规划前请与制造商核实。' : 'Calculations are theoretical estimates based on ASME B16.5 and ASME B16.9 dimensional data. Verify critical weights with manufacturers before procurement or load planning.'}</p>
         </div>
       </div>
       <div class="border-t border-theme py-4 text-center text-xs text-theme-muted">
-        © 2026 PVF Calculator. Built for engineering professionals.
+        {isZh ? '© 2026 PVF Calculator · 专为工程专业人员打造' : '© 2026 PVF Calculator. Built for engineering professionals.'}
       </div>
     </footer>
     <script is:inline>
