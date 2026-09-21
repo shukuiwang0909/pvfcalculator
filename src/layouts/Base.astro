@@ -302,7 +302,7 @@ const siteJsonLd = [
     </header>
     <div id="mobile-menu" class="fixed inset-0 z-40 hidden">
       <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-      <div class="absolute top-14 left-0 right-0 bg-theme-primary border-b border-theme shadow-xl">
+      <div class="absolute top-14 left-0 right-0 bg-theme-primary border-b border-theme shadow-xl overflow-y-auto max-h-[calc(100vh-3.5rem)]">
         <nav class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
           {navGroups.map((g) => (
             <div class="mb-1">
