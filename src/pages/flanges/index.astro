@@ -1,0 +1,160 @@
+---
+import Base from "../../layouts/Base.astro";
+import flangeData from "../../data/flange-b165.json";
+
+const origin = "https://pvfcalculator.com";
+const title = "ASME B16.5 Flange Dimensions — All Classes | PVFCalculator";
+const description =
+  "ASME B16.5 flange dimensions for all pressure classes: Class 150, 300, 600, 900, 1500, and 2500. OD, bolt circle, bolt count, and thickness tables for NPS 1/2\" through NPS 12\".";
+const canonical = `${origin}/flanges/`;
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Flanges", url: "/flanges/" },
+];
+
+// Build NPS-4 teaser row for all classes that have it
+const nps4Rows = (flangeData as any).classes
+  .map((cls: any) => {
+    const e = cls.npsEntries.find((n: any) => n.nps === "4");
+    return e ? { label: cls.label, slug: cls.slug, odIn: e.odIn, boltCount: e.boltCount, boltSizeIn: e.boltSizeIn, minThkIn: e.minThkIn, approximate: cls.approximate } : null;
+  })
+  .filter(Boolean);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: "ASME B16.5 Flange Dimensions — All Classes",
+    url: canonical,
+    about: { "@type": "Thing", name: "Steel Flange", sameAs: "https://www.wikidata.org/wiki/Q1064965" },
+    author: { "@type": "Person", name: "Kevin Wang" },
+    publisher: { "@type": "Organization", name: "PVFCalculator", url: origin },
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={canonical}
+  breadcrumbItems={breadcrumbItems}
+  jsonLd={jsonLd}
+  ogType="article"
+>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Flange Dimensions</span>
+      </nav>
+
+      <!-- Hero -->
+      <h1 class="text-3xl md:text-4xl font-bold text-theme-primary mb-4">
+        ASME B16.5 Flange Dimensions — All Classes
+      </h1>
+      <p class="text-theme-secondary text-lg mb-10 max-w-3xl">
+        ASME B16.5 covers pipe flanges and flanged fittings in NPS 1/2" through NPS 24" across
+        six pressure classes. Select a class below to view full dimension tables, or use the
+        comparison table to see how NPS 4" flanges scale across classes.
+      </p>
+
+      <!-- Class cards grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+        {(flangeData as any).classes.map((cls: any) => (
+          <a
+            href={`/flanges/${cls.slug}/`}
+            class="glass border border-theme rounded-xl p-5 hover:border-[var(--accent)] transition-colors group"
+          >
+            <div class="flex items-start justify-between mb-3">
+              <span class="text-xl font-bold text-theme-primary group-hover:accent-text transition-colors">
+                {cls.label}
+              </span>
+              {cls.approximate && (
+                <span class="text-xs px-2 py-0.5 rounded-full border border-theme text-theme-muted">approx.</span>
+              )}
+            </div>
+            <p class="text-theme-secondary text-sm mb-3">
+              Rated to <strong class="text-theme-primary">{cls.maxPressureBar} bar</strong> ({cls.maxPressurePsi} psi) at ambient
+              temperature — Group 1.1 carbon steel per ASME B16.5.
+            </p>
+            <p class="text-theme-muted text-xs">
+              {cls.npsEntries.length} NPS sizes: {cls.npsEntries[0].nps}" – {cls.npsEntries[cls.npsEntries.length - 1].nps}"
+            </p>
+            <span class="mt-3 inline-block text-sm accent-text font-medium">
+              View dimensions &rarr;
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Teaser comparison table: NPS 4 across all classes -->
+      <div class="mb-14">
+        <h2 class="text-xl font-bold text-theme-primary mb-2">
+          NPS 4" Flange: Dimensions by Class
+        </h2>
+        <p class="text-theme-secondary text-sm mb-5">
+          The table below shows how a 4-inch flange grows heavier and larger as the pressure class
+          increases. All dimensions in inches per ASME B16.5.
+        </p>
+        <div class="overflow-x-auto rounded-xl border border-theme">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme bg-theme-secondary">
+                <th class="px-4 py-3 text-left text-theme-primary font-semibold">Class</th>
+                <th class="px-4 py-3 text-right text-theme-primary font-semibold">OD (in)</th>
+                <th class="px-4 py-3 text-right text-theme-primary font-semibold">Bolts</th>
+                <th class="px-4 py-3 text-right text-theme-primary font-semibold">Bolt Size</th>
+                <th class="px-4 py-3 text-right text-theme-primary font-semibold">Min Thk (in)</th>
+                <th class="px-4 py-3 text-left text-theme-primary font-semibold"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {nps4Rows.map((row: any, i: number) => (
+                <tr class={`border-b border-theme last:border-0 ${i % 2 === 0 ? "" : "bg-theme-secondary"}`}>
+                  <td class="px-4 py-3 font-semibold accent-text">
+                    {row.label}
+                    {row.approximate && <span class="text-theme-muted text-xs ml-1">*</span>}
+                  </td>
+                  <td class="px-4 py-3 text-right text-theme-secondary">{row.odIn.toFixed(2)}"</td>
+                  <td class="px-4 py-3 text-right text-theme-secondary">{row.boltCount}</td>
+                  <td class="px-4 py-3 text-right text-theme-secondary">{row.boltSizeIn}"</td>
+                  <td class="px-4 py-3 text-right text-theme-secondary">{row.minThkIn.toFixed(2)}"</td>
+                  <td class="px-4 py-3 text-left">
+                    <a href={`/flanges/${row.slug}/nps-4/`} class="text-xs accent-text hover:underline">
+                      Details &rarr;
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-theme-muted mt-2">* Class 900, 1500, and 2500 dimensions are reference values. Always verify against the current edition of ASME B16.5.</p>
+      </div>
+
+      <!-- About section -->
+      <div class="glass border border-theme rounded-xl p-6 mb-10">
+        <h2 class="text-lg font-bold text-theme-primary mb-3">About ASME B16.5</h2>
+        <p class="text-theme-secondary text-sm leading-relaxed mb-3">
+          ASME B16.5 is the American National Standard for pipe flanges and flanged fittings in
+          NPS 1/2 through NPS 24. It defines six pressure classes — 150, 300, 600, 900, 1500, and
+          2500 — each corresponding to a maximum allowable pressure at a reference temperature for
+          a given material group. Class 150 flanges rated to 285 psi (19.6 bar) at ambient are the
+          most common in process piping; Class 2500 flanges rated to 6170 psi (425 bar) are used in
+          high-pressure service such as wellhead and hydraulic systems.
+        </p>
+        <p class="text-theme-secondary text-sm leading-relaxed">
+          Dimensions given on this site cover raised face (RF) weld neck flanges as the reference
+          type. Actual dimensions for slip-on, socket weld, blind, and threaded flanges differ;
+          use the <a href="/flange-weight-calculator/" class="text-theme-accent hover:underline">Flange Weight Calculator</a> for
+          a full breakdown by type.
+        </p>
+      </div>
+
+    </div>
+  </section>
+</Base>

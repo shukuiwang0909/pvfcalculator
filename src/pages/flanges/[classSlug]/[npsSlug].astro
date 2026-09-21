@@ -1,0 +1,360 @@
+---
+import Base from "../../../layouts/Base.astro";
+import flangeData from "../../../data/flange-b165.json";
+
+export async function getStaticPaths() {
+  const paths: Array<{ params: { classSlug: string; npsSlug: string }; props: any }> = [];
+  for (const cls of (flangeData as any).classes) {
+    for (const entry of cls.npsEntries) {
+      paths.push({
+        params: { classSlug: cls.slug, npsSlug: entry.slug },
+        props: { cls, entry },
+      });
+    }
+  }
+  return paths;
+}
+
+type NpsEntry = {
+  nps: string;
+  slug: string;
+  npsMm: number;
+  odIn: number;
+  bcdIn: number;
+  boltCount: number;
+  boltSizeIn: string;
+  boltHoleDiaIn: number;
+  rfOdIn: number;
+  minThkIn: number;
+  approxKgWN: number;
+};
+
+type ClassData = {
+  class: number;
+  slug: string;
+  label: string;
+  maxPressureBar: number;
+  maxPressurePsi: number;
+  approximate: boolean;
+  npsEntries: NpsEntry[];
+};
+
+type Props = { cls: ClassData; entry: NpsEntry };
+
+const { cls, entry } = Astro.props;
+
+function inToMm(val: number): string {
+  return (val * 25.4).toFixed(1);
+}
+
+/** Parse a fractional inch string like "1/2", "1-1/8", "1" to a decimal number */
+function parseFractionIn(s: string): number {
+  const dashIdx = s.indexOf("-", 1); // skip first char (never a minus sign here)
+  if (dashIdx !== -1) {
+    // e.g. "1-1/8"
+    const whole = parseFloat(s.slice(0, dashIdx));
+    const fracParts = s.slice(dashIdx + 1).split("/");
+    return whole + parseFloat(fracParts[0]) / parseFloat(fracParts[1]);
+  }
+  const slashParts = s.split("/");
+  if (slashParts.length === 2) {
+    return parseFloat(slashParts[0]) / parseFloat(slashParts[1]);
+  }
+  return parseFloat(s);
+}
+
+const origin = "https://pvfcalculator.com";
+const pageUrl = `${origin}/flanges/${cls.slug}/${entry.slug}/`;
+
+const title = `ASME B16.5 ${cls.label} NPS ${entry.nps} Inch Flange Dimensions | PVFCalculator`;
+const description = `ASME B16.5 ${cls.label} NPS ${entry.nps}" flange dimensions: OD ${entry.odIn}" (${inToMm(entry.odIn)} mm), bolt circle ${entry.bcdIn}", ${entry.boltCount} × ${entry.boltSizeIn}" bolts. Imperial and metric tables.`;
+
+// Adjacent NPS sizes within same class
+const entryIdx = cls.npsEntries.findIndex((e) => e.slug === entry.slug);
+const prevNps = entryIdx > 0 ? cls.npsEntries[entryIdx - 1] : null;
+const nextNps = entryIdx < cls.npsEntries.length - 1 ? cls.npsEntries[entryIdx + 1] : null;
+
+// Same NPS in other classes
+const allClasses: ClassData[] = (flangeData as any).classes;
+const otherClassLinks = allClasses
+  .filter((c) => c.slug !== cls.slug)
+  .map((c) => {
+    const match = c.npsEntries.find((e) => e.nps === entry.nps);
+    return match ? { label: c.label, slug: c.slug, entrySlug: match.slug } : null;
+  })
+  .filter((x): x is { label: string; slug: string; entrySlug: string } => x !== null);
+
+// Next class for FAQ3
+const clsIdx = allClasses.findIndex((c) => c.slug === cls.slug);
+const nextClass = clsIdx < allClasses.length - 1 ? allClasses[clsIdx + 1] : null;
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Flanges", url: "/flanges/" },
+  { name: cls.label, url: `/flanges/${cls.slug}/` },
+  { name: `NPS ${entry.nps}"`, url: pageUrl },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: title,
+    url: pageUrl,
+    about: { "@type": "Thing", name: "Steel Flange", sameAs: "https://www.wikidata.org/wiki/Q1064965" },
+    author: { "@type": "Person", name: "Kevin Wang" },
+    publisher: { "@type": "Organization", name: "PVFCalculator", url: origin },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `What is an ASME B16.5 ${cls.label} NPS ${entry.nps} flange?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `An ASME B16.5 ${cls.label} NPS ${entry.nps}" flange is a forged steel pipe flange conforming to ASME B16.5, with a nominal pipe size of ${entry.nps}" (DN ${entry.npsMm}) and a ${cls.class}-class pressure rating. The flange outside diameter is ${entry.odIn}" (${inToMm(entry.odIn)} mm) with ${entry.boltCount} bolt holes on a ${entry.bcdIn}" bolt circle. It is rated to approximately ${cls.maxPressureBar} bar (${cls.maxPressurePsi} psi) at ambient temperature for Group 1.1 carbon steel.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What material is used for a ${cls.label} NPS ${entry.nps}" flange?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${cls.label} NPS ${entry.nps}" flanges are commonly supplied in ASTM A105 (carbon steel, forged), ASTM A182 F304 or F316L (stainless steel), or ASTM A182 F11/F22 (chrome-moly alloy for elevated temperature service). The material selection depends on the design temperature, pressure, and corrosion environment.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: nextClass
+          ? `How does ${cls.label} differ from ${nextClass.label} for NPS ${entry.nps}?`
+          : `What is the maximum pressure rating for ${cls.label} NPS ${entry.nps}"?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: nextClass
+            ? `${cls.label} is rated to approximately ${cls.maxPressureBar} bar (${cls.maxPressurePsi} psi) at ambient temperature, while ${nextClass.label} is rated to ${nextClass.maxPressureBar} bar (${nextClass.maxPressurePsi} psi). For NPS ${entry.nps}", the ${nextClass.label} flange has a larger outside diameter and requires heavier bolting to achieve the higher pressure rating. Always confirm the required class with your piping design specification (PDS) before procurement.`
+            : `${cls.label} flanges are rated to approximately ${cls.maxPressureBar} bar (${cls.maxPressurePsi} psi) at ambient temperature for Group 1.1 carbon steel per ASME B16.5. This is the highest standard class in ASME B16.5.`,
+        },
+      },
+    ],
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={pageUrl}
+  breadcrumbItems={breadcrumbItems}
+  jsonLd={jsonLd}
+  ogType="article"
+>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/flanges/" class="hover:text-theme-primary transition-colors">Flanges</a>
+        <span>/</span>
+        <a href={`/flanges/${cls.slug}/`} class="hover:text-theme-primary transition-colors">{cls.label}</a>
+        <span>/</span>
+        <span class="text-theme-primary">NPS {entry.nps}"</span>
+      </nav>
+
+      <!-- Hero -->
+      <h1 class="text-3xl md:text-4xl font-bold text-theme-primary mb-4">
+        ASME B16.5 {cls.label} — NPS {entry.nps}" Flange Dimensions
+      </h1>
+
+      <!-- Intro paragraph -->
+      <p class="text-theme-secondary text-lg mb-3 max-w-3xl leading-relaxed">
+        An ASME B16.5 {cls.label} NPS {entry.nps}" flange (DN {entry.npsMm}) is a forged steel pipe flange rated to
+        <strong class="text-theme-primary">{cls.maxPressureBar} bar ({cls.maxPressurePsi} psi)</strong> at ambient temperature for Group 1.1 carbon steel.
+        It is used in process piping systems wherever the design pressure and temperature fall within
+        the {cls.label} pressure-temperature rating envelope defined in ASME B16.5.
+      </p>
+
+      {cls.approximate && (
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 text-sm mb-6">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Reference values — verify against the current edition of ASME B16.5.</span>
+        </div>
+      )}
+
+      <!-- Dimensions table -->
+      <div class="overflow-x-auto rounded-xl border border-theme mb-8">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-theme bg-theme-secondary">
+              <th class="px-4 py-3 text-left text-theme-primary font-semibold">Dimension</th>
+              <th class="px-4 py-3 text-right text-theme-primary font-semibold">Imperial (in)</th>
+              <th class="px-4 py-3 text-right text-theme-primary font-semibold">Metric (mm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-theme hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Flange OD</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.odIn.toFixed(2)}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(entry.odIn)} mm</td>
+            </tr>
+            <tr class="border-b border-theme bg-theme-secondary/50 hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Bolt Circle Diameter (BCD)</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.bcdIn.toFixed(2)}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(entry.bcdIn)} mm</td>
+            </tr>
+            <tr class="border-b border-theme hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Number of Bolt Holes</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.boltCount}</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">—</td>
+            </tr>
+            <tr class="border-b border-theme bg-theme-secondary/50 hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Bolt Hole Diameter</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.boltHoleDiaIn.toFixed(2)}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(entry.boltHoleDiaIn)} mm</td>
+            </tr>
+            <tr class="border-b border-theme hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Bolt Size (stud)</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.boltSizeIn}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(parseFractionIn(entry.boltSizeIn))} mm</td>
+            </tr>
+            <tr class="border-b border-theme bg-theme-secondary/50 hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Raised Face OD</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.rfOdIn.toFixed(2)}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(entry.rfOdIn)} mm</td>
+            </tr>
+            <tr class="border-b border-theme hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Minimum Thickness</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.minThkIn.toFixed(2)}"</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">{inToMm(entry.minThkIn)} mm</td>
+            </tr>
+            <tr class="hover:bg-theme-secondary transition-colors">
+              <td class="px-4 py-3 text-theme-secondary">Approx. Weight — Weld Neck (kg){cls.approximate ? "*" : ""}</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-primary">{entry.approxKgWN} kg</td>
+              <td class="px-4 py-3 text-right font-mono text-theme-secondary">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Disclaimer box -->
+      <div class="rounded-xl border border-theme bg-theme-secondary px-5 py-4 mb-8">
+        <p class="text-theme-secondary text-sm leading-relaxed">
+          <strong class="text-theme-primary">Disclaimer:</strong> These dimensions are provided for reference only.
+          Always verify against the current edition of <strong class="text-theme-primary">ASME B16.5</strong> before using in
+          engineering calculations, fabrication drawings, or procurement documents.
+          {cls.approximate && " Dimensions for Class 900, 1500, and 2500 are reference approximations — class-specific tolerances and ratings must be confirmed from the standard."}
+        </p>
+      </div>
+
+      <!-- Materials note -->
+      <div class="glass border border-theme rounded-xl p-5 mb-10">
+        <h2 class="text-base font-bold text-theme-primary mb-2">Common Materials</h2>
+        <p class="text-theme-secondary text-sm leading-relaxed">
+          {cls.label} NPS {entry.nps}" flanges are typically carbon steel <strong class="text-theme-primary">ASTM A105</strong> (forged)
+          or stainless steel <strong class="text-theme-primary">ASTM A182 F304 / F316L</strong>.
+          For elevated temperatures above 340 °C (650 °F), chrome-moly grades such as A182 F11 or F22
+          are specified. Confirm the material group against the ASME B16.5 pressure-temperature tables
+          for your design conditions. Use the <a href="/flange-weight-calculator/" class="text-theme-accent hover:underline">Flange Weight Calculator</a> to
+          estimate weights for different materials and flange types.
+        </p>
+      </div>
+
+      <!-- FAQ section -->
+      <div class="mb-12">
+        <h2 class="text-xl font-bold text-theme-primary mb-5">Frequently Asked Questions</h2>
+        <div class="space-y-5">
+          <div class="glass border border-theme rounded-xl p-5">
+            <p class="font-semibold text-theme-primary mb-2">What is an ASME B16.5 {cls.label} NPS {entry.nps}" flange?</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              A forged steel pipe flange conforming to ASME B16.5, NPS {entry.nps}" (DN {entry.npsMm}), pressure class {cls.class}.
+              The flange OD is {entry.odIn}" ({inToMm(entry.odIn)} mm) with {entry.boltCount} bolt holes on a {entry.bcdIn}" bolt circle.
+              It is rated to approximately {cls.maxPressureBar} bar ({cls.maxPressurePsi} psi) at ambient for Group 1.1 carbon steel.
+            </p>
+          </div>
+          <div class="glass border border-theme rounded-xl p-5">
+            <p class="font-semibold text-theme-primary mb-2">What material is a {cls.label} NPS {entry.nps}" flange?</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Common materials include ASTM A105 (carbon steel, forged), ASTM A182 F304/F316L (stainless steel),
+              and ASTM A182 F11/F22 (chrome-moly alloy for high-temperature service).
+              The choice depends on the fluid service, maximum design temperature, and corrosion requirements.
+            </p>
+          </div>
+          {nextClass && (
+            <div class="glass border border-theme rounded-xl p-5">
+              <p class="font-semibold text-theme-primary mb-2">How does {cls.label} differ from {nextClass.label} for NPS {entry.nps}"?</p>
+              <p class="text-theme-secondary text-sm leading-relaxed">
+                {cls.label} is rated to {cls.maxPressureBar} bar ({cls.maxPressurePsi} psi) at ambient, while {nextClass.label} is rated to {nextClass.maxPressureBar} bar ({nextClass.maxPressurePsi} psi).
+                The {nextClass.label} flange for NPS {entry.nps}" has a larger OD and heavier bolting to achieve the higher pressure rating.
+                Always confirm the required class from the piping design specification before procurement.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Related: NPS ±1 in same class -->
+      {(prevNps || nextNps) && (
+        <div class="mb-10">
+          <h2 class="text-lg font-bold text-theme-primary mb-4">Related Sizes — {cls.label}</h2>
+          <div class="flex flex-col sm:flex-row gap-4">
+            {prevNps && (
+              <a
+                href={`/flanges/${cls.slug}/${prevNps.slug}/`}
+                class="flex-1 glass border border-theme rounded-xl p-4 hover:border-[var(--accent)] transition-colors group"
+              >
+                <p class="text-xs text-theme-muted mb-1">&larr; Smaller size</p>
+                <p class="font-semibold text-theme-primary group-hover:accent-text transition-colors">{cls.label} NPS {prevNps.nps}"</p>
+                <p class="text-xs text-theme-secondary mt-0.5">OD {prevNps.odIn}" · {prevNps.boltCount} bolts</p>
+              </a>
+            )}
+            {nextNps && (
+              <a
+                href={`/flanges/${cls.slug}/${nextNps.slug}/`}
+                class="flex-1 glass border border-theme rounded-xl p-4 hover:border-[var(--accent)] transition-colors group text-right"
+              >
+                <p class="text-xs text-theme-muted mb-1">Larger size &rarr;</p>
+                <p class="font-semibold text-theme-primary group-hover:accent-text transition-colors">{cls.label} NPS {nextNps.nps}"</p>
+                <p class="text-xs text-theme-secondary mt-0.5">OD {nextNps.odIn}" · {nextNps.boltCount} bolts</p>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      <!-- Related: same NPS, other classes -->
+      {otherClassLinks.length > 0 && (
+        <div class="mb-10">
+          <h2 class="text-lg font-bold text-theme-primary mb-4">NPS {entry.nps}" in Other Classes</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {otherClassLinks.map((link) => (
+              <a
+                href={`/flanges/${link.slug}/${link.entrySlug}/`}
+                class="glass border border-theme rounded-xl p-3 hover:border-[var(--accent)] transition-colors group text-center"
+              >
+                <p class="font-semibold text-theme-primary group-hover:accent-text transition-colors text-sm">{link.label}</p>
+                <p class="text-xs text-theme-muted mt-0.5">NPS {entry.nps}"</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Back links -->
+      <div class="flex flex-wrap gap-4 text-sm text-theme-muted">
+        <a href={`/flanges/${cls.slug}/`} class="hover:text-theme-primary transition-colors">
+          &larr; {cls.label} — All NPS
+        </a>
+        <span class="text-theme-muted/40">|</span>
+        <a href="/flanges/" class="hover:text-theme-primary transition-colors">
+          &larr; All Classes
+        </a>
+      </div>
+
+    </div>
+  </section>
+</Base>
