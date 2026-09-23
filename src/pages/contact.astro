@@ -1,0 +1,97 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Contact | PVF Calculator";
+const description =
+  "Contact Kevin Wang at PVF Calculator. Submit a sourcing inquiry, report a calculation error, or ask a technical question about ASME pipe fittings and flanges.";
+const canonical = "https://pvfcalculator.com/contact/";
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Contact", url: "/contact/" },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact PVF Calculator",
+    url: canonical,
+    description: description,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      availableLanguage: ["English", "Chinese"],
+      areaServed: "Worldwide",
+    },
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonical={canonical}
+  breadcrumbItems={breadcrumbItems}
+  jsonLd={jsonLd}
+>
+  <section class="relative overflow-hidden py-16 px-4">
+    <div class="max-w-2xl mx-auto">
+      <nav class="text-sm text-theme-muted mb-8 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-theme-primary">Contact</span>
+      </nav>
+
+      <h1 class="text-3xl font-bold text-theme-primary mb-3">Contact</h1>
+      <p class="text-theme-secondary mb-10 leading-relaxed">
+        Questions about a calculation, a sourcing inquiry, or feedback on the tools — use the form below and Kevin Wang will respond within one business day (China Standard Time, UTC+8).
+      </p>
+
+      <div class="space-y-8">
+
+        <div class="glass border border-theme rounded-xl p-6">
+          <h2 class="text-lg font-bold text-theme-primary mb-2">Send a Message</h2>
+          <p class="text-theme-secondary text-sm mb-5 leading-relaxed">
+            Use the inquiry form to describe your question or specification. Include the pipe size, schedule, material, and standard where relevant — it helps give you a faster, more accurate reply.
+          </p>
+          <a
+            href="/inquiry/"
+            class="inline-block px-6 py-3 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-lg transition-colors"
+          >
+            Open Inquiry Form →
+          </a>
+        </div>
+
+        <div class="glass border border-theme rounded-xl p-6">
+          <h2 class="text-lg font-bold text-theme-primary mb-4">What We Can Help With</h2>
+          <ul class="space-y-2 text-theme-secondary text-sm leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="text-amber-400 mt-0.5">·</span>
+              <span>Technical questions about ASME B16.5, B16.9, or B36.10M standards</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-400 mt-0.5">·</span>
+              <span>Sourcing inquiries for flanges and pipe fittings from Mengcun / Cangzhou, Hebei</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-400 mt-0.5">·</span>
+              <span>Calculation errors or discrepancies you have found in the tools</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-400 mt-0.5">·</span>
+              <span>Suggestions for new calculators or chart pages</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass border border-theme rounded-xl p-6">
+          <h2 class="text-lg font-bold text-theme-primary mb-2">Response Time</h2>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            Kevin reads every message and typically responds within one business day. PVF Calculator is based in Cangzhou, Hebei, China (UTC+8). Messages sent during evenings or weekends in Asia may be answered the following business day in your time zone.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Base>
