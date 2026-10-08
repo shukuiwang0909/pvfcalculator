@@ -460,10 +460,17 @@ const siteJsonLd = [
           });
           resultPanels.forEach(function(p) { observer.observe(p, { childList: true, subtree: true }); });
         }
-        // inquiry_submit
-        var form = document.querySelector('form[id="inquiry"], form[name="inquiry"], form');
-        if (form) {
-          form.addEventListener('submit', function() {
+        // calculator_submit: user clicked Calculate on any calculator form
+        document.querySelectorAll('form').forEach(function(f) {
+          if (f.id === 'inquiry' || f.getAttribute('name') === 'inquiry') return;
+          f.addEventListener('submit', function() {
+            gtagEvent('calculator_submit', { page_path: window.location.pathname });
+          });
+        });
+        // inquiry_submit: only on actual inquiry forms
+        var inquiryForm = document.querySelector('form[id="inquiry"], form[name="inquiry"]');
+        if (inquiryForm) {
+          inquiryForm.addEventListener('submit', function() {
             gtagEvent('inquiry_submit', {});
           });
         }
