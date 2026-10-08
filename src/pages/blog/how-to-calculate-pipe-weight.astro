@@ -1,0 +1,356 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "How to Calculate Pipe Weight: Formula, Examples, and MTO Tips";
+const description =
+  "Step-by-step guide to calculating pipe weight per meter and per length. Includes the ASME B36.10M formula, worked examples for common NPS sizes, material density table, and practical tips for material take-off and shipping.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-10-08",
+  dateModified: "2026-10-08",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/how-to-calculate-pipe-weight/",
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is the formula to calculate pipe weight per meter?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "For carbon steel pipe: W (kg/m) = (OD − t) × t × 0.02466, where OD is the outside diameter in mm and t is the wall thickness in mm. The constant 0.02466 = π × 7850 ÷ 1,000,000, based on steel density of 7850 kg/m³.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How much does 6-inch SCH 40 pipe weigh per meter?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "NPS 6\" SCH 40 carbon steel pipe weighs approximately 28.26 kg/m (19.0 lb/ft). Based on ASME B36.10M dimensions: OD 168.3 mm, wall thickness 7.11 mm.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does stainless steel pipe weigh more than carbon steel?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Slightly more. Stainless steel 304/316 has a density of ~7,930–7,980 kg/m³ vs 7,850 kg/m³ for carbon steel — about 1–2% heavier for the same dimensions. The difference is small enough that many engineers use the carbon steel formula as an approximation.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I calculate total pipe weight for a shipment?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Multiply the weight per meter by the total pipe length in your order, then add 2–3% for end caps, protective sleeves, and packing materials. For sea freight, pipes are typically shipped as actual weight rather than volumetric weight since steel is dense.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is the difference between nominal weight and theoretical weight?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Theoretical weight is calculated from the formula using exact ASME dimensions. Nominal weight (or mill weight) is the actual measured weight from the manufacturer, which may vary by ±5–10% due to manufacturing tolerances per ASTM A530. Always use theoretical weight for budgeting and actual weight for final shipping documents.",
+      },
+    },
+  ],
+};
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "How to Calculate Pipe Weight", url: "/blog/how-to-calculate-pipe-weight/" },
+];
+
+const weightTable = [
+  { nps: '1"',   od: 33.4,  sch40t: 3.38,  sch40w: 2.50,  sch80t: 4.55,  sch80w: 3.24  },
+  { nps: '1½"',  od: 48.3,  sch40t: 3.68,  sch40w: 4.05,  sch80t: 5.08,  sch80w: 5.41  },
+  { nps: '2"',   od: 60.3,  sch40t: 3.91,  sch40w: 5.44,  sch80t: 5.54,  sch80w: 7.48  },
+  { nps: '3"',   od: 88.9,  sch40t: 5.49,  sch40w: 11.29, sch80t: 7.62,  sch80w: 15.27 },
+  { nps: '4"',   od: 114.3, sch40t: 6.02,  sch40w: 16.07, sch80t: 8.56,  sch80w: 22.32 },
+  { nps: '6"',   od: 168.3, sch40t: 7.11,  sch40w: 28.26, sch80t: 10.97, sch80w: 42.56 },
+  { nps: '8"',   od: 219.1, sch40t: 8.18,  sch40w: 42.55, sch80t: 12.70, sch80w: 64.64 },
+  { nps: '10"',  od: 273.1, sch40t: 9.27,  sch40w: 60.31, sch80t: 12.70, sch80w: 81.55 },
+  { nps: '12"',  od: 323.9, sch40t: 9.53,  sch40w: 73.81, sch80t: 12.70, sch80w: 97.46 },
+];
+
+const densityTable = [
+  { material: "Carbon steel (A106, A53, A105)", density: "7,850", note: "Standard reference" },
+  { material: "Stainless 304 / 304L (A312 TP304)", density: "7,930", note: "+1.0% vs CS" },
+  { material: "Stainless 316 / 316L (A312 TP316)", density: "7,980", note: "+1.7% vs CS" },
+  { material: "Duplex 2205 (A790)", density: "7,805", note: "−0.6% vs CS" },
+  { material: "Chrome-moly P11 / P22 (A335)", density: "7,850", note: "Same as CS" },
+  { material: "Alloy P91 (A335)", density: "7,760", note: "−1.1% vs CS" },
+];
+---
+
+<Base title={title} description={description} jsonLd={[jsonLd, faqJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="/pipe-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">How to Calculate Pipe Weight</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        How to Calculate <span class="accent-text">Pipe Weight</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        Whether you are preparing a material take-off (MTO), requesting a freight quote, or designing a pipe support structure, knowing the exact pipe weight is essential. This guide explains the formula, walks through worked examples, and covers practical tips for shipping and procurement.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: October 8, 2026</span>
+        <span>·</span>
+        <span>7 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- The Formula -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">The Pipe Weight Formula (ASME B36.10M)</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Pipe weight is calculated from its cross-sectional area multiplied by density. For any pipe where you know the outside diameter (OD) and wall thickness (t):
+        </p>
+        <div class="glass rounded-xl p-6 mb-6">
+          <p class="text-theme-primary font-mono font-semibold text-lg mb-2">W = (OD − t) × t × π × ρ ÷ 1,000,000</p>
+          <ul class="text-theme-secondary text-sm space-y-1 mt-4">
+            <li><strong class="text-theme-primary">W</strong> = weight per meter (kg/m)</li>
+            <li><strong class="text-theme-primary">OD</strong> = outside diameter (mm)</li>
+            <li><strong class="text-theme-primary">t</strong> = wall thickness (mm)</li>
+            <li><strong class="text-theme-primary">ρ</strong> = material density (kg/m³)</li>
+          </ul>
+        </div>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          For carbon steel (ρ = 7,850 kg/m³), the formula simplifies to:
+        </p>
+        <div class="glass rounded-xl p-6">
+          <p class="text-theme-primary font-mono font-semibold text-lg">W (kg/m) = (OD − t) × t × 0.02466</p>
+          <p class="text-theme-muted text-sm mt-2">The constant 0.02466 = π × 7,850 ÷ 1,000,000. OD and t in mm.</p>
+        </div>
+      </div>
+
+      <!-- Worked Example -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Step-by-Step Example</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          Calculate the total weight of a 6-meter length of NPS 6" SCH 40 carbon steel pipe (A106 Gr. B).
+        </p>
+
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 1 — Look up the dimensions</p>
+            <p class="text-theme-secondary text-sm">From ASME B36.10M: NPS 6" OD = 168.3 mm, SCH 40 wall thickness = 7.11 mm.</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 2 — Calculate weight per meter</p>
+            <p class="text-theme-secondary text-sm font-mono">W = (168.3 − 7.11) × 7.11 × 0.02466<br />W = 161.19 × 7.11 × 0.02466<br />W = <strong>28.26 kg/m</strong></p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 3 — Multiply by pipe length</p>
+            <p class="text-theme-secondary text-sm font-mono">Total = 28.26 kg/m × 6 m = <strong>169.6 kg</strong> per pipe length</p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 4 — Scale up for full order</p>
+            <p class="text-theme-secondary text-sm">For 100 pipes: 169.6 × 100 = <strong>16,960 kg</strong> (≈17 metric tons). Add 2–3% for end caps and packaging.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weight Table -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Carbon Steel Pipe Weight Reference Table</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          Pre-calculated weights for common NPS sizes in SCH 40 and SCH 80. All values based on ASME B36.10M and carbon steel density 7,850 kg/m³.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">NPS</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">OD (mm)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 40 t (mm)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 40 (kg/m)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 80 t (mm)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 80 (kg/m)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {weightTable.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-primary font-medium">{row.nps}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.od}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch40t}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary font-medium">{row.sch40w}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch80t}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary font-medium">{row.sch80w}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mt-3">Weight in kg per meter. Dimensions per ASME B36.10M. Carbon steel at 7,850 kg/m³.</p>
+      </div>
+
+      <!-- Material Density -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Pipe Weight for Other Materials</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          The formula is the same for all materials — only the density constant changes. Use the table below to replace the carbon steel constant (0.02466) with the correct factor for your material:
+        </p>
+        <div class="glass rounded-xl p-4 mb-4">
+          <p class="text-theme-primary font-semibold text-sm mb-1">Constant = π × ρ ÷ 1,000,000</p>
+          <p class="text-theme-muted text-xs">Then: W (kg/m) = (OD − t) × t × constant</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Material</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Density (kg/m³)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {densityTable.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-secondary">{row.material}</td>
+                  <td class="py-3 px-4 text-right text-theme-primary font-medium">{row.density}</td>
+                  <td class="py-3 px-4 text-right text-theme-muted text-xs">{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mt-3">Density values are standard reference values. Actual mill density may vary slightly.</p>
+      </div>
+
+      <!-- Shipping & MTO Tips -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Practical Tips for MTO and Shipping</h2>
+
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Add 2–3% for packaging</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Steel pipes are typically shipped with plastic end caps, steel rings, or bundling wire. For large-bore pipes, wooden dunnage and steel cradles add further weight. Budget 2–3% above theoretical pipe weight for total gross weight.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Sea freight: actual weight almost always dominates</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Steel pipe is dense. For sea freight, volumetric weight (CBM × 1,000 kg/CBM on a break-bulk basis) is almost always lower than actual weight. You will be charged on actual weight. For air freight (volumetric factor ~167 kg/CBM), volumetric weight will likely exceed actual weight for large-bore light-wall pipe.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Theoretical vs mill weight: use theoretical for MTO</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              ASTM A530 allows a manufacturing tolerance of ±10% on wall thickness for seamless pipe (±5% for ERW). This means the actual pipe weight can differ from the theoretical value. Use theoretical weight for budgeting and MTO. Use actual measured weight for final shipping documents and customs declarations.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Don't forget the fittings</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              A complete MTO includes elbows, tees, reducers, flanges, and valves in addition to pipe. Fitting weights can add 15–30% to the total pipe spool weight, especially for large-bore or high-schedule piping. Use individual fitting weight calculators for accurate MTO.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the formula to calculate pipe weight per meter?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              For carbon steel pipe: W (kg/m) = (OD − t) × t × 0.02466, where OD is outside diameter in mm and t is wall thickness in mm. The constant 0.02466 = π × 7850 ÷ 1,000,000. For other materials, replace 7850 with the correct density in kg/m³.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>How much does 6-inch SCH 40 pipe weigh per meter?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              NPS 6" SCH 40 carbon steel pipe weighs approximately 28.26 kg/m (19.0 lb/ft). This is based on ASME B36.10M dimensions: OD 168.3 mm, wall thickness 7.11 mm.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Does stainless steel pipe weigh more than carbon steel?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Slightly more. Stainless steel 304/316 has a density of ~7,930–7,980 kg/m³ vs 7,850 kg/m³ for carbon steel — about 1–2% heavier for the same dimensions. The difference is small enough that many engineers use the carbon steel formula as an approximation for initial estimates.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>How do I calculate total pipe weight for a shipment?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-colors flex items-center justify-between">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Multiply the weight per meter by total pipe length in your order. Then add 2–3% for end caps, protective sleeves, and bundling. For sea freight, pipes ship at actual weight since steel density makes volumetric weight lower in nearly all cases.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>What is the difference between nominal weight and theoretical weight?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Theoretical weight is calculated from the formula using exact ASME dimensions. Mill weight is the actual measured weight, which can vary ±5–10% due to manufacturing tolerances per ASTM A530. Use theoretical weight for MTO and budgeting; use actual mill weight for final shipping documents and customs.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Skip the Math — Use the Calculator</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Enter NPS, schedule, material, and length. Get weight per meter, total weight in kg and lb, and a copyable result — instantly.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/pipe-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Pipe Weight Calculator
+          </a>
+          <a href="/elbow-weight-calculator/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Elbow Weight Calculator
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
