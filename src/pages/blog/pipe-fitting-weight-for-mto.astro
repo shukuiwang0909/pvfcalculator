@@ -1,0 +1,481 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const title = "Pipe Fitting Weight for Material Take-off: Elbows, Tees, and Reducers";
+const description =
+  "How to calculate pipe fitting weight for a complete MTO. Covers ASME B16.9 elbows, equal tees, and concentric reducers with reference weight tables, a step-by-step MTO workflow, and common mistakes to avoid.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: { "@type": "ImageObject", url: "https://pvfcalculator.com/og-image.png", width: 1200, height: 630 },
+  author: { "@type": "Organization", name: "PVF Calculator" },
+  publisher: { "@type": "Organization", name: "PVF Calculator" },
+  datePublished: "2026-10-08",
+  dateModified: "2026-10-08",
+  mainEntityOfPage: "https://pvfcalculator.com/blog/pipe-fitting-weight-for-mto/",
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How much do pipe fittings add to total MTO weight?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "It depends on the piping density, but fittings typically add 15–35% on top of bare pipe weight for a typical process piping spool. A line with many direction changes (elbows every 1–2 pipe lengths) can have fittings that weigh as much as the pipe itself.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is a 90° LR elbow heavier than a 90° SR elbow?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. A long radius (LR) elbow has a centerline radius of 1.5 × NPS, giving it a longer arc and therefore more material than a short radius (SR) elbow with radius of 1.0 × NPS. An LR elbow weighs roughly 40–60% more than an SR elbow of the same NPS and schedule.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I calculate reducing tee weight?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A reducing tee (where the branch is smaller than the run) weighs slightly less than an equal tee of the same run size. The weight reduction depends on how much smaller the branch is. For a rough estimate, calculate the equal tee weight at the run NPS and reduce by 5–15% depending on the branch-to-run ratio.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do ASME B16.9 standards specify fitting weight?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "ASME B16.9 specifies dimensional tolerances, end-to-end dimensions, and minimum wall thickness for butt weld fittings. It does not specify a single nominal weight — fitting weights vary by manufacturer based on their exact manufacturing method and wall thickness. Published weights are theoretical calculations based on the minimum wall thickness allowed by the standard.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Should I include fitting weight in a freight quote?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fittings are dense steel components and are shipped at actual weight. For sea freight, actual weight almost always exceeds volumetric weight for steel fittings. Always include fitting weight in your gross weight calculation for shipping quotes.",
+      },
+    },
+  ],
+};
+
+const breadcrumbItems = [
+  { name: "Home", url: "/" },
+  { name: "Blog", url: "/blog/" },
+  { name: "Pipe Fitting Weight for MTO", url: "/blog/pipe-fitting-weight-for-mto/" },
+];
+
+const elbowTable = [
+  { nps: '2"',   sch40: 1.4,  sch80: 1.9  },
+  { nps: '3"',   sch40: 3.8,  sch80: 5.2  },
+  { nps: '4"',   sch40: 6.9,  sch80: 9.8  },
+  { nps: '6"',   sch40: 18.7, sch80: 27.6 },
+  { nps: '8"',   sch40: 39.5, sch80: 59.2 },
+  { nps: '10"',  sch40: 71.7, sch80: 99.0 },
+  { nps: '12"',  sch40: 110,  sch80: 148  },
+];
+
+const teeTable = [
+  { nps: '2"',   sch40: 1.5,  sch80: 2.1  },
+  { nps: '3"',   sch40: 4.3,  sch80: 5.8  },
+  { nps: '4"',   sch40: 8.2,  sch80: 11.9 },
+  { nps: '6"',   sch40: 22.5, sch80: 34.2 },
+  { nps: '8"',   sch40: 49.5, sch80: 73.5 },
+  { nps: '10"',  sch40: 87.0, sch80: 126  },
+  { nps: '12"',  sch40: 136,  sch80: 193  },
+];
+
+const reducerTable = [
+  { size: '3" × 2"',   sch40: 1.8  },
+  { size: '4" × 3"',   sch40: 2.9  },
+  { size: '6" × 4"',   sch40: 5.6  },
+  { size: '8" × 6"',   sch40: 10.6 },
+  { size: '10" × 8"',  sch40: 18.6 },
+  { size: '12" × 10"', sch40: 28.6 },
+];
+---
+
+<Base title={title} description={description} jsonLd={[jsonLd, faqJsonLd]} breadcrumbItems={breadcrumbItems} ctaHref="/elbow-weight-calculator/">
+  <section class="relative overflow-hidden py-20 px-4">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <nav class="text-sm text-theme-muted mb-6 flex items-center gap-2">
+        <a href="/" class="hover:text-theme-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-theme-primary transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-theme-primary">Pipe Fitting Weight for MTO</span>
+      </nav>
+
+      <h1 class="text-3xl md:text-5xl font-bold mb-6 text-theme-primary">
+        Pipe Fitting Weight for <span class="accent-text">Material Take-off</span>
+      </h1>
+      <p class="text-lg text-theme-secondary mb-8 leading-relaxed">
+        A material take-off (MTO) that only counts pipe weight is incomplete. Elbows, tees, and reducers can add 15–35% on top of bare pipe weight in a typical spool. This guide covers how to calculate ASME B16.9 fitting weights, provides reference tables for common sizes, and walks through a complete MTO workflow.
+      </p>
+      <div class="flex items-center gap-4 text-sm text-theme-muted">
+        <span>Updated: October 8, 2026</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <!-- Why Fitting Weight Matters -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Why Fitting Weight Matters in MTO</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Steel pipe fittings are dense components. A single NPS 12" elbow in SCH 40 weighs approximately 110 kg — about as much as 1.5 meters of the same pipe. Multiply that across a typical process piping spool with 20–30 fittings, and ignoring fitting weight introduces significant error into your shipping quotes, crane load calculations, and procurement costs.
+        </p>
+        <div class="glass rounded-xl p-6">
+          <p class="text-theme-primary font-semibold mb-3">When fitting weight matters most:</p>
+          <ul class="text-theme-secondary text-sm space-y-2">
+            <li class="flex items-start gap-2"><span class="text-amber-400 mt-0.5">·</span><span><strong class="text-theme-primary">Freight quotes</strong> — sea freight charged at actual gross weight; fittings are the densest items in a shipment</span></li>
+            <li class="flex items-start gap-2"><span class="text-amber-400 mt-0.5">·</span><span><strong class="text-theme-primary">Pipe support design</strong> — support spacing and hanger loads require total spool weight</span></li>
+            <li class="flex items-start gap-2"><span class="text-amber-400 mt-0.5">·</span><span><strong class="text-theme-primary">Procurement budgeting</strong> — fittings cost more per kg than straight pipe; accurate quantities prevent cost overruns</span></li>
+            <li class="flex items-start gap-2"><span class="text-amber-400 mt-0.5">·</span><span><strong class="text-theme-primary">Module weight control</strong> — offshore platforms and modular skids have strict weight envelopes</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- How Fitting Weight is Calculated -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">How ASME B16.9 Fitting Weight Is Calculated</h2>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          Unlike straight pipe, fitting weights cannot be calculated from a single simple formula because fittings have compound geometry — curved walls, varying cross-sections, and ends that transition between sizes. Published weights are theoretical values based on the minimum wall thickness permitted by ASME B16.9, using a density of 7,850 kg/m³ for carbon steel.
+        </p>
+        <p class="text-theme-secondary leading-relaxed mb-4">
+          In practice, the most reliable approach is to:
+        </p>
+        <ol class="list-decimal list-inside text-theme-secondary space-y-2 mb-6">
+          <li>Use the fitting weight calculators below for each fitting type and schedule</li>
+          <li>Cross-check against manufacturer datasheets for critical applications</li>
+          <li>Apply a 5–10% upward tolerance to account for actual manufacturing weight vs theoretical minimum</li>
+        </ol>
+        <div class="glass rounded-xl p-5">
+          <p class="text-theme-primary font-semibold mb-2">Tolerance note</p>
+          <p class="text-theme-secondary text-sm leading-relaxed">
+            ASME B16.9 does not specify a single nominal weight. Fitting weights from different manufacturers can vary by ±10–15% for the same NPS and schedule, depending on whether the manufacturer uses minimum or nominal wall thickness. For shipping purposes, request mill test reports or weigh a sample fitting.
+          </p>
+        </div>
+      </div>
+
+      <!-- Elbow Table -->
+      <div>
+        <h2 class="text-2xl font-bold mb-2 text-theme-primary">90° Long Radius Elbow Weight Reference</h2>
+        <p class="text-theme-secondary text-sm mb-6">ASME B16.9 · Centerline radius = 1.5 × NPS · Carbon steel at 7,850 kg/m³ · Per fitting</p>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">NPS</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 40 (kg)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 80 (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {elbowTable.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-primary font-medium">{row.nps}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch40}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch80}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mb-4">Reference values based on ASME B16.9 minimum wall. Actual mill weight may vary ±10–15%.</p>
+        <a href="/elbow-weight-calculator/" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors">
+          Calculate exact elbow weight for any NPS and schedule →
+        </a>
+      </div>
+
+      <!-- Tee Table -->
+      <div>
+        <h2 class="text-2xl font-bold mb-2 text-theme-primary">Equal Tee Weight Reference</h2>
+        <p class="text-theme-secondary text-sm mb-6">ASME B16.9 · Equal run and branch · Carbon steel at 7,850 kg/m³ · Per fitting</p>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">NPS</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 40 (kg)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 80 (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teeTable.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-primary font-medium">{row.nps}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch40}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch80}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mb-4">For reducing tees, use the equal tee weight at the run NPS and reduce by 5–15% depending on the branch size ratio.</p>
+        <a href="/tee-weight-calculator/" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors">
+          Calculate exact tee weight — equal and reducing →
+        </a>
+      </div>
+
+      <!-- Reducer Table -->
+      <div>
+        <h2 class="text-2xl font-bold mb-2 text-theme-primary">Concentric Reducer Weight Reference</h2>
+        <p class="text-theme-secondary text-sm mb-6">ASME B16.9 · Concentric (coaxial) pattern · Carbon steel SCH 40 · Per fitting</p>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Size (large × small)</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">SCH 40 (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reducerTable.map((row) => (
+                <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                  <td class="py-3 px-4 text-theme-primary font-medium">{row.size}</td>
+                  <td class="py-3 px-4 text-right text-theme-secondary">{row.sch40}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mb-4">Eccentric reducers weigh approximately the same as concentric reducers for the same size transition.</p>
+        <a href="/reducer-weight-calculator/" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors">
+          Calculate exact reducer weight — concentric and eccentric →
+        </a>
+      </div>
+
+      <!-- MTO Workflow -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Complete MTO Workflow: Step by Step</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          A systematic approach prevents both under-counting and double-counting. Work from a piping isometric or P&ID, not from memory.
+        </p>
+
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 1 — List all components by type</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Go through each isometric line by line. Create separate rows for: straight pipe (by NPS, schedule, and material), 90° LR elbows, 90° SR elbows, 45° elbows, equal tees, reducing tees, concentric reducers, eccentric reducers, flanges, and valves. Do not combine different types even if the NPS is the same.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 2 — Calculate pipe weight by segment</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Use the pipe weight formula or calculator for each pipe segment length. Sum all segments of the same NPS and schedule together. Add 3–5% for cut losses (straight pipe is ordered in fixed lengths; the off-cuts are waste).
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 3 — Calculate fitting weight by type and count</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              For each fitting type, enter the NPS and schedule into the appropriate calculator. Multiply the per-fitting weight by the count. Group by NPS and schedule: a line can have elbows in three different sizes if it transitions through reducers.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 4 — Add flanges and valves</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Flanges and valves are typically the heaviest individual components. Use the flange weight calculator for flanged connections. Valve weights vary significantly by type and trim; use manufacturer datasheets or catalog weights for valves.
+            </p>
+          </div>
+
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-2">Step 5 — Sum and apply allowances</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Total weight = pipe + fittings + flanges + valves. Add 2–3% for packaging (end caps, bundling wire, protective coating on threads). For shipping documents, this is your estimated gross weight. For offshore or modular applications, apply your project-specific weight growth factor (typically 5–15% of steel weight).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example MTO -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Example: 6" Process Line Spool</h2>
+        <p class="text-theme-secondary leading-relaxed mb-6">
+          A single isometric for a NPS 6" SCH 40 carbon steel spool contains: 18 m of straight pipe, four 90° LR elbows, one equal tee, and two weld-neck flanges (Class 300).
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-theme">
+                <th class="text-left py-3 px-4 text-theme-primary font-semibold">Item</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Qty</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Unit weight</th>
+                <th class="text-right py-3 px-4 text-theme-primary font-semibold">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-secondary">NPS 6" SCH 40 pipe</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">18 m</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">28.26 kg/m</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-medium">508.7 kg</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-secondary">90° LR elbow NPS 6" SCH 40</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">4</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">18.7 kg</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-medium">74.8 kg</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-secondary">Equal tee NPS 6" SCH 40</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">1</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">22.5 kg</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-medium">22.5 kg</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-secondary">WN flange NPS 6" Class 300</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">2</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">~18.5 kg</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-medium">37.0 kg</td>
+              </tr>
+              <tr class="border-b border-theme bg-theme-tertiary">
+                <td class="py-3 px-4 text-theme-primary font-semibold" colspan="3">Subtotal (steel)</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-semibold">643.0 kg</td>
+              </tr>
+              <tr class="border-b border-theme hover:bg-theme-tertiary transition-colors">
+                <td class="py-3 px-4 text-theme-secondary">Packaging (+2.5%)</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">—</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">—</td>
+                <td class="py-3 px-4 text-right text-theme-secondary">16.1 kg</td>
+              </tr>
+              <tr class="border-b border-theme bg-amber-500/10">
+                <td class="py-3 px-4 text-theme-primary font-bold" colspan="3">Estimated gross weight</td>
+                <td class="py-3 px-4 text-right text-theme-primary font-bold">659.1 kg</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-theme-muted text-xs mt-3">
+          Fittings + flanges = 134.3 kg = 20.9% of total steel weight. A pipe-only MTO would underestimate this spool by over 20%.
+        </p>
+      </div>
+
+      <!-- Common Mistakes -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-theme-primary">Common MTO Mistakes</h2>
+        <div class="space-y-4">
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Counting pipe length including fitting face-to-face</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              The face-to-face length of a fitting is part of the fitting, not the pipe. When measuring pipe segments from an isometric, end-to-end dimensions include fitting tangent lengths. Subtract the fitting end-to-center dimension from each pipe segment to avoid double-counting.
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Using one schedule for all fittings on a mixed-schedule line</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Process lines sometimes transition between schedules at reducers or valves. Track the schedule for each section separately. A SCH 80 elbow can weigh 40% more than the same NPS in SCH 40.
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Ignoring flanged joints in the fitting count</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              Each flanged connection has two flanges plus a gasket and bolt set. Forgetting to count flange pairs at equipment nozzles and valve ends is a common source of MTO shortfall.
+            </p>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <p class="text-theme-primary font-semibold mb-1">Using NPS as the schedule for large bore fittings</p>
+            <p class="text-theme-secondary text-sm leading-relaxed">
+              For NPS 14" and above, schedule designations change. Always verify the schedule against the piping specification (pipe class) and the ASME B36.10M table for large bore sizes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-theme-primary">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>How much do pipe fittings add to total MTO weight?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Typically 15–35% on top of bare pipe weight, depending on piping density. A line with frequent direction changes can have fittings that weigh as much as the pipe itself. Always count fittings separately — never estimate as a blanket percentage.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Is a 90° LR elbow heavier than a 90° SR elbow?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Yes. An LR elbow (radius = 1.5 × NPS) has a longer arc and more material than an SR elbow (radius = 1.0 × NPS). LR elbows weigh roughly 40–60% more than SR elbows of the same NPS and schedule.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>How do I calculate reducing tee weight?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Use the tee weight calculator and select the run NPS and branch NPS separately. As a rough estimate, a reducing tee weighs about 5–15% less than an equal tee of the same run NPS, depending on how small the branch is relative to the run.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Do ASME B16.9 standards specify fitting weight?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              ASME B16.9 specifies dimensions and minimum wall thickness, not a single nominal weight. Published weights are theoretical calculations at minimum wall. Actual mill weights can vary ±10–15% between manufacturers. For critical weight applications, request the manufacturer's certified weight or weigh a sample.
+            </div>
+          </details>
+
+          <details class="glass rounded-xl overflow-hidden group">
+            <summary class="px-6 py-4 cursor-pointer text-theme-primary font-medium hover:bg-theme-tertiary transition-colors flex items-center justify-between">
+              <span>Should I include fitting weight in a freight quote?</span>
+              <span class="text-theme-muted group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-6 pb-4 text-theme-secondary text-sm leading-relaxed">
+              Yes. Steel fittings ship at actual weight for sea freight. Never omit them from your gross weight estimate. For a large-bore spool with heavy flanges and elbows, fittings can be 25–40% of total shipment weight.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="glass rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none"></div>
+        <h2 class="text-2xl font-bold text-theme-primary mb-3 relative z-10">Calculate Each Fitting Instantly</h2>
+        <p class="text-theme-secondary mb-6 relative z-10">
+          Free calculators for all ASME B16.9 butt weld fittings. Select NPS, schedule, and material to get weight in kg and lb.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/elbow-weight-calculator/" class="accent-bg hover:opacity-90 font-semibold px-6 py-3 rounded-xl transition-colors" style="color: #07090c;">
+            Elbow Weight
+          </a>
+          <a href="/tee-weight-calculator/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Tee Weight
+          </a>
+          <a href="/reducer-weight-calculator/" class="border border-theme hover:bg-theme-tertiary font-semibold px-6 py-3 rounded-xl transition-colors text-theme-primary">
+            Reducer Weight
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Base>
