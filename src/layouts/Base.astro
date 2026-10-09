@@ -223,7 +223,7 @@ const siteJsonLd = [
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
     <script is:inline define:vars={{ GA4_ID }}>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      window.gtag = function(){dataLayer.push(arguments);};
       gtag('js', new Date());
       gtag('config', GA4_ID);
     </script>
