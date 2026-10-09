@@ -43,4 +43,11 @@ const breadcrumbItems = [
       </div>
     </div>
   </section>
+  <script is:inline>
+    (function() {
+      if (typeof gtag === 'function') {
+        gtag('event', 'rfq_submit', { form_location: 'request-a-quote-zh' });
+      }
+    })();
+  </script>
 </Base>

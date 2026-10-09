@@ -460,6 +460,12 @@ const siteJsonLd = [
           });
           resultPanels.forEach(function(p) { observer.observe(p, { childList: true, subtree: true }); });
         }
+        // rfq_click: user clicked any link to the quote form
+        document.querySelectorAll('a[href*="request-a-quote"]').forEach(function(a) {
+          a.addEventListener('click', function() {
+            gtagEvent('rfq_click', { source_page: window.location.pathname });
+          });
+        });
         // calculator_submit: user clicked Calculate on any calculator form
         document.querySelectorAll('form').forEach(function(f) {
           if (f.id === 'inquiry' || f.getAttribute('name') === 'inquiry') return;
