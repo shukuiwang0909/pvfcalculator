@@ -342,19 +342,32 @@ const breadcrumbItems = [
   </section>
 
   <script>
-    // Show loading state on submit + fire GA4 conversion event
-    document.getElementById('quoteForm')?.addEventListener('submit', function() {
-      if (typeof gtag === 'function') {
-        gtag('event', 'rfq_submit', {
-          form_location: 'request-a-quote',
-          transport_type: 'beacon',
-        });
-      }
-      const btn = this.querySelector('button[type="submit"]');
-      if (btn) {
-        btn.textContent = 'Submitting…';
-        btn.disabled = true;
-      }
+    document.getElementById('quoteForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = this;
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' },
+      })
+      .then(function(res) {
+        if (res.ok) {
+          if (typeof gtag === 'function') {
+            gtag('event', 'rfq_submit', { form_location: 'request-a-quote' });
+          }
+          window.location.href = '/request-a-quote/thanks/';
+        } else {
+          if (btn) { btn.textContent = 'Submit Quote Request'; btn.disabled = false; }
+          alert('Something went wrong. Please try again or email inquiry@pvfcalculator.com');
+        }
+      })
+      .catch(function() {
+        if (btn) { btn.textContent = 'Submit Quote Request'; btn.disabled = false; }
+        alert('Network error. Please try again.');
+      });
     });
   </script>
 </Base>
