@@ -342,8 +342,14 @@ const breadcrumbItems = [
   </section>
 
   <script>
-    // Show loading state on submit
+    // Show loading state on submit + fire GA4 conversion event
     document.getElementById('quoteForm')?.addEventListener('submit', function() {
+      if (typeof gtag === 'function') {
+        gtag('event', 'rfq_submit', {
+          form_location: 'request-a-quote',
+          transport_type: 'beacon',
+        });
+      }
       const btn = this.querySelector('button[type="submit"]');
       if (btn) {
         btn.textContent = 'Submitting…';

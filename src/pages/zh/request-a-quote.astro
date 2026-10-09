@@ -162,4 +162,19 @@ const breadcrumbItems = [
       </div>
     </div>
   </section>
+  <script>
+    document.getElementById('quoteForm')?.addEventListener('submit', function() {
+      if (typeof gtag === 'function') {
+        gtag('event', 'rfq_submit', {
+          form_location: 'request-a-quote-zh',
+          transport_type: 'beacon',
+        });
+      }
+      const btn = this.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.textContent = '提交中…';
+        btn.disabled = true;
+      }
+    });
+  </script>
 </Base>
