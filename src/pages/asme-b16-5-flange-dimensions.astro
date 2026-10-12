@@ -58,13 +58,24 @@ const jsonLd = {
   "datePublished": "2024-01-01",
   "dateModified": new Date().toISOString().split('T')[0],
 };
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What does ASME B16.5 cover?", "acceptedAnswer": { "@type": "Answer", "text": "ASME B16.5 covers pipe flanges and flanged fittings from NPS ½\" through 24\" (DN 15–600) in six pressure classes: 150, 300, 400, 600, 900, 1500, and 2500. It specifies dimensions, tolerances, pressure-temperature ratings, materials, and marking. For flanges NPS 26\" and above, ASME B16.47 (Series A and B) applies." } },
+    { "@type": "Question", "name": "What is the difference between Class 150 and Class 300 flanges?", "acceptedAnswer": { "@type": "Answer", "text": "Class number indicates pressure rating. Class 150 flanges are rated at approximately 290 psi (20 bar) at ambient temperature for carbon steel (ASTM A105). Class 300 flanges are rated at approximately 750 psi (52 bar) under the same conditions. At elevated temperatures, ratings decrease per ASME B16.5 pressure-temperature tables. Higher class flanges have larger OD, greater face-to-face thickness, and more bolts." } },
+    { "@type": "Question", "name": "What is the difference between raised face (RF) and flat face (FF) flanges?", "acceptedAnswer": { "@type": "Answer", "text": "A raised face (RF) flange has a raised seating surface (typically 2mm or 7mm high) that concentrates gasket load on a smaller area — suitable for spiral wound, ring, and full face gaskets. Class 150 flanges have 2mm RF; Class 300 and above have 7mm RF. A flat face (FF) flange has no raised area and uses a full face gasket across the entire face — required when mating with cast iron or ductile iron flanges to avoid over-stressing the mating flange." } },
+    { "@type": "Question", "name": "How many bolts does a Class 150 NPS 4 flange require?", "acceptedAnswer": { "@type": "Answer", "text": "A Class 150 NPS 4\" flange requires 8 bolts of 5/8\" (M16) diameter. In general, the bolt count for ASME B16.5 flanges ranges from 4 bolts (NPS ½\"–1\") to 28 bolts (NPS 24\") depending on class. The bolt circle diameter, bolt size, and count are all specified in the ASME B16.5 dimensional tables — use this chart to look up the exact values for your class and size." } },
+    { "@type": "Question", "name": "What is the difference between a weld neck and slip on flange?", "acceptedAnswer": { "@type": "Answer", "text": "A weld neck (WN) flange has a tapered hub that is butt-welded to the pipe — preferred for high pressure, high temperature, and cyclic service because the single full-penetration weld is fully radiographable and the hub provides a smooth bore transition. A slip on (SO) flange slides over the pipe and requires two fillet welds (inside and outside) — lower cost, easier alignment, but only suitable for Class 150–600 non-critical service. ASME B16.5 covers both types; always consult the engineer of record for service classification." } },
+  ],
+};
 const breadcrumbItems = [
   { name: "Home", url: "/" },
   { name: "ASME B16.5 Flange Dimensions", url: "/asme-b16-5-flange-dimensions/" },
 ];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+<Base title={title} description={description} canonical={canonical} jsonLd={[jsonLd, faqSchema]} breadcrumbItems={breadcrumbItems}>
   <section class="relative overflow-hidden py-12 sm:py-16">
     <div class="max-w-7xl mx-auto px-4">
       <!-- Header -->

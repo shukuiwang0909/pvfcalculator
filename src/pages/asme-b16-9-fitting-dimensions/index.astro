@@ -21,6 +21,18 @@ const jsonLd = {
   },
 };
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What does ASME B16.9 cover?", "acceptedAnswer": { "@type": "Answer", "text": "ASME B16.9 covers factory-made wrought buttwelding pipe fittings: 90° and 45° elbows (long and short radius), equal tees, reducing tees, concentric and eccentric reducers, caps, and return bends. It covers NPS ½\" through 48\" (DN 15–1200). For fittings made to MSS SP-75, dimensions are the same as B16.9 for sizes NPS 2\" through 48\"." } },
+    { "@type": "Question", "name": "What is the center-to-end dimension (A) for a 90° elbow?", "acceptedAnswer": { "@type": "Answer", "text": "The center-to-end (A) dimension for a long radius (LR) 90° elbow is 1.5 × NPS in inches, converted to mm. For NPS 4\" (DN 100), A = 1.5 × 4\" × 25.4 = 152mm. For a short radius (SR) elbow, A = 1.0 × NPS. Always use the actual B16.9 dimensional table — rounding differences can cause installation problems in tight-tolerance piping layouts." } },
+    { "@type": "Question", "name": "What is the difference between long radius (LR) and short radius (SR) elbows?", "acceptedAnswer": { "@type": "Answer", "text": "Long radius (LR) elbows have a centerline radius of 1.5 × pipe nominal diameter — they provide lower pressure drop, better flow, and lower stress concentration. Short radius (SR) elbows have a centerline radius of 1.0 × pipe nominal diameter — more compact but higher pressure drop and stress. Use SR only when space is severely constrained. Most piping codes and process plants default to LR elbows." } },
+    { "@type": "Question", "name": "How do I calculate the weight of a buttweld fitting?", "acceptedAnswer": { "@type": "Answer", "text": "Use our free weight calculators: Elbow Weight Calculator for 90° and 45° elbows, Tee Weight Calculator for equal and reducing tees, and Reducer Weight Calculator for concentric and eccentric reducers. Each calculator uses ASME B16.9 center-to-end dimensions combined with the pipe wall thickness (schedule) and material density to compute a theoretical weight. Actual weights from manufacturers may differ by up to 10% due to end finish machining." } },
+    { "@type": "Question", "name": "What materials are used for ASME B16.9 fittings?", "acceptedAnswer": { "@type": "Answer", "text": "Common materials for ASME B16.9 buttweld fittings: carbon steel (ASTM A234 WPB — most common, -29°C to 427°C), alloy steel (ASTM A234 WP11, WP22 for elevated temperature), stainless steel 304L/316L (ASTM A403 WP304L, WP316L), and duplex stainless (ASTM A815 WP2205). Material grade must be called out explicitly on the purchase order along with heat and product analysis certificates." } },
+  ],
+};
+
 // ASME B16.9 fitting dimensions (mm)
 // Format: [NPS, 90D A, 45D B, Tee C, Tee M, Reducer H]
 const fittingData: number[][] = [
@@ -80,7 +92,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+<Base title={title} description={description} canonical={canonical} jsonLd={[jsonLd, faqSchema]} breadcrumbItems={breadcrumbItems}>
   <!-- Hero -->
   <section class="relative overflow-hidden py-10 sm:py-14">
     <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>

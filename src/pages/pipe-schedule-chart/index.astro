@@ -22,6 +22,18 @@ const jsonLd = {
   },
 };
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What does pipe schedule mean?", "acceptedAnswer": { "@type": "Answer", "text": "Pipe schedule (SCH) is a dimensionless number that determines wall thickness for a given nominal pipe size (NPS). It was introduced by ASME to standardize wall thicknesses across manufacturers. A higher schedule number means thicker wall and heavier pipe. For example, NPS 4\" SCH 40 has a wall thickness of 6.02mm, while SCH 80 is 8.56mm. Schedules are defined by ASME B36.10M (carbon/alloy steel) and ASME B36.19M (stainless steel)." } },
+    { "@type": "Question", "name": "What is the difference between SCH 40 and STD (standard)?", "acceptedAnswer": { "@type": "Answer", "text": "For NPS ½\" through 10\", SCH 40 and STD are identical in wall thickness — they are the same schedule designation. For NPS 12\" and larger, STD has a wall thickness of 9.52mm (3/8\") regardless of nominal size, while SCH 40 thickness continues to increase with size. So they diverge at NPS 12\" and above. In most piping specifications, STD and SCH 40 are interchangeable up to NPS 10\"." } },
+    { "@type": "Question", "name": "What is the difference between SCH 80 and XS (extra strong)?", "acceptedAnswer": { "@type": "Answer", "text": "For NPS ½\" through 8\", SCH 80 and XS are identical. For NPS 10\" and larger, XS has a fixed wall of 12.70mm (½\") while SCH 80 continues increasing. XS is an older designation that pre-dates the schedule system; SCH 80 is the modern equivalent for most sizes. The two are interchangeable up to NPS 8\" in most applications." } },
+    { "@type": "Question", "name": "What is the heaviest available pipe schedule?", "acceptedAnswer": { "@type": "Answer", "text": "XXS (double extra strong) is the heaviest standard designation — approximately twice the wall of XS. For NPS 4\", XXS wall thickness is 17.12mm vs. 8.56mm for XS. For NPS 8\", XXS is 22.23mm vs. 12.70mm for XS. SCH 160 is not the same as XXS — at NPS 4\", SCH 160 is 13.49mm and XXS is 17.12mm. SCH 160 and XXS only coincide at NPS 1\" and 1¼\"." } },
+    { "@type": "Question", "name": "How do I convert NPS to DN (nominal bore)?", "acceptedAnswer": { "@type": "Answer", "text": "NPS (Nominal Pipe Size) and DN (Diamètre Nominal) are both nominal designations that do not equal the actual pipe OD. The conversion is fixed by standard: NPS ½\" = DN 15, NPS ¾\" = DN 20, NPS 1\" = DN 25, NPS 1½\" = DN 40, NPS 2\" = DN 50, NPS 3\" = DN 80, NPS 4\" = DN 100, NPS 6\" = DN 150, NPS 8\" = DN 200, NPS 10\" = DN 250, NPS 12\" = DN 300. Note that actual pipe OD is larger than both NPS and DN values — it is fixed per ASME B36.10M." } },
+  ],
+};
+
 // DN (nominal bore, mm) map keyed by NPS
 const dnMap: Record<number, number> = {
   0.125: 6, 0.25: 8, 0.375: 10, 0.5: 15, 0.75: 20,
@@ -45,7 +57,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbItems={breadcrumbItems}>
+<Base title={title} description={description} canonical={canonical} jsonLd={[jsonLd, faqSchema]} breadcrumbItems={breadcrumbItems}>
   <!-- Hero -->
   <section class="relative overflow-hidden py-10 sm:py-14">
     <div class="absolute -top-40 right-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
